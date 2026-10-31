@@ -1,0 +1,35 @@
+/* CSS Design Tokens & System Variables */
+:root {
+    --color-navy-dark: #0b192c;
+    --color-navy-light: #1e293b;
+    --color-offwhite: #f8fafc;
+    --color-white: #ffffff;
+    
+    --accent-blue: #0284c7;
+    --accent-teal: #0d9488;
+    --accent-hover: #0369a1;
+    
+    --status-success: #10b981;
+    --status-warning: #f59e0b;
+    --status-danger: #ef4444;
+    --status-info: #3b82f6;
+    
+    --text-dark: #0f172a;
+    --text-muted: #64748b;
+    --text-light: #f8fafc;
+    
+    --border-subtle: #e2e8f0;
+    --border-strong: #cbd5e1;
+    
+    --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+    --font-mono: 'JetBrains Mono', monospace;
+    
+    --radius-sm: 8px;
+    --radius-md: 12px;
+    --radius-lg: 18px;
+    --radius-xl: 24px;
+    
+    --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.05);
+    --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.08);
+    --shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.12);
+}

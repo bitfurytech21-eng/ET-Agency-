@@ -1,0 +1,231 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    --font-heading: 'Raleway', Helvetica, Arial, Lucida, sans-serif;
+    --font-alt-heading: 'Open Sans', Helvetica, Arial, Lucida, sans-serif;
+    --font-body: 'Open Sans', Helvetica, Arial, Lucida, sans-serif;
+    --font-script: 'Alex Brush', cursive, sans-serif;
+    --color-teal: #00b7a8;
+    --color-brown-bg: rgba(130, 99, 79, 0.71);
+    --color-dark-bg: #282828;
+  }
+
+  body {
+    font-family: var(--font-body);
+    color: #333333;
+    background-color: #ffffff;
+    margin: 0;
+    padding: 0;
+    line-height: 1.7em;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-heading);
+  }
+
+  .font-script {
+    font-family: var(--font-script);
+  }
+}
+
+/* Divi Specific Replicas from easytravellodging.com */
+.et_section_hero {
+  background-image: radial-gradient(circle at top left, rgba(255,255,255,0.89) 30%, rgba(255,255,255,0) 80%), url('https://easytravellodging.com/wp-content/uploads/2023/01/keys-hotel-board-background.jpg') !important;
+  background-size: cover;
+  background-position: center;
+}
+
+.et_section_brown {
+  background-color: rgba(130, 99, 79, 0.71) !important;
+}
+
+.et_section_amenities {
+  background-image: linear-gradient(150deg, #2f3a44 25%, rgba(47,58,68,0.68) 100%), url('https://easytravellodging.com/wp-content/uploads/2023/01/bed-and-breakfast-16.jpg') !important;
+  background-size: cover;
+  background-position: center;
+}
+
+.et_section_attractions {
+  background-image: linear-gradient(150deg, rgba(47,58,68,0.36) 25%, rgba(38,46,53,0) 100%), url('https://easytravellodging.com/wp-content/uploads/2022/03/RANCHO-Sunrise-2.jpg') !important;
+  background-size: cover;
+  background-position: center;
+}
+
+.et_section_dark {
+  background-color: #282828 !important;
+}
+
+.et_photo_shadow {
+  box-shadow: 5px 5px 0px 0px rgba(0,0,0,0.3) !important;
+}
+
+.et_section_corporate_hero {
+  background-image: radial-gradient(circle at top left, rgba(255,255,255,0.89) 30%, rgba(255,255,255,0) 80%), url('https://easytravellodging.com/wp-content/uploads/2022/11/AdobeStock_314863868-web.jpg') !important;
+  background-size: cover;
+  background-position: center;
+}
+
+.et_section_corporate_divider {
+  background-image: linear-gradient(180deg, rgba(106,125,140,0.5) 0%, #6a7d8c 100%), url('https://easytravellodging.com/wp-content/uploads/2022/11/bed-and-breakfast-17.jpg') !important;
+  background-size: cover;
+  background-position: center;
+}
+
+.et_section_corporate_reviews {
+  background-image: url('https://easytravellodging.com/wp-content/uploads/2022/03/RANCHO-Andrea-Crettol-7-Web.jpg') !important;
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+}
+
+.et_curve_left {
+  border-radius: 360px 0 0 360px;
+  overflow: hidden;
+  box-shadow: 10px 10px 0px 0px #82634f;
+}
+
+.et_curve_right {
+  border-radius: 0 360px 360px 0;
+  overflow: hidden;
+  box-shadow: -12px 10px 0px 0px #82634f;
+}
+
+@media (max-width: 768px) {
+  .et_curve_left, .et_curve_right {
+    border-radius: 24px;
+    box-shadow: 6px 6px 0px 0px #82634f;
+  }
+}
+
+/* Divi Buttons */
+.et_pb_button {
+  font-family: 'Raleway', Helvetica, Arial, Lucida, sans-serif !important;
+  font-weight: 700 !important;
+  cursor: pointer;
+  transition: all 300ms ease;
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0px;
+}
+
+.et_pb_button_white {
+  background-color: #ffffff !important;
+  color: #000000 !important;
+  padding: 12px 28px !important;
+  font-size: 18px !important;
+  border: 1px solid #e2e8f0;
+}
+
+.et_pb_button_white:hover {
+  background-color: #f8fafc !important;
+  transform: translateY(-1px);
+}
+
+.et_pb_button_teal {
+  background-color: #00b7a8 !important;
+  color: #ffffff !important;
+  padding: 14px 34px !important;
+  font-size: 20px !important;
+  border: none;
+}
+
+.et_pb_button_teal:hover {
+  background-color: #009e91 !important;
+  transform: translateY(-1px);
+}
+
+/* Typography styles matching Divi */
+.et_hero_h5 {
+  font-family: 'Open Sans', Helvetica, Arial, sans-serif !important;
+  font-weight: 700 !important;
+  text-transform: uppercase !important;
+  font-size: 20px !important;
+  color: #000000 !important;
+  letter-spacing: 0.5em !important;
+  line-height: 1.8em !important;
+}
+
+.et_hero_h1 {
+  font-family: 'Open Sans', Helvetica, Arial, sans-serif !important;
+  font-weight: 700 !important;
+  font-size: 80px !important;
+  color: #00b7a8 !important;
+  line-height: 1.2em !important;
+  text-shadow: 0.08em 0.08em 0em rgba(0,0,0,0.4) !important;
+}
+
+@media (max-width: 768px) {
+  .et_hero_h1 {
+    font-size: 44px !important;
+  }
+  .et_hero_h5 {
+    font-size: 14px !important;
+    letter-spacing: 0.25em !important;
+  }
+}
+
+.et_section_h2 {
+  font-family: 'Raleway', Helvetica, Arial, sans-serif !important;
+  font-weight: 700 !important;
+  font-size: 50px !important;
+  line-height: 1.4em !important;
+  color: #000000 !important;
+}
+
+@media (max-width: 768px) {
+  .et_section_h2 {
+    font-size: 32px !important;
+  }
+}
+
+.et_section_h6 {
+  font-family: 'Raleway', Helvetica, Arial, sans-serif !important;
+  font-weight: 700 !important;
+  text-transform: uppercase !important;
+  font-size: 16px !important;
+  letter-spacing: 5px !important;
+  line-height: 1.8em !important;
+}
+
+/* Navigation Menu */
+#main-header {
+  background-color: #ffffff;
+  border-bottom: 1px solid #f2f2f2;
+}
+
+#top-menu li a {
+  font-family: 'Raleway', Helvetica, Arial, sans-serif;
+  font-weight: 600;
+  font-size: 14px;
+  color: #666666;
+  transition: all 300ms ease;
+}
+
+#top-menu li.current-menu-item > a,
+#top-menu li a:hover {
+  color: #00b7a8 !important;
+}
+
+/* Divi Toggle Style */
+.et_pb_toggle {
+  border: 1px solid #d9d9d9;
+  transition: all 200ms ease;
+}
+
+.et_pb_toggle_close {
+  background-color: #f4f4f4;
+  padding: 18px 24px;
+}
+
+.et_pb_toggle_open {
+  background-color: #ffffff;
+  padding: 18px 24px;
+}
+
+/* Smooth scrolling */
+html {
+  scroll-behavior: smooth;
+}

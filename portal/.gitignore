@@ -1,0 +1,7 @@
+/vendor/
+/storage/database.sqlite
+/storage/logs/*.log
+/storage/cache/*
+/storage/sessions/*
+/storage/private/payment-proofs/*
+.env

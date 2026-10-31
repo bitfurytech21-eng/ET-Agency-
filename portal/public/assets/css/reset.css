@@ -1,0 +1,24 @@
+/* Modern CSS Reset & Baseline Standard */
+*, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html, body {
+    height: 100%;
+    font-family: var(--font-sans, system-ui);
+    background-color: var(--color-offwhite, #f8fafc);
+    color: var(--text-dark, #0f172a);
+    -webkit-font-smoothing: antialiased;
+    line-height: 1.5;
+}
+
+img, video, canvas, svg {
+    display: block;
+    max-width: 100%;
+}
+
+button, input, select, textarea {
+    font: inherit;
+}

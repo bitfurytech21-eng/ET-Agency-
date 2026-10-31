@@ -1,0 +1,51 @@
+/* Vehicle Details Styles */
+.vehicle-details-container {
+    display: grid;
+    grid-template-columns: 1fr 380px;
+    gap: 2rem;
+    align-items: start;
+}
+
+@media (max-width: 992px) {
+    .vehicle-details-container {
+        grid-template-columns: 1fr;
+    }
+}
+
+.viewer-3d-box {
+    width: 100%;
+    height: 480px;
+    background: #090d16;
+    border-radius: var(--radius-lg);
+    position: relative;
+    overflow: hidden;
+    border: 1px solid var(--border-subtle);
+}
+
+.spec-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+    margin: 1.5rem 0;
+}
+
+.spec-item {
+    background: var(--color-offwhite);
+    padding: 1rem;
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border-subtle);
+}
+
+.spec-label {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    letter-spacing: 0.05em;
+}
+
+.spec-value {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--text-dark);
+    margin-top: 0.25rem;
+}

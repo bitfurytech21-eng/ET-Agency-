@@ -1,0 +1,251 @@
+{
+  "users": [],
+  "properties": [
+    {
+      "id": "unit-91",
+      "code": "#A",
+      "unitNumber": "Unit 91",
+      "slug": "one-bedroom-one-bath-downstairs-91",
+      "title": "One Bedroom, One Bath, Downstairs (A)",
+      "category": "Holiday Apartment, Family Apartment",
+      "shortDesc": "Stunning downstairs 1-bedroom apartment in Rancho Cordova tailored for professional travelers.",
+      "fullDesc": "Welcome to your home away from home in Rancho Cordova. This comfortable one-bedroom apartment includes a fully equipped kitchen, private patio, and all the essentials for a productive temporary stay.",
+      "bedrooms": 1,
+      "bathrooms": 1,
+      "floor": "Downstairs",
+      "location": "Rancho Cordova / Greater Sacramento, CA",
+      "monthlyRate": 2500,
+      "startingRate": "Starting From $2,500 / Month",
+      "pricingNote": "May vary. Includes utilities and parking. Minimum stay 30 days.",
+      "status": "Available",
+      "sqft": "680 sq ft",
+      "liveUrl": "https://easytravellodging.com/one-bedroom-one-bath-downstairs-91/",
+      "images": [
+        "https://easytravellodging.com/wp-content/plugins/vikbooking/site/resources/uploads/big_cc-91-1.jpg",
+        "https://easytravellodging.com/wp-content/plugins/vikbooking/site/resources/uploads/big_img_1671.jpg",
+        "https://easytravellodging.com/wp-content/plugins/vikbooking/site/resources/uploads/big_img_1696.jpg",
+        "https://easytravellodging.com/wp-content/plugins/vikbooking/site/resources/uploads/big_cc-91-2.jpg"
+      ],
+      "features": [
+        "Fully updated kitchen with modern appliances",
+        "In-unit washer and dryer",
+        "Cozy living room with fireplace and Smart TV",
+        "Private patio",
+        "Dedicated covered parking",
+        "Ground floor access"
+      ],
+      "amenities": [
+        "WiFi",
+        "TV",
+        "Air Conditioning",
+        "Bathroom",
+        "Disabled Facilities",
+        "Fireplace",
+        "In-Unit Washer/Dryer",
+        "Private Patio"
+      ],
+      "minimumStayDays": 30
+    },
+    {
+      "id": "unit-173",
+      "code": "#B",
+      "unitNumber": "Unit 173",
+      "slug": "one-bedroom-one-bath-downstairs-173",
+      "title": "One Bedroom, One Bath, Downstairs (B)",
+      "category": "Holiday Apartment, Family Apartment",
+      "shortDesc": "Modern ground-floor luxury suite with designer touches, fireplace, and a private patio.",
+      "fullDesc": "This quiet and elegant one-bedroom apartment brings together comfort, convenience, and a productive work environment for midterm stays in Rancho Cordova.",
+      "bedrooms": 1,
+      "bathrooms": 1,
+      "floor": "Downstairs",
+      "location": "Rancho Cordova / Greater Sacramento, CA",
+      "monthlyRate": 2500,
+      "startingRate": "Starting From $2,500 / Month",
+      "pricingNote": "May vary. Includes utilities and parking. Minimum stay 30 days.",
+      "status": "Available",
+      "sqft": "710 sq ft",
+      "liveUrl": "https://easytravellodging.com/one-bedroom-one-bath-downstairs-173/",
+      "images": [
+        "https://easytravellodging.com/wp-content/plugins/vikbooking/site/resources/uploads/big_img_4864.jpg",
+        "https://easytravellodging.com/wp-content/plugins/vikbooking/site/resources/uploads/big_img_3271.jpg",
+        "https://easytravellodging.com/wp-content/plugins/vikbooking/site/resources/uploads/big_img_3274.jpg",
+        "https://easytravellodging.com/wp-content/plugins/vikbooking/site/resources/uploads/big_img_3269.jpg"
+      ],
+      "features": [
+        "Ground-floor unit with reserved parking",
+        "Cozy indoor fireplace",
+        "55 inch Smart TV",
+        "Updated kitchen",
+        "Private outdoor patio",
+        "Pet-friendly on approval"
+      ],
+      "amenities": [
+        "WiFi",
+        "TV",
+        "Air Conditioning",
+        "Bathroom",
+        "Pets Allowed",
+        "Fireplace",
+        "In-Unit Washer/Dryer",
+        "Private Patio"
+      ],
+      "minimumStayDays": 30
+    },
+    {
+      "id": "unit-250",
+      "code": "#C",
+      "unitNumber": "Unit 250",
+      "slug": "two-bedroom-two-bath-upstairs-250",
+      "title": "Two Bedroom, Two Bath, Upstairs (C)",
+      "category": "Holiday Apartment, Family Apartment",
+      "shortDesc": "Spacious upper residence with vaulted ceilings, private balcony, and premium amenities for long-term stays.",
+      "fullDesc": "This upper-level apartment delivers flexible living for professionals, couples, and small families who need a comfortable, fully equipped base in Sacramento.",
+      "bedrooms": 2,
+      "bathrooms": 2,
+      "floor": "Upstairs",
+      "location": "Rancho Cordova / Greater Sacramento, CA",
+      "monthlyRate": 2800,
+      "startingRate": "Starting From $2,800 / Month",
+      "pricingNote": "May vary. Includes utilities and parking. Minimum stay 30 days.",
+      "status": "Available",
+      "sqft": "960 sq ft",
+      "liveUrl": "https://easytravellodging.com/two-bedroom-two-bath-upstairs-250/",
+      "images": [
+        "https://easytravellodging.com/wp-content/plugins/vikbooking/site/resources/uploads/big_img_2936.jpg",
+        "https://easytravellodging.com/wp-content/plugins/vikbooking/site/resources/uploads/big_img_2928.jpg",
+        "https://easytravellodging.com/wp-content/plugins/vikbooking/site/resources/uploads/big_img_2932.jpg",
+        "https://easytravellodging.com/wp-content/plugins/vikbooking/site/resources/uploads/big_img_4658.jpg"
+      ],
+      "features": [
+        "Two private bedrooms and two full bathrooms",
+        "Vaulted ceilings with natural light",
+        "Private upstairs balcony",
+        "Chef-style kitchen",
+        "Washer and dryer included",
+        "Community gym and pool access"
+      ],
+      "amenities": [
+        "WiFi",
+        "TV",
+        "Air Conditioning",
+        "Bathroom",
+        "Fireplace",
+        "In-Unit Washer/Dryer",
+        "Private Balcony",
+        "Chef Kitchen"
+      ],
+      "minimumStayDays": 30
+    },
+    {
+      "id": "unit-333",
+      "code": "#D",
+      "unitNumber": "Unit 333",
+      "slug": "exquisite-2-bedroom-midterm-rental-in-rancho-cordova-333",
+      "title": "Exquisite 2-Bedroom Midterm Rental in Rancho Cordova (D)",
+      "category": "Holiday Apartment, Family Apartment",
+      "shortDesc": "Sophisticated 2-bedroom, 2-bathroom haven designed for remote productivity and luxury living.",
+      "fullDesc": "This elegant two-bedroom apartment blends executive comfort with long-stay practicality, making it ideal for work travel, relocation, and expanded family visits.",
+      "bedrooms": 2,
+      "bathrooms": 2,
+      "floor": "Upstairs",
+      "location": "Rancho Cordova / Greater Sacramento, CA",
+      "monthlyRate": 2800,
+      "startingRate": "Starting From $2,800 / Month",
+      "pricingNote": "May vary. Includes utilities and parking. Minimum stay 30 days.",
+      "status": "Available",
+      "sqft": "980 sq ft",
+      "liveUrl": "https://easytravellodging.com/exquisite-2-bedroom-midterm-rental-in-rancho-cordova-333/",
+      "images": [
+        "https://easytravellodging.com/wp-content/plugins/vikbooking/site/resources/uploads/big_115.jpg",
+        "https://easytravellodging.com/wp-content/plugins/vikbooking/site/resources/uploads/big_114.jpg",
+        "https://easytravellodging.com/wp-content/plugins/vikbooking/site/resources/uploads/big_117.jpg",
+        "https://easytravellodging.com/wp-content/plugins/vikbooking/site/resources/uploads/big_116.jpg"
+      ],
+      "features": [
+        "Three smart TVs",
+        "Premium queen beds and hotel-quality linens",
+        "Modern kitchen with quartz counters",
+        "In-unit washer and dryer",
+        "Private patio",
+        "Strong WiFi for remote work"
+      ],
+      "amenities": [
+        "WiFi",
+        "TV",
+        "Air Conditioning",
+        "Bathroom",
+        "Fireplace",
+        "3 Smart TVs",
+        "In-Unit Washer/Dryer",
+        "Private Patio"
+      ],
+      "minimumStayDays": 30
+    },
+    {
+      "id": "unit-335",
+      "code": "#E",
+      "unitNumber": "Unit 335",
+      "slug": "luxury-2-bedroom-midterm-rental-in-rancho-cordova-335",
+      "title": "Luxury 2-Bedroom Midterm Rental in Rancho Cordova (E)",
+      "category": "Holiday Apartment, Family Apartment",
+      "shortDesc": "Top-tier executive condo with fireplace, outdoor space, and access to community amenities.",
+      "fullDesc": "This upscale residence offers a polished living experience with high-end finishes, practical workspaces, and enough room for guests to settle in for an extended assignment.",
+      "bedrooms": 2,
+      "bathrooms": 2,
+      "floor": "Downstairs",
+      "location": "Rancho Cordova / Greater Sacramento, CA",
+      "monthlyRate": 2800,
+      "startingRate": "Starting From $2,800 / Month",
+      "pricingNote": "May vary. Includes utilities and parking. Minimum stay 30 days.",
+      "status": "Available",
+      "sqft": "990 sq ft",
+      "liveUrl": "https://easytravellodging.com/luxury-2-bedroom-midterm-rental-in-rancho-cordova-335/",
+      "images": [
+        "https://easytravellodging.com/wp-content/plugins/vikbooking/site/resources/uploads/big_cc-335_img_5339.jpg",
+        "https://easytravellodging.com/wp-content/plugins/vikbooking/site/resources/uploads/big_cc-335_img_5342.jpg",
+        "https://easytravellodging.com/wp-content/plugins/vikbooking/site/resources/uploads/big_img_4881.jpg",
+        "https://easytravellodging.com/wp-content/plugins/vikbooking/site/resources/uploads/big_cc-2_kitchen_sink.jpg"
+      ],
+      "features": [
+        "Spacious two-bedroom floor plan",
+        "Full suite of club amenities",
+        "Wood-burning fireplace",
+        "Chef kitchen",
+        "Private secluded patio",
+        "Gym, pool, spa, tennis, and volleyball access"
+      ],
+      "amenities": [
+        "WiFi",
+        "TV",
+        "Air Conditioning",
+        "Bathroom",
+        "Fireplace",
+        "In-Unit Washer/Dryer",
+        "Private Patio",
+        "Pool & Spa Access"
+      ],
+      "minimumStayDays": 30
+    }
+  ],
+  "bookings": [
+    {
+      "id": "bk_1793481302548",
+      "propertyId": "unit-91",
+      "guestName": "Dr. Sarah Miller",
+      "guestEmail": "sarah.miller@example.com",
+      "guestPhone": "(916) 555-0199",
+      "employer": "UC Davis Health",
+      "role": "Locum Tenens Physician",
+      "checkIn": "2026-11-03",
+      "checkOut": "2027-01-02",
+      "adults": 1,
+      "children": 0,
+      "status": "awaiting_payment",
+      "notes": "Assignment at Sacramento campus",
+      "totalNights": 60,
+      "createdAt": "2026-10-31T21:15:02.548Z",
+      "paymentProvider": "manual"
+    }
+  ],
+  "payments": []
+}

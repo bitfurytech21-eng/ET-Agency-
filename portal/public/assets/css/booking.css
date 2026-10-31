@@ -1,0 +1,25 @@
+/* Lodging & Reservation Modal Styles */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(11, 25, 44, 0.75);
+    backdrop-filter: blur(8px);
+    z-index: 2000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1.5rem;
+}
+
+.modal-content-panel {
+    background: white;
+    border-radius: var(--radius-xl, 24px);
+    width: 100%;
+    max-width: 680px;
+    padding: 2.5rem;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+    border: 1px solid var(--border-subtle);
+}

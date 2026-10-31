@@ -1,0 +1,128 @@
+{
+    "customers": [
+        {
+            "id": "cust_demo_01",
+            "name": "Dr. Marcus Vance",
+            "email": "client@easytravellodging.com",
+            "password_hash": "$2y$10$YncBqZgZDDvz1UYVruBIeuSHRYNVHugDVGT4VnhCJGf2.KIZe4lIC",
+            "company": "UC Davis Health Medical Center",
+            "role": "Visiting Surgery Fellow",
+            "phone": "(916) 426-3655",
+            "balance_usd": 4400,
+            "units_balance": 44,
+            "created_at": "2026-10-01T21:26:25+00:00",
+            "purchases": [
+                {
+                    "id": "pch_101",
+                    "description": "Corporate Lodging Package - Unit 173 (Q4)",
+                    "unit_number": "Unit 173",
+                    "units_purchased": 50,
+                    "amount_usd": 5000,
+                    "status": "active",
+                    "purchased_at": "2026-10-17T21:26:25+00:00",
+                    "payment_method": "Corporate Wire"
+                },
+                {
+                    "id": "pch_102",
+                    "description": "Prepaid Executive Stays Credit (34 Units)",
+                    "unit_number": "Flex Units",
+                    "units_purchased": 34,
+                    "amount_usd": 3400,
+                    "status": "active",
+                    "purchased_at": "2026-10-26T21:26:25+00:00",
+                    "payment_method": "Direct ACH"
+                },
+                {
+                    "id": "pch_1793482501_67",
+                    "description": "Purchased 10 Lodging Units (10 Lodging Units Package)",
+                    "unit_number": "Flex Unit Credits",
+                    "units_purchased": 10,
+                    "amount_usd": 1000,
+                    "status": "active",
+                    "purchased_at": "2026-10-31T21:35:01+00:00",
+                    "payment_method": "Corporate Wire"
+                }
+            ],
+            "transactions": [
+                {
+                    "id": "tx_901",
+                    "type": "credit_purchase",
+                    "units": 50,
+                    "amount_usd": 5000,
+                    "description": "Initial Unit Purchase - 50 Units",
+                    "date": "2026-10-17T21:26:25+00:00"
+                },
+                {
+                    "id": "tx_902",
+                    "type": "credit_purchase",
+                    "units": 34,
+                    "amount_usd": 3400,
+                    "description": "Tier 2 Credit Recharge - 34 Units",
+                    "date": "2026-10-26T21:26:25+00:00"
+                },
+                {
+                    "id": "tx_pay_1793481994_818",
+                    "type": "balance_settlement",
+                    "units": -25,
+                    "amount_usd": -2500,
+                    "booking_id": "bk_rec_910",
+                    "description": "Internal Command: Settled Booking bk_rec_910 using 25 dashboard units",
+                    "command_code": "INTERNAL_SETTLE_UNITS",
+                    "date": "2026-10-31T21:26:34+00:00",
+                    "status": "settled"
+                },
+                {
+                    "id": "tx_1793482501_73",
+                    "type": "unit_purchase",
+                    "units": 10,
+                    "amount_usd": 1000,
+                    "description": "Purchased 10 Units via Corporate Wire",
+                    "date": "2026-10-31T21:35:01+00:00"
+                },
+                {
+                    "id": "tx_pay_1793482509_925",
+                    "type": "balance_settlement",
+                    "units": -25,
+                    "amount_usd": -2500,
+                    "booking_id": "bk_rec_910",
+                    "description": "Internal Command: Settled Booking bk_rec_910 using 25 dashboard units",
+                    "command_code": "INTERNAL_EXEC_PAY_FROM_BALANCE",
+                    "date": "2026-10-31T21:35:09+00:00",
+                    "status": "settled"
+                }
+            ]
+        }
+    ],
+    "sessions": {
+        "21820b1dfc41afd6069587b2500b275e4037f9a0f69d99ec": {
+            "customer_id": "cust_demo_01",
+            "created_at": "2026-10-31T21:26:25+00:00",
+            "expires_at": "2026-11-07T21:26:25+00:00"
+        },
+        "67989eeec902bfa7b2fb519c1d517f9f9456907a0dd2e454": {
+            "customer_id": "cust_demo_01",
+            "created_at": "2026-10-31T21:32:51+00:00",
+            "expires_at": "2026-11-07T21:32:51+00:00"
+        },
+        "11eade6434f37094fac6c9a8a4c28ceceb4c6aaf8e3516cc": {
+            "customer_id": "cust_demo_01",
+            "created_at": "2026-10-31T21:34:40+00:00",
+            "expires_at": "2026-11-07T21:34:40+00:00"
+        },
+        "c513b8bb8013caa0feaa8b5c07a0d2590c8f9776b7aefb8e": {
+            "customer_id": "cust_demo_01",
+            "created_at": "2026-10-31T21:34:45+00:00",
+            "expires_at": "2026-11-07T21:34:45+00:00"
+        },
+        "22f4abb0eaa0bec4c1a37af1e16990140f31ebf1aaddea14": {
+            "customer_id": "cust_demo_01",
+            "created_at": "2026-10-31T21:35:01+00:00",
+            "expires_at": "2026-11-07T21:35:01+00:00"
+        },
+        "91f6a038579678f9dd0d40b2eee9bf31e5ee5aac246460b1": {
+            "customer_id": "cust_demo_01",
+            "created_at": "2026-10-31T21:35:09+00:00",
+            "expires_at": "2026-11-07T21:35:09+00:00"
+        }
+    }
+}
