@@ -1,4 +1,5 @@
 import React from 'react';
+import { COMPANY_INFO } from '../data/lodgingData';
 
 interface FooterProps {
   onNavClick: (tab: string) => void;
@@ -6,41 +7,17 @@ interface FooterProps {
   onOpenBrochure?: () => void;
 }
 
-export const Footer: React.FC<FooterProps> = ({ onNavClick }) => {
+export const Footer: React.FC<FooterProps> = () => {
   return (
-    <footer id="main-footer" className="bg-[#1f1f1f] text-[#666666] py-5 border-t border-[#2d2d2d] text-center text-[12px]">
-      <div className="max-w-[1250px] mx-auto px-4 sm:px-8 flex flex-col sm:flex-row items-center justify-between gap-2">
-        <div id="footer-info">
-          ©️ Copyright 2022 Easy Travel Lodging | All Rights Reserved | Website by{' '}
-          <a
-            href="https://thathelpfulchick.com"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-[#999999] hover:text-[#00b7a8] transition-colors"
-          >
-            That Helpful Chick
-          </a>{' '}
-          |{' '}
-          <button
-            onClick={() => onNavClick('vehicles')}
-            className="text-[#999999] hover:text-[#00b7a8] transition-colors cursor-pointer"
-          >
-            Fleet Rentals (3D)
-          </button>{' '}
-          |{' '}
-          <button
-            onClick={() => onNavClick('portal')}
-            className="text-[#999999] hover:text-[#00b7a8] transition-colors cursor-pointer"
-          >
-            Client Sign In
-          </button>{' '}
-          |{' '}
-          <button
-            onClick={() => onNavClick('privacy')}
-            className="text-[#999999] hover:text-[#00b7a8] transition-colors cursor-pointer"
-          >
-            Privacy Policy
-          </button>
+    <footer id="main-footer" className="bg-[#1f1f1f] text-[#999999] py-8 border-t border-[#2d2d2d] text-[12px]">
+      <div className="max-w-[1280px] mx-auto px-4 sm:px-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-center sm:text-left">
+        <div className="space-y-1">
+          <div className="text-stone-200 font-semibold">
+            {COMPANY_INFO.name} · Furnished Residences &amp; Extended Stays
+          </div>
+          <div className="text-[#888888]">
+            © {new Date().getFullYear()} Easy Travel Lodging. All Rights Reserved.
+          </div>
         </div>
       </div>
     </footer>

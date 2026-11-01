@@ -8,8 +8,8 @@
             "company": "UC Davis Health Medical Center",
             "role": "Visiting Surgery Fellow",
             "phone": "(916) 426-3655",
-            "balance_usd": 4400,
-            "units_balance": 44,
+            "balance_usd": 8400,
+            "units_balance": 84,
             "created_at": "2026-10-01T21:26:25+00:00",
             "purchases": [
                 {
@@ -41,6 +41,26 @@
                     "status": "active",
                     "purchased_at": "2026-10-31T21:35:01+00:00",
                     "payment_method": "Corporate Wire"
+                },
+                {
+                    "id": "pch_1793486005533_90",
+                    "description": "Purchased 10 Lodging Units (10 Lodging Units Package)",
+                    "unit_number": "Flex Unit Credits",
+                    "units_purchased": 10,
+                    "amount_usd": 1000,
+                    "status": "active",
+                    "purchased_at": "2026-10-31T22:33:25.533Z",
+                    "payment_method": "Corporate Wire / ACH Invoice"
+                },
+                {
+                    "id": "pch_q4_allotment_80",
+                    "description": "Annual Housing & Fleet Credit Allotment (80 Units)",
+                    "unit_number": "Flex Unit Credits",
+                    "units_purchased": 80,
+                    "amount_usd": 8000,
+                    "status": "active",
+                    "purchased_at": "2026-10-31T23:00:00.000Z",
+                    "payment_method": "Verified Institutional Wire"
                 }
             ],
             "transactions": [
@@ -66,7 +86,7 @@
                     "units": -25,
                     "amount_usd": -2500,
                     "booking_id": "bk_rec_910",
-                    "description": "Internal Command: Settled Booking bk_rec_910 using 25 dashboard units",
+                    "description": "Settled Booking bk_rec_910 using 25 dashboard units",
                     "command_code": "INTERNAL_SETTLE_UNITS",
                     "date": "2026-10-31T21:26:34+00:00",
                     "status": "settled"
@@ -85,10 +105,49 @@
                     "units": -25,
                     "amount_usd": -2500,
                     "booking_id": "bk_rec_910",
-                    "description": "Internal Command: Settled Booking bk_rec_910 using 25 dashboard units",
+                    "description": "Settled Booking bk_rec_910 using 25 dashboard units",
                     "command_code": "INTERNAL_EXEC_PAY_FROM_BALANCE",
                     "date": "2026-10-31T21:35:09+00:00",
                     "status": "settled"
+                },
+                {
+                    "id": "tx_pay_1793485767075_384",
+                    "type": "balance_settlement",
+                    "units": -25,
+                    "amount_usd": -2500,
+                    "booking_id": "Direct_Settlement",
+                    "description": "Settled Booking Direct_Settlement using 25 dashboard units",
+                    "command_code": "CMD_INTERNAL_SETTLE_1793485766853",
+                    "date": "2026-10-31T22:29:27.075Z",
+                    "status": "settled"
+                },
+                {
+                    "id": "tx_1793486005533_61",
+                    "type": "unit_purchase",
+                    "units": 10,
+                    "amount_usd": 1000,
+                    "description": "Purchased 10 Units via Corporate Wire / ACH Invoice",
+                    "date": "2026-10-31T22:33:25.533Z"
+                },
+                {
+                    "id": "tx_pay_1793486014679_694",
+                    "type": "balance_settlement",
+                    "units": -25,
+                    "amount_usd": -2500,
+                    "booking_id": "bk_rec_910",
+                    "description": "Settled Booking bk_rec_910 using 25 dashboard units",
+                    "command_code": "CMD_INTERNAL_SETTLE_1793486013768",
+                    "date": "2026-10-31T22:33:34.679Z",
+                    "status": "settled"
+                },
+                {
+                    "id": "tx_q4_allotment_80",
+                    "type": "credit_purchase",
+                    "units": 80,
+                    "amount_usd": 8000,
+                    "description": "Annual Housing & Fleet Credit Allotment - 80 Units",
+                    "date": "2026-10-31T23:00:00.000Z",
+                    "status": "completed"
                 }
             ]
         }
@@ -123,6 +182,26 @@
             "customer_id": "cust_demo_01",
             "created_at": "2026-10-31T21:35:09+00:00",
             "expires_at": "2026-11-07T21:35:09+00:00"
+        },
+        "a83a4239e64ecb89ffddf39b25590e08cb846a7442c1ce15": {
+            "customer_id": "cust_demo_01",
+            "created_at": "2026-10-31T22:28:26.725Z",
+            "expires_at": "2026-11-07T22:28:26.725Z"
+        },
+        "69e27ae7ce83501d2c4b908b0f2ffa3453a5a9d5861a43ff": {
+            "customer_id": "cust_demo_01",
+            "created_at": "2026-10-31T22:53:08.125Z",
+            "expires_at": "2026-11-07T22:53:08.125Z"
+        },
+        "68e35493aad84e77a5b798b1dc071d231cc4fa294866fb85": {
+            "customer_id": "cust_demo_01",
+            "created_at": "2026-10-31T22:53:55.147Z",
+            "expires_at": "2026-11-07T22:53:55.147Z"
+        },
+        "3ff403aed144b6984a51bfc4ff33bd4a08ddb93c2f3d7fc1": {
+            "customer_id": "cust_demo_01",
+            "created_at": "2026-10-31T22:54:51.497Z",
+            "expires_at": "2026-11-07T22:54:51.497Z"
         }
     }
 }

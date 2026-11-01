@@ -49,30 +49,31 @@ export const US_VEHICLES: UsVehicle[] = [
     dailyRate: 119,
     weeklyRate: 690,
     monthlyRate: 2350,
-    tagline: 'Iconic American Freedom Under California Skies',
-    description: 'Experience California highways in the quintessential American open-top muscle car. Featuring Ford’s signature 5.0L Coyote V8, premium leather seating, MagneRide damping, and an automated soft-top for sunny Sacramento drives.',
+    tagline: 'Open-Air California Touring & Weekend Escapes',
+    description:
+      'Enjoy sunny Northern California drives in Ford’s classic open-top grand tourer. Equipped with a responsive 5.0L V8, heated and ventilated leather seating, MagneRide adaptive damping, and an 8-second power soft-top—well suited for coastal day trips, Napa afternoons, or everyday Sacramento cruising.',
     features: [
       'Power soft-top convertible with quick 8-second deploy',
       'Selectable active valve performance exhaust',
-      '12.4" digital instrument cluster with Track Apps',
-      'Bang & Olufsen 12-speaker surround sound',
-      'Heated and ventilated leather sport bucket seats',
-      'Sacramento & Tahoe highway prep with toll transponder'
+      '12.4-inch digital driver display with Apple CarPlay & Android Auto',
+      'Bang & Olufsen 12-speaker audio system',
+      'Heated and ventilated leather front seats',
+      'Prepared for Greater Sacramento & regional highway travel',
     ],
     specs: {
       horsepower: '480 HP @ 7,150 RPM',
       acceleration: '0–60 mph in 4.1 sec',
       topSpeed: '155 mph',
       efficiency: '18 MPG City / 24 MPG Hwy',
-      fuelType: 'Premium Gasoline'
+      fuelType: 'Premium Gasoline',
     },
-    defaultColor: '#c8102e', // Race Red
+    defaultColor: '#c8102e',
     availableColors: [
       { name: 'Race Red', hex: '#c8102e' },
       { name: 'Shadow Black', hex: '#111317' },
       { name: 'Grabber Blue', hex: '#005bb5' },
       { name: 'Oxford White', hex: '#f0f3f6' },
-      { name: 'Carbonized Gray', hex: '#3d444b' }
+      { name: 'Carbonized Gray', hex: '#3d444b' },
     ],
     style3d: {
       bodyShape: 'muscle',
@@ -81,45 +82,46 @@ export const US_VEHICLES: UsVehicle[] = [
       wheelWidth: 0.28,
       hasConvertibleTop: true,
       hasExhaustPipes: true,
-    }
+    },
   },
   {
     id: 'tesla-model-y',
     name: 'Tesla Model Y Performance',
     make: 'Tesla',
-    category: 'All-Electric Dual Motor Performance SUV',
+    category: 'All-Electric Dual Motor Crossover SUV',
     year: 2025,
     engine: 'Dual AC Permanent Magnet Electric Motors',
-    drivetrain: 'Intelligent All-Wheel Drive (AWD)',
+    drivetrain: 'All-Wheel Drive (AWD)',
     seating: 5,
     luggage: 4,
     dailyRate: 110,
     weeklyRate: 640,
     monthlyRate: 2200,
-    tagline: 'Silent Acceleration & Ultra-Efficient Sacramento Commutes',
-    description: 'The premier Silicon Valley engineered crossover. Enjoy instant torque, complimentary access to Tesla Supercharging stations throughout the Central Valley, Autopilot highway assist, and expansive cargo capacity for medical & corporate professionals.',
+    tagline: 'Quiet All-Electric Comfort for Daily Errands & Regional Travel',
+    description:
+      'An effortless all-electric crossover with Dual Motor all-wheel drive, generous cargo space for suitcases or strollers, and seamless Supercharger access across Northern California. Popular with families, airport arrivals, and multi-week residents.',
     features: [
-      'Dual Motor AWD with instant 0-60 throttle response',
-      'Full glass panoramic roof with infrared tinting',
-      '15-inch center touchscreen with streaming & navigation',
-      'Over-the-air Sacramento airport and ETL unit delivery',
-      'HEPA cabin air filtration system with Bioweapon Defense',
-      'Expansive 76 cu ft cargo capacity with front trunk (frunk)'
+      'Dual Motor AWD with smooth, quiet acceleration',
+      'Tinted panoramic glass roof',
+      '15-inch touchscreen navigation with live charger routing',
+      'Available for SMF Airport pickup or residence doorstep delivery',
+      'HEPA cabin air filtration',
+      '76 cu ft total cargo space including front trunk',
     ],
     specs: {
       horsepower: '455 HP Equivalent',
       acceleration: '0–60 mph in 3.5 sec',
       topSpeed: '155 mph',
       efficiency: '115 MPGe (303 mi range)',
-      fuelType: 'Pure Electric (Complimentary Supercharging)'
+      fuelType: '100% Electric (Supercharger Access)',
     },
-    defaultColor: '#2563eb', // Deep Blue Metallic
+    defaultColor: '#2563eb',
     availableColors: [
       { name: 'Deep Metallic Blue', hex: '#1e40af' },
       { name: 'Pearl White Multi-Coat', hex: '#f8fafc' },
       { name: 'Solid Black', hex: '#09090b' },
       { name: 'Midnight Silver Metallic', hex: '#475569' },
-      { name: 'Ultra Red', hex: '#991b1b' }
+      { name: 'Ultra Red', hex: '#991b1b' },
     ],
     style3d: {
       bodyShape: 'suv',
@@ -127,13 +129,13 @@ export const US_VEHICLES: UsVehicle[] = [
       wheelRadius: 0.4,
       wheelWidth: 0.26,
       isElectric: true,
-    }
+    },
   },
   {
     id: 'chevy-suburban',
     name: 'Chevrolet Suburban High Country',
     make: 'Chevrolet',
-    category: 'Full-Size American Executive Transport',
+    category: 'Full-Size Three-Row Family & Group SUV',
     year: 2025,
     engine: '6.2L EcoTec3 V8 with Dynamic Fuel Management',
     drivetrain: 'Four-Wheel Drive (4WD) with Autotrac 2-speed',
@@ -142,29 +144,30 @@ export const US_VEHICLES: UsVehicle[] = [
     dailyRate: 165,
     weeklyRate: 980,
     monthlyRate: 3400,
-    tagline: 'The Gold Standard of American Room & Road Command',
-    description: 'Spacious, commanding, and exceptionally smooth. Designed for executive teams, traveling healthcare crews, and families desiring expansive comfort with four-corner adaptive air suspension and authentic American build quality.',
+    tagline: 'Three-Row Space for Families, Relocations & Group Trips',
+    description:
+      'Roomy, composed, and built for long stretches of highway. With seating for up to seven, second-row captain’s chairs, adaptive air suspension, and expansive luggage capacity, the Suburban handles family visits, household moves, and group outings with ease.',
     features: [
-      'Four-Corner Air Ride Adaptive Suspension for pillow ride',
-      'Second-row executive captain chairs with personal climate',
-      '10-speed electronically controlled automatic transmission',
-      'Dual 12.6-inch rear-seat entertainment screens',
-      'HD Surround Vision with 13 camera perspectives',
-      'Massive 144.7 cu ft cargo volume for long assignment gear'
+      'Four-Corner Air Ride Adaptive Suspension',
+      'Second-row captain’s chairs with tri-zone climate control',
+      '10-speed automatic transmission with 4WD',
+      'Dual rear-seat entertainment screens for passengers',
+      'HD Surround Vision camera views for easy parking',
+      '144.7 cu ft maximum cargo capacity',
     ],
     specs: {
       horsepower: '420 HP @ 5,600 RPM',
       acceleration: '0–60 mph in 6.1 sec',
       topSpeed: '130 mph',
       efficiency: '15 MPG City / 20 MPG Hwy',
-      fuelType: 'Gasoline'
+      fuelType: 'Gasoline',
     },
-    defaultColor: '#1c1917', // Black Raven
+    defaultColor: '#1c1917',
     availableColors: [
       { name: 'Black Onyx', hex: '#18181b' },
       { name: 'Summit White', hex: '#f4f4f5' },
       { name: 'Dark Ash Metallic', hex: '#334155' },
-      { name: 'Auburn Metallic', hex: '#78350f' }
+      { name: 'Auburn Metallic', hex: '#78350f' },
     ],
     style3d: {
       bodyShape: 'luxury_suv',
@@ -173,44 +176,45 @@ export const US_VEHICLES: UsVehicle[] = [
       wheelWidth: 0.32,
       hasRoofRack: true,
       hasExhaustPipes: true,
-    }
+    },
   },
   {
     id: 'cadillac-escalade',
     name: 'Cadillac Escalade ESV Platinum',
     make: 'Cadillac',
-    category: 'Ultra-Luxury American VIP Flagship',
+    category: 'Extended-Length Luxury Three-Row SUV',
     year: 2025,
-    engine: '6.2L Handcrafted V8 with Magnetic Ride 4.0',
+    engine: '6.2L V8 with Magnetic Ride Control 4.0',
     drivetrain: 'Electronic Full-Time All-Wheel Drive',
     seating: 7,
     luggage: 6,
     dailyRate: 195,
     weeklyRate: 1190,
     monthlyRate: 4100,
-    tagline: 'Unrivaled Elegance, Status and Whisper-Quiet Comfort',
-    description: 'The pinnacle of American luxury automotive craftsmanship. Features 38 inches of curved OLED dashboard displays, AKG Studio Reference 36-speaker sound, semi-aniline hand-finished leather, and unmatched highway prestige.',
+    tagline: 'First-Class Cabin Quietness & Extended Three-Row Comfort',
+    description:
+      'Our flagship full-size luxury SUV pairs whisper-quiet highway poise with extended ESV luggage room. Featuring curved OLED displays, AKG 36-speaker audio, semi-aniline leather seating, and Magnetic Ride damping for special occasions, family travel, or VIP arrivals.',
     features: [
-      'Curved 38-inch total diagonal OLED displays',
-      'AKG Studio Reference 36-speaker 3D audio system',
-      'Full semi-aniline leather with 16-way massaging seats',
-      'Night Vision thermal imaging with pedestrian detection',
-      'Soft-close automatic doors and motorized deployable steps',
-      'Chauffeur pickup option to Sacramento International (SMF)'
+      'Curved 38-inch diagonal OLED driver and infotainment display',
+      'AKG Studio Reference 36-speaker sound system',
+      'Semi-aniline leather with heated, ventilated, massaging front seats',
+      'Night Vision driver assistance',
+      'Power retractable assist steps and hands-free liftgate',
+      'Optional SMF Airport curbside delivery',
     ],
     specs: {
       horsepower: '420 HP @ 5,600 RPM',
       acceleration: '0–60 mph in 5.9 sec',
       topSpeed: '130 mph',
       efficiency: '14 MPG City / 19 MPG Hwy',
-      fuelType: 'Premium Gasoline'
+      fuelType: 'Premium Gasoline',
     },
-    defaultColor: '#0f172a', // Galactic Blue / Deep Obsidian
+    defaultColor: '#0f172a',
     availableColors: [
       { name: 'Black Raven', hex: '#09090b' },
       { name: 'Galactic Deep Blue', hex: '#0f172a' },
       { name: 'Crystal White Tricoat', hex: '#fafafa' },
-      { name: 'Dark Emerald Metallic', hex: '#064e3b' }
+      { name: 'Dark Emerald Metallic', hex: '#064e3b' },
     ],
     style3d: {
       bodyShape: 'luxury_suv',
@@ -219,37 +223,38 @@ export const US_VEHICLES: UsVehicle[] = [
       wheelWidth: 0.34,
       hasRoofRack: true,
       hasExhaustPipes: true,
-    }
+    },
   },
   {
     id: 'jeep-wrangler',
     name: 'Jeep Wrangler Rubicon 4xe',
     make: 'Jeep',
-    category: 'American Adventure Hybrid Convertible 4x4',
+    category: 'Plug-In Hybrid 4x4 Adventure SUV',
     year: 2025,
-    engine: '2.0L Turbo I4 + Dual Electric Hybrid Motors',
-    drivetrain: 'Rock-Trac Full-Time 4x4 with Locking Differentials',
+    engine: '2.0L Turbo I4 + Plug-In Electric Hybrid Drive',
+    drivetrain: 'Rock-Trac Full-Time 4x4',
     seating: 5,
     luggage: 3,
     dailyRate: 125,
     weeklyRate: 740,
     monthlyRate: 2550,
-    tagline: 'Legendary Trail Rated Capability with Electric Hybrid Drive',
-    description: 'Built for guests seeking California wilderness weekend getaways to Lake Tahoe, Yosemite, and the Sierra Nevada foothills while maintaining silent electric city capability throughout Sacramento and Rancho Cordova.',
+    tagline: 'Sierra Foothills, Lake Tahoe & Everyday Hybrid Versatility',
+    description:
+      'Ready for weekend trips to Lake Tahoe, Folsom Lake, or Yosemite while offering quiet plug-in hybrid driving around Sacramento neighborhoods. All-weather 4x4 capability meets open-air removable roof panels.',
     features: [
-      'Removable Freedom Top 3-piece hardtop and doors',
-      'Rock-Trac 4:1 low gear ratio with electronic sway-bar disconnect',
-      'Dana 44 heavy-duty axles with Tru-Lok electronic lockers',
-      'Alpine 9-speaker premium all-weather audio system',
-      'Waterproof interior with one-way drain valves',
-      'Tahoe snow chains & bike rack included upon request'
+      'Removable 3-piece Freedom Top hardtop panels',
+      'Full-time Rock-Trac 4x4 capability for mountain weather',
+      'Plug-in hybrid mode for quiet local errands',
+      'Alpine 9-speaker all-weather audio system',
+      'Durable washout-ready interior flooring',
+      'Optional bike rack or winter traction kit on request',
     ],
     specs: {
       horsepower: '375 HP / 470 lb-ft Torque',
       acceleration: '0–60 mph in 5.2 sec',
       topSpeed: '115 mph',
       efficiency: '49 MPGe / 370 Miles Combined Range',
-      fuelType: 'PHEV (Electric + Gasoline)'
+      fuelType: 'Plug-In Hybrid (Electric + Gasoline)',
     },
     defaultColor: '#0284c7', // Hydro Blue
     availableColors: [

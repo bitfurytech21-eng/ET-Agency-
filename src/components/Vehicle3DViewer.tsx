@@ -1,16 +1,17 @@
 import React, { useEffect, useRef, useState } from 'react';
 import * as THREE from 'three';
+import { RoomEnvironment } from 'three/examples/jsm/environments/RoomEnvironment.js';
 import { UsVehicle } from '../data/vehicleData';
+import { LivePhotoBackground } from './LivePhotoBackground';
 import { 
   RotateCw, 
-  Eye, 
   Lightbulb, 
   Sparkles, 
   ChevronUp, 
   ChevronDown, 
-  Maximize2, 
   Compass,
-  Check
+  Check,
+  Gauge
 } from 'lucide-react';
 
 interface Vehicle3DViewerProps {
@@ -40,13 +41,22 @@ export const Vehicle3DViewer: React.FC<Vehicle3DViewerProps> = ({
   const bodyMaterialsRef = useRef<THREE.MeshPhysicalMaterial[]>([]);
   const headlightMaterialsRef = useRef<THREE.MeshStandardMaterial[]>([]);
   const targetCamPosRef = useRef<THREE.Vector3>(new THREE.Vector3(3.8, 1.8, 4.2));
+  const autoRotateRef = useRef<boolean>(autoRotate);
+  const isDrivingRef = useRef<boolean>(isDriving);
 
-  // Initialize Three.js Scene
+  useEffect(() => {
+    autoRotateRef.current = autoRotate;
+  }, [autoRotate]);
+
+  useEffect(() => {
+    isDrivingRef.current = isDriving;
+  }, [isDriving]);
+
+  // Initialize Three.js Scene over Live Realistic Architectural Backdrop
   useEffect(() => {
     const container = mountRef.current;
     if (!container) return;
 
-    // Detect software WebGL guard
     const isSoftwareGl = (() => {
       try {
         const gl = document.createElement('canvas').getContext('webgl2');
@@ -64,10 +74,8 @@ export const Vehicle3DViewer: React.FC<Vehicle3DViewerProps> = ({
     const width = container.clientWidth || 800;
     const height = container.clientHeight || 500;
 
-    // Scene
+    // Scene (alpha-composited over LivePhotoBackground — zero dark-blue background)
     const scene = new THREE.Scene();
-    scene.background = new THREE.Color(0x0b0f19);
-    scene.fog = new THREE.FogExp2(0x0b0f19, 0.04);
     sceneRef.current = scene;
 
     // Camera
@@ -76,26 +84,37 @@ export const Vehicle3DViewer: React.FC<Vehicle3DViewerProps> = ({
     camera.lookAt(0, 0.6, 0);
     cameraRef.current = camera;
 
-    // Renderer
+    // Renderer with alpha enabled so live realistic twilight drive photo shines behind the 3D plinth
     const renderer = new THREE.WebGLRenderer({
       antialias: !isSoftwareGl,
       powerPreference: 'high-performance',
-      alpha: false,
+      alpha: true,
     });
+    renderer.setClearColor(0x000000, 0);
     renderer.setSize(width, height);
     renderer.setPixelRatio(isSoftwareGl ? 1 : Math.min(window.devicePixelRatio, 2));
     renderer.outputColorSpace = THREE.SRGBColorSpace;
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    renderer.toneMappingExposure = 1.25;
+    renderer.toneMappingExposure = 1.28;
     renderer.shadowMap.enabled = !isSoftwareGl;
     renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 
     container.appendChild(renderer.domElement);
     rendererRef.current = renderer;
 
-    // Studio Lighting Rig
-    // Key Light
-    const keyLight = new THREE.DirectionalLight(0xffffff, 2.5);
+    // Procedural Studio Environment Reflections for Metallic Clearcoat Paint
+    let envTexture: THREE.Texture | null = null;
+    if (!isSoftwareGl) {
+      const pmremGenerator = new THREE.PMREMGenerator(renderer);
+      const roomEnv = new RoomEnvironment();
+      envTexture = pmremGenerator.fromScene(roomEnv, 0.04).texture;
+      scene.environment = envTexture;
+      roomEnv.dispose();
+      pmremGenerator.dispose();
+    }
+
+    // Warm Golden-Hour Architectural Studio Lighting Rig (Zero Blue Light Cast)
+    const keyLight = new THREE.DirectionalLight(0xfff7ed, 2.6);
     keyLight.position.set(5, 7, 5);
     keyLight.castShadow = !isSoftwareGl;
     if (keyLight.castShadow) {
@@ -108,33 +127,43 @@ export const Vehicle3DViewer: React.FC<Vehicle3DViewerProps> = ({
     }
     scene.add(keyLight);
 
-    // Fill Light (Cool sky / warm ground contrast)
-    const hemiLight = new THREE.HemisphereLight(0xddeeff, 0x1e293b, 1.2);
+    // Warm golden sky / warm sandstone ground hemisphere light
+    const hemiLight = new THREE.HemisphereLight(0xfef3c7, 0x3b2d23, 1.25);
     hemiLight.position.set(0, 10, 0);
     scene.add(hemiLight);
 
-    // Rim / Back Light (Highlights metallic roof & shoulder line)
-    const rimLight = new THREE.DirectionalLight(0x60a5fa, 1.8);
+    // Signature Brand Teal Rim / Back Light
+    const rimLight = new THREE.DirectionalLight(0x2dd4bf, 1.65);
     rimLight.position.set(-6, 4, -5);
     scene.add(rimLight);
 
-    // Warm Accent Spotlight
-    const accentSpot = new THREE.SpotLight(0xfef08a, 1.4, 15, Math.PI / 4, 0.4);
+    // Warm Amber Sconce Spotlight
+    const accentSpot = new THREE.SpotLight(0xfde68a, 1.5, 15, Math.PI / 4, 0.4);
     accentSpot.position.set(0, 6, 4);
     scene.add(accentSpot);
 
-    // Studio Floor Grid & Contact Shadow
-    const floorGeo = new THREE.PlaneGeometry(30, 30);
-    const floorMat = new THREE.MeshStandardMaterial({
-      color: 0x090d16,
-      roughness: 0.65,
-      metalness: 0.2,
+    // Sculpted Architectural Travertine & Bronze Turntable Plinth
+    const plinthGeo = new THREE.CylinderGeometry(2.85, 2.98, 0.08, 64);
+    const plinthMat = new THREE.MeshStandardMaterial({
+      color: 0x261e19,
+      roughness: 0.55,
+      metalness: 0.25,
     });
-    const floor = new THREE.Mesh(floorGeo, floorMat);
-    floor.rotation.x = -Math.PI / 2;
-    floor.position.y = 0;
-    floor.receiveShadow = !isSoftwareGl;
-    scene.add(floor);
+    const plinth = new THREE.Mesh(plinthGeo, plinthMat);
+    plinth.position.y = -0.04;
+    plinth.receiveShadow = !isSoftwareGl;
+    scene.add(plinth);
+
+    const ringGeo = new THREE.TorusGeometry(2.88, 0.022, 16, 72);
+    const ringMat = new THREE.MeshStandardMaterial({
+      color: 0x82634f,
+      roughness: 0.3,
+      metalness: 0.75,
+    });
+    const plinthRing = new THREE.Mesh(ringGeo, ringMat);
+    plinthRing.rotation.x = Math.PI / 2;
+    plinthRing.position.y = 0.002;
+    scene.add(plinthRing);
 
     // Radial Soft Contact Shadow underneath car
     const shadowGeo = new THREE.PlaneGeometry(4.8, 2.4);
@@ -144,9 +173,9 @@ export const Vehicle3DViewer: React.FC<Vehicle3DViewerProps> = ({
     const ctx = canvas.getContext('2d');
     if (ctx) {
       const grad = ctx.createRadialGradient(64, 64, 10, 64, 64, 60);
-      grad.addColorStop(0, 'rgba(0, 0, 0, 0.7)');
-      grad.addColorStop(0.5, 'rgba(0, 0, 0, 0.35)');
-      grad.addColorStop(1, 'rgba(0, 0, 0, 0)');
+      grad.addColorStop(0, 'rgba(18, 13, 10, 0.78)');
+      grad.addColorStop(0.5, 'rgba(18, 13, 10, 0.38)');
+      grad.addColorStop(1, 'rgba(18, 13, 10, 0)');
       ctx.fillStyle = grad;
       ctx.fillRect(0, 0, 128, 128);
     }
@@ -154,7 +183,7 @@ export const Vehicle3DViewer: React.FC<Vehicle3DViewerProps> = ({
     const shadowMat = new THREE.MeshBasicMaterial({
       map: shadowTex,
       transparent: true,
-      opacity: 0.8,
+      opacity: 0.85,
       depthWrite: false,
     });
     const contactShadow = new THREE.Mesh(shadowGeo, shadowMat);
@@ -166,7 +195,7 @@ export const Vehicle3DViewer: React.FC<Vehicle3DViewerProps> = ({
     let isDragging = false;
     let prevMouseX = 0;
     let prevMouseY = 0;
-    let spherical = { radius: 5.6, theta: 0.85, phi: 1.25 };
+    const spherical = { radius: 5.6, theta: 0.85, phi: 1.25 };
 
     const onMouseDown = (e: MouseEvent) => {
       isDragging = true;
@@ -209,7 +238,6 @@ export const Vehicle3DViewer: React.FC<Vehicle3DViewerProps> = ({
     window.addEventListener('mouseup', onMouseUp);
     dom.addEventListener('wheel', onWheel, { passive: false });
 
-    // Touch support for mobile
     let touchStartX = 0;
     let touchStartY = 0;
     const onTouchStart = (e: TouchEvent) => {
@@ -232,7 +260,6 @@ export const Vehicle3DViewer: React.FC<Vehicle3DViewerProps> = ({
     dom.addEventListener('touchstart', onTouchStart, { passive: true });
     dom.addEventListener('touchmove', onTouchMove, { passive: true });
 
-    // Animation Loop
     let animFrameId = 0;
     const clock = new THREE.Clock();
 
@@ -240,20 +267,22 @@ export const Vehicle3DViewer: React.FC<Vehicle3DViewerProps> = ({
       animFrameId = requestAnimationFrame(animate);
       const delta = clock.getDelta();
 
-      // Smooth camera interpolation towards target
       camera.position.lerp(targetCamPosRef.current, Math.min(1, delta * 6));
       camera.lookAt(0, 0.6, 0);
 
-      // Auto rotation
-      if (autoRotate && carGroupRef.current) {
+      if (autoRotateRef.current && carGroupRef.current) {
         carGroupRef.current.rotation.y += delta * 0.45;
       }
 
-      // Wheel rotation during driving mode
-      if (isDriving) {
+      if (isDrivingRef.current) {
         wheelsRef.current.forEach((w) => {
-          w.rotation.x += delta * 12;
+          w.rotation.x += delta * 14;
         });
+        if (carGroupRef.current) {
+          carGroupRef.current.position.y = Math.sin(clock.elapsedTime * 18) * 0.008;
+        }
+      } else if (carGroupRef.current && carGroupRef.current.position.y !== 0) {
+        carGroupRef.current.position.y = 0;
       }
 
       renderer.render(scene, camera);
@@ -261,7 +290,6 @@ export const Vehicle3DViewer: React.FC<Vehicle3DViewerProps> = ({
 
     animate();
 
-    // Resize Handler
     const handleResize = () => {
       if (!container || !rendererRef.current || !cameraRef.current) return;
       const w = container.clientWidth;
@@ -282,6 +310,16 @@ export const Vehicle3DViewer: React.FC<Vehicle3DViewerProps> = ({
       dom.removeEventListener('wheel', onWheel);
       dom.removeEventListener('touchstart', onTouchStart);
       dom.removeEventListener('touchmove', onTouchMove);
+      if (envTexture) {
+        envTexture.dispose();
+      }
+      shadowTex.dispose();
+      plinthGeo.dispose();
+      plinthMat.dispose();
+      ringGeo.dispose();
+      ringMat.dispose();
+      shadowGeo.dispose();
+      shadowMat.dispose();
       if (renderer.domElement && container.contains(renderer.domElement)) {
         container.removeChild(renderer.domElement);
       }
@@ -294,7 +332,6 @@ export const Vehicle3DViewer: React.FC<Vehicle3DViewerProps> = ({
     const scene = sceneRef.current;
     if (!scene) return;
 
-    // Remove existing car
     if (carGroupRef.current) {
       scene.remove(carGroupRef.current);
       carGroupRef.current.traverse((child) => {
@@ -314,13 +351,11 @@ export const Vehicle3DViewer: React.FC<Vehicle3DViewerProps> = ({
     bodyMaterialsRef.current = [];
     headlightMaterialsRef.current = [];
 
-    // Create New Car Group (Pivot at bottom center)
     const carGroup = new THREE.Group();
     carGroup.position.set(0, 0, 0);
 
     const color = new THREE.Color(selectedColorHex);
 
-    // Premium Automotive Paint Material
     const bodyMat = new THREE.MeshPhysicalMaterial({
       color: color,
       metalness: 0.85,
@@ -331,39 +366,35 @@ export const Vehicle3DViewer: React.FC<Vehicle3DViewerProps> = ({
     });
     bodyMaterialsRef.current.push(bodyMat);
 
-    // Tinted Glass Material
+    // Warm Smoked Bronze-Charcoal Tinted Glass (Zero Blue Cast)
     const glassMat = new THREE.MeshStandardMaterial({
-      color: 0x050810,
+      color: 0x161210,
       roughness: 0.05,
       metalness: 0.4,
       transparent: true,
       opacity: 0.82,
     });
 
-    // Dark Trim & Chassis Material
     const trimMat = new THREE.MeshStandardMaterial({
-      color: 0x18181b,
+      color: 0x1c1917,
       roughness: 0.5,
       metalness: 0.3,
     });
 
-    // Chrome Material
     const chromeMat = new THREE.MeshStandardMaterial({
-      color: 0xe4e4e7,
+      color: 0xe7e5e4,
       metalness: 0.95,
       roughness: 0.1,
     });
 
-    // Headlight Emissive Material
     const headlightMat = new THREE.MeshStandardMaterial({
-      color: 0xffffff,
-      emissive: headlightsOn ? 0xffffff : 0x222222,
+      color: 0xfffbeb,
+      emissive: headlightsOn ? 0xfffbeb : 0x292524,
       emissiveIntensity: headlightsOn ? 2.5 : 0.1,
       roughness: 0.1,
     });
     headlightMaterialsRef.current.push(headlightMat);
 
-    // Taillight Emissive Material
     const taillightMat = new THREE.MeshStandardMaterial({
       color: 0xff0000,
       emissive: headlightsOn ? 0xff0000 : 0x440000,
@@ -371,64 +402,53 @@ export const Vehicle3DViewer: React.FC<Vehicle3DViewerProps> = ({
       roughness: 0.2,
     });
 
-    // Build specific US car silhouette based on bodyShape
     const shape = vehicle.style3d.bodyShape;
     const [w, h, l] = vehicle.style3d.dimensions;
 
-    // 1. Lower Chassis / Floorpan
     const chassisGeo = new THREE.BoxGeometry(w * 0.88, 0.18, l * 0.92);
     const chassis = new THREE.Mesh(chassisGeo, trimMat);
     chassis.position.set(0, 0.28, 0);
     chassis.castShadow = true;
     carGroup.add(chassis);
 
-    // 2. Primary Body Silhouette
     if (shape === 'muscle') {
-      // Ford Mustang: aggressive sculpt, long hood, short rear deck
       const lowerBodyGeo = new THREE.BoxGeometry(w * 0.94, h * 0.45, l * 0.94);
       const lowerBody = new THREE.Mesh(lowerBodyGeo, bodyMat);
       lowerBody.position.set(0, 0.48, 0);
       lowerBody.castShadow = true;
       carGroup.add(lowerBody);
 
-      // Long sloping front hood with air scoop
       const hoodGeo = new THREE.BoxGeometry(w * 0.88, 0.08, l * 0.32);
       const hood = new THREE.Mesh(hoodGeo, bodyMat);
       hood.position.set(0, 0.72, l * 0.26);
       carGroup.add(hood);
 
-      // Fastback / Soft-Top Roof
       const cabinGeo = new THREE.BoxGeometry(w * 0.8, h * 0.42, l * 0.42);
       const cabin = new THREE.Mesh(cabinGeo, vehicle.style3d.hasConvertibleTop ? trimMat : bodyMat);
       cabin.position.set(0, 0.86, -0.15);
       cabin.castShadow = true;
       carGroup.add(cabin);
 
-      // Sloping Windshield
       const windshieldGeo = new THREE.BoxGeometry(w * 0.76, h * 0.38, 0.06);
       const windshield = new THREE.Mesh(windshieldGeo, glassMat);
       windshield.position.set(0, 0.84, 0.16);
       windshield.rotation.x = -0.45;
       carGroup.add(windshield);
 
-      // Rear Decklid Spoiler
       const spoilerGeo = new THREE.BoxGeometry(w * 0.86, 0.05, 0.22);
       const spoiler = new THREE.Mesh(spoilerGeo, trimMat);
       spoiler.position.set(0, 0.76, -l * 0.42);
       carGroup.add(spoiler);
     } else if (shape === 'suv' || shape === 'luxury_suv') {
-      // Tesla Model Y / Chevy Suburban / Cadillac Escalade
       const isEscalade = vehicle.id === 'cadillac-escalade';
       const isSuburban = vehicle.id === 'chevy-suburban';
 
-      // Lower Body
       const lowerBodyGeo = new THREE.BoxGeometry(w * 0.95, h * 0.5, l * 0.95);
       const lowerBody = new THREE.Mesh(lowerBodyGeo, bodyMat);
       lowerBody.position.set(0, 0.55, 0);
       lowerBody.castShadow = true;
       carGroup.add(lowerBody);
 
-      // Upper Greenhouse / Cabin
       const cabinLength = isSuburban || isEscalade ? l * 0.65 : l * 0.54;
       const cabinGeo = new THREE.BoxGeometry(w * 0.86, h * 0.45, cabinLength);
       const cabin = new THREE.Mesh(cabinGeo, bodyMat);
@@ -436,20 +456,17 @@ export const Vehicle3DViewer: React.FC<Vehicle3DViewerProps> = ({
       cabin.castShadow = true;
       carGroup.add(cabin);
 
-      // Windows wrap
       const sideGlassGeo = new THREE.BoxGeometry(w * 0.87, h * 0.36, cabinLength * 0.9);
       const sideGlass = new THREE.Mesh(sideGlassGeo, glassMat);
       sideGlass.position.set(0, 0.96, isSuburban || isEscalade ? -0.2 : -0.1);
       carGroup.add(sideGlass);
 
-      // Front Windshield
       const windshieldGeo = new THREE.BoxGeometry(w * 0.82, h * 0.38, 0.06);
       const windshield = new THREE.Mesh(windshieldGeo, glassMat);
       windshield.position.set(0, 0.92, (isSuburban || isEscalade ? -0.2 : -0.1) + cabinLength * 0.48);
       windshield.rotation.x = -0.38;
       carGroup.add(windshield);
 
-      // Roof Rails for American Executive SUVs
       if (vehicle.style3d.hasRoofRack) {
         const railGeo = new THREE.BoxGeometry(0.04, 0.04, cabinLength * 0.85);
         const leftRail = new THREE.Mesh(railGeo, chromeMat);
@@ -459,7 +476,6 @@ export const Vehicle3DViewer: React.FC<Vehicle3DViewerProps> = ({
         carGroup.add(leftRail, rightRail);
       }
 
-      // Escalade / Suburban Front Impressive Grille
       if (isEscalade || isSuburban) {
         const grilleGeo = new THREE.BoxGeometry(w * 0.74, h * 0.35, 0.1);
         const grille = new THREE.Mesh(grilleGeo, isEscalade ? chromeMat : trimMat);
@@ -467,39 +483,33 @@ export const Vehicle3DViewer: React.FC<Vehicle3DViewerProps> = ({
         carGroup.add(grille);
       }
     } else {
-      // Jeep Wrangler Rubicon 4xe (Boxy, rugged, vertical windshield, rear spare)
       const lowerBodyGeo = new THREE.BoxGeometry(w * 0.92, h * 0.48, l * 0.88);
       const lowerBody = new THREE.Mesh(lowerBodyGeo, bodyMat);
       lowerBody.position.set(0, 0.6, 0);
       lowerBody.castShadow = true;
       carGroup.add(lowerBody);
 
-      // Boxy upright cabin
       const cabinGeo = new THREE.BoxGeometry(w * 0.84, h * 0.46, l * 0.48);
-      const cabin = new THREE.Mesh(cabinGeo, trimMat); // Freedom Top hardtop
+      const cabin = new THREE.Mesh(cabinGeo, trimMat);
       cabin.position.set(0, 1.02, -0.15);
       carGroup.add(cabin);
 
-      // Upright Windshield
       const windshieldGeo = new THREE.BoxGeometry(w * 0.78, h * 0.38, 0.05);
       const windshield = new THREE.Mesh(windshieldGeo, glassMat);
       windshield.position.set(0, 1.0, 0.12);
-      windshield.rotation.x = -0.12; // Almost vertical
+      windshield.rotation.x = -0.12;
       carGroup.add(windshield);
 
-      // Iconic 7-slot front grille
       const grilleGeo = new THREE.BoxGeometry(w * 0.68, 0.32, 0.08);
       const grille = new THREE.Mesh(grilleGeo, bodyMat);
       grille.position.set(0, 0.62, l * 0.45);
       carGroup.add(grille);
 
-      // Front Steel Winch Bumper
       const bumperGeo = new THREE.BoxGeometry(w * 0.96, 0.14, 0.22);
       const bumper = new THREE.Mesh(bumperGeo, trimMat);
       bumper.position.set(0, 0.42, l * 0.52);
       carGroup.add(bumper);
 
-      // Rear Mounted Spare Tire
       const spareTireGeo = new THREE.CylinderGeometry(0.38, 0.38, 0.24, 20);
       const spareTire = new THREE.Mesh(spareTireGeo, trimMat);
       spareTire.rotation.x = Math.PI / 2;
@@ -507,7 +517,6 @@ export const Vehicle3DViewer: React.FC<Vehicle3DViewerProps> = ({
       carGroup.add(spareTire);
     }
 
-    // 3. Headlights & Taillights
     const hlGeo = new THREE.BoxGeometry(0.24, 0.12, 0.06);
     const leftHeadlight = new THREE.Mesh(hlGeo, headlightMat);
     leftHeadlight.position.set(-w * 0.34, 0.58, l * 0.48);
@@ -522,7 +531,6 @@ export const Vehicle3DViewer: React.FC<Vehicle3DViewerProps> = ({
     rightTaillight.position.set(w * 0.36, 0.62, -l * 0.48);
     carGroup.add(leftTaillight, rightTaillight);
 
-    // 4. Dual Exhaust Tips if Gas
     if (vehicle.style3d.hasExhaustPipes) {
       const pipeGeo = new THREE.CylinderGeometry(0.045, 0.045, 0.2, 12);
       const leftPipe = new THREE.Mesh(pipeGeo, chromeMat);
@@ -534,7 +542,6 @@ export const Vehicle3DViewer: React.FC<Vehicle3DViewerProps> = ({
       carGroup.add(leftPipe, rightPipe);
     }
 
-    // 5. Wheels & Rims (4 distinct corners)
     const wheelR = vehicle.style3d.wheelRadius;
     const wheelW = vehicle.style3d.wheelWidth;
     const wheelX = w * 0.46;
@@ -545,23 +552,21 @@ export const Vehicle3DViewer: React.FC<Vehicle3DViewerProps> = ({
     const rimGeo = new THREE.CylinderGeometry(wheelR * 0.65, wheelR * 0.65, wheelW * 1.02, 16);
 
     const wheelPositions = [
-      [-wheelX, wheelR, wheelZFront], // Front Left
-      [wheelX, wheelR, wheelZFront],  // Front Right
-      [-wheelX, wheelR, wheelZRear],  // Rear Left
-      [wheelX, wheelR, wheelZRear],   // Rear Right
+      [-wheelX, wheelR, wheelZFront],
+      [wheelX, wheelR, wheelZFront],
+      [-wheelX, wheelR, wheelZRear],
+      [wheelX, wheelR, wheelZRear],
     ];
 
     wheelPositions.forEach(([x, y, z]) => {
       const wheelGroup = new THREE.Group();
       wheelGroup.position.set(x, y, z);
 
-      // Tire Rubber
       const tire = new THREE.Mesh(tireGeo, trimMat);
       tire.rotation.z = Math.PI / 2;
       tire.castShadow = true;
       wheelGroup.add(tire);
 
-      // Alloy Rim
       const rim = new THREE.Mesh(rimGeo, chromeMat);
       rim.rotation.z = Math.PI / 2;
       wheelGroup.add(rim);
@@ -574,7 +579,6 @@ export const Vehicle3DViewer: React.FC<Vehicle3DViewerProps> = ({
     carGroupRef.current = carGroup;
   }, [vehicle]);
 
-  // Update Body Color dynamically
   useEffect(() => {
     const col = new THREE.Color(selectedColorHex);
     bodyMaterialsRef.current.forEach((m) => {
@@ -582,15 +586,13 @@ export const Vehicle3DViewer: React.FC<Vehicle3DViewerProps> = ({
     });
   }, [selectedColorHex]);
 
-  // Update Headlights dynamically
   useEffect(() => {
     headlightMaterialsRef.current.forEach((m) => {
-      m.emissive.setHex(headlightsOn ? 0xffffff : 0x222222);
+      m.emissive.setHex(headlightsOn ? 0xfffbeb : 0x292524);
       m.emissiveIntensity = headlightsOn ? 2.5 : 0.1;
     });
   }, [headlightsOn]);
 
-  // Set Camera View Presets
   const setCameraView = (view: 'threeQuarter' | 'side' | 'front' | 'top') => {
     setActiveCameraView(view);
     setAutoRotate(false);
@@ -613,31 +615,49 @@ export const Vehicle3DViewer: React.FC<Vehicle3DViewerProps> = ({
   };
 
   return (
-    <div className="relative w-full h-[460px] sm:h-[540px] rounded-2xl sm:rounded-3xl overflow-hidden bg-slate-950 border border-slate-800 shadow-2xl select-none">
-      {/* 3D WebGL Canvas Container */}
-      <div ref={mountRef} className="w-full h-full cursor-grab active:cursor-grabbing" />
+    <div className="relative w-full h-[460px] sm:h-[540px] rounded-2xl sm:rounded-3xl overflow-hidden bg-[#1e1713] border border-[#3f332b] shadow-2xl select-none">
+      {/* Live Realistic Twilight Porte-Cochère Studio Backdrop */}
+      <LivePhotoBackground scene="twilight" overlay="subtle" />
 
-      {/* Top Left Badge: Vehicle Specs & Live Engine Badge */}
-      <div className="absolute top-4 left-4 z-10 pointer-events-none flex flex-col gap-1.5 text-left">
-        <div className="inline-flex items-center gap-2 px-3 py-1 bg-slate-900/90 border border-slate-700/80 rounded-full text-xs text-white shadow-lg">
-          <span className="w-2 h-2 rounded-full bg-blue-500" />
+      {/* 3D WebGL Canvas Container */}
+      <div ref={mountRef} className="relative z-10 w-full h-full cursor-grab active:cursor-grabbing" />
+
+      {/* Top Left Badge: Vehicle Specs & Live Studio Badge */}
+      <div className="absolute top-4 left-4 z-20 pointer-events-none flex flex-col gap-1.5 text-left">
+        <div className="inline-flex items-center gap-2 px-3 py-1 bg-[#1f1915]/90 backdrop-blur-md border border-[#45382f] rounded-full text-xs text-white shadow-lg">
+          <span className="w-2 h-2 rounded-full bg-[#00b7a8]" />
           <span className="font-bold">{vehicle.year} {vehicle.name}</span>
-          <span className="text-slate-400">• {vehicle.specs.horsepower}</span>
+          <span className="text-[#c8b9a9]">• {vehicle.specs.horsepower}</span>
         </div>
-        <span className="text-[11px] text-slate-400 pl-1 font-mono">
-          Interactive 3D Studio • Click & Drag to Orbit • Scroll to Zoom
+        <span className="text-[11px] text-[#ede5dc] pl-1 font-mono drop-shadow-xs">
+          Interactive 3D Studio • Click &amp; Drag to Orbit • Scroll to Zoom
         </span>
       </div>
 
       {/* Top Right Quick Controls */}
-      <div className="absolute top-4 right-4 z-10 flex items-center gap-2">
+      <div className="absolute top-4 right-4 z-20 flex items-center gap-2">
         <button
+          type="button"
+          onClick={() => setIsDriving(!isDriving)}
+          title="Toggle Highway Wheel Spin Simulation"
+          className={`p-2.5 rounded-xl border text-xs font-semibold flex items-center gap-1.5 transition-colors cursor-pointer backdrop-blur-md ${
+            isDriving
+              ? 'bg-emerald-500/25 border-emerald-400/60 text-emerald-300'
+              : 'bg-[#1f1915]/90 border-[#45382f] text-[#dfd3c5] hover:text-white'
+          }`}
+        >
+          <Gauge className="w-4 h-4" />
+          <span className="hidden sm:inline">{isDriving ? 'Drive ON' : 'Drive Sim'}</span>
+        </button>
+
+        <button
+          type="button"
           onClick={() => setHeadlightsOn(!headlightsOn)}
           title="Toggle Headlights"
-          className={`p-2.5 rounded-xl border text-xs font-semibold flex items-center gap-1.5 transition-colors cursor-pointer ${
+          className={`p-2.5 rounded-xl border text-xs font-semibold flex items-center gap-1.5 transition-colors cursor-pointer backdrop-blur-md ${
             headlightsOn
-              ? 'bg-amber-400/20 border-amber-400/50 text-amber-300'
-              : 'bg-slate-900/80 border-slate-700 text-slate-400 hover:text-white'
+              ? 'bg-amber-400/20 border-amber-400/50 text-amber-200'
+              : 'bg-[#1f1915]/90 border-[#45382f] text-[#dfd3c5] hover:text-white'
           }`}
         >
           <Lightbulb className="w-4 h-4" />
@@ -645,102 +665,18 @@ export const Vehicle3DViewer: React.FC<Vehicle3DViewerProps> = ({
         </button>
 
         <button
+          type="button"
           onClick={() => setAutoRotate(!autoRotate)}
           title="Toggle Turntable Rotation"
-          className={`p-2.5 rounded-xl border text-xs font-semibold flex items-center gap-1.5 transition-colors cursor-pointer ${
+          className={`p-2.5 rounded-xl border text-xs font-semibold flex items-center gap-1.5 transition-colors cursor-pointer backdrop-blur-md ${
             autoRotate
-              ? 'bg-blue-600/30 border-blue-500 text-blue-300'
-              : 'bg-slate-900/80 border-slate-700 text-slate-400 hover:text-white'
+              ? 'bg-[#00b7a8]/30 border-[#00b7a8] text-[#6df0e2]'
+              : 'bg-[#1f1915]/90 border-[#45382f] text-[#dfd3c5] hover:text-white'
           }`}
         >
           <RotateCw className={`w-4 h-4 ${autoRotate ? 'animate-spin' : ''}`} style={{ animationDuration: '6s' }} />
           <span className="hidden sm:inline">Turntable</span>
         </button>
-      </div>
-
-      {/* Sleek Bottom Control Dock (Zero Viewport Occlusion, Collapsible) */}
-      <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-20 w-[94%] max-w-xl flex flex-col items-center">
-        {/* Collapse / Expand Tab */}
-        <button
-          onClick={() => setControlsCollapsed(!controlsCollapsed)}
-          className="px-3 py-1 bg-slate-900/95 hover:bg-slate-850 border border-b-0 border-slate-700 text-[11px] text-slate-300 rounded-t-xl flex items-center gap-1 shadow-md cursor-pointer transition-colors"
-        >
-          {controlsCollapsed ? (
-            <>
-              <ChevronUp className="w-3.5 h-3.5 text-blue-400" />
-              <span>Show Studio Controls</span>
-            </>
-          ) : (
-            <>
-              <ChevronDown className="w-3.5 h-3.5 text-blue-400" />
-              <span>Hide Studio Controls</span>
-            </>
-          )}
-        </button>
-
-        {/* Dock Surface */}
-        {!controlsCollapsed && (
-          <div className="w-full bg-slate-900/95 border border-slate-700/80 rounded-2xl p-3.5 shadow-2xl flex flex-col gap-3 animate-in fade-in slide-in-from-bottom-2">
-            {/* Color Swatches */}
-            <div className="flex items-center justify-between gap-3 flex-wrap">
-              <span className="text-xs font-bold text-slate-300 flex items-center gap-1.5">
-                <Sparkles className="w-3.5 h-3.5 text-blue-400" />
-                <span>Exterior Finish:</span>
-              </span>
-
-              <div className="flex items-center gap-2">
-                {vehicle.availableColors.map((c) => {
-                  const isSelected = selectedColorHex.toLowerCase() === c.hex.toLowerCase();
-                  return (
-                    <button
-                      key={c.name}
-                      onClick={() => onColorChange(c.hex)}
-                      title={c.name}
-                      className={`w-7 h-7 rounded-full border-2 transition-transform cursor-pointer flex items-center justify-center ${
-                        isSelected
-                          ? 'border-white scale-110 shadow-md ring-2 ring-blue-500'
-                          : 'border-slate-600 hover:scale-105 opacity-80 hover:opacity-100'
-                      }`}
-                      style={{ backgroundColor: c.hex }}
-                    >
-                      {isSelected && <Check className="w-3.5 h-3.5 text-white mix-blend-difference" />}
-                    </button>
-                  );
-                })}
-              </div>
-            </div>
-
-            {/* Camera Perspective Presets */}
-            <div className="flex items-center justify-between gap-2 pt-2 border-t border-slate-800">
-              <span className="text-[11px] text-slate-400 font-semibold flex items-center gap-1">
-                <Compass className="w-3 h-3 text-slate-400" /> Camera Angle:
-              </span>
-
-              <div className="flex items-center gap-1.5">
-                {(
-                  [
-                    { id: 'threeQuarter', label: '3/4 Angle' },
-                    { id: 'side', label: 'Profile' },
-                    { id: 'front', label: 'Direct Front' },
-                    { id: 'top', label: 'Top View' },
-                  ] as const
-                ).map((cam) => (
-                  <button
-                    key={cam.id}
-                    onClick={() => setCameraView(cam.id)}
-                    className={`px-2.5 py-1 text-[11px] font-semibold rounded-lg transition-colors cursor-pointer ${
-                      activeCameraView === cam.id
-                        ? 'bg-blue-600 text-white shadow-xs'
-                        : 'bg-slate-800 text-slate-300 hover:bg-slate-700'
-                    }`}
-                  >
-                    {cam.label}
-                  </button>
-                ))}
-              </div>
-            </div>
-          </div>
-        )}
       </div>
     </div>
   );

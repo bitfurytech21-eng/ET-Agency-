@@ -24,11 +24,22 @@ import { PropertyDetailView } from './components/PropertyDetailView';
 import { Footer } from './components/Footer';
 import { SmartsupChat } from './components/SmartsupChat';
 import { BookingModal } from './components/BookingModal';
+import { VehicleBookingModal } from './components/VehicleBookingModal';
 import { VehiclesSection } from './components/VehiclesSection';
 import { CustomerPortal } from './components/CustomerPortal';
+import { AdminPortal } from './components/AdminPortal';
+import { CartDrawer } from './components/CartDrawer';
+import { ShopServicesSection } from './components/ShopServicesSection';
+import { CartCheckoutView } from './components/CartCheckoutView';
+import { LivePhotoBackground } from './components/LivePhotoBackground';
+import { CartProvider, useCart } from './context/CartContext';
 import { PROPERTIES } from './data/lodgingData';
+import { UsVehicle } from './data/vehicleData';
 
-export default function App() {
+function AppShell() {
+  const { liveProperties } = useCart();
+  const activeProperties = liveProperties.length > 0 ? liveProperties : PROPERTIES;
+
   const [currentTab, setCurrentTab] = useState<string>('home');
   const [brochureOpen, setBrochureOpen] = useState<boolean>(false);
   const [bookingModalOpen, setBookingModalOpen] = useState<boolean>(false);
@@ -36,43 +47,63 @@ export default function App() {
   const [modalDate, setModalDate] = useState('');
   const [modalDuration, setModalDuration] = useState('30-60');
 
+  // 3D Fleet Vehicle Booking Modal state
+  const [vehicleModalOpen, setVehicleModalOpen] = useState<boolean>(false);
+  const [selectedVehicle, setSelectedVehicle] = useState<UsVehicle | null>(null);
+  const [selectedVehicleColor, setSelectedVehicleColor] = useState<string | undefined>(undefined);
+
+  // Portfolio search filter state
+  const [portfolioSearchQuery, setPortfolioSearchQuery] = useState<string>('');
+
   // Handle URL hash if any
   useEffect(() => {
     const handleHash = () => {
-      let hash = window.location.hash.replace('#', '').replace(/^\//, '').replace(/\/$/, '');
+      const hash = window.location.hash.replace('#', '').replace(/^\//, '').replace(/\/$/, '');
       if (!hash || hash === 'home') {
         setCurrentTab('home');
         return;
       }
-      
+
       const tabMap: Record<string, string> = {
-        'corporate': 'corporate',
-        'portfolio': 'portfolio',
-        'about': 'about',
+        corporate: 'corporate',
+        'extended-stays': 'corporate',
+        portfolio: 'portfolio',
+        residences: 'portfolio',
+        about: 'about',
         'about-us': 'about',
-        'beahost': 'beahost',
+        beahost: 'beahost',
         'want-to-be-a-host': 'beahost',
-        'guide': 'guide',
+        guide: 'guide',
         'area-guide': 'guide',
-        'faq': 'faq',
-        'faqs': 'faq',
-        'terms': 'terms',
+        faq: 'faq',
+        faqs: 'faq',
+        terms: 'terms',
         'terms-and-conditions': 'terms',
-        'blog': 'blog',
-        'contact': 'contact',
+        blog: 'blog',
+        contact: 'contact',
         'contact-us': 'contact',
-        'privacy': 'privacy',
+        privacy: 'privacy',
         'privacy-policy': 'privacy',
-        'vehicles': 'vehicles',
-        'fleet': 'vehicles',
-        'cars': 'vehicles',
+        vehicles: 'vehicles',
+        fleet: 'vehicles',
+        cars: 'vehicles',
         'car-rentals': 'vehicles',
         'vehicle-rentals': 'vehicles',
-        'portal': 'portal',
+        shop: 'shop',
+        services: 'shop',
+        packages: 'shop',
+        store: 'shop',
+        cart: 'cart',
+        checkout: 'checkout',
+        orders: 'cart',
+        'track-order': 'cart',
+        portal: 'portal',
         'client-portal': 'portal',
-        'login': 'portal',
-        'dashboard': 'portal',
-        'units': 'portal'
+        login: 'portal',
+        dashboard: 'portal',
+        units: 'portal',
+        admin: 'admin',
+        'admin-portal': 'admin',
       };
 
       if (tabMap[hash]) {
@@ -85,8 +116,9 @@ export default function App() {
         return;
       }
 
-      // Check if hash matches any property slug or ID
-      const matched = PROPERTIES.find(p => p.slug === hash || p.id === hash || p.unitNumber === hash || p.code === hash);
+      const matched = PROPERTIES.find(
+        (p) => p.slug === hash || p.id === hash || p.unitNumber === hash || p.code === hash,
+      );
       if (matched) {
         setCurrentTab(`listing:${matched.id}`);
         return;
@@ -100,11 +132,7 @@ export default function App() {
   }, []);
 
   const handleOpenBooking = (propertyId?: string, moveInDate?: string, duration?: string) => {
-    if (propertyId) {
-      setSelectedPropertyId(propertyId);
-    } else {
-      setSelectedPropertyId('any');
-    }
+    setSelectedPropertyId(propertyId || 'any');
     if (moveInDate) {
       setModalDate(moveInDate);
     }
@@ -120,18 +148,40 @@ export default function App() {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
+  const knownViews = [
+    'corporate',
+    'portfolio',
+    'about',
+    'beahost',
+    'guide',
+    'faq',
+    'terms',
+    'blog',
+    'contact',
+    'privacy',
+    'vehicles',
+    'shop',
+    'cart',
+    'checkout',
+    'portal',
+    'admin',
+  ];
+
   return (
-    <div className="min-h-screen bg-slate-50 text-slate-800 flex flex-col font-sans">
-      {/* Header Navigation */}
+    <div className="min-h-screen bg-[#faf8f5] text-[#282828] flex flex-col font-sans">
       <Header
         currentTab={currentTab}
         setCurrentTab={navigateToTab}
         onOpenBooking={() => handleOpenBooking()}
+        onSearchListings={(q) => {
+          setPortfolioSearchQuery(q);
+          navigateToTab('portfolio');
+        }}
       />
 
-      {/* Main View Switching */}
       <main className="flex-1">
-        {(currentTab === 'home' || (!['corporate','portfolio','about','beahost','guide','faq','terms','blog','contact','privacy','vehicles','portal'].includes(currentTab) && !currentTab.startsWith('listing:'))) && (
+        {(currentTab === 'home' ||
+          (!knownViews.includes(currentTab) && !currentTab.startsWith('listing:'))) && (
           <>
             <Hero
               onExploreListings={() => navigateToTab('portfolio')}
@@ -162,62 +212,77 @@ export default function App() {
 
         {currentTab === 'portfolio' && (
           <>
-            <div className="bg-slate-900 text-white py-12 px-4 text-center">
-              <span className="text-xs uppercase font-extrabold text-sky-400 tracking-wider">
-                Full Sacramento Inventory
-              </span>
-              <h1 className="text-3xl sm:text-4xl font-heading font-black mt-1">
-                Portfolio & Midterm Listings
-              </h1>
-              <p className="text-slate-300 text-sm max-w-xl mx-auto mt-2">
-                Units 91, 173, 250, 333, and 335 in Rancho Cordova for 30+ day stays.
-              </p>
+            <div className="relative overflow-hidden py-16 sm:py-20 px-4 text-center text-white border-b border-[#3a2f28]">
+              <LivePhotoBackground scene="courtyard" secondaryScene="interior" overlay="espresso" />
+              <div className="relative z-10 max-w-3xl mx-auto">
+                <span className="text-xs uppercase font-extrabold text-[#4de0d2] tracking-widest">
+                  Furnished Residences · Greater Sacramento
+                </span>
+                <h1 className="text-3xl sm:text-5xl font-heading font-black mt-2 text-white">
+                  1- &amp; 2-Bedroom Furnished Apartments
+                </h1>
+                <p className="text-[#ede5dc] text-sm sm:text-base max-w-2xl mx-auto mt-3 leading-relaxed">
+                  Move-in-ready residences in Rancho Cordova for short visits (5+ nights), extended 30+ day stays, family relocations, home renovations, and organizational housing.
+                </p>
+              </div>
             </div>
             <PropertiesSection
+              properties={activeProperties}
               onSelectPropertyForBooking={(id, date, dur) => handleOpenBooking(id, date, dur)}
               onViewListingDetails={(property) => navigateToTab(`listing:${property.id}`)}
+              onNavigate={navigateToTab}
+              searchQuery={portfolioSearchQuery}
+              onClearSearch={() => setPortfolioSearchQuery('')}
             />
             <AmenitiesSection />
           </>
         )}
 
-        {currentTab.startsWith('listing:') && (() => {
-          const propId = currentTab.replace('listing:', '');
-          const property = PROPERTIES.find(p => p.id === propId || p.slug === propId) || PROPERTIES[0];
-          return (
-            <PropertyDetailView
-              property={property}
-              onBack={() => navigateToTab('portfolio')}
-              onOpenBooking={(id, date, dur) => handleOpenBooking(id, date, dur)}
-              onSelectAnotherProperty={(id) => navigateToTab(`listing:${id}`)}
-            />
-          );
-        })()}
+        {currentTab.startsWith('listing:') &&
+          (() => {
+            const propId = currentTab.replace('listing:', '');
+            const property =
+              activeProperties.find((p) => p.id === propId || p.slug === propId) ||
+              activeProperties[0];
+            return (
+              <PropertyDetailView
+                property={property}
+                onBack={() => navigateToTab('portfolio')}
+                onOpenBooking={(id, date, dur) => handleOpenBooking(id, date, dur)}
+                onSelectAnotherProperty={(id) => navigateToTab(`listing:${id}`)}
+                onNavigate={navigateToTab}
+              />
+            );
+          })()}
 
         {currentTab === 'about' && (
           <>
             <AboutView onOpenBooking={() => handleOpenBooking()} />
-            <AwardsSection />
+            <AwardsSection
+              onOpenBrochure={() => setBrochureOpen(true)}
+              onExploreListings={() => navigateToTab('portfolio')}
+            />
             <ReviewsSection />
           </>
         )}
 
-        {currentTab === 'beahost' && (
-          <HostDesignView />
-        )}
+        {currentTab === 'beahost' && <HostDesignView />}
 
         {currentTab === 'guide' && (
           <>
-            <div className="bg-slate-900 text-white py-12 px-4 text-center">
-              <span className="text-xs uppercase font-extrabold text-teal-400 tracking-wider">
-                Local Area Highlights
-              </span>
-              <h1 className="text-3xl sm:text-4xl font-heading font-black mt-1">
-                Sacramento & Rancho Cordova Travel Guide
-              </h1>
-              <p className="text-slate-300 text-sm max-w-xl mx-auto mt-2">
-                Discover local dining, the 6-brewery Barrel District, historic parks, and Sierra day trips.
-              </p>
+            <div className="relative overflow-hidden py-16 sm:py-20 px-4 text-center text-white border-b border-[#3a2f28]">
+              <LivePhotoBackground scene="river" secondaryScene="courtyard" overlay="espresso" />
+              <div className="relative z-10 max-w-3xl mx-auto">
+                <span className="text-xs uppercase font-extrabold text-[#4de0d2] tracking-widest">
+                  Regional Guide &amp; Neighborhood Highlights
+                </span>
+                <h1 className="text-3xl sm:text-5xl font-heading font-black mt-2 text-white">
+                  Greater Sacramento &amp; Rancho Cordova Guide
+                </h1>
+                <p className="text-[#ede5dc] text-sm sm:text-base max-w-xl mx-auto mt-3 leading-relaxed">
+                  Explore American River Parkway trails, local dining, the Barrel District, cultural landmarks, and weekend trips from Gold Country to Lake Tahoe.
+                </p>
+              </div>
             </div>
             <AreaGuideSection
               onOpenBooking={() => handleOpenBooking()}
@@ -226,17 +291,11 @@ export default function App() {
           </>
         )}
 
-        {currentTab === 'faq' && (
-          <FAQView onOpenBooking={() => handleOpenBooking()} />
-        )}
+        {currentTab === 'faq' && <FAQView onOpenBooking={() => handleOpenBooking()} />}
 
-        {currentTab === 'terms' && (
-          <TermsView onOpenBooking={() => handleOpenBooking()} />
-        )}
+        {currentTab === 'terms' && <TermsView onOpenBooking={() => handleOpenBooking()} />}
 
-        {currentTab === 'blog' && (
-          <BlogView onOpenBooking={() => handleOpenBooking()} />
-        )}
+        {currentTab === 'blog' && <BlogView onOpenBooking={() => handleOpenBooking()} />}
 
         {currentTab === 'contact' && (
           <div className="pt-8">
@@ -244,16 +303,27 @@ export default function App() {
           </div>
         )}
 
-        {currentTab === 'privacy' && (
-          <PrivacyPolicyView />
-        )}
+        {currentTab === 'privacy' && <PrivacyPolicyView />}
 
         {currentTab === 'vehicles' && (
           <VehiclesSection
-            onReserveVehicle={(vehicleName) => {
-              handleOpenBooking(undefined, undefined, undefined);
+            onReserveVehicle={(vehicle, colorHex) => {
+              setSelectedVehicle(vehicle);
+              setSelectedVehicleColor(colorHex);
+              setVehicleModalOpen(true);
             }}
+            onNavigate={navigateToTab}
           />
+        )}
+
+        {currentTab === 'shop' && <ShopServicesSection onNavigate={navigateToTab} />}
+
+        {currentTab === 'cart' && (
+          <CartCheckoutView initialMode="cart" onNavigate={navigateToTab} />
+        )}
+
+        {currentTab === 'checkout' && (
+          <CartCheckoutView initialMode="checkout" onNavigate={navigateToTab} />
         )}
 
         {currentTab === 'portal' && (
@@ -262,32 +332,50 @@ export default function App() {
             onNavigateTab={navigateToTab}
           />
         )}
+
+        {currentTab === 'admin' && <AdminPortal onNavigateTab={navigateToTab} />}
       </main>
 
-      {/* Footer */}
       <Footer
         onNavClick={navigateToTab}
         onOpenBooking={() => handleOpenBooking()}
         onOpenBrochure={() => setBrochureOpen(true)}
       />
 
-      {/* Global Modern Booking / Reservation Inquiry Modal */}
+      <CartDrawer onNavigate={navigateToTab} />
+
       <BookingModal
         isOpen={bookingModalOpen}
         onClose={() => setBookingModalOpen(false)}
         initialPropertyId={selectedPropertyId}
         initialMoveInDate={modalDate}
         initialDuration={modalDuration}
+        properties={activeProperties}
       />
 
-      {/* Brochure Modal */}
-      <BrochureModal
-        isOpen={brochureOpen}
-        onClose={() => setBrochureOpen(false)}
+      <VehicleBookingModal
+        isOpen={vehicleModalOpen}
+        onClose={() => setVehicleModalOpen(false)}
+        initialVehicle={selectedVehicle}
+        initialColorHex={selectedVehicleColor}
+        onOpenPortal={() => {
+          setVehicleModalOpen(false);
+          navigateToTab('portal');
+        }}
+        onNavigate={navigateToTab}
       />
 
-      {/* Smartsup Live Chat Widget */}
+      <BrochureModal isOpen={brochureOpen} onClose={() => setBrochureOpen(false)} />
+
       <SmartsupChat />
     </div>
+  );
+}
+
+export default function App() {
+  return (
+    <CartProvider>
+      <AppShell />
+    </CartProvider>
   );
 }

@@ -1,17 +1,7 @@
 import React, { useState } from 'react';
-import { COMPANY_INFO } from '../data/lodgingData';
-import { 
-  Heart, 
-  Award, 
-  Plane, 
-  GraduationCap, 
-  ShieldCheck, 
-  CheckCircle2, 
-  ChevronRight,
-  Mail,
-  Phone,
-  X
-} from 'lucide-react';
+import { getFallbackPropertyImage } from '../data/lodgingData';
+import { Heart, X } from 'lucide-react';
+import { LivePhotoBackground } from './LivePhotoBackground';
 
 interface AboutViewProps {
   onOpenBooking: () => void;
@@ -41,21 +31,22 @@ export const AboutView: React.FC<AboutViewProps> = ({ onOpenBooking }) => {
   return (
     <div className="w-full bg-white text-[#333333]">
       {/* =========================================================================
-          SECTION 1: Hero Banner (About Us - Hello from Easy Travel Lodging!)
+          SECTION 1: Live Realistic Photo Hero Banner
           ========================================================================= */}
-      <section className="bg-slate-900 text-white py-16 sm:py-24 px-4 sm:px-8 border-b border-slate-800">
-        <div className="max-w-5xl mx-auto text-center space-y-4">
-          <span className="text-xs font-bold uppercase tracking-[4px] text-[#00b7a8] inline-block">
-            Hello from Easy Travel Lodging!
+      <section className="relative overflow-hidden text-white py-16 sm:py-24 px-4 sm:px-8 border-b border-[#3a2f28]">
+        <LivePhotoBackground scene="courtyard" secondaryScene="interior" overlay="espresso" />
+        <div className="relative z-10 max-w-5xl mx-auto text-center space-y-4">
+          <span className="text-xs font-bold uppercase tracking-[4px] text-[#4de0d2] inline-block">
+            Locally Owned &amp; Operated Hospitality
           </span>
           <h1 className="font-heading font-black text-4xl sm:text-6xl text-white tracking-tight">
-            About Us
+            Meet Bill &amp; Marlena
           </h1>
-          <p className="text-slate-300 text-lg sm:text-xl max-w-3xl mx-auto leading-relaxed pt-2">
-            We are a corporate housing company designed to serve traveling professionals who will be in the Sacramento area for <strong>30 days or more</strong>.
+          <p className="text-[#f2ebe2] text-lg sm:text-xl max-w-3xl mx-auto leading-relaxed pt-2">
+            We founded Easy Travel Lodging to give families, relocating homeowners, visiting guests, and extended-stay travelers a genuine home in Greater Sacramento—whether for a weeklong stay or several months.
           </p>
-          <p className="text-slate-400 text-sm sm:text-base max-w-3xl mx-auto leading-relaxed">
-            Bill and Marlena have been married for <strong>38 years</strong> and are &ldquo;officially&rdquo; retired from their W-2 jobs. They love to spend their time with friends and family and be outdoors. They love kayaking, hiking, traveling, and fun adventures.
+          <p className="text-[#dfd3c5] text-sm sm:text-base max-w-3xl mx-auto leading-relaxed">
+            Married for <strong>38 years</strong>, Bill Wheelock and Dr. Marlena Uhrik bring decades of leadership, education, and interior staging experience to hospitality—and enjoy kayaking, hiking, aviation, and time outdoors with family and friends.
           </p>
         </div>
       </section>
@@ -63,45 +54,49 @@ export const AboutView: React.FC<AboutViewProps> = ({ onOpenBooking }) => {
       {/* =========================================================================
           SECTION 2: Host Bill Section
           ========================================================================= */}
-      <section className="py-14 sm:py-20 px-4 sm:px-8 bg-white border-b border-slate-100">
+      <section className="py-14 sm:py-20 px-4 sm:px-8 bg-white border-b border-[#efe9e0]">
         <div className="max-w-6xl mx-auto">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-center">
-            {/* Image Col (Left) */}
             <div className="lg:col-span-5 flex justify-center">
-              <div className="et_curve_left max-w-md w-full bg-stone-100 shadow-lg overflow-hidden border border-slate-200">
+              <div className="max-w-md w-full bg-[#faf8f5] rounded-2xl shadow-lg overflow-hidden border border-[#e6dfd5]">
                 <img
                   src="https://easytravellodging.com/wp-content/uploads/2023/01/Bill-Marlena-airplanehangersign.jpg"
-                  alt="Bill Wheelock - Easy Travel Lodging Host"
+                  alt="Bill Wheelock - Easy Travel Lodging Co-Founder"
+                  onError={(e) => {
+                    e.currentTarget.onerror = null;
+                    e.currentTarget.src = getFallbackPropertyImage(11);
+                  }}
                   className="w-full h-80 sm:h-[400px] object-cover hover:scale-105 transition-transform duration-500"
                   loading="lazy"
                 />
               </div>
             </div>
 
-            {/* Text Col (Right) */}
             <div className="lg:col-span-7 space-y-4 text-left">
               <span className="text-xs font-extrabold uppercase tracking-widest text-[#00b7a8]">
-                Your Host
+                Co-Founder &amp; Operations Lead
               </span>
-              <h2 className="font-heading font-black text-3xl sm:text-5xl text-slate-900">
-                Bill
+              <h2 className="font-heading font-black text-3xl sm:text-5xl text-[#282828]">
+                Bill Wheelock
               </h2>
-              <div className="space-y-3 text-slate-700 text-base sm:text-lg leading-relaxed pt-2">
+              <div className="space-y-3 text-[#5c5046] text-base sm:text-lg leading-relaxed pt-2">
                 <p>
-                  Bill’s career in <strong>Information Systems Management</strong> had him busy traveling around the United States where he headed up teams of people who installed computer systems in a variety of industries.
+                  Bill’s career in <strong className="text-[#282828]">Information Systems Management</strong> took him across the United States leading technical teams that deployed enterprise systems across diverse industries.
                 </p>
                 <p>
-                  As a <strong>Private Pilot for over 40 years</strong>, a Radio Voiceover artist, and a <strong>Navy Veteran serving in Vietnam</strong>, he is also a graduate of the University of San Francisco with an MBA from the University of Phoenix.
+                  A <strong className="text-[#282828]">U.S. Navy veteran</strong>, radio voiceover artist, and <strong className="text-[#282828]">licensed private pilot for more than 40 years</strong>, Bill holds a bachelor’s degree from the University of San Francisco and an MBA from the University of Phoenix.
                 </p>
                 <p>
-                  He has been able to utilize all these skills and life experiences to really champion the things that are important to him.
+                  Today, he oversees residence readiness, guest logistics, and fleet coordination with the same reliability and attention to detail he valued during his own years on the road.
                 </p>
               </div>
 
-              <div className="pt-2 flex flex-wrap gap-2 text-xs font-bold text-slate-600">
-                <span className="px-3 py-1 bg-slate-100 rounded-md border border-slate-200">✓ U.S. Navy Veteran</span>
-                <span className="px-3 py-1 bg-slate-100 rounded-md border border-slate-200">✓ 40+ Year Pilot</span>
-                <span className="px-3 py-1 bg-slate-100 rounded-md border border-slate-200">✓ MBA Graduate</span>
+              <div className="pt-2 flex flex-wrap items-center gap-2 text-xs font-semibold text-[#82634f]">
+                <span>U.S. Navy Veteran</span>
+                <span aria-hidden="true">·</span>
+                <span>40+ Year Private Pilot</span>
+                <span aria-hidden="true">·</span>
+                <span>MBA, Operations &amp; Systems</span>
               </div>
             </div>
           </div>
@@ -111,42 +106,46 @@ export const AboutView: React.FC<AboutViewProps> = ({ onOpenBooking }) => {
       {/* =========================================================================
           SECTION 3: Host Marlena Section
           ========================================================================= */}
-      <section className="py-14 sm:py-20 px-4 sm:px-8 bg-stone-50/70 border-b border-slate-200">
+      <section className="py-14 sm:py-20 px-4 sm:px-8 bg-[#faf8f5] border-b border-[#e6dfd5]">
         <div className="max-w-6xl mx-auto">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-center">
-            {/* Text Col (Left) */}
             <div className="lg:col-span-7 space-y-4 text-left order-2 lg:order-1">
               <span className="text-xs font-extrabold uppercase tracking-widest text-[#00b7a8]">
-                Your Host
+                Co-Founder &amp; Design Director
               </span>
-              <h2 className="font-heading font-black text-3xl sm:text-5xl text-slate-900">
-                Marlena
+              <h2 className="font-heading font-black text-3xl sm:text-5xl text-[#282828]">
+                Dr. Marlena Uhrik
               </h2>
-              <div className="space-y-3 text-slate-700 text-base sm:text-lg leading-relaxed pt-2">
+              <div className="space-y-3 text-[#5c5046] text-base sm:text-lg leading-relaxed pt-2">
                 <p>
-                  Marlena spent her entire career in <strong>Education</strong>. Starting off as an Elementary School Teacher and working extensively in diverse settings her career culminated in getting her <strong>Doctorate degree in Educational Leadership</strong>.
+                  Marlena dedicated her first career to <strong className="text-[#282828]">public education</strong>—beginning as an elementary school teacher before earning her <strong className="text-[#282828]">Doctorate in Educational Leadership</strong>.
                 </p>
                 <p>
-                  She retired as an <strong>Educational Consultant for the California Department of Education</strong> and is noted for the many local, national, and international awards for her work for kids and families.
+                  She retired as an <strong className="text-[#282828]">Educational Consultant for the California Department of Education</strong>, recognized locally, nationally, and internationally for her work supporting children and families.
                 </p>
                 <p>
-                  Marlena’s after-retirement journey took her to become a Real Estate Investor, Realtor, Certified Home Stager, and a published author with several award-winning books.
+                  In her second chapter, Marlena became a licensed Realtor, real estate investor, Certified Home Stager, and award-winning author—shaping the warm, livable aesthetic of every Easy Travel Lodging residence.
                 </p>
               </div>
 
-              <div className="pt-2 flex flex-wrap gap-2 text-xs font-bold text-slate-600">
-                <span className="px-3 py-1 bg-slate-100 rounded-md border border-slate-200">✓ Ed.D. Educational Leadership</span>
-                <span className="px-3 py-1 bg-slate-100 rounded-md border border-slate-200">✓ 1996 Olympic Torchbearer</span>
-                <span className="px-3 py-1 bg-slate-100 rounded-md border border-slate-200">✓ Published Author</span>
+              <div className="pt-2 flex flex-wrap items-center gap-2 text-xs font-semibold text-[#82634f]">
+                <span>Ed.D. Educational Leadership</span>
+                <span aria-hidden="true">·</span>
+                <span>1996 Olympic Torchbearer</span>
+                <span aria-hidden="true">·</span>
+                <span>Certified Home Stager &amp; Author</span>
               </div>
             </div>
 
-            {/* Image Col (Right) */}
             <div className="lg:col-span-5 flex justify-center order-1 lg:order-2">
-              <div className="et_curve_right max-w-md w-full bg-stone-100 shadow-lg overflow-hidden border border-slate-200">
+              <div className="max-w-md w-full bg-[#f4efe9] rounded-2xl shadow-lg overflow-hidden border border-[#e6dfd5]">
                 <img
                   src="https://easytravellodging.com/wp-content/uploads/2023/01/Bill-Marlena-dressedup.jpg"
-                  alt="Dr. Marlena Uhrik - Easy Travel Lodging Host"
+                  alt="Dr. Marlena Uhrik - Easy Travel Lodging Co-Founder"
+                  onError={(e) => {
+                    e.currentTarget.onerror = null;
+                    e.currentTarget.src = getFallbackPropertyImage(12);
+                  }}
                   className="w-full h-80 sm:h-[400px] object-cover hover:scale-105 transition-transform duration-500"
                   loading="lazy"
                 />
@@ -159,101 +158,105 @@ export const AboutView: React.FC<AboutViewProps> = ({ onOpenBooking }) => {
       {/* =========================================================================
           SECTION 4: Bill & Marlena Joint Mission & Philanthropy
           ========================================================================= */}
-      <section className="py-16 sm:py-24 px-4 sm:px-8 bg-white border-b border-slate-200">
+      <section className="py-16 sm:py-24 px-4 sm:px-8 bg-white border-b border-[#e6dfd5]">
         <div className="max-w-6xl mx-auto space-y-12">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
-            {/* Joint Photo */}
             <div className="lg:col-span-5 flex justify-center">
-              <div className="rounded-2xl overflow-hidden shadow-xl border border-slate-200 max-w-md w-full">
+              <div className="rounded-2xl overflow-hidden shadow-xl border border-[#e6dfd5] max-w-md w-full">
                 <img
                   src="https://easytravellodging.com/wp-content/uploads/2022/11/Marlena-Bill-Plane.jpg"
                   alt="Bill and Marlena Wheelock with Airplane"
+                  onError={(e) => {
+                    e.currentTarget.onerror = null;
+                    e.currentTarget.src = getFallbackPropertyImage(13);
+                  }}
                   className="w-full h-80 sm:h-[380px] object-cover hover:scale-105 transition-transform duration-500"
                   loading="lazy"
                 />
               </div>
             </div>
 
-            {/* Joint Narrative */}
             <div className="lg:col-span-7 space-y-5 text-left">
-              <h2 className="font-heading font-black text-3xl sm:text-5xl text-slate-900">
-                Bill &amp; Marlena
+              <h2 className="font-heading font-black text-3xl sm:text-5xl text-[#282828]">
+                Why We Built Easy Travel Lodging
               </h2>
 
-              <p className="text-slate-700 text-base sm:text-lg leading-relaxed">
-                Both Bill and Marlena know what it is like to be traveling professionals. It is what they did throughout their careers. While the travel aspect might seem like fun---especially in the beginning---there are stressors and limitations when, at the end of the day, all you have is an empty hotel room to stay in.
+              <p className="text-[#5c5046] text-base sm:text-lg leading-relaxed">
+                Having spent years traveling across the country during their own careers, Bill and Marlena know firsthand how tiring impersonal hotel rooms become when you are away from home for more than a few nights.
               </p>
 
-              <p className="text-slate-700 text-base sm:text-lg leading-relaxed">
-                People have asked, &ldquo;Why are you doing Easy Travel Lodging at our age?&rdquo; Both Bill and Marlena say they have found fulfillment in serving others even throughout their careers. Easy Travel Lodging serves as a vehicle for providing great service to others and at the same time supporting the things that are important to them.
+              <p className="text-[#5c5046] text-base sm:text-lg leading-relaxed">
+                They created Easy Travel Lodging to offer a better alternative—welcoming families between homes, visiting relatives, patients and caregivers, vacationers, and business guests with residences that feel calm, well-equipped, and genuinely cared for.
               </p>
 
-              <div className="p-4 rounded-xl bg-rose-50 border border-rose-200 text-rose-950 text-sm sm:text-base font-semibold flex items-center gap-3">
+              <div className="p-4 rounded-xl bg-[#faf3ef] border border-[#e3d2c7] text-[#3d2e24] text-sm sm:text-base font-semibold flex items-center gap-3">
                 <Heart className="w-6 h-6 text-rose-500 fill-rose-500 shrink-0" />
                 <span>
-                  A portion of their proceeds from Easy Travel Lodging goes to their favorite causes: <strong>kids, vets, and pets</strong>.
+                  A portion of proceeds from every reservation supports organizations serving <strong>children, veterans, and pets</strong>.
                 </span>
               </div>
             </div>
           </div>
 
-          {/* Inspirational Highlights Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-4">
-            <div className="p-6 bg-slate-50 rounded-2xl border border-slate-200 space-y-2 text-left">
-              <p className="text-slate-800 text-sm sm:text-base italic font-medium leading-relaxed">
-                &ldquo;We are so excited about providing an awesome experience for our guests. We really wanted Easy Travel Lodging to be the flagship for short-term rentals.&rdquo;
+            <div className="p-6 bg-[#faf8f5] rounded-2xl border border-[#e6dfd5] space-y-2 text-left">
+              <p className="text-[#3d352e] text-sm sm:text-base italic font-medium leading-relaxed">
+                &ldquo;We wanted every residence to set a higher standard for furnished rentals—combining residential comfort with dependable, personal hospitality.&rdquo;
               </p>
             </div>
 
-            <div className="p-6 bg-slate-50 rounded-2xl border border-slate-200 space-y-2 text-left">
-              <p className="text-slate-800 text-sm sm:text-base italic font-medium leading-relaxed">
-                &ldquo;We wanted to be distinct and have people remember us as providing exceptional service with amazing accommodations.&rdquo;
+            <div className="p-6 bg-[#faf8f5] rounded-2xl border border-[#e6dfd5] space-y-2 text-left">
+              <p className="text-[#3d352e] text-sm sm:text-base italic font-medium leading-relaxed">
+                &ldquo;Every guest deserves to arrive to a spotless home, a stocked kitchen, and hosts who are reachable whenever a question comes up.&rdquo;
               </p>
             </div>
 
-            <div className="p-6 bg-slate-50 rounded-2xl border border-slate-200 space-y-2 text-left">
-              <p className="text-slate-800 text-sm sm:text-base italic font-medium leading-relaxed">
-                &ldquo;It has been a pleasure to watch our company grow and serve so many people. We love meeting people from around the world and having a chance to learn from others.&rdquo;
+            <div className="p-6 bg-[#faf8f5] rounded-2xl border border-[#e6dfd5] space-y-2 text-left">
+              <p className="text-[#3d352e] text-sm sm:text-base italic font-medium leading-relaxed">
+                &ldquo;Welcoming guests from down the street and around the world—and helping make their time in Sacramento easier—is what keeps us inspired.&rdquo;
               </p>
             </div>
 
-            <div className="p-6 bg-slate-50 rounded-2xl border border-slate-200 space-y-2 text-left">
-              <p className="text-slate-800 text-sm sm:text-base italic font-medium leading-relaxed">
-                &ldquo;We are thrilled when people say, &lsquo;This was the BEST ever&rsquo; or &lsquo;I can&rsquo;t say enough about how awesome Bill and Marlena were!&rsquo;&rdquo;
+            <div className="p-6 bg-[#faf8f5] rounded-2xl border border-[#e6dfd5] space-y-2 text-left">
+              <p className="text-[#3d352e] text-sm sm:text-base italic font-medium leading-relaxed">
+                &ldquo;Nothing means more to us than hearing a guest say their apartment truly felt like home from day one.&rdquo;
               </p>
             </div>
           </div>
 
-          {/* Closing Invitation */}
-          <div className="text-center p-8 bg-teal-50 rounded-2xl border border-teal-200 space-y-3">
-            <h3 className="font-heading font-black text-2xl text-teal-950">
-              We love what we are doing. Come be a part of it!
-            </h3>
-            <p className="text-teal-800 text-base max-w-xl mx-auto">
-              Share in the peace and tranquility in your home away from home in Rancho Cordova and Sacramento.
-            </p>
-            <div className="pt-2">
-              <button
-                onClick={onOpenBooking}
-                className="et_pb_button et_pb_button_teal cursor-pointer shadow-md text-sm font-bold uppercase tracking-wider"
-              >
-                Book Your Stay
-              </button>
+          <div className="relative overflow-hidden text-center p-10 rounded-3xl border border-[#3a2f28] space-y-3 text-white shadow-lg">
+            <LivePhotoBackground scene="interior" overlay="espresso" />
+            <div className="relative z-10 space-y-3">
+              <h3 className="font-heading font-black text-2xl sm:text-3xl text-white">
+                We Would Love to Host Your Upcoming Stay
+              </h3>
+              <p className="text-[#ede5dc] text-base max-w-xl mx-auto">
+                Explore open dates across our Rancho Cordova and Greater Sacramento residences or reach out with questions anytime.
+              </p>
+              <div className="pt-2">
+                <button
+                  onClick={onOpenBooking}
+                  className="et_pb_button et_pb_button_teal cursor-pointer shadow-md text-sm font-bold uppercase tracking-wider"
+                >
+                  Check Residence Availability
+                </button>
+              </div>
             </div>
           </div>
         </div>
       </section>
 
       {/* =========================================================================
-          SECTION 5: Guest Reviews Section (Parallax Background)
+          SECTION 5: Guest Reviews Section
           ========================================================================= */}
-      <section className="et_section_corporate_reviews py-16 sm:py-24 px-4 sm:px-8">
-        <div className="max-w-6xl mx-auto bg-white/90 backdrop-blur-xs p-6 sm:p-12 rounded-2xl shadow-xl border border-white/60 text-left">
+      <section className="relative overflow-hidden py-16 sm:py-24 px-4 sm:px-8">
+        <LivePhotoBackground scene="courtyard" overlay="light" />
+        <div className="relative z-10 max-w-6xl mx-auto bg-white/95 backdrop-blur-xs p-6 sm:p-12 rounded-2xl shadow-lg border border-[#e6dfd5] text-left">
           <div className="mb-8">
-            <span className="text-xs font-bold uppercase tracking-[4px] text-slate-800 block mb-1">
+            <span className="text-xs font-bold uppercase tracking-[4px] text-[#82634f] block mb-1">
               Reviews
             </span>
-            <h2 className="font-heading font-black text-3xl sm:text-5xl text-slate-950">
+            <h2 className="font-heading font-black text-3xl sm:text-5xl text-[#282828]">
               Guest Reviews
             </h2>
           </div>
@@ -263,16 +266,20 @@ export const AboutView: React.FC<AboutViewProps> = ({ onOpenBooking }) => {
               <div 
                 key={idx}
                 onClick={() => setSelectedReviewImage(rev.src)}
-                className="group relative cursor-pointer bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-all duration-300 transform hover:-translate-y-1 border border-stone-200"
+                className="group relative cursor-pointer bg-white rounded-xl overflow-hidden shadow-2xs hover:shadow-md transition-all duration-300 transform hover:-translate-y-1 border border-[#e6dfd5]"
               >
                 <img 
                   src={rev.src} 
                   alt={rev.alt}
+                  onError={(e) => {
+                    e.currentTarget.onerror = null;
+                    e.currentTarget.src = getFallbackPropertyImage(idx);
+                  }}
                   className="w-full h-auto object-cover"
                   loading="lazy"
                 />
-                <div className="absolute inset-0 bg-slate-900/10 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                  <span className="bg-white/95 text-slate-900 px-3 py-1.5 rounded-full text-xs font-bold shadow-md">
+                <div className="absolute inset-0 bg-[#282828]/15 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                  <span className="bg-white/95 text-[#282828] px-3 py-1.5 rounded-full text-xs font-bold shadow-md">
                     Click to Enlarge
                   </span>
                 </div>
@@ -285,7 +292,7 @@ export const AboutView: React.FC<AboutViewProps> = ({ onOpenBooking }) => {
       {/* Lightbox Modal for Reviews */}
       {selectedReviewImage && (
         <div 
-          className="fixed inset-0 z-50 bg-black/80 backdrop-blur-xs flex items-center justify-center p-4 animate-in fade-in"
+          className="fixed inset-0 z-50 bg-[#1c1613]/80 backdrop-blur-xs flex items-center justify-center p-4 animate-in fade-in"
           onClick={() => setSelectedReviewImage(null)}
         >
           <div 
@@ -294,7 +301,7 @@ export const AboutView: React.FC<AboutViewProps> = ({ onOpenBooking }) => {
           >
             <button
               onClick={() => setSelectedReviewImage(null)}
-              className="absolute top-3 right-3 w-8 h-8 rounded-full bg-stone-100 hover:bg-stone-200 text-stone-700 flex items-center justify-center cursor-pointer transition-colors"
+              className="absolute top-3 right-3 w-8 h-8 rounded-full bg-[#faf8f5] hover:bg-[#efe9e0] text-[#282828] flex items-center justify-center cursor-pointer transition-colors"
             >
               <X className="w-5 h-5" />
             </button>

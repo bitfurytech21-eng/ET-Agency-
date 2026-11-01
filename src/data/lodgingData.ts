@@ -20,7 +20,10 @@ export interface PropertyListing {
   status: 'Available' | 'Inquired' | 'Reserved';
   sqft?: string;
   liveUrl?: string;
+  minimumStayDays?: number;
 }
+
+export type Property = PropertyListing;
 
 export interface ReviewItem {
   id: string;
@@ -60,19 +63,41 @@ export interface HouseRule {
   strictness: 'Required' | 'Standard Policy' | 'Strict';
 }
 
+export const FALLBACK_PROPERTY_IMAGES: string[] = [
+  '/assets/aistudio/IMG_7507_859e455d.jpeg',
+  '/assets/aistudio/IMG_7508_48161a22.jpeg',
+  '/assets/aistudio/IMG_7509_f0c79223.jpeg',
+  '/assets/aistudio/IMG_7512_017601e0.jpeg',
+  '/assets/aistudio/IMG_7513_1054402c.jpeg',
+  '/assets/aistudio/IMG_7514_ed633c70.jpeg',
+  '/assets/aistudio/IMG_7515_4de98041.jpeg',
+  '/assets/aistudio/IMG_7516_dce1d031.jpeg',
+  '/assets/aistudio/IMG_7518_0ee1a951.jpeg',
+  '/assets/aistudio/IMG_7520_e944fa06.jpeg',
+  '/assets/aistudio/IMG_7521_7eb0f68d.jpeg',
+  '/assets/aistudio/IMG_7522_32340e37.jpeg',
+  '/assets/aistudio/IMG_7523_c24ad0f9.jpeg',
+  '/assets/aistudio/IMG_7525_5c632db5.jpeg',
+];
+
+export function getFallbackPropertyImage(index = 0): string {
+  return FALLBACK_PROPERTY_IMAGES[Math.abs(index) % FALLBACK_PROPERTY_IMAGES.length];
+}
+
 export const COMPANY_INFO = {
   name: 'Easy Travel Lodging',
-  shortName: 'ETL Corporate Housing',
-  tagline: 'A Home Away From Home — Stay With Us In Comfort',
-  subtagline: 'Where comfort meets integrity, and every guest is treated with dignity and care.',
+  shortName: 'Easy Travel Lodging',
+  tagline: 'Furnished Residences, Fleet Mobility & Concierge Care',
+  subtagline:
+    'Thoughtfully equipped 1- and 2-bedroom apartments, flexible stays from 5 nights to 12+ months, and attentive local hospitality across Greater Sacramento.',
   phone: '916-800-3295',
   phoneClean: '9168003295',
   email: 'Contact@EasyTravelLodging.com',
   location: 'Sacramento & Rancho Cordova, CA',
-  hours: 'Available 7 Days a Week for Guest Inquiries',
+  hours: 'Available 7 Days a Week for Guest Support & Inquiries',
   checkInTime: '2:00 PM',
   checkOutTime: '11:00 AM',
-  minimumStay: '5 Days or More (5 to 10 Day Short Stays Available)',
+  minimumStay: 'Flexible Short Stays (5+ Nights) & Extended Stays (30+ Days)',
   logoUrl: 'https://easytravellodging.com/wp-content/uploads/2022/02/Easy-Travel-Lodging-Logo_jpeg-color.jpg',
   founders: [
     {
@@ -124,286 +149,306 @@ export const COMPANY_INFO = {
 // Authentic scraped property listings from easytravellodging.com
 export const PROPERTIES: PropertyListing[] = [
   {
-    id: "unit-91",
-    code: "#A",
-    unitNumber: "Unit 91",
-    slug: "one-bedroom-one-bath-downstairs-91",
-    title: "One Bedroom, One Bath, Downstairs (A)",
-    category: "Holiday Apartment, Family Apartment",
-    shortDesc: "Stunning downstairs 1-bedroom apartment in Rancho Cordova tailored for traveling healthcare workers, engineers, and corporate executives.",
-    fullDesc: "Welcome to your new home away from home in #RanchoCordova! This stunning 1 bedroom, 1 bath apartment is perfect for traveling professionals seeking a comfortable and convenient stay.\n\nCheck out all the amazing features this apartment has to offer:\n\u2022 Fully updated kitchen with modern appliances for all your cooking needs\n\u2022 In-unit washer/dryer for the ultimate convenience\n\u2022 Cozy living room with fireplace and 55\u2033 Smart TV for relaxing after a long day\n\u2022 Private patio for fresh air and relaxation\n\u2022 Comfy bedroom with plenty of storage space for your belongings.",
+    id: 'unit-91',
+    code: '#A',
+    unitNumber: 'Unit 91',
+    slug: 'one-bedroom-one-bath-downstairs-91',
+    title: 'One-Bedroom Ground-Floor Suite (Residence A)',
+    category: 'Furnished Residence • Short & Extended Stays',
+    shortDesc:
+      'Step-free ground-floor one-bedroom apartment with an updated kitchen, wood-burning fireplace, private patio, and reserved covered parking.',
+    fullDesc:
+      'Set in a peaceful, landscaped Rancho Cordova community, Residence A offers comfortable single-level living for solo travelers, couples, relocating households, and guests visiting family or regional medical and academic centers.\n\nInside, you will find a full-size updated kitchen stocked with cookware and dinnerware, an in-unit washer and dryer, a welcoming living area with a wood-burning fireplace and 55-inch Smart TV, high-speed Wi-Fi, and a private patio steps from your reserved covered parking space.',
     bedrooms: 1,
     bathrooms: 1,
-    floor: "Downstairs",
-    location: "Rancho Cordova / Greater Sacramento, CA",
+    floor: 'Downstairs',
+    location: 'Rancho Cordova / Greater Sacramento, CA',
     monthlyRate: 2500,
-    startingRate: "Starting From ,500 Per Month",
-    pricingNote: "May vary. Includes 00.00 utilities and parking. Minimum stay 30 days.",
-    status: "Available",
-    sqft: "680 sq ft",
-    liveUrl: "https://easytravellodging.com/one-bedroom-one-bath-downstairs-91/",
+    startingRate: 'From $2,500 / Month',
+    pricingNote:
+      'Includes utilities, high-speed Wi-Fi, and covered parking. Available for 5–29 night short stays and 30+ day tax-exempt extended stays.',
+    status: 'Available',
+    sqft: '680 sq ft',
+    minimumStayDays: 5,
+    liveUrl: 'https://easytravellodging.com/one-bedroom-one-bath-downstairs-91/',
     images: [
-      "https://easytravellodging.com/wp-content/plugins/vikbooking/site/resources/uploads/big_cc-91-1.jpg",
-      "https://easytravellodging.com/wp-content/plugins/vikbooking/site/resources/uploads/big_img_1671.jpg",
-      "https://easytravellodging.com/wp-content/plugins/vikbooking/site/resources/uploads/big_img_1696.jpg",
-      "https://easytravellodging.com/wp-content/plugins/vikbooking/site/resources/uploads/big_cc-91-2.jpg",
-      "https://easytravellodging.com/wp-content/plugins/vikbooking/site/resources/uploads/big_img_1705.jpg",
-      "https://easytravellodging.com/wp-content/plugins/vikbooking/site/resources/uploads/big_img_1672.jpg",
-      "https://easytravellodging.com/wp-content/plugins/vikbooking/site/resources/uploads/big_img_1662.jpg",
-      "https://easytravellodging.com/wp-content/plugins/vikbooking/site/resources/uploads/big_img_1684.jpg",
-      "https://easytravellodging.com/wp-content/plugins/vikbooking/site/resources/uploads/big_img_1686.jpg"
-],
+      'https://easytravellodging.com/wp-content/plugins/vikbooking/site/resources/uploads/big_cc-91-1.jpg',
+      'https://easytravellodging.com/wp-content/plugins/vikbooking/site/resources/uploads/big_img_1671.jpg',
+      'https://easytravellodging.com/wp-content/plugins/vikbooking/site/resources/uploads/big_img_1696.jpg',
+      'https://easytravellodging.com/wp-content/plugins/vikbooking/site/resources/uploads/big_cc-91-2.jpg',
+      'https://easytravellodging.com/wp-content/plugins/vikbooking/site/resources/uploads/big_img_1705.jpg',
+      'https://easytravellodging.com/wp-content/plugins/vikbooking/site/resources/uploads/big_img_1672.jpg',
+      'https://easytravellodging.com/wp-content/plugins/vikbooking/site/resources/uploads/big_img_1662.jpg',
+      'https://easytravellodging.com/wp-content/plugins/vikbooking/site/resources/uploads/big_img_1684.jpg',
+      'https://easytravellodging.com/wp-content/plugins/vikbooking/site/resources/uploads/big_img_1686.jpg',
+    ],
     features: [
-      "Fully updated kitchen with modern appliances for all your cooking needs",
-      "In-unit washer/dryer for the ultimate convenience",
-      "Cozy living room with fireplace and 55\u2033 Smart TV for relaxing after a long day",
-      "Private patio for fresh air and relaxation",
-      "Comfy bedroom with plenty of storage space for your belongings",
-      "Single-level ground floor access with no exterior stairs",
-      "Assigned covered parking space with easy building access"
-],
+      'Updated full kitchen with full-size appliances, coffee maker, and cookware',
+      'In-unit washer and dryer with initial laundry supplies',
+      'Living room with wood-burning fireplace and 55-inch Smart TV',
+      'Private ground-level patio for outdoor dining or quiet mornings',
+      'Queen bedroom with generous closet storage and blackout curtains',
+      'Step-free ground-floor entry with no exterior stairs',
+      'Assigned covered parking space near your entrance',
+    ],
     amenities: [
-      "WiFi",
-      "TV",
-      "Air Conditioning",
-      "Bathroom",
-      "Disabled Facilities",
-      "Fireplace",
-      "In-Unit Washer/Dryer",
-      "Private Patio"
-]
+      'WiFi',
+      'TV',
+      'Air Conditioning',
+      'Bathroom',
+      'Disabled Facilities',
+      'Fireplace',
+      'In-Unit Washer/Dryer',
+      'Private Patio',
+    ],
   },
   {
-    id: "unit-173",
-    code: "#B",
-    unitNumber: "Unit 173",
-    slug: "one-bedroom-one-bath-downstairs-173",
-    title: "One Bedroom, One Bath, Downstairs (B)",
-    category: "Holiday Apartment, Family Apartment",
-    shortDesc: "Modern ground-floor luxury suite with designer touches, fireplace, private patio, and complete office setup in a quiet neighborhood.",
-    fullDesc: "Welcome to this awesome #RanchoCordova pad, available for a midterm rental! This 1 bedroom, 1 bath beauty comes fully loaded with all the bells and whistles, making it the perfect spot for a #vacay or #staycation.\n\nGet cozy by the fireplace, binge-watch your fave shows on the 55\u2033 Smart TV, or whip up some delicious eats in the fully updated kitchen \u2013 the choice is yours! And with an in-unit washer/dryer, you\u2019ll be able to rock your fave outfits all week long.\n\nEnjoy the outdoor patio and soak up some sun or just chill out with your #bff. And when it\u2019s time to call it a night, the comfy bedroom is ready and waiting to snuggle you up in style.\n\nLocated in a quiet neighborhood, you\u2019ll be just steps away from all the best shops, restaurants, and local hotspots. Don\u2019t wait \u2013 apply now to snag this totally #awesome apartment for your next #adventure!",
+    id: 'unit-173',
+    code: '#B',
+    unitNumber: 'Unit 173',
+    slug: 'one-bedroom-one-bath-downstairs-173',
+    title: 'One-Bedroom Courtyard Suite (Residence B)',
+    category: 'Pet-Friendly Residence • Short & Extended Stays',
+    shortDesc:
+      'Calm ground-floor one-bedroom suite featuring curated furnishings, a cozy fireplace, private patio, workspace, and pet-friendly options on approval.',
+    fullDesc:
+      'Residence B pairs residential warmth with everyday practicality in Greater Sacramento. Thoughtfully arranged for solo guests, couples, homeowners between closings or renovations, and travelers bringing an approved pet, this ground-floor apartment makes it easy to settle into your normal routine.\n\nPrepare meals in the updated kitchen, unwind beside the fireplace with a 55-inch Smart TV, handle laundry inside your suite, or step out onto your private fenced patio. Shops, neighborhood dining, American River Parkway trails, and Highway 50 are all minutes away.',
     bedrooms: 1,
     bathrooms: 1,
-    floor: "Downstairs",
-    location: "Rancho Cordova / Greater Sacramento, CA",
+    floor: 'Downstairs',
+    location: 'Rancho Cordova / Greater Sacramento, CA',
     monthlyRate: 2500,
-    startingRate: "Starting From ,500 Per Month",
-    pricingNote: "May vary. Includes 00.00 utilities and parking. Minimum stay 30 days.",
-    status: "Available",
-    sqft: "710 sq ft",
-    liveUrl: "https://easytravellodging.com/one-bedroom-one-bath-downstairs-173/",
+    startingRate: 'From $2,500 / Month',
+    pricingNote:
+      'Includes utilities, high-speed Wi-Fi, and covered parking. Available for 5–29 night short stays and 30+ day tax-exempt extended stays.',
+    status: 'Available',
+    sqft: '710 sq ft',
+    minimumStayDays: 5,
+    liveUrl: 'https://easytravellodging.com/one-bedroom-one-bath-downstairs-173/',
     images: [
-      "https://easytravellodging.com/wp-content/plugins/vikbooking/site/resources/uploads/big_img_4864.jpg",
-      "https://easytravellodging.com/wp-content/plugins/vikbooking/site/resources/uploads/big_img_3271.jpg",
-      "https://easytravellodging.com/wp-content/plugins/vikbooking/site/resources/uploads/big_img_3274.jpg",
-      "https://easytravellodging.com/wp-content/plugins/vikbooking/site/resources/uploads/big_img_3269.jpg",
-      "https://easytravellodging.com/wp-content/plugins/vikbooking/site/resources/uploads/big_img_3280.jpg",
-      "https://easytravellodging.com/wp-content/plugins/vikbooking/site/resources/uploads/big_img_3279.jpg",
-      "https://easytravellodging.com/wp-content/plugins/vikbooking/site/resources/uploads/big_img_3285.jpg",
-      "https://easytravellodging.com/wp-content/plugins/vikbooking/site/resources/uploads/big_img_3272.jpg",
-      "https://easytravellodging.com/wp-content/plugins/vikbooking/site/resources/uploads/big_img_3289.jpg",
-      "https://easytravellodging.com/wp-content/plugins/vikbooking/site/resources/uploads/big_img_3264.jpg",
-      "https://easytravellodging.com/wp-content/plugins/vikbooking/site/resources/uploads/big_img_3267.jpg",
-      "https://easytravellodging.com/wp-content/plugins/vikbooking/site/resources/uploads/big_img_3265.jpg",
-      "https://easytravellodging.com/wp-content/plugins/vikbooking/site/resources/uploads/big_img_3287.jpg",
-      "https://easytravellodging.com/wp-content/plugins/vikbooking/site/resources/uploads/big_img_3266.jpg"
-],
+      'https://easytravellodging.com/wp-content/plugins/vikbooking/site/resources/uploads/big_img_4864.jpg',
+      'https://easytravellodging.com/wp-content/plugins/vikbooking/site/resources/uploads/big_img_3271.jpg',
+      'https://easytravellodging.com/wp-content/plugins/vikbooking/site/resources/uploads/big_img_3274.jpg',
+      'https://easytravellodging.com/wp-content/plugins/vikbooking/site/resources/uploads/big_img_3269.jpg',
+      'https://easytravellodging.com/wp-content/plugins/vikbooking/site/resources/uploads/big_img_3280.jpg',
+      'https://easytravellodging.com/wp-content/plugins/vikbooking/site/resources/uploads/big_img_3279.jpg',
+      'https://easytravellodging.com/wp-content/plugins/vikbooking/site/resources/uploads/big_img_3285.jpg',
+      'https://easytravellodging.com/wp-content/plugins/vikbooking/site/resources/uploads/big_img_3272.jpg',
+      'https://easytravellodging.com/wp-content/plugins/vikbooking/site/resources/uploads/big_img_3289.jpg',
+      'https://easytravellodging.com/wp-content/plugins/vikbooking/site/resources/uploads/big_img_3264.jpg',
+      'https://easytravellodging.com/wp-content/plugins/vikbooking/site/resources/uploads/big_img_3267.jpg',
+      'https://easytravellodging.com/wp-content/plugins/vikbooking/site/resources/uploads/big_img_3265.jpg',
+      'https://easytravellodging.com/wp-content/plugins/vikbooking/site/resources/uploads/big_img_3287.jpg',
+      'https://easytravellodging.com/wp-content/plugins/vikbooking/site/resources/uploads/big_img_3266.jpg',
+    ],
     features: [
-      "Ground-floor unit with convenient nearby reserved parking",
-      "Cozy indoor fireplace with modern mantel & designer lighting",
-      "55\u2033 Smart TV in living salon plus bedroom streaming TV",
-      "Fully updated kitchen with premium appliances & kitchen starter kit",
-      "In-unit washer and dryer for effortless laundry days",
-      "Private outdoor patio for morning coffee and California sunshine",
-      "Pet-friendly accommodation with prior approval"
-],
+      'Ground-floor entry with nearby reserved covered parking',
+      'Wood-burning fireplace with warm ambient lighting',
+      '55-inch Smart TV in living area plus bedroom Smart TV',
+      'Updated full kitchen with full-size appliances and starter essentials',
+      'In-unit washer and dryer',
+      'Private fenced outdoor patio',
+      'Pet-friendly accommodations available with prior approval',
+    ],
     amenities: [
-      "WiFi",
-      "TV",
-      "Air Conditioning",
-      "Bathroom",
-      "Pets Allowed",
-      "Fireplace",
-      "In-Unit Washer/Dryer",
-      "Private Patio"
-]
+      'WiFi',
+      'TV',
+      'Air Conditioning',
+      'Bathroom',
+      'Pets Allowed',
+      'Fireplace',
+      'In-Unit Washer/Dryer',
+      'Private Patio',
+    ],
   },
   {
-    id: "unit-250",
-    code: "#C",
-    unitNumber: "Unit 250",
-    slug: "two-bedroom-two-bath-upstairs-250",
-    title: "Two Bedroom, Two Bath, Upstairs (C)",
-    category: "Holiday Apartment, Family Apartment",
-    shortDesc: "Spacious 2-bedroom, 2-bathroom upper residence boasting vaulted ceilings, private balcony, dual smart TVs, and dual master comforts.",
-    fullDesc: "Welcome to this stunning #RanchoCordova apartment, available for a midterm rental! Boasting 2 bedrooms, 2 bathrooms, and a host of luxurious amenities, this is the perfect home-away-from-home for those seeking a comfortable and convenient stay.\n\nAs you step into the apartment, you\u2019ll immediately be struck by its inviting ambience, with a charming fireplace and modern updates throughout. The fully updated kitchen is a chef\u2019s dream, complete with top-of-the-line appliances and ample counter space to whip up delicious meals. And with the in-unit washer/dryer, you\u2019ll enjoy the ultimate convenience and comfort during your stay.\n\nStep outside onto the private patio to enjoy the fresh air and sunshine or curl up in the cozy bedroom for a peaceful night\u2019s rest. And with a 55\u2033 Smart TV, you can unwind and catch up on your favorite shows after a long day. Located in a quiet neighborhood, this apartment offers easy access to shops, restaurants, and other local hotspots. Don\u2019t miss your chance to experience the ultimate in #midtermrental living \u2013 apply now to make this beautiful apartment your own!",
+    id: 'unit-250',
+    code: '#C',
+    unitNumber: 'Unit 250',
+    slug: 'two-bedroom-two-bath-upstairs-250',
+    title: 'Two-Bedroom Vaulted Upper Residence (Residence C)',
+    category: 'Family & Dual-Suite Residence • Short & Extended Stays',
+    shortDesc:
+      'Bright upstairs two-bedroom, two-bath apartment with vaulted ceilings, a private balcony, and generous space for families or shared stays.',
+    fullDesc:
+      'Residence C offers 960 square feet of sunlit upper-level living with vaulted ceilings and two well-separated bedrooms and full bathrooms. The layout works equally well for families, households bridging a home sale or remodel, colleagues sharing accommodations, or guests who want a dedicated home office separate from the primary bedroom.\n\nEnjoy a fully equipped kitchen with ample counter space, in-unit laundry, a living room fireplace, a private balcony overlooking mature trees, and access to the community pools, spa, fitness center, and courts.',
     bedrooms: 2,
     bathrooms: 2,
-    floor: "Upstairs",
-    location: "Rancho Cordova / Greater Sacramento, CA",
+    floor: 'Upstairs',
+    location: 'Rancho Cordova / Greater Sacramento, CA',
     monthlyRate: 2800,
-    startingRate: "Starting From ,800 Per Month",
-    pricingNote: "May vary. Includes 00.00 utilities and parking. Minimum stay 30 days.",
-    status: "Available",
-    sqft: "960 sq ft",
-    liveUrl: "https://easytravellodging.com/two-bedroom-two-bath-upstairs-250/",
+    startingRate: 'From $2,800 / Month',
+    pricingNote:
+      'Includes utilities, high-speed Wi-Fi, and covered parking. Available for 5–29 night short stays and 30+ day tax-exempt extended stays.',
+    status: 'Available',
+    sqft: '960 sq ft',
+    minimumStayDays: 5,
+    liveUrl: 'https://easytravellodging.com/two-bedroom-two-bath-upstairs-250/',
     images: [
-      "https://easytravellodging.com/wp-content/plugins/vikbooking/site/resources/uploads/big_img_2936.jpg",
-      "https://easytravellodging.com/wp-content/plugins/vikbooking/site/resources/uploads/big_img_2928.jpg",
-      "https://easytravellodging.com/wp-content/plugins/vikbooking/site/resources/uploads/big_img_2932.jpg",
-      "https://easytravellodging.com/wp-content/plugins/vikbooking/site/resources/uploads/big_img_4658.jpg",
-      "https://easytravellodging.com/wp-content/plugins/vikbooking/site/resources/uploads/big_img_2934.jpg",
-      "https://easytravellodging.com/wp-content/plugins/vikbooking/site/resources/uploads/big_img_2938.jpg",
-      "https://easytravellodging.com/wp-content/plugins/vikbooking/site/resources/uploads/big_img_2954.jpg",
-      "https://easytravellodging.com/wp-content/plugins/vikbooking/site/resources/uploads/big_img_4664.jpg",
-      "https://easytravellodging.com/wp-content/plugins/vikbooking/site/resources/uploads/big_img_2953.jpg",
-      "https://easytravellodging.com/wp-content/plugins/vikbooking/site/resources/uploads/big_img_4681.jpg",
-      "https://easytravellodging.com/wp-content/plugins/vikbooking/site/resources/uploads/big_img_4678.jpg",
-      "https://easytravellodging.com/wp-content/plugins/vikbooking/site/resources/uploads/big_img_4667.jpg",
-      "https://easytravellodging.com/wp-content/plugins/vikbooking/site/resources/uploads/big_img_2944.jpg"
-],
+      'https://easytravellodging.com/wp-content/plugins/vikbooking/site/resources/uploads/big_img_2936.jpg',
+      'https://easytravellodging.com/wp-content/plugins/vikbooking/site/resources/uploads/big_img_2928.jpg',
+      'https://easytravellodging.com/wp-content/plugins/vikbooking/site/resources/uploads/big_img_2932.jpg',
+      'https://easytravellodging.com/wp-content/plugins/vikbooking/site/resources/uploads/big_img_4658.jpg',
+      'https://easytravellodging.com/wp-content/plugins/vikbooking/site/resources/uploads/big_img_2934.jpg',
+      'https://easytravellodging.com/wp-content/plugins/vikbooking/site/resources/uploads/big_img_2938.jpg',
+      'https://easytravellodging.com/wp-content/plugins/vikbooking/site/resources/uploads/big_img_2954.jpg',
+      'https://easytravellodging.com/wp-content/plugins/vikbooking/site/resources/uploads/big_img_4664.jpg',
+      'https://easytravellodging.com/wp-content/plugins/vikbooking/site/resources/uploads/big_img_2953.jpg',
+      'https://easytravellodging.com/wp-content/plugins/vikbooking/site/resources/uploads/big_img_4681.jpg',
+      'https://easytravellodging.com/wp-content/plugins/vikbooking/site/resources/uploads/big_img_4678.jpg',
+      'https://easytravellodging.com/wp-content/plugins/vikbooking/site/resources/uploads/big_img_4667.jpg',
+      'https://easytravellodging.com/wp-content/plugins/vikbooking/site/resources/uploads/big_img_2944.jpg',
+    ],
     features: [
-      "Two private bedrooms and two full bathrooms for optimal privacy",
-      "Vaulted ceilings with abundant natural sunlight & tree views",
-      "Charming living room fireplace and 55\u2033 4K Smart TV",
-      "Chef-inspired kitchen with dishwasher, microwave, and full dinnerware",
-      "In-unit stackable washer/dryer with laundry supplies",
-      "Private upstairs balcony patio for peaceful relaxation",
-      "Access to community fitness center, pools, and tennis courts"
-],
+      'Two private bedrooms and two full bathrooms for household privacy',
+      'Vaulted ceilings with abundant natural light and tree-lined views',
+      'Living room fireplace and 55-inch 4K Smart TV',
+      'Full kitchen with dishwasher, microwave, coffee maker, and dinnerware',
+      'In-unit washer and dryer with starter supplies',
+      'Private upstairs balcony',
+      'Access to community fitness center, swimming pools, spa, and courts',
+    ],
     amenities: [
-      "WiFi",
-      "TV",
-      "Air Conditioning",
-      "Bathroom",
-      "Fireplace",
-      "In-Unit Washer/Dryer",
-      "Private Balcony",
-      "Chef Kitchen"
-]
+      'WiFi',
+      'TV',
+      'Air Conditioning',
+      'Bathroom',
+      'Fireplace',
+      'In-Unit Washer/Dryer',
+      'Private Balcony',
+      'Chef Kitchen',
+    ],
   },
   {
-    id: "unit-333",
-    code: "#D",
-    unitNumber: "Unit 333",
-    slug: "exquisite-2-bedroom-midterm-rental-in-rancho-cordova-333",
-    title: "Exquisite 2-Bedroom Midterm Rental in Rancho Cordova (D)",
-    category: "Holiday Apartment, Family Apartment",
-    shortDesc: "Sophisticated 2-bedroom, 2-bathroom haven designed for supreme executive comfort, remote productivity, and luxury relaxation.",
-    fullDesc: "Welcome to this exquisite two-bedroom, two-bathroom apartment in the captivating city of Rancho Cordova! With its unrivaled charm and an array of upscale amenities, this extraordinary abode is tailor-made to be your ideal home-away-from-home for a truly remarkable stay.\n\nFrom the moment you step foot inside, you\u2019ll be enchanted by the welcoming atmosphere that envelops you. The elegant fireplace and contemporary upgrades throughout the apartment create an irresistible blend of sophistication and comfort. The fully updated kitchen is a culinary haven, equipped with state-of-the-art appliances and generous counter space to effortlessly craft delectable meals. Plus, with the added convenience of an in-unit washer/dryer, your stay promises to be nothing short of pure indulgence.\n\nStep outside onto the private patio and bask in the glorious sunshine while reveling in the fresh air. Alternatively, retreat to the cozy bedroom, where tranquility awaits to provide you with a restful night\u2019s sleep. And for your entertainment needs, a magnificent 55\u2033 Smart TV stands ready to whisk you away into a world of captivating shows and movies, allowing you to unwind after a fulfilling day. Each bedroom has its own 43\u201d TV so you are just a click away from your favorite TV shows.\n\nNestled within a serene neighborhood, this exceptional apartment offers seamless access to a plethora of shops, restaurants, and local hotspots, ensuring that you are perfectly positioned to experience the vibrant pulse of Rancho Cordova. Seize this extraordinary opportunity to immerse yourself in the pinnacle of midterm rental living\u2014apply now and make this stunning apartment your very own!",
+    id: 'unit-333',
+    code: '#D',
+    unitNumber: 'Unit 333',
+    slug: 'exquisite-2-bedroom-midterm-rental-in-rancho-cordova-333',
+    title: 'Two-Bedroom Designer Upper Suite (Residence D)',
+    category: 'Two-Bedroom Suite • Short & Extended Stays',
+    shortDesc:
+      'Refined two-bedroom, two-bath residence with quartz kitchen counters, three Smart TVs, private balcony, and high-speed Wi-Fi.',
+    fullDesc:
+      'Residence D blends modern residential finishes with everyday comfort. Designed for families visiting Greater Sacramento, relocating homeowners, remote workers, and multi-week travelers, this quiet upstairs apartment provides room to cook, work, and unwind.\n\nBoth bedrooms include queen mattresses with crisp 400–600 thread count linens and dedicated 43-inch Smart TVs, complementing the 55-inch Smart TV and fireplace in the main living room. An updated kitchen with stone counters, in-unit laundry, and a peaceful balcony overlooking landscaped grounds complete the home.',
     bedrooms: 2,
     bathrooms: 2,
-    floor: "Upstairs",
-    location: "Rancho Cordova / Greater Sacramento, CA",
+    floor: 'Upstairs',
+    location: 'Rancho Cordova / Greater Sacramento, CA',
     monthlyRate: 2800,
-    startingRate: "Starting From ,800 Per Month",
-    pricingNote: "May vary. Includes 00.00 utilities and parking. Minimum stay 30 days.",
-    status: "Available",
-    sqft: "980 sq ft",
-    liveUrl: "https://easytravellodging.com/exquisite-2-bedroom-midterm-rental-in-rancho-cordova-333/",
+    startingRate: 'From $2,800 / Month',
+    pricingNote:
+      'Includes utilities, high-speed Wi-Fi, and covered parking. Available for 5–29 night short stays and 30+ day tax-exempt extended stays.',
+    status: 'Available',
+    sqft: '980 sq ft',
+    minimumStayDays: 5,
+    liveUrl: 'https://easytravellodging.com/exquisite-2-bedroom-midterm-rental-in-rancho-cordova-333/',
     images: [
-      "https://easytravellodging.com/wp-content/plugins/vikbooking/site/resources/uploads/big_115.jpg",
-      "https://easytravellodging.com/wp-content/plugins/vikbooking/site/resources/uploads/big_114.jpg",
-      "https://easytravellodging.com/wp-content/plugins/vikbooking/site/resources/uploads/big_117.jpg",
-      "https://easytravellodging.com/wp-content/plugins/vikbooking/site/resources/uploads/big_116.jpg",
-      "https://easytravellodging.com/wp-content/plugins/vikbooking/site/resources/uploads/big_121.jpg",
-      "https://easytravellodging.com/wp-content/plugins/vikbooking/site/resources/uploads/big_118.jpg",
-      "https://easytravellodging.com/wp-content/plugins/vikbooking/site/resources/uploads/big_120.jpg",
-      "https://easytravellodging.com/wp-content/plugins/vikbooking/site/resources/uploads/big_123.jpg",
-      "https://easytravellodging.com/wp-content/plugins/vikbooking/site/resources/uploads/big_119.jpg",
-      "https://easytravellodging.com/wp-content/plugins/vikbooking/site/resources/uploads/big_122.jpg",
-      "https://easytravellodging.com/wp-content/plugins/vikbooking/site/resources/uploads/big_124.jpg",
-      "https://easytravellodging.com/wp-content/plugins/vikbooking/site/resources/uploads/big_125.jpg",
-      "https://easytravellodging.com/wp-content/plugins/vikbooking/site/resources/uploads/big_103.jpg",
-      "https://easytravellodging.com/wp-content/plugins/vikbooking/site/resources/uploads/big_107.jpg",
-      "https://easytravellodging.com/wp-content/plugins/vikbooking/site/resources/uploads/big_126.jpg",
-      "https://easytravellodging.com/wp-content/plugins/vikbooking/site/resources/uploads/big_105.jpg",
-      "https://easytravellodging.com/wp-content/plugins/vikbooking/site/resources/uploads/big_106.jpg",
-      "https://easytravellodging.com/wp-content/plugins/vikbooking/site/resources/uploads/big_113.jpg",
-      "https://easytravellodging.com/wp-content/plugins/vikbooking/site/resources/uploads/big_108.jpg",
-      "https://easytravellodging.com/wp-content/plugins/vikbooking/site/resources/uploads/big_110.jpg",
-      "https://easytravellodging.com/wp-content/plugins/vikbooking/site/resources/uploads/big_112.jpg",
-      "https://easytravellodging.com/wp-content/plugins/vikbooking/site/resources/uploads/big_111.jpg",
-      "https://easytravellodging.com/wp-content/plugins/vikbooking/site/resources/uploads/big_109.jpg"
-],
+      'https://easytravellodging.com/wp-content/plugins/vikbooking/site/resources/uploads/big_115.jpg',
+      'https://easytravellodging.com/wp-content/plugins/vikbooking/site/resources/uploads/big_114.jpg',
+      'https://easytravellodging.com/wp-content/plugins/vikbooking/site/resources/uploads/big_117.jpg',
+      'https://easytravellodging.com/wp-content/plugins/vikbooking/site/resources/uploads/big_116.jpg',
+      'https://easytravellodging.com/wp-content/plugins/vikbooking/site/resources/uploads/big_121.jpg',
+      'https://easytravellodging.com/wp-content/plugins/vikbooking/site/resources/uploads/big_118.jpg',
+      'https://easytravellodging.com/wp-content/plugins/vikbooking/site/resources/uploads/big_120.jpg',
+      'https://easytravellodging.com/wp-content/plugins/vikbooking/site/resources/uploads/big_123.jpg',
+      'https://easytravellodging.com/wp-content/plugins/vikbooking/site/resources/uploads/big_119.jpg',
+      'https://easytravellodging.com/wp-content/plugins/vikbooking/site/resources/uploads/big_122.jpg',
+      'https://easytravellodging.com/wp-content/plugins/vikbooking/site/resources/uploads/big_124.jpg',
+      'https://easytravellodging.com/wp-content/plugins/vikbooking/site/resources/uploads/big_125.jpg',
+      'https://easytravellodging.com/wp-content/plugins/vikbooking/site/resources/uploads/big_103.jpg',
+      'https://easytravellodging.com/wp-content/plugins/vikbooking/site/resources/uploads/big_107.jpg',
+      'https://easytravellodging.com/wp-content/plugins/vikbooking/site/resources/uploads/big_126.jpg',
+      'https://easytravellodging.com/wp-content/plugins/vikbooking/site/resources/uploads/big_105.jpg',
+      'https://easytravellodging.com/wp-content/plugins/vikbooking/site/resources/uploads/big_106.jpg',
+      'https://easytravellodging.com/wp-content/plugins/vikbooking/site/resources/uploads/big_113.jpg',
+      'https://easytravellodging.com/wp-content/plugins/vikbooking/site/resources/uploads/big_108.jpg',
+      'https://easytravellodging.com/wp-content/plugins/vikbooking/site/resources/uploads/big_110.jpg',
+      'https://easytravellodging.com/wp-content/plugins/vikbooking/site/resources/uploads/big_112.jpg',
+      'https://easytravellodging.com/wp-content/plugins/vikbooking/site/resources/uploads/big_111.jpg',
+      'https://easytravellodging.com/wp-content/plugins/vikbooking/site/resources/uploads/big_109.jpg',
+    ],
     features: [
-      "3 Smart TVs: 55\u2033 Smart TV in living salon plus 43\u2033 Smart TV in each bedroom",
-      "Two deluxe bedrooms with premium hotel-quality queen mattresses and 600-thread count sheets",
-      "Two full bathrooms with newly reglazed tubs and plush white towels",
-      "State-of-the-art kitchen with granite counters, Keurig, and Instant Pot",
-      "In-unit washer/dryer for ultimate comfort and independence",
-      "Private sunlit patio/balcony overlooking calm landscaped grounds",
-      "400+ Mbps high-speed WiFi network for seamless remote work and streaming"
-],
+      'Three Smart TVs: 55-inch in living room plus 43-inch TV in each bedroom',
+      'Two queen bedrooms with hotel-grade mattresses and crisp cotton linens',
+      'Two full bathrooms with newly reglazed tubs and fresh white towels',
+      'Updated kitchen with stone counters, Keurig coffee maker, and Instant Pot',
+      'In-unit washer and dryer',
+      'Private sunlit balcony overlooking landscaped grounds',
+      'High-speed 400+ Mbps Wi-Fi for video calls, remote learning, and streaming',
+    ],
     amenities: [
-      "WiFi",
-      "TV",
-      "Air Conditioning",
-      "Bathroom",
-      "Fireplace",
-      "3 Smart TVs",
-      "In-Unit Washer/Dryer",
-      "Private Patio"
-]
+      'WiFi',
+      'TV',
+      'Air Conditioning',
+      'Bathroom',
+      'Fireplace',
+      '3 Smart TVs',
+      'In-Unit Washer/Dryer',
+      'Private Patio',
+    ],
   },
   {
-    id: "unit-335",
-    code: "#E",
-    unitNumber: "Unit 335",
-    slug: "luxury-2-bedroom-midterm-rental-in-rancho-cordova-335",
-    title: "Luxury 2-Bedroom Midterm Rental in Rancho Cordova (E)",
-    category: "Holiday Apartment, Family Apartment",
-    shortDesc: "Top-tier 2-bedroom executive condo featuring fireplace, private outdoor space, modern chef kitchen, and full access to club amenities.",
-    fullDesc: "Looking for a luxurious and fully equipped midterm rental in Rancho Cordova? Look no further than this stunning 2 bedroom, 2 bath apartment.\n\nFeaturing a cozy fireplace, private patio, fully updated kitchen, in-unit washer/dryer, and a 55\u2033 Smart TV, this apartment has everything you need for a comfortable and convenient stay. With two spacious bedrooms and two modern bathrooms, this apartment is perfect for traveling professionals seeking ample space to work and relax.\n\nLocated in a prime neighborhood near major businesses and local attractions, this apartment offers the perfect balance of comfort and convenience. Plus, with a beautifully furnished interior and top-of-the-line amenities, you\u2019ll feel right at home during your stay.\n\nDon\u2019t settle for a boring hotel room \u2013 make this stunning apartment your own. Apply now and experience the best in luxury living during your next business trip to Rancho Cordova.\n\nIncluded in your stay are a 24-hour fitness center, swimming pools, and heated spas along with volleyball and tennis courts. Amenities include central air, central heat, refrigerator, oven/stove, microwave, dishwasher, updated kitchen counters, and in-unit stackable washer/dryer. The built-in credenza in the dining area provides extra storage. Your living room includes a cozy indoor fireplace. The updated bathroom includes a newly reglazed bathtub. Your private patio offers a secluded outdoor space for your rest and tranquility.",
+    id: 'unit-335',
+    code: '#E',
+    unitNumber: 'Unit 335',
+    slug: 'luxury-2-bedroom-midterm-rental-in-rancho-cordova-335',
+    title: 'Two-Bedroom Premier Patio Residence (Residence E)',
+    category: 'Ground-Floor Two-Bedroom • Short & Extended Stays',
+    shortDesc:
+      'Spacious ground-floor two-bedroom, two-bath residence with a wood-burning fireplace, secluded patio, and full club amenities.',
+    fullDesc:
+      'Our largest ground-floor layout, Residence E offers 990 square feet of relaxed, single-level living in Rancho Cordova. With two spacious bedrooms, two full bathrooms, a built-in dining credenza, a full kitchen, and a secluded outdoor patio, it comfortably accommodates families, insurance-displaced homeowners, multi-week vacationers, and project teams.\n\nGuests also enjoy full access to community amenities—including a 24-hour fitness center, swimming pools, heated spas, and tennis and volleyball courts—along with central heating and air, in-unit laundry, and reserved covered parking.',
     bedrooms: 2,
     bathrooms: 2,
-    floor: "Downstairs",
-    location: "Rancho Cordova / Greater Sacramento, CA",
+    floor: 'Downstairs',
+    location: 'Rancho Cordova / Greater Sacramento, CA',
     monthlyRate: 2800,
-    startingRate: "Starting From ,800 Per Month",
-    pricingNote: "May vary. Includes 00.00 utilities and parking. Minimum stay 30 days.",
-    status: "Available",
-    sqft: "990 sq ft",
-    liveUrl: "https://easytravellodging.com/luxury-2-bedroom-midterm-rental-in-rancho-cordova-335/",
+    startingRate: 'From $2,800 / Month',
+    pricingNote:
+      'Includes utilities, high-speed Wi-Fi, and covered parking. Available for 5–29 night short stays and 30+ day tax-exempt extended stays.',
+    status: 'Available',
+    sqft: '990 sq ft',
+    minimumStayDays: 5,
+    liveUrl: 'https://easytravellodging.com/luxury-2-bedroom-midterm-rental-in-rancho-cordova-335/',
     images: [
-      "https://easytravellodging.com/wp-content/plugins/vikbooking/site/resources/uploads/big_cc-335_img_5339.jpg",
-      "https://easytravellodging.com/wp-content/plugins/vikbooking/site/resources/uploads/big_cc-335_img_5342.jpg",
-      "https://easytravellodging.com/wp-content/plugins/vikbooking/site/resources/uploads/big_img_4881.jpg",
-      "https://easytravellodging.com/wp-content/plugins/vikbooking/site/resources/uploads/big_cc-2_kitchen_sink.jpg",
-      "https://easytravellodging.com/wp-content/plugins/vikbooking/site/resources/uploads/big_cc_bathroom.jpg",
-      "https://easytravellodging.com/wp-content/plugins/vikbooking/site/resources/uploads/big_img_2934.jpg",
-      "https://easytravellodging.com/wp-content/plugins/vikbooking/site/resources/uploads/big_cc-335_img_5257.jpg",
-      "https://easytravellodging.com/wp-content/plugins/vikbooking/site/resources/uploads/big_cc-335_img_5267.jpg",
-      "https://easytravellodging.com/wp-content/plugins/vikbooking/site/resources/uploads/big_cc-335_img_5258.jpg",
-      "https://easytravellodging.com/wp-content/plugins/vikbooking/site/resources/uploads/big_cc-335_img_5262.jpg",
-      "https://easytravellodging.com/wp-content/plugins/vikbooking/site/resources/uploads/big_cc-335_img_5268.jpg",
-      "https://easytravellodging.com/wp-content/plugins/vikbooking/site/resources/uploads/big_cc-335_img_5275.jpg",
-      "https://easytravellodging.com/wp-content/plugins/vikbooking/site/resources/uploads/big_cc-335_img_5277.jpg",
-      "https://easytravellodging.com/wp-content/plugins/vikbooking/site/resources/uploads/big_cc-335_img_5274.jpg",
-      "https://easytravellodging.com/wp-content/plugins/vikbooking/site/resources/uploads/big_cc-335_img_5280.jpg",
-      "https://easytravellodging.com/wp-content/plugins/vikbooking/site/resources/uploads/big_cc-335_img_5337.jpg",
-      "https://easytravellodging.com/wp-content/plugins/vikbooking/site/resources/uploads/big_img_4228.jpg",
-      "https://easytravellodging.com/wp-content/plugins/vikbooking/site/resources/uploads/big_img_2953.jpg"
-],
+      'https://easytravellodging.com/wp-content/plugins/vikbooking/site/resources/uploads/big_cc-335_img_5339.jpg',
+      'https://easytravellodging.com/wp-content/plugins/vikbooking/site/resources/uploads/big_cc-335_img_5342.jpg',
+      'https://easytravellodging.com/wp-content/plugins/vikbooking/site/resources/uploads/big_img_4881.jpg',
+      'https://easytravellodging.com/wp-content/plugins/vikbooking/site/resources/uploads/big_cc-2_kitchen_sink.jpg',
+      'https://easytravellodging.com/wp-content/plugins/vikbooking/site/resources/uploads/big_cc_bathroom.jpg',
+      'https://easytravellodging.com/wp-content/plugins/vikbooking/site/resources/uploads/big_img_2934.jpg',
+      'https://easytravellodging.com/wp-content/plugins/vikbooking/site/resources/uploads/big_cc-335_img_5257.jpg',
+      'https://easytravellodging.com/wp-content/plugins/vikbooking/site/resources/uploads/big_cc-335_img_5267.jpg',
+      'https://easytravellodging.com/wp-content/plugins/vikbooking/site/resources/uploads/big_cc-335_img_5258.jpg',
+      'https://easytravellodging.com/wp-content/plugins/vikbooking/site/resources/uploads/big_cc-335_img_5262.jpg',
+      'https://easytravellodging.com/wp-content/plugins/vikbooking/site/resources/uploads/big_cc-335_img_5268.jpg',
+      'https://easytravellodging.com/wp-content/plugins/vikbooking/site/resources/uploads/big_cc-335_img_5275.jpg',
+      'https://easytravellodging.com/wp-content/plugins/vikbooking/site/resources/uploads/big_cc-335_img_5277.jpg',
+      'https://easytravellodging.com/wp-content/plugins/vikbooking/site/resources/uploads/big_cc-335_img_5274.jpg',
+      'https://easytravellodging.com/wp-content/plugins/vikbooking/site/resources/uploads/big_cc-335_img_5280.jpg',
+      'https://easytravellodging.com/wp-content/plugins/vikbooking/site/resources/uploads/big_cc-335_img_5337.jpg',
+      'https://easytravellodging.com/wp-content/plugins/vikbooking/site/resources/uploads/big_img_4228.jpg',
+      'https://easytravellodging.com/wp-content/plugins/vikbooking/site/resources/uploads/big_img_2953.jpg',
+    ],
     features: [
-      "Spacious two-bedroom, two-bathroom floor plan with ground-level access",
-      "Full suite of community amenities: 24-hr gym, swimming pools, spas, tennis & volleyball courts",
-      "Cozy indoor wood-burning fireplace and 55\u2033 4K Smart TV in living salon",
-      "Chef kitchen with refrigerator, oven/range, microwave, and dishwasher",
-      "Built-in credenza in dining area providing generous storage",
-      "In-unit stackable washer and dryer with detergent supplies",
-      "Private secluded patio for outdoor rest and peaceful evenings"
-],
+      'Spacious two-bedroom, two-bathroom ground-floor layout',
+      'Community access: 24-hour gym, pools, heated spas, tennis & volleyball courts',
+      'Wood-burning fireplace and 55-inch 4K Smart TV in the living room',
+      'Full kitchen with refrigerator, range, microwave, and dishwasher',
+      'Built-in dining credenza for extra household storage',
+      'In-unit washer and dryer with starter detergent',
+      'Secluded private patio for quiet outdoor relaxation',
+    ],
     amenities: [
-      "WiFi",
-      "TV",
-      "Air Conditioning",
-      "Bathroom",
-      "Fireplace",
-      "In-Unit Washer/Dryer",
-      "Private Patio",
-      "Pool & Spa Access"
-]
+      'WiFi',
+      'TV',
+      'Air Conditioning',
+      'Bathroom',
+      'Fireplace',
+      'In-Unit Washer/Dryer',
+      'Private Patio',
+      'Pool & Spa Access',
+    ],
   },
 ];
 
@@ -453,142 +498,162 @@ export const FAQS: FAQItem[] = [
   {
     id: 'faq-1',
     category: 'General',
-    question: 'What is Easy Travel Lodging (ETL)?',
-    answer: 'ETL is a corporate housing company that provides fully furnished and equipped rentals for traveling professionals who are in the Sacramento area for 30 days or more.'
+    question: 'Who stays with Easy Travel Lodging?',
+    answer:
+      'We welcome a wide range of guests—families visiting relatives or relocating to Greater Sacramento, homeowners bridging a closing or home renovation, individuals in the region for medical care or university programs, remote workers, leisure visitors staying five nights or longer, and organizations arranging extended accommodations.',
   },
   {
     id: 'faq-2',
     category: 'General',
-    question: 'What is a Mid-term rental?',
-    answer: 'Typically, a mid-term rental is designed for occupancy of 30 days or more.'
+    question: 'What stay lengths are available?',
+    answer:
+      'We offer both short stays (5 to 29 nights) and extended stays (30 days to 12+ months). Stays of 30 consecutive days or longer qualify for California extended-stay occupancy tax exemption.',
   },
   {
     id: 'faq-3',
     category: 'General',
-    question: 'What makes ETL different from Airbnb?',
-    answer: 'Airbnb caters to those who might be on vacation and need a place to stay for a very short period of time---typically a day or two or a week. ETL caters to the traveling professional who is on a work assignment and needs a place to stay for 30 days or more.'
+    question: 'How does Easy Travel Lodging differ from standard hotels or peer-to-peer vacation listings?',
+    answer:
+      'Every residence is locally operated and inspected by co-founders Bill Wheelock and Dr. Marlena Uhrik. Unlike a compact hotel room, you receive a full kitchen, in-unit washer and dryer, separate living and sleeping areas, covered parking, all utilities, and optional vehicle rentals or arrival services in a single checkout.',
   },
   {
     id: 'faq-4',
     category: 'General',
-    question: 'Who are traveling professionals?',
-    answer: 'Some examples of traveling professionals are described as traveling nurses/doctors, visiting professors, project managers, engineers, consultants, IT personnel, and digital nomads.'
+    question: 'Can I bundle a residence, vehicle rental, and guest services in one cart?',
+    answer:
+      'Yes. You can add furnished apartments, 3D fleet rentals, airport transfers, pantry provisioning, ergonomic home-office setups, housekeeping sessions, or prepaid Lodging Unit bundles to one shopping cart and check out under a single order reference.',
   },
   {
     id: 'faq-5',
     category: 'General',
-    question: 'How is ETL different from other mid-term rentals?',
-    answer: 'We feel we go the extra mile to have each mid-term rental look and feel like home. Our guests marvel at how beautiful and cozy their "new home" is and how special they feel throughout the whole onboarding process including the ETL Welcome Basket, Guest Book, and Starter Kit.'
+    question: 'What makes our residences feel like a real home?',
+    answer:
+      'Each apartment is prepared with hotel-grade bedding, plush bath towels, a full cookware-equipped kitchen, high-speed Wi-Fi, an arrival Welcome Basket, a local Area Guidebook, and our signature Starter Kit so you never need to run errands the night you arrive.',
   },
   {
     id: 'faq-6',
     category: 'Stays & Amenities',
     question: 'What is included in the Easy Travel Lodging Starter Kit?',
-    answer: 'Your "Easy Travel Lodging Starter Kit" includes basic supplies so that you do not have to run out to the store to get dish detergent or trash bags while getting set up for your new assignment:\n• 1 roll of Paper Towels & extra Toilet Paper\n• Eco-friendly Toiletries & Shampoo\n• Eco-friendly Laundry Detergent\n• Dish/Dishwasher Detergent & drying towels\n• Ziplock bags, Saran Wrap & aluminum foil\n• Cleaning supplies: broom, dustpan, vacuum, Swiffer with pads, trash bags, multi-purpose cleaners\n• Basic office desk supplies\n• Plenty of quality hangers!'
+    answer:
+      'Every stay includes initial household essentials so you can settle in right away:\n• Paper towels and extra bath tissue\n• Eco-friendly bath toiletries and shampoo\n• Laundry pods and dishwasher detergent\n• Food storage bags, wrap, and aluminum foil\n• Vacuum, broom, Swiffer, trash bags, and surface cleaners\n• Desk supplies and a generous set of closet hangers',
   },
   {
     id: 'faq-7',
     category: 'Stays & Amenities',
-    question: 'What is in the ETL Guest Book?',
-    answer: 'You will find maps of the area, calendars of local events, and coupons for nearby breweries/wineries and restaurants. You will even find a coloring book and crayons for young kids.'
+    question: 'What will I find in the Guest Guidebook?',
+    answer:
+      'Each residence includes local neighborhood maps, seasonal community calendars, dining and tasting-room recommendations, American River Parkway trail tips, and family-friendly activity ideas—including coloring books and crayons for younger guests.',
   },
   {
     id: 'faq-8',
     category: 'Stays & Amenities',
-    question: 'What things are planned for safety and comfort?',
-    answer: 'Hotel quality queen-size mattress, vinyl-free bed bug liner for the mattress, mattress protector washed for each new guest, 2 sets of sheets/pillows with pillowcases and protectors (400-600 thread count), 2 sets of white towels for each guest, Hotel quality duvet and duvet insert, 2 Smart TVs (a 43-inch TV in the bedroom and a 55-inch in the living room), electronic key system, convenient parking, all utilities paid, and so much more!'
+    question: 'What comfort and safety features come standard?',
+    answer:
+      'Residences feature queen mattresses with freshly laundered protectors, two sets of 400–600 thread count cotton sheets, plush white bath towels, Smart TVs in the living area and bedrooms, electronic keypad locks, reserved parking, and utilities included in your rate.',
   },
   {
     id: 'faq-9',
     category: 'Stays & Amenities',
-    question: 'What things are included in the kitchen?',
-    answer: 'Each property has a stove, oven, microwave, refrigerator, and dishwasher along with an in unit washer and dryer. A complete set of dishes and silverware for 4, along with cups and glasses, mixing bowls, and other cooking and baking supplies. Each kitchen also has a coffee maker and Instant Pot.'
+    question: 'How are the kitchens equipped?',
+    answer:
+      'Every apartment has a full-size refrigerator, range and oven, microwave, dishwasher, coffee maker, Instant Pot, dishes and flatware, glassware, mixing bowls, bakeware, and everyday cooking utensils, plus an in-unit washer and dryer.',
   },
   {
     id: 'faq-10',
     category: 'Booking & Policies',
-    question: 'What else makes ETL special?',
-    answer: 'At ETL, we care about our guests and strive to build meaningful relationships. That\'s why we take the time to call ahead and bring local treats and goodies as a warm welcome to our guests. When you stay with ETL, you\'ll have the peace of mind of knowing that the owners, Bill Wheelock and Marlena Uhrik, understand the unique needs of traveling professionals and are committed to making your stay as comfortable and enjoyable as possible.'
+    question: 'How do checkout payments and payment verification work?',
+    answer:
+      'You can pay immediately using verified Lodging Units in your Client Portal (1 Unit = $100 USD) or remit via Bank Wire, Direct ACH, or Zelle. Wire, ACH, and Zelle orders remain in Pending Verification status until bank clearance is confirmed by our accounting team, after which your official Paid & Confirmed receipt is issued.',
   },
   {
     id: 'faq-11',
     category: 'Booking & Policies',
-    question: 'What are the check-in and check-out times?',
-    answer: 'Check in time is at 2:00 PM on the mutually approved move-in day and check out time is at 11:00 AM upon the move-out day. Changes may be accommodated upon request.'
-  }
+    question: 'What are the standard check-in and check-out times?',
+    answer:
+      'Standard check-in begins at 2:00 PM on your arrival date, and check-out is at 11:00 AM on your departure date. Early arrival or late departure requests can often be accommodated with advance notice.',
+  },
 ];
 
 export const HOUSE_RULES: HouseRule[] = [
   {
     id: 'rule-bg',
-    title: 'Background Verification Required',
-    description: 'All applicants are required to pay for and complete a background check. Once the background check for your midterm rental application has yielded satisfactory results, your application will be approved.',
+    title: 'Guest Verification for Extended Stays',
+    description:
+      'Extended-stay reservations (30+ days) require standard identity and background screening prior to lease finalization to maintain a safe, welcoming residential community.',
     icon: 'ShieldCheck',
-    strictness: 'Required'
+    strictness: 'Required',
   },
   {
     id: 'rule-pets',
-    title: 'Pets Policy',
-    description: 'Typically, Easy Travel Lodging does not accept pets. If, for some reason, an exception is made based on pre-established criteria, the occupant must fill out a Pet Addendum form before occupancy.',
+    title: 'Pet Policy',
+    description:
+      'Select residences welcome pets with advance approval and a signed Pet Addendum (you can also add the Approved Pet Welcome & Sanitization package directly to your cart).',
     icon: 'PawPrint',
-    strictness: 'Standard Policy'
+    strictness: 'Standard Policy',
   },
   {
     id: 'rule-events',
-    title: 'No Large Events',
-    description: 'No large events or parties are allowed on the premises.',
+    title: 'No Parties or Large Gatherings',
+    description:
+      'To preserve a peaceful residential setting for neighbors and fellow guests, large events or parties are not permitted.',
     icon: 'Users',
-    strictness: 'Strict'
+    strictness: 'Strict',
   },
   {
     id: 'rule-smoking',
-    title: '100% Smoke-Free Environment',
-    description: 'This is a smoke-free environment. Should there be evidence of smoking, the occupant will be charged for damages such as re-carpeting, painting, cleaning, etc.',
+    title: '100% Smoke-Free Residences',
+    description:
+      'All interiors, patios, and balconies are strictly smoke-free. Remediation charges apply if evidence of indoor smoking is found.',
     icon: 'CigaretteOff',
-    strictness: 'Strict'
+    strictness: 'Strict',
   },
   {
     id: 'rule-vaping',
-    title: 'Vaping and E-Cigarettes',
-    description: 'Vaping and e-cigarette smoking is not allowed inside the property.',
+    title: 'No Indoor Vaping or E-Cigarettes',
+    description: 'Vaping and e-cigarette use are not permitted inside any apartment.',
     icon: 'Ban',
-    strictness: 'Strict'
+    strictness: 'Strict',
   },
   {
     id: 'rule-quiet',
     title: 'Quiet Hours: 10:00 PM – 6:00 AM',
-    description: 'Quiet hours are typically designated between 10:00 pm - 6:00 am. Please be respectful of your surroundings and other people’s work schedules. We ask that you be quiet and discreet, especially at night.',
+    description:
+      'Quiet hours are observed nightly between 10:00 PM and 6:00 AM out of courtesy for neighbors, families, and shift-schedule residents.',
     icon: 'VolumeX',
-    strictness: 'Required'
+    strictness: 'Required',
   },
   {
     id: 'rule-times',
     title: 'Check-In 2:00 PM / Check-Out 11:00 AM',
-    description: 'Check in time is at 2:00 PM on the mutually approved move-in day and check out time is at 11:00 AM upon the move-out day.',
+    description:
+      'Check-in opens at 2:00 PM via smart-lock code on arrival day, and check-out is by 11:00 AM on departure day.',
     icon: 'Clock',
-    strictness: 'Standard Policy'
+    strictness: 'Standard Policy',
   },
   {
     id: 'rule-guests',
-    title: 'Maximum Number of Guests',
-    description: 'Occasional overnight guests are allowed for up to seven days. Any extended stay must be approved by Easy Travel Lodging.',
+    title: 'Registered Household & Overnight Visitors',
+    description:
+      'Occasional overnight visitors are welcome for up to seven nights. Guests staying longer should be registered with Easy Travel Lodging.',
     icon: 'UserPlus',
-    strictness: 'Standard Policy'
+    strictness: 'Standard Policy',
   },
   {
     id: 'rule-filming',
     title: 'Commercial Photography & Filming',
-    description: 'Commercial photography and filming is not allowed on premises.',
+    description:
+      'Commercial filming or production shoots require prior written authorization from Easy Travel Lodging.',
     icon: 'CameraOff',
-    strictness: 'Required'
+    strictness: 'Required',
   },
   {
     id: 'rule-safety',
-    title: 'Safety & Health Standards',
-    description: 'Please close and lock all windows and doors when you leave the property. Please do not keep any food in the bedroom.',
+    title: 'Home Care & Security',
+    description:
+      'Please secure all windows and doors when away from the residence and store food items in the kitchen.',
     icon: 'Lock',
-    strictness: 'Required'
-  }
+    strictness: 'Required',
+  },
 ];
 
 export const AREA_ATTRACTIONS = {
@@ -647,91 +712,91 @@ export const BLOG_POSTS: BlogPost[] = [
   {
     id: 'post-1',
     slug: 'welcome-to-easy-travel-lodging-your-home-away-from-home',
-    title: 'Welcome to Easy Travel Lodging: Your Home Away from Home!',
-    category: 'Corporate Housing',
+    title: 'Welcome to Easy Travel Lodging: Furnished Comfort for Every Kind of Stay',
+    category: 'Guest Experience',
     date: 'November 2025',
     readTime: '4 min read',
-    excerpt: 'Other travelers are also part of who we serve. Perhaps you are a digital nomad, waiting for your new home to be built, or in need of a welcoming haven during a medical journey...',
+    excerpt: 'Whether you are visiting family, remodeling your home, relocating to Greater Sacramento, or arriving for an extended project, discover how a thoughtfully furnished residence changes the way you travel.',
     coverImage: 'https://easytravellodging.com/wp-content/uploads/2023/04/CC-91-2.jpg',
     content: [
-      'Welcome to Easy Travel Lodging! Other travelers are also part of who we serve. Perhaps you are a digital nomad, waiting for your new home to be built, in need of a welcoming haven during a medical journey, a grandparent eager to be closer to your grandchildren, or dealing with an insurance claim due to property damage.',
-      'We understand that being away from home can bring its own set of stresses. That’s why we curate spaces that don’t feel like temporary quarters. With warm color palettes, cozy indoor fireplaces, fully stocked kitchens, and thoughtful welcome baskets filled with local goodies, ETL brings the essence of home to every stay.',
-      'Our guests frequently mention the peace of mind they feel knowing that Bill and Marlena are local and accessible. From seamless keyless check-in to quiet evening hours, our mission is to ensure you feel grounded and appreciated throughout your time in Sacramento.'
+      'Great hospitality starts with recognizing that no two guests travel for the exact same reason. Some arrive in Sacramento to welcome a new grandchild or support a loved one at a nearby medical center; others are waiting for a new home build to close, navigating a home renovation, working remotely, or managing a multi-month regional project.',
+      'We understand that time away from your primary residence is far easier when your space feels genuinely livable. With warm residential interiors, indoor fireplaces, fully equipped kitchens, in-unit laundry, and arrival starter kits, each Easy Travel Lodging suite is prepared for real daily life rather than a cramped overnight stopover.',
+      'Guests consistently tell us how reassuring it is to have responsive local hosts in Bill and Marlena. From smooth keyless self check-in to quiet evening hours and optional concierge add-ons, every detail is arranged so you can settle in from day one.'
     ]
   },
   {
     id: 'post-2',
     slug: 'embrace-history-and-nature-a-delightful-stay-in-rancho-cordovas-gold-rush-haven',
-    title: "Embrace History and Nature: A Delightful Stay in Rancho Cordova's Gold Rush Haven",
+    title: "Trails, River Views & Local Flavor: Exploring Rancho Cordova and Sacramento",
     category: 'Local Guide',
     date: 'October 2025',
     readTime: '5 min read',
-    excerpt: "Nestled in the embrace of California's historical Gold Rush area, Rancho Cordova offers a unique blend of history, nature, and modern charm. A stay in this vibrant city promises not only a journey through the pages of the past...",
+    excerpt: "Set along the American River Parkway in California's historic Gold Country corridor, Rancho Cordova pairs peaceful riverside trails with quick access to Midtown Sacramento and Folsom.",
     coverImage: 'https://easytravellodging.com/wp-content/uploads/2023/01/keys-hotel-board-web-crop.png',
     content: [
-      "Nestled in the embrace of California's historical Gold Rush area, Rancho Cordova offers a unique blend of history, nature, and modern charm.",
-      "The American River Parkway provides endless opportunities for biking, jogging, and birdwatching along 32 miles of paved trails. Just upstream, Lake Natoma offers serene waters for paddleboarding, kayaking, and open-air picnics.",
-      "In the evening, discover the Barrel District, home to six independent craft breweries and local tasting rooms. With our strategic location near Highway 50, you are 20 minutes from the California State Capitol and minutes from the historic town of Folsom."
+      "Set along California's historic Gold Country corridor, Rancho Cordova offers an inviting blend of outdoor recreation, neighborhood dining, and effortless regional access.",
+      "Just minutes from our residences, the 32-mile American River Parkway invites morning bike rides, riverside walks, and birdwatching beneath native valley oaks. Upstream, Lake Natoma offers calm water for paddleboarding, kayaking, and lakeside picnics.",
+      "In the evening, explore independent craft breweries, cideries, and coffee roasters in the Barrel District, or hop onto Highway 50 to reach Downtown Sacramento, Folsom's historic Sutter Street, or weekend day trips to Lake Tahoe and Napa Valley."
     ]
   },
   {
     id: 'post-3',
     slug: 'the-waiting-game-embracing-midterm-rentals-during-the-transition-period',
-    title: 'The Waiting Game: Embracing Midterm Rentals During the Transition Period',
-    category: 'Relocation',
+    title: 'Bridging the Gap Between Homes: Stress-Free Housing During Moves & Renovations',
+    category: 'Relocation & Home Transitions',
     date: 'September 2025',
     readTime: '4 min read',
-    excerpt: 'The exhilarating journey of buying or building a new home often comes with its own unique set of challenges, particularly during the transition period. Whether you have sold your old home and are awaiting closing...',
+    excerpt: 'Buying, building, or renovating a home rarely follows a rigid calendar. Flexible furnished residences give families and homeowners breathing room without 12-month lease lock-ins.',
     coverImage: 'https://easytravellodging.com/wp-content/uploads/2023/01/P91-LR.jpg',
     content: [
-      'The exhilarating journey of buying or building a new home often comes with its own unique set of challenges, particularly during the transition period.',
-      'Whether you have sold your previous residence faster than expected, or construction delays have pushed back your move-in date, trying to find flexible housing can cause immense stress. Traditional apartments demand 12-month commitments, while hotels lack kitchens, in-unit laundry, and storage.',
-      'Easy Travel Lodging midterm rentals eliminate the dilemma. With 30-day minimum stays, all utilities paid, in-unit washers and dryers, and fully equipped kitchens, your transition period turns into a relaxing staycation rather than an ordeal.'
+      'Buying, selling, or renovating a home is exciting, yet closing timelines and contractor schedules rarely line up to the exact day.',
+      'When your previous home sells quickly or kitchen and flooring renovations require moving out for several weeks, traditional 12-month apartment leases are too rigid—and living out of suitcases in a hotel quickly wears thin without a real kitchen or laundry room.',
+      'Easy Travel Lodging bridges that gap cleanly. With flexible short stays (5+ nights) and tax-exempt extended stays (30+ nights), utilities and high-speed Wi-Fi included, and optional pet-friendly residences, your household can keep its normal routine until moving day arrives.'
     ]
   },
   {
     id: 'post-4',
     slug: 'a-home-away-from-home-the-vital-role-of-midterm-rentals-for-medically-fragile-travelers',
-    title: 'A Home Away from Home: The Vital Role of Midterm Rentals for Medically Fragile Travelers',
-    category: 'Healthcare',
+    title: 'Restful Ground-Floor Suites Near Sacramento Medical Centers',
+    category: 'Wellness & Accessibility',
     date: 'August 2025',
     readTime: '5 min read',
-    excerpt: 'For those facing complex medical conditions or undergoing specialized treatment, traveling can be a challenging and daunting endeavor. Being far from home during such times can heighten stress...',
+    excerpt: 'When traveling for outpatient care or supporting a family member at UC Davis Health, Kaiser Permanente, or Sutter Health, step-free access and a calm, hygienic home environment matter.',
     coverImage: 'https://easytravellodging.com/wp-content/uploads/2023/04/IMG_1684.jpg',
     content: [
-      'For patients and families facing specialized treatments at regional medical hubs like UC Davis Health, Kaiser Permanente, and Mercy General, having a tranquil, hygienic, ground-floor space is essential.',
-      'At Easy Travel Lodging, our ground-floor downstairs units (Unit 91, Unit 173, and Unit 335) provide step-free access, vinyl-free bed bug mattress liners, hypoallergenic protections, and reglazed sanitized bathtubs.',
-      'Having a private kitchen allows patients to prepare dietary-specific meals, while designated quiet hours (10:00 PM - 6:00 AM) guarantee undisturbed rest crucial for recovery.'
+      'For patients and family caregivers visiting regional centers such as UC Davis Health, Kaiser Permanente, Mercy General, and Sutter Medical Center, a quiet, sanitized, ground-floor residence makes recovery far more comfortable.',
+      'At Easy Travel Lodging, our ground-floor residences (Suites 91, 173, and 335) feature step-free entry, protective hypoallergenic mattress encasements, freshly reglazed bathtubs, and central climate control.',
+      'A full private kitchen makes it simple to prepare specific dietary meals at any hour, while community quiet hours from 10:00 PM to 6:00 AM support uninterrupted rest.'
     ]
   },
   {
     id: 'post-5',
     slug: 'what-should-i-consider-before-renting-midterm',
-    title: 'What Should I Consider Before Renting Midterm?',
-    category: 'Midterm Guide',
-    date: 'June 2023',
+    title: 'How to Choose the Right Furnished Residence for a Short or Extended Stay',
+    category: 'Planning Guide',
+    date: 'June 2025',
     readTime: '4 min read',
-    excerpt: 'Renting a midterm property can provide a convenient and flexible housing solution for individuals or families in need of temporary accommodation. Here are key aspects to keep in mind...',
+    excerpt: 'Comparing hotels, unfurnished apartments, and turnkey residences? Use this practical checklist to evaluate total cost, workspace quality, kitchen equipment, and location.',
     coverImage: 'https://easytravellodging.com/wp-content/uploads/2023/04/IMG_1672.jpg',
     content: [
-      'Budget: Determine your budget for rent, utilities, and any additional fees. At ETL, all utilities and high-speed WiFi are 100% included in the monthly rate with zero surprise bills.',
-      'Location: Ensure close proximity to freeways, grocery stores, healthcare centers, and your workplace. Rancho Cordova offers rapid access to Sacramento, Folsom, and Elk Grove.',
-      'Furnishings & Equipment: Ensure the property includes high-speed internet, dedicated workstations, hotel-quality mattresses, and a fully stocked kitchen with essential cookware.'
+      'Look at Transparent Total Cost: Compare nightly hotel taxes, parking fees, and restaurant meals against an all-inclusive furnished suite where electricity, gas, water, trash, reserved parking, and 400+ Mbps Wi-Fi are already built in—and stays of 30+ nights qualify for California occupancy tax exemption.',
+      'Check Everyday Livability: Look for in-unit laundry, full-size cookware rather than a mini-fridge, comfortable seating, and dedicated desk space if anyone in your party works or studies remotely.',
+      'Bundle Transportation & Arrival Extras: Combining your residence with a delivered fleet vehicle or pre-arrival grocery and housekeeping service in a single checkout saves valuable time on arrival day.'
     ]
   },
   {
     id: 'post-6',
     slug: 'how-do-midterm-rentals-work',
-    title: 'How Do Midterm Rentals Work?',
-    category: 'Midterm Guide',
-    date: 'June 2023',
+    title: 'How Online Reservations, Flexible Stays & Prepaid Lodging Units Work',
+    category: 'Booking Guide',
+    date: 'May 2025',
     readTime: '4 min read',
-    excerpt: 'When it comes to midterm rentals, the process is similar to long-term rentals, but with a shorter, more flexible duration. It starts with a streamlined digital agreement...',
+    excerpt: 'From adding a residence, vehicle, or concierge service to your cart to settling by Unit Balance or bank transfer, here is what to expect at every step.',
     coverImage: 'https://easytravellodging.com/wp-content/uploads/2023/01/250-LR.jpg',
     content: [
-      'Midterm rentals typically span from one to six months. Unlike vacation rentals where tourists stay for a weekend, midterm rentals cater to professionals on 30+ day work assignments or families in transition.',
-      'Easy Travel Lodging follows a meticulous onboarding process: you select your dates and unit, complete a quick background check for community safety, sign your digital lease, and receive your keyless door codes.',
-      'Everything is ready upon arrival: beds made with 400-600 thread count linens, the ETL Starter Kit unpacked, and the ETL Welcome Basket waiting on your kitchen counter.'
+      'Booking a furnished residence or vehicle with Easy Travel Lodging is straightforward whether you are reserving for yourself, your family, or a team.',
+      'Browse available suites, 3D fleet vehicles, and arrival add-ons, add your selections to your shopping cart, and review itemized pricing—including automatic occupancy tax exemption on 30+ night residential stays—before checkout.',
+      'Complete checkout instantly using prepaid Client Portal Lodging Units or choose Bank Wire, Direct ACH, or Corporate Zelle with real-time payment verification status tracking and downloadable receipts.'
     ]
   }
 ];
@@ -739,28 +804,28 @@ export const BLOG_POSTS: BlogPost[] = [
 export const HOST_DESIGN_SECRETS = [
   {
     number: '01',
-    title: 'Design for the 30-Day+ Traveler, Not the Weekend Tourist',
-    description: 'Midterm guests need ample wardrobe closet space, ergonomic work desks, blazing internet, and full kitchen cookware—not superficial decor.'
+    title: 'Design for Real Daily Living, Not Just Overnight Stays',
+    description: 'Guests staying a week or several months value generous closet storage, supportive seating, ergonomic desk space, reliable Wi-Fi, and real cookware far more than novelty decor.'
   },
   {
     number: '02',
-    title: 'The Power of First-Impression Photography',
-    description: 'Prospective corporate bookers decide in under 4 seconds whether to click your listing. Bright natural lighting, decluttered surfaces, and staged welcoming vignettes make all the difference.'
+    title: 'Honest, Natural-Light Photography',
+    description: 'Clear, accurate photography builds trust before check-in. Bright natural lighting, uncluttered rooms, and truthful floor-plan angles help guests choose the right suite with confidence.'
   },
   {
     number: '03',
-    title: 'Durable Luxury: High-Thread Linens & Bulletproof Surfaces',
-    description: 'Hotel-quality 400-600 thread count linens combined with commercial stain-resistant fabrics elevate review scores while lowering replacement expenses.'
+    title: 'Enduring Comfort: Hotel-Grade Linens & Easy-Care Finishes',
+    description: 'Crisp 400–600 thread count cotton sheets paired with durable, easy-to-sanitize surfaces keep every residence feeling fresh stay after stay.'
   },
   {
     number: '04',
-    title: 'The "Turnkey Starter Kit" Psychology',
-    description: 'Providing initial dishwasher pods, eco-detergent, paper products, and coffee creates an instant sense of relief that translates directly into 5-star reviews.'
+    title: 'Thoughtful First-Night Arrival Essentials',
+    description: 'Stocking initial dish soap, laundry pods, paper goods, coffee, and a local welcome basket lets tired travelers unpack and unwind before ever visiting a grocery store.'
   },
   {
     number: '05',
-    title: 'Community Ethics & Trust as a Competitive Moat',
-    description: 'Guests staying a month or more want accountable local operators. Ethical transparency, rapid responsiveness, and professional reputation unlock high occupancy.'
+    title: 'Responsive Local Stewardship & Transparent Policies',
+    description: 'Guests appreciate accountable local hosts, clear pricing without hidden fees, and prompt maintenance support from arrival through departure.'
   }
 ];
 
@@ -770,19 +835,19 @@ export const PRIVACY_POLICY_TEXT = {
   sections: [
     {
       title: 'Information Collection, Use, and Sharing',
-      content: 'We are the sole owners of the information collected on this site. We only have access to/collect information that you voluntarily give us via email, booking inquiry form, or other direct contact from you. We will not sell or rent this information to anyone.\n\nWe will use your information to respond to you, regarding the reason you contacted us. We will not share your information with any third party outside of our organization, other than as necessary to fulfill your request (e.g., standard tenant background verification for midterm housing approval).'
+      content: 'Easy Travel Lodging is the sole owner of the information collected on this website. We collect only the contact, billing, stay, and order details you voluntarily provide when placing an order through our shopping cart, submitting a reservation or inquiry form, or registering for the Client Portal. We never sell or rent your personal information.\n\nWe use your information strictly to fulfill reservations, process vehicle rentals and concierge services, verify payments, issue order receipts, and respond to guest support requests. Information is shared outside our organization only when required to complete a requested service (such as identity or residential screening for extended leases).'
     },
     {
       title: 'Your Access to and Control Over Information',
-      content: 'You may opt out of any future contacts from us at any time. You can do the following at any time by contacting us via the email address or phone number given on our website:\n• See what data we have about you, if any.\n• Change/correct any data we have about you.\n• Have us delete any data we have about you.\n• Express any concern you have about our use of your data.'
+      content: 'You may opt out of non-transactional communications from us at any time. By contacting us via the email address or phone number listed below, you may:\n• Request a summary of the personal records associated with your account or orders.\n• Update or correct your contact, billing, or profile information.\n• Request deletion of personal data not required for active leases or tax accounting.\n• Share any questions regarding how your data is handled.'
     },
     {
-      title: 'Security',
-      content: 'We take precautions to protect your information. When you submit sensitive information via the website, your information is protected both online and offline. Only employees or hosts (Bill Wheelock and Marlena Uhrik) who need the information to perform a specific job (e.g., customer service, reservation management, or billing) are granted access to personally identifiable information.'
+      title: 'Security & Payment Verification',
+      content: 'We take industry-standard precautions to protect your information online and offline. All order totals are calculated and verified server-side, client portal passwords are encrypted, and access to reservation and billing records is restricted to authorized hosts and treasury personnel performing guest support, fulfillment, or accounting reconciliation.'
     },
     {
       title: 'Contact Us Regarding Privacy',
-      content: 'If you feel that we are not abiding by this privacy policy, you should contact us immediately via telephone at 916-800-3295 or via email at Contact@EasyTravelLodging.com'
+      content: 'If you have questions about this Privacy Policy or how your information is handled, please contact us directly by phone at 916-800-3295 or by email at Contact@EasyTravelLodging.com.'
     }
   ]
 };

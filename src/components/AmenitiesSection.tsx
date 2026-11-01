@@ -1,37 +1,50 @@
 import React from 'react';
 import { Check } from 'lucide-react';
+import { LivePhotoBackground } from './LivePhotoBackground';
 
 export const AmenitiesSection: React.FC = () => {
   const amenities = [
-    { title: 'Free WiFi', desc: '400+ Mbps high-speed internet' },
-    { title: 'Free Parking', desc: 'Assigned dedicated parking space' },
-    { title: 'Bedroom Comforts', desc: 'Hotel-quality queen mattress & linens' },
-    { title: 'Private Patio Or Balcony', desc: 'Secluded outdoor space with seating' },
-    { title: 'Washer & Dryer', desc: 'In-unit stackable laundry' },
-    { title: 'ADA Compliant', desc: 'Single-level ground floor access' },
-    { title: 'Computer Station', desc: 'Work desk and comfortable chair' },
-    { title: 'Cozy Fireplace', desc: 'Electric fireplace in living room' },
-    { title: 'Coffee Maker', desc: 'Keurig coffee maker & Instant Pot' }
+    { title: 'High-Speed Wi-Fi', desc: '400+ Mbps internet for work, study, and streaming' },
+    { title: 'Reserved Parking', desc: 'Dedicated covered parking steps from your door' },
+    { title: 'Restful Queen Suites', desc: 'Hotel-grade mattresses with 400–600 thread count linens' },
+    { title: 'Private Patio or Balcony', desc: 'Furnished outdoor space for morning coffee or evening air' },
+    { title: 'In-Unit Laundry', desc: 'Private washer and dryer with starter detergent' },
+    { title: 'Ground-Floor Options', desc: 'Step-free single-level access in select residences' },
+    { title: 'Dedicated Workspace', desc: 'Comfortable desk setup for remote work or planning' },
+    { title: 'Living Room Fireplace', desc: 'Warm indoor fireplace for relaxed evenings' },
+    { title: 'Stocked Kitchen & Coffee Bar', desc: 'Full appliances, cookware, Keurig brewer, and Instant Pot' }
   ];
 
   return (
     <>
-      {/* Visual Separator Section 5 from easytravellodging.com */}
-      <div className="et_section_amenities h-48 sm:h-72 w-full" />
+      <div className="et_section_amenities relative overflow-hidden h-52 sm:h-72 w-full border-y border-[#3a2f28]">
+        <LivePhotoBackground scene="interior" secondaryScene="courtyard" overlay="subtle" />
+        <div className="relative z-10 h-full max-w-[1200px] mx-auto px-4 sm:px-8 flex items-end pb-6 sm:pb-8">
+          <div className="text-left">
+            <span className="text-xs font-extrabold uppercase tracking-[0.2em] text-[#4de0d2] block">
+              Interior Architecture &amp; Comfort
+            </span>
+            <p className="font-heading font-bold text-lg sm:text-2xl text-white mt-0.5">
+              Sunlit California living spaces outfitted for effortless arrivals
+            </p>
+          </div>
+        </div>
+      </div>
 
-      {/* Section 6: Amenities, Services, & Travel Guide */}
-      <section className="bg-white py-14 sm:py-20 border-b border-[#e5e5e5]">
+      <section className="bg-white py-14 sm:py-20 border-b border-[#e6dfd5]">
         <div className="max-w-[1200px] mx-auto px-4 sm:px-8 text-left space-y-10">
-          <div>
-            <h6 className="et_section_h6 text-[#000000]">
-              What you Get
+          <div className="space-y-2">
+            <h6 className="et_section_h6 text-[#282828]">
+              Included With Every Residence
             </h6>
             <h2 className="font-heading font-bold text-3xl sm:text-5xl text-[#00b7a8] leading-tight mt-1">
-              Amenities, Services, &amp; Travel Guide
+              Everyday Home Comforts &amp; Turnkey Essentials
             </h2>
+            <p className="text-sm sm:text-base text-[#5c5046] max-w-3xl pt-1">
+              Every apartment includes utilities, household essentials, and full community amenities so you can settle in from your first evening without unexpected setup costs.
+            </p>
           </div>
 
-          {/* 3x3 Grid with round check icons matching Divi ETmodules style */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8 pt-2">
             {amenities.map((item, index) => (
               <div key={index} className="flex items-center gap-4 py-2">
@@ -39,10 +52,10 @@ export const AmenitiesSection: React.FC = () => {
                   <Check className="w-5 h-5 stroke-[3]" />
                 </div>
                 <div>
-                  <h5 className="font-heading font-bold text-lg text-[#000000]">
+                  <h5 className="font-heading font-bold text-lg text-[#282828]">
                     {item.title}
                   </h5>
-                  <p className="text-xs text-slate-500">{item.desc}</p>
+                  <p className="text-xs text-[#5c5046]">{item.desc}</p>
                 </div>
               </div>
             ))}

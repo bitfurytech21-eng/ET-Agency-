@@ -27,9 +27,9 @@ export const AvailabilityCalendar: React.FC<AvailabilityCalendarProps> = ({
   onSelectDates,
   compact = false
 }) => {
-  // Base date set around the current local timeline (Nov 2026)
-  const [currentYear, setCurrentYear] = useState<number>(2026);
-  const [currentMonth, setCurrentMonth] = useState<number>(10); // 0-indexed: 10 = November
+  // Base date initialized dynamically from current date
+  const [currentYear, setCurrentYear] = useState<number>(() => new Date().getFullYear());
+  const [currentMonth, setCurrentMonth] = useState<number>(() => new Date().getMonth());
   
   // Selection state
   const [selectedStart, setSelectedStart] = useState<string | null>(null);
@@ -95,7 +95,7 @@ export const AvailabilityCalendar: React.FC<AvailabilityCalendarProps> = ({
     type: 'past' | 'booked' | 'turnover' | 'available'; 
     label?: string;
   } => {
-    const todayStr = '2026-10-31';
+    const todayStr = new Date().toISOString().split('T')[0];
     if (dateStr < todayStr) {
       return { type: 'past', label: 'Past Date' };
     }
@@ -178,21 +178,21 @@ export const AvailabilityCalendar: React.FC<AvailabilityCalendarProps> = ({
   };
 
   return (
-    <div className="bg-white border border-[#e5e5e5] shadow-xs text-left overflow-hidden">
+    <div className="bg-white border border-[#e6dfd5] shadow-xs text-left overflow-hidden rounded-lg">
       {/* Top Header / Real-time Status Banner */}
-      <div className="bg-[#fcfcfc] border-b border-[#e5e5e5] px-4 sm:px-6 py-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+      <div className="bg-[#faf8f5] border-b border-[#e6dfd5] px-4 sm:px-6 py-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
         <div className="space-y-1">
           <div className="flex items-center gap-2">
-            <span className="w-2.5 h-2.5 rounded-full bg-[#00b7a8] animate-pulse" />
+            <span className="w-2.5 h-2.5 rounded-full bg-[#00b7a8]" />
             <span className="text-xs font-bold uppercase tracking-wider text-[#00b7a8]">
               Live Availability
             </span>
-            <span className="text-xs text-slate-400">•</span>
-            <span className="text-xs font-semibold text-slate-700">
+            <span className="text-xs text-[#857568]">•</span>
+            <span className="text-xs font-semibold text-[#5c5046]">
               {schedule.unitNumber} ({schedule.code})
             </span>
           </div>
-          <p className="text-xs sm:text-sm text-[#333333] font-medium flex items-center gap-1.5">
+          <p className="text-xs sm:text-sm text-[#282828] font-medium flex items-center gap-1.5">
             <Clock className="w-3.5 h-3.5 text-[#00b7a8] shrink-0" />
             <span>{schedule.statusMessage}</span>
           </p>
@@ -209,10 +209,10 @@ export const AvailabilityCalendar: React.FC<AvailabilityCalendarProps> = ({
                   setCurrentYear(qm.year);
                   setCurrentMonth(qm.month);
                 }}
-                className={`px-2.5 py-1 text-xs font-semibold transition-colors cursor-pointer shrink-0 ${
+                className={`px-2.5 py-1 text-xs font-semibold rounded transition-colors cursor-pointer shrink-0 ${
                   isActive
                     ? 'bg-[#00b7a8] text-white shadow-xs'
-                    : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                    : 'bg-[#f2ece4] text-[#5c5046] hover:bg-[#e6dfd5]'
                 }`}
               >
                 {qm.name}
@@ -226,10 +226,10 @@ export const AvailabilityCalendar: React.FC<AvailabilityCalendarProps> = ({
         {/* Month Header Navigation */}
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <h4 className="font-heading font-bold text-lg sm:text-xl text-[#000000]">
+            <h4 className="font-heading font-bold text-lg sm:text-xl text-[#282828]">
               {monthNames[currentMonth]} {currentYear}
             </h4>
-            <span className="text-xs text-slate-500 hidden sm:inline">
+            <span className="text-xs text-[#857568] hidden sm:inline">
               (Stays of 30 days or more)
             </span>
           </div>
@@ -238,14 +238,14 @@ export const AvailabilityCalendar: React.FC<AvailabilityCalendarProps> = ({
             <button
               onClick={handlePrevMonth}
               aria-label="Previous Month"
-              className="p-1.5 border border-slate-200 text-slate-600 hover:text-black hover:border-slate-400 transition-colors cursor-pointer"
+              className="p-1.5 border border-[#dfd7cc] text-[#5c5046] hover:text-[#282828] hover:border-[#82634f] transition-colors cursor-pointer rounded"
             >
               <ChevronLeft className="w-4 h-4" />
             </button>
             <button
               onClick={handleNextMonth}
               aria-label="Next Month"
-              className="p-1.5 border border-slate-200 text-slate-600 hover:text-black hover:border-slate-400 transition-colors cursor-pointer"
+              className="p-1.5 border border-[#dfd7cc] text-[#5c5046] hover:text-[#282828] hover:border-[#82634f] transition-colors cursor-pointer rounded"
             >
               <ChevronRight className="w-4 h-4" />
             </button>
@@ -253,19 +253,19 @@ export const AvailabilityCalendar: React.FC<AvailabilityCalendarProps> = ({
         </div>
 
         {/* Calendar Grid */}
-        <div className="border border-[#e9ecef] rounded-xs overflow-hidden">
+        <div className="border border-[#e6dfd5] rounded-xs overflow-hidden">
           {/* Day of Week Headers */}
-          <div className="grid grid-cols-7 bg-[#f8f9fa] border-b border-[#e9ecef] text-center text-[11px] font-bold text-slate-600 uppercase py-2">
+          <div className="grid grid-cols-7 bg-[#faf8f5] border-b border-[#e6dfd5] text-center text-[11px] font-bold text-[#5c5046] uppercase py-2">
             {daysOfWeek.map((d) => (
               <div key={d}>{d}</div>
             ))}
           </div>
 
           {/* Days Cells */}
-          <div className="grid grid-cols-7 gap-px bg-[#e9ecef]">
+          <div className="grid grid-cols-7 gap-px bg-[#e6dfd5]">
             {/* Blank offset days */}
             {Array.from({ length: firstDayIndex }).map((_, idx) => (
-              <div key={`empty-${idx}`} className="bg-[#fcfcfc] min-h-[46px] sm:min-h-[58px]" />
+              <div key={`empty-${idx}`} className="bg-[#fcfaf7] min-h-[46px] sm:min-h-[58px]" />
             ))}
 
             {/* Actual Month Days */}
@@ -368,27 +368,27 @@ export const AvailabilityCalendar: React.FC<AvailabilityCalendarProps> = ({
         </div>
 
         {/* Calendar Legend */}
-        <div className="flex flex-wrap items-center justify-between gap-3 pt-1 text-xs text-slate-600 border-t border-[#f0f0f0]">
+        <div className="flex flex-wrap items-center justify-between gap-3 pt-1 text-xs text-[#5c5046] border-t border-[#efe9e0]">
           <div className="flex flex-wrap items-center gap-4">
             <div className="flex items-center gap-1.5">
               <span className="w-3 h-3 rounded-xs bg-[#00b7a8]" />
-              <span className="font-medium text-slate-700">Available Date</span>
+              <span className="font-medium text-[#5c5046]">Available Date</span>
             </div>
             <div className="flex items-center gap-1.5">
               <span className="w-3 h-3 rounded-xs bg-rose-200 border border-rose-300" />
-              <span className="font-medium text-slate-700">Occupied / Booked</span>
+              <span className="font-medium text-[#5c5046]">Occupied / Booked</span>
             </div>
             <div className="flex items-center gap-1.5">
               <span className="w-3 h-3 rounded-xs bg-amber-200 border border-amber-300" />
-              <span className="font-medium text-slate-700">Cleaning &amp; Inspection</span>
+              <span className="font-medium text-[#5c5046]">Cleaning &amp; Inspection</span>
             </div>
             <div className="flex items-center gap-1.5">
-              <span className="w-3 h-3 rounded-xs bg-slate-200" />
-              <span className="font-medium text-slate-400">Past</span>
+              <span className="w-3 h-3 rounded-xs bg-[#e6dfd5]" />
+              <span className="font-medium text-[#857568]">Past</span>
             </div>
           </div>
 
-          <div className="text-[11px] text-slate-500 font-medium italic">
+          <div className="text-[11px] text-[#857568] font-medium italic">
             * Minimum booking: 30 consecutive days
           </div>
         </div>
@@ -400,16 +400,16 @@ export const AvailabilityCalendar: React.FC<AvailabilityCalendarProps> = ({
               <div className="space-y-1">
                 <div className="flex items-center gap-2">
                   <CalendarIcon className="w-4 h-4 text-[#00b7a8]" />
-                  <span className="text-xs font-bold uppercase tracking-wider text-slate-800">
+                  <span className="text-xs font-bold uppercase tracking-wider text-[#282828]">
                     Selected Stay Window
                   </span>
                 </div>
-                <div className="text-sm font-semibold text-slate-900">
+                <div className="text-sm font-semibold text-[#282828]">
                   <span>Move-In: <strong className="text-[#00b7a8]">{selectedStart}</strong></span>
                   {selectedEnd ? (
                     <span> → Move-Out: <strong className="text-[#00b7a8]">{selectedEnd}</strong> ({selectedDaysCount} Nights)</span>
                   ) : (
-                    <span className="text-slate-500 font-normal ml-2">
+                    <span className="text-[#857568] font-normal ml-2">
                       (Click an end date to finalize your stay period)
                     </span>
                   )}
@@ -422,7 +422,7 @@ export const AvailabilityCalendar: React.FC<AvailabilityCalendarProps> = ({
                     setSelectedStart(null);
                     setSelectedEnd(null);
                   }}
-                  className="px-3 py-2 text-xs text-slate-600 hover:text-black border border-slate-300 bg-white cursor-pointer"
+                  className="px-3 py-2 text-xs text-[#5c5046] hover:text-[#282828] border border-[#dfd7cc] bg-white cursor-pointer"
                 >
                   Clear
                 </button>
@@ -432,7 +432,7 @@ export const AvailabilityCalendar: React.FC<AvailabilityCalendarProps> = ({
                   disabled={selectedEnd ? !meetsMinimumStay : false}
                   className={`et_pb_button text-xs py-2 px-5 cursor-pointer flex items-center justify-center gap-1.5 ${
                     selectedEnd && !meetsMinimumStay
-                      ? 'bg-slate-300 text-slate-500 cursor-not-allowed'
+                      ? 'bg-[#dfd7cc] text-[#857568] cursor-not-allowed'
                       : 'et_pb_button_teal'
                   }`}
                 >
@@ -464,7 +464,7 @@ export const AvailabilityCalendar: React.FC<AvailabilityCalendarProps> = ({
 
         {/* Hover / Status Note */}
         {hoveredEventInfo && !selectedStart && (
-          <div className="text-xs text-slate-600 bg-slate-50 p-2.5 border border-slate-200 flex items-center gap-2">
+          <div className="text-xs text-[#5c5046] bg-[#faf8f5] p-2.5 border border-[#e6dfd5] flex items-center gap-2">
             <Info className="w-4 h-4 text-[#00b7a8] shrink-0" />
             <span>{hoveredEventInfo}</span>
           </div>

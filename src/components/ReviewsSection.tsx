@@ -1,25 +1,26 @@
 import React from 'react';
 import { YouTubeEmbed } from './YouTubeEmbed';
+import { getFallbackPropertyImage } from '../data/lodgingData';
 
 export const ReviewsSection: React.FC = () => {
   return (
     <>
-      {/* Section 3 from easytravellodging.com */}
+      {/* Hospitality Promise Banner */}
       <section className="et_section_brown py-12 sm:py-16 text-left">
         <div className="max-w-[1200px] mx-auto px-4 sm:px-8 space-y-4">
           <h2 className="et_teal_h2 text-3xl sm:text-5xl font-bold text-[#00b7a8]">
-            EASY TRAVEL LODGING
+            HOSPITALITY THAT FEELS LIKE HOME
           </h2>
-          <p className="font-heading font-semibold text-xl sm:text-2xl text-[#000000] leading-snug">
-            Are you coming to Sacramento for an extended business assignment? Great, we’ve got the perfect housing solution for you…
+          <p className="font-heading font-semibold text-xl sm:text-2xl text-[#000000] leading-snug max-w-3xl">
+            Whether you are in town for a week, bridging a home closing, visiting family, or settling in for several months, every detail is ready before you arrive.
           </p>
-          <p className="text-[16px] text-[#000000] leading-relaxed">
-            We provide luxurious, fully-furnished and equipped rental properties with excellent service for traveling professionals throughout the Sacramento region for stays of 30 days or more.
+          <p className="text-[16px] text-[#000000] leading-relaxed max-w-4xl">
+            Co-founders Bill Wheelock and Dr. Marlena Uhrik personally oversee each residence—pairing full kitchens, in-unit laundry, reserved parking, and responsive local support so every guest enjoys a calm, reliable stay in Greater Sacramento.
           </p>
         </div>
       </section>
 
-      {/* Section 4 from easytravellodging.com: Parallax Background with Reviews and Video Testimonials */}
+      {/* Guest Stories & Video Testimonials */}
       <section 
         className="relative py-14 sm:py-20 bg-cover bg-center"
         style={{
@@ -28,14 +29,13 @@ export const ReviewsSection: React.FC = () => {
         }}
       >
         <div className="max-w-[1200px] mx-auto px-4 sm:px-8 space-y-6">
-          {/* Header & Graphic Reviews Container (Row 7 & 8) */}
-          <div className="bg-[rgba(255,255,255,0.85)] rounded-t-[15px] p-6 sm:p-10 text-left space-y-6">
+          <div className="bg-[rgba(255,255,255,0.88)] rounded-t-[15px] p-6 sm:p-10 text-left space-y-6">
             <div>
               <h6 className="et_section_h6 text-[#000000]">
-                Reviews
+                Verified Experiences
               </h6>
               <h2 className="font-heading font-bold text-3xl sm:text-5xl text-[#000000] leading-tight mt-1">
-                Guest Reviews
+                What Guests Say About Staying With Us
               </h2>
             </div>
 
@@ -45,6 +45,10 @@ export const ReviewsSection: React.FC = () => {
                 <img
                   src="https://easytravellodging.com/wp-content/uploads/2023/02/6-1.png"
                   alt="Guest Review 1"
+                  onError={(e) => {
+                    e.currentTarget.onerror = null;
+                    e.currentTarget.src = getFallbackPropertyImage(8);
+                  }}
                   className="w-full h-auto object-cover"
                   loading="lazy"
                 />
@@ -53,6 +57,10 @@ export const ReviewsSection: React.FC = () => {
                 <img
                   src="https://easytravellodging.com/wp-content/uploads/2023/02/6-2-1.png"
                   alt="Guest Review 2"
+                  onError={(e) => {
+                    e.currentTarget.onerror = null;
+                    e.currentTarget.src = getFallbackPropertyImage(9);
+                  }}
                   className="w-full h-auto object-cover"
                   loading="lazy"
                 />
@@ -61,6 +69,10 @@ export const ReviewsSection: React.FC = () => {
                 <img
                   src="https://easytravellodging.com/wp-content/uploads/2023/02/6-3-1.png"
                   alt="Guest Review 3"
+                  onError={(e) => {
+                    e.currentTarget.onerror = null;
+                    e.currentTarget.src = getFallbackPropertyImage(10);
+                  }}
                   className="w-full h-auto object-cover"
                   loading="lazy"
                 />
