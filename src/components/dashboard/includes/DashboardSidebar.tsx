@@ -4,7 +4,6 @@ import {
   LayoutDashboard,
   Building2,
   Car,
-  CreditCard,
   Heart,
   Bell,
   MessageSquare,
@@ -43,7 +42,6 @@ export const DashboardSidebar: React.FC<DashboardSidebarProps> = ({
     { id: 'overview', label: 'Overview', folder: 'Overview/', icon: LayoutDashboard },
     { id: 'accommodation', label: 'Accommodation', folder: 'Accommodation/', icon: Building2 },
     { id: 'car-rentals', label: 'Car Rentals', folder: 'CarRentals/', icon: Car },
-    { id: 'payments', label: 'Payments', folder: 'Payments/', icon: CreditCard },
     { id: 'saved-items', label: 'Saved Items', folder: 'SavedItems/', icon: Heart, badge: savedItemsCount },
     { id: 'notifications', label: 'Notifications', folder: 'Notifications/', icon: Bell, badge: unreadNotificationsCount },
     { id: 'messages', label: 'Messages', folder: 'Messages/', icon: MessageSquare, badge: unreadMessagesCount },
@@ -105,7 +103,6 @@ export const DashboardSidebar: React.FC<DashboardSidebarProps> = ({
         </nav>
       </div>
 
-      {/* Sidebar Footer info */}
       <div className="p-3 bg-[#1c1612] border border-[#3f332b] rounded-xl text-[11px] text-[#a89988] space-y-1">
         <span className="text-white font-bold block">24/7 Concierge Support</span>
         <p className="text-[10px] leading-relaxed">
