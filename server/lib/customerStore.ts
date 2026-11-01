@@ -245,8 +245,8 @@ export async function phpAuthRegister(payload: {
   }
 
   const customerId = `cust_${Date.now()}_${Math.floor(Math.random() * 900 + 100)}`;
-  const initialUnits = 25;
-  const initialBalance = initialUnits * 100.0;
+  const initialUnits = 0;
+  const initialBalance = 0.0;
   const passwordHash = bcrypt.hashSync(password, 10);
   const nowIso = new Date().toISOString();
 
@@ -261,28 +261,8 @@ export async function phpAuthRegister(payload: {
     balance_usd: initialBalance,
     units_balance: initialUnits,
     created_at: nowIso,
-    purchases: [
-      {
-        id: `pch_${Date.now()}`,
-        description: 'Account Activation Welcome Allotment (25 Units)',
-        unit_number: 'Sacramento Flex Allotment',
-        units_purchased: initialUnits,
-        amount_usd: initialBalance,
-        status: 'active',
-        purchased_at: nowIso,
-        payment_method: 'Welcome Credit Tier',
-      },
-    ],
-    transactions: [
-      {
-        id: `tx_${Date.now()}`,
-        type: 'welcome_credit',
-        units: initialUnits,
-        amount_usd: initialBalance,
-        description: 'Welcome Account Activation Allotment',
-        date: nowIso,
-      },
-    ],
+    purchases: [],
+    transactions: [],
   };
 
   db.customers.push(newCustomer);

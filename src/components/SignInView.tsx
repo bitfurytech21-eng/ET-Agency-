@@ -24,8 +24,8 @@ export const SignInView: React.FC<SignInViewProps> = ({
   onLoginSuccess,
   authNotice,
 }) => {
-  const [email, setEmail] = useState('client@easytravellodging.com');
-  const [password, setPassword] = useState('welcome123');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
@@ -55,12 +55,6 @@ export const SignInView: React.FC<SignInViewProps> = ({
     } finally {
       setIsLoading(false);
     }
-  };
-
-  const fillDemoCredentials = () => {
-    setEmail('client@easytravellodging.com');
-    setPassword('welcome123');
-    setErrorMsg(null);
   };
 
   return (
@@ -129,15 +123,8 @@ export const SignInView: React.FC<SignInViewProps> = ({
             </div>
 
             <div>
-              <div className="flex items-center justify-between mb-1.5">
+              <div className="mb-1.5">
                 <label className="block text-xs font-bold text-[#282828]">Password</label>
-                <button
-                  type="button"
-                  onClick={fillDemoCredentials}
-                  className="text-[11px] font-bold text-[#00897d] hover:underline cursor-pointer"
-                >
-                  Use Demo Login
-                </button>
               </div>
               <div className="relative">
                 <Lock className="w-4 h-4 absolute left-3.5 top-3.5 text-[#857568] pointer-events-none" />

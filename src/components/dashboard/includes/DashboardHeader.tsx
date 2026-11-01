@@ -153,23 +153,14 @@ export const DashboardHeader: React.FC<DashboardHeaderProps> = ({
             </div>
           </div>
 
-          {/* Right: User Profile */}
-          <div className="flex items-center gap-2 sm:gap-3">
-            {/* User Profile Mini Pill */}
+          {/* Right Section */}
+          <div className="flex items-center gap-2">
             <button
               type="button"
-              onClick={() => onNavigateTab('profile')}
-              className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-[#29201a] border border-[#4a3b31] hover:bg-[#382b23] text-white text-left transition-colors cursor-pointer"
+              onClick={onReturnToSite}
+              className="px-3 py-1.5 rounded-lg bg-[#29201a] hover:bg-[#382b23] border border-[#4a3b31] text-[#ede5dc] text-xs font-semibold transition-colors cursor-pointer"
             >
-              <div className="w-6 h-6 rounded-full bg-[#00b7a8] flex items-center justify-center text-white text-xs font-bold">
-                {user.name.charAt(0)}
-              </div>
-              <div className="text-xs leading-tight hidden sm:block">
-                <span className="font-bold text-white block truncate max-w-[110px]">{user.name}</span>
-                <span className="text-[10px] text-[#a89988] block truncate max-w-[110px]">
-                  {user.company || 'Member'}
-                </span>
-              </div>
+              Exit to Main Site
             </button>
           </div>
         </div>

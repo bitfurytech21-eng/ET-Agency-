@@ -154,7 +154,7 @@ async function runPhpService(service: string, action: string, payload: Record<st
 }
 
 const app = express();
-const port = Number(process.env.PORT ?? 3001);
+const port = Number(process.env.PORT ?? 3000);
 
 app.set('trust proxy', 1);
 
@@ -682,10 +682,11 @@ app.post('/api/php/auth/login', async (req: Request, res: Response) => {
 app.post('/api/php/auth/register', async (req: Request, res: Response) => {
   try {
     const result = await runPhpService('auth.php', 'register', req.body);
-    if (result.data.success && result.data.customer?.email) {
+    const data = result.data as { success?: boolean; customer?: { email: string; name: string } };
+    if (data.success && data.customer?.email) {
       await sendUserNotification({
-        to: result.data.customer.email,
-        name: result.data.customer.name,
+        to: data.customer.email,
+        name: data.customer.name,
         subject: 'Welcome to the Easy Travel client portal',
         intro: 'Your client account is active and your welcome units have been added.',
         details: [
