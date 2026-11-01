@@ -120,6 +120,39 @@ async function sendUserNotification({
   }
 }
 
+async function runPhpService(service: string, action: string, payload: Record<string, unknown> = {}) {
+  switch (`${service}:${action}`) {
+    case 'auth.php:login':
+      return { data: await phpAuthLogin(payload as { email?: string; password?: string }) };
+    case 'auth.php:register':
+      return { data: await phpAuthRegister(payload as { name?: string; email?: string; password?: string; company?: string; role?: string; phone?: string }) };
+    case 'auth.php:verify':
+      return { data: await phpAuthVerify(String(payload.token ?? '')) };
+    case 'dashboard.php:get':
+      return { data: await phpDashboardGet(String(payload.token ?? '')) };
+    case 'dashboard.php:buy_units':
+      return {
+        data: await phpDashboardBuyUnits(
+          String(payload.token ?? ''),
+          Number(payload.units ?? 0),
+          String(payload.packageType ?? 'Standard Unit Credit Pack'),
+          String(payload.paymentMethod ?? 'Corporate Credit Facility'),
+        ),
+      };
+    case 'checkout_balance.php:pay':
+      return {
+        data: await phpCheckoutPayFromBalance(
+          String(payload.token ?? ''),
+          String(payload.bookingId ?? ''),
+          Number(payload.unitsRequired ?? 0),
+          String(payload.commandCode ?? 'INTERNAL_EXEC_PAY_FROM_BALANCE'),
+        ),
+      };
+    default:
+      throw new Error(`Unknown PHP service: ${service}:${action}`);
+  }
+}
+
 const app = express();
 const port = Number(process.env.PORT ?? 3001);
 
