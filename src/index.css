@@ -125,6 +125,11 @@ main > * {
   z-index: 1;
 }
 
+::selection {
+  background: rgba(28, 114, 128, 0.18);
+  color: var(--ink);
+}
+
 header {
   background: rgba(255, 255, 255, 0.82);
   backdrop-filter: blur(14px);
@@ -238,15 +243,6 @@ textarea:focus {
   transform: translate3d(0, 0, 0);
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .reveal-on-scroll {
-    opacity: 1;
-    transform: none;
-    transition: none;
-  }
-}
-
-/* Preserve all existing custom sections while improving premium polish */
 @keyframes etlKenBurnsPrimary {
   0% {
     transform: scale3d(1.02, 1.02, 1) translate3d(0%, 0%, 0);
@@ -289,6 +285,15 @@ textarea:focus {
   }
 }
 
+@keyframes etlGentleFloat {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
 .etl-live-photo-primary {
   will-change: transform;
   animation: etlKenBurnsPrimary 32s ease-in-out infinite;
@@ -304,15 +309,20 @@ textarea:focus {
   animation: etlWarmSunlightDrift 22s ease-in-out infinite;
 }
 
+.etl-float-soft {
+  animation: etlGentleFloat 7s ease-in-out infinite;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .etl-live-photo-primary,
   .etl-live-photo-secondary,
-  .etl-warm-sunlight-drift {
+  .etl-warm-sunlight-drift,
+  .etl-float-soft,
+  .reveal-on-scroll {
     animation: none !important;
     transform: none !important;
-  }
-  .etl-live-photo-secondary {
-    opacity: 0 !important;
+    opacity: 1 !important;
+    transition: none !important;
   }
 }
 
@@ -523,7 +533,6 @@ textarea:focus {
   }
 }
 
-/* Utility enhancements for the premium travel platform */
 .section-card,
 .card-surface,
 .dashboard-card,
