@@ -62,7 +62,7 @@ export const PropertiesSection: React.FC<PropertiesSectionProps> = ({
   const [modalTab, setModalTab] = useState<'gallery' | 'calendar'>('gallery');
   const [expandedCalendarId, setExpandedCalendarId] = useState<string | null>(null);
   const [selectedMainImages, setSelectedMainImages] = useState<Record<string, number>>({});
-  const [unitFilter, setUnitFilter] = useState<'all' | '1bed' | '2bed' | 'downstairs' | 'upstairs'>('all');
+  const [unitFilter, setUnitFilter] = useState<'all' | 'sacramento' | 'los-angeles' | '1bed' | '2bed' | 'downstairs' | 'upstairs'>('all');
   const [localQuery, setLocalQuery] = useState<string>('');
 
   // Per-unit cart term & check-in state
@@ -75,6 +75,8 @@ export const PropertiesSection: React.FC<PropertiesSectionProps> = ({
 
   const filteredProperties = useMemo(() => {
     return sourceProperties.filter((prop) => {
+      if (unitFilter === 'sacramento' && prop.id.startsWith('la-')) return false;
+      if (unitFilter === 'los-angeles' && !prop.id.startsWith('la-')) return false;
       if (unitFilter === '1bed' && prop.bedrooms !== 1) return false;
       if (unitFilter === '2bed' && prop.bedrooms !== 2) return false;
       if (unitFilter === 'downstairs' && prop.floor !== 'Downstairs') return false;
@@ -164,7 +166,9 @@ export const PropertiesSection: React.FC<PropertiesSectionProps> = ({
         <div className="bg-[#faf8f5] border border-[#e6dfd5] p-4 rounded-lg flex flex-col md:flex-row md:items-center justify-between gap-3">
           <div className="flex flex-wrap items-center gap-2">
             {[
-              { id: 'all', label: `All Residences (${sourceProperties.length})` },
+              { id: 'all', label: `All Collections (${sourceProperties.length})` },
+              { id: 'sacramento', label: 'Sacramento Corporate Stays' },
+              { id: 'los-angeles', label: 'Los Angeles Vacation Rentals' },
               { id: '1bed', label: '1 Bed / 1 Bath' },
               { id: '2bed', label: '2 Bed / 2 Bath' },
               { id: 'downstairs', label: 'Ground Floor' },
@@ -277,16 +281,54 @@ export const PropertiesSection: React.FC<PropertiesSectionProps> = ({
                           }
                         }}
                       />
+
+                      {prop.images.length > 1 && (
+                        <>
+                          <button
+                            type="button"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setSelectedMainImages((prev) => ({
+                                ...prev,
+                                [prop.id]: currentImgIdx === 0 ? prop.images.length - 1 : currentImgIdx - 1,
+                              }));
+                            }}
+                            className="absolute left-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-black/60 hover:bg-black text-white flex items-center justify-center transition-all opacity-0 group-hover:opacity-100 cursor-pointer shadow-md"
+                            aria-label="Previous photo"
+                          >
+                            <ChevronLeft className="w-5 h-5" />
+                          </button>
+                          <button
+                            type="button"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setSelectedMainImages((prev) => ({
+                                ...prev,
+                                [prop.id]: currentImgIdx === prop.images.length - 1 ? 0 : currentImgIdx + 1,
+                              }));
+                            }}
+                            className="absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-black/60 hover:bg-black text-white flex items-center justify-center transition-all opacity-0 group-hover:opacity-100 cursor-pointer shadow-md"
+                            aria-label="Next photo"
+                          >
+                            <ChevronRight className="w-5 h-5" />
+                          </button>
+                        </>
+                      )}
+
                       <button
                         onClick={() => handleOpenModal(prop, 'gallery')}
                         className="absolute bottom-3 right-3 px-2.5 py-1.5 bg-white/95 hover:bg-white text-[#282828] rounded shadow-md text-xs font-semibold flex items-center gap-1 cursor-pointer"
                       >
                         <Maximize2 className="w-3.5 h-3.5" />
-                        <span>Photos ({prop.images.length})</span>
+                        <span>All Photos ({prop.images.length})</span>
                       </button>
 
                       <div className="absolute top-3 left-3 bg-[#241d18]/75 text-white text-[11px] font-semibold px-2.5 py-1 rounded">
                         {prop.category || 'Furnished Residence'}
+                      </div>
+
+                      <div className="absolute bottom-3 left-3 bg-black/70 text-white text-[10px] font-medium px-2 py-0.5 rounded tabular-nums">
+                        {currentImgIdx + 1} / {prop.images.length}
                       </div>
                     </div>
 
@@ -601,7 +643,7 @@ export const PropertiesSection: React.FC<PropertiesSectionProps> = ({
             Standard Residence &amp; Community Inclusions
           </h4>
           <p>
-            Every Easy Travel Lodging apartment is prepared for immediate, comfortable living—whether you are booking a 5-night family visit, managing a home renovation or relocation, or settling in for a multi-month stay in Greater Sacramento.
+            Every Easy Travel Lodging apartment is prepared for immediate, comfortable living—whether you are booking a 5-night family visit, managing a home renovation or relocation, or settling in for a multi-month stay across California’s homes.
           </p>
           <p>
             Guests enjoy access to a 24-hour fitness center, swimming pools, heated spas, and outdoor volleyball and tennis courts. Inside each apartment you will find central air and heating, a full-size refrigerator, range and oven, microwave, dishwasher, updated kitchen counters, and an in-unit stackable washer and dryer.

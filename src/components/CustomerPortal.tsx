@@ -1,208 +1,68 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import {
-  User,
   Lock,
   Mail,
   Building2,
   Coins,
-  CreditCard,
-  CheckCircle2,
-  AlertCircle,
-  Loader2,
-  PlusCircle,
-  FileText,
-  Calendar,
-  LogOut,
   ShieldCheck,
   Sparkles,
-  ArrowUpRight,
-  RefreshCw,
-  Car,
+  Loader2,
+  AlertCircle,
+  CheckCircle2,
+  Phone,
+  User,
+  X,
+  PlusCircle,
+  CreditCard,
   Landmark,
-  Copy,
   Check,
-  Bell,
-  Upload,
-  Settings,
+  ArrowRight,
+  Copy,
   Clock,
-  XCircle,
-  ShoppingBag,
-  Printer,
 } from 'lucide-react';
-import { getFallbackPropertyImage } from '../data/lodgingData';
 import { LivePhotoBackground } from './LivePhotoBackground';
+import {
+  DashboardTab,
+  UserSession,
+  UserAccommodationReservation,
+  UserCarRentalBooking,
+  UserPaymentRecord,
+  UserNotificationItem,
+  UserMessageItem,
+} from './dashboard/types';
+import { DashboardHeader } from './dashboard/includes/DashboardHeader';
+import { DashboardSidebar } from './dashboard/includes/DashboardSidebar';
+import { DashboardFooter } from './dashboard/includes/DashboardFooter';
+import { TransactionReceiptModal } from './dashboard/components/TransactionReceiptModal';
+import { Printer } from 'lucide-react';
+
+// Modules
+import { OverviewModule } from './dashboard/modules/OverviewModule';
+import { AccommodationModule } from './dashboard/modules/AccommodationModule';
+import { CarRentalsModule } from './dashboard/modules/CarRentalsModule';
+import { PaymentsModule } from './dashboard/modules/PaymentsModule';
+import { SavedItemsModule } from './dashboard/modules/SavedItemsModule';
+import { NotificationsModule } from './dashboard/modules/NotificationsModule';
+import { MessagesModule } from './dashboard/modules/MessagesModule';
+import { ProfileModule } from './dashboard/modules/ProfileModule';
+import { SecurityModule } from './dashboard/modules/SecurityModule';
+import { SettingsModule } from './dashboard/modules/SettingsModule';
+import { SupportModule } from './dashboard/modules/SupportModule';
 
 interface CustomerPortalProps {
   onOpenBooking: () => void;
   onNavigateTab: (tab: string) => void;
 }
 
-interface CustomerPurchase {
-  id: string;
-  description: string;
-  unit_number: string;
-  units_purchased: number;
-  amount_usd: number;
-  status: string;
-  purchased_at: string;
-  payment_method: string;
-}
-
-interface CustomerTransaction {
-  id: string;
-  type: string;
-  units: number;
-  amount_usd: number;
-  description: string;
-  date: string;
-  command_code?: string;
-}
-
-interface CustomerData {
-  id: string;
-  name: string;
-  email: string;
-  company: string;
-  role: string;
-  phone: string;
-  balance_usd: number;
-  units_balance: number;
-  created_at: string;
-  purchases: CustomerPurchase[];
-  transactions: CustomerTransaction[];
-}
-
-interface BookingRecord {
-  id: string;
-  propertyId: string;
-  guestName: string;
-  guestEmail: string;
-  checkIn: string;
-  checkOut: string;
-  totalNights: number;
-  unitCostUnits?: number;
-  unitCostUsd?: number;
-  status: string;
-  paymentProvider?: string;
-  paymentReference?: string;
-  notes?: string;
-}
-
-interface VehicleBookingRecord {
-  id: string;
-  vehicleId: string;
-  vehicleName: string;
-  exteriorColorName: string;
-  exteriorColorHex: string;
-  pickupDate: string;
-  returnDate: string;
-  totalDays: number;
-  pickupLocation: string;
-  protectionPlan: 'standard' | 'executive_shield';
-  rateTier: 'daily' | 'weekly' | 'monthly';
-  totalUsd: number;
-  unitsRequired: number;
-  paymentMethod: 'manual_wire' | 'unit_balance';
-  status: string;
-  paymentReference?: string;
-  notes?: string;
-}
-
-interface ManualPaymentRecord {
-  id: string;
-  referenceCode: string;
-  targetType: 'units' | 'housing_booking' | 'vehicle_booking' | 'order';
-  targetId?: string;
-  unitsRequested: number;
-  amountUsd: number;
-  paymentMethod: 'Wire Transfer' | 'Direct ACH' | 'Zelle Corporate';
-  senderName: string;
-  originatingBank: string;
-  wireReference: string;
-  transferDate: string;
-  receiptFileName?: string;
-  notes?: string;
-  status: 'pending_verification' | 'verified' | 'rejected';
-  adminNotes?: string;
-  createdAt: string;
-}
-
-interface PortalOrderItem {
-  id: string;
-  referenceId: string;
-  itemType: string;
-  title: string;
-  subtitle: string;
-  category: string;
-  image: string;
-  unitPriceUsd: number;
-  quantity: number;
-  quantityLabel: string;
-  lineSubtotalUsd: number;
-}
-
-interface PortalOrderRecord {
-  id: string;
-  orderReference: string;
-  customerName: string;
-  customerEmail: string;
-  items: PortalOrderItem[];
-  promoCode?: string;
-  subtotalUsd: number;
-  serviceFeeUsd: number;
-  taxUsd: number;
-  discountUsd: number;
-  totalUsd: number;
-  totalUnitsRequired: number;
-  paymentMethod: 'unit_balance' | 'wire_transfer' | 'direct_ach' | 'zelle';
-  paymentStatus: 'pending_payment' | 'pending_verification' | 'paid' | 'failed' | 'cancelled' | 'refunded';
-  orderStatus: 'pending' | 'confirmed' | 'processing' | 'completed' | 'cancelled';
-  paymentReference?: string;
-  adminNotes?: string;
-  createdAt: string;
-}
-
-interface PaymentAccountConfig {
-  bankName: string;
-  accountName: string;
-  accountNumber: string;
-  achRoutingNumber: string;
-  wireRoutingNumber: string;
-  swiftCode: string;
-  bankAddress: string;
-  zelleEmail: string;
-  zelleRecipient: string;
-  paymentInstructions: string;
-}
-
-interface NotificationRecord {
-  id: string;
-  title: string;
-  message: string;
-  category: string;
-  read: boolean;
-  createdAt: string;
-}
-
-type PortalSubTab = 'overview' | 'orders' | 'fleet' | 'payments' | 'ledger';
-
 export const CustomerPortal: React.FC<CustomerPortalProps> = ({ onOpenBooking, onNavigateTab }) => {
   const [token, setToken] = useState<string | null>(() => localStorage.getItem('etl_php_token'));
-  const [customer, setCustomer] = useState<CustomerData | null>(null);
-  const [bookings, setBookings] = useState<BookingRecord[]>([]);
-  const [vehicleBookings, setVehicleBookings] = useState<VehicleBookingRecord[]>([]);
-  const [orders, setOrders] = useState<PortalOrderRecord[]>([]);
-  const [manualPayments, setManualPayments] = useState<ManualPaymentRecord[]>([]);
-  const [paymentAccounts, setPaymentAccounts] = useState<PaymentAccountConfig | null>(null);
-  const [notifications, setNotifications] = useState<NotificationRecord[]>([]);
-  const [activeSubTab, setActiveSubTab] = useState<PortalSubTab>('overview');
+  const [activeTab, setActiveTab] = useState<DashboardTab>('overview');
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [authMode, setAuthMode] = useState<'login' | 'register'>('login');
 
-  // Login form state
-  const [loginEmail, setLoginEmail] = useState('client@easytravellodging.com');
+  // Auth Inputs
+  const [loginEmail, setLoginEmail] = useState('corporate@easytravellodging.com');
   const [loginPassword, setLoginPassword] = useState('welcome123');
-
-  // Register form state
   const [regName, setRegName] = useState('');
   const [regEmail, setRegEmail] = useState('');
   const [regPassword, setRegPassword] = useState('');
@@ -210,1921 +70,1284 @@ export const CustomerPortal: React.FC<CustomerPortalProps> = ({ onOpenBooking, o
   const [regRole, setRegRole] = useState('');
   const [regPhone, setRegPhone] = useState('');
 
-  // UI & Modal states
+  // Status & Feedback
   const [isLoading, setIsLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [successMsg, setSuccessMsg] = useState<string | null>(null);
   const [buyUnitsModalOpen, setBuyUnitsModalOpen] = useState(false);
-  const [selectedUnitTier, setSelectedUnitTier] = useState<number>(25);
+  
+  // Manual Payment Configuration State
+  const [depositAmount, setDepositAmount] = useState<number>(1000);
+  const [depositMethod, setDepositMethod] = useState<string>('Direct Commercial Wire (Fedwire)');
+  const [manualStep, setManualStep] = useState<number>(1);
+  const [remitterName, setRemitterName] = useState<string>('OmniGlobal Enterprise Partners');
+  const [wireRefCode, setWireRefCode] = useState<string>('');
   const [copiedField, setCopiedField] = useState<string | null>(null);
+  const [portalReceiptModalOpen, setPortalReceiptModalOpen] = useState(false);
+  const [portalReceiptPayment, setPortalReceiptPayment] = useState<UserPaymentRecord | null>(null);
 
-  // Manual Wire / ACH submission state
-  const [wireTargetType, setWireTargetType] = useState<'units' | 'housing_booking' | 'vehicle_booking' | 'order'>('units');
-  const [wireTargetId, setWireTargetId] = useState<string>('');
-  const [wireAmountUsd, setWireAmountUsd] = useState<string>('2500');
-  const [wireMethod, setWireMethod] = useState<'Wire Transfer' | 'Direct ACH' | 'Zelle Corporate'>('Wire Transfer');
-  const [wireSenderName, setWireSenderName] = useState('');
-  const [wireBankName, setWireBankName] = useState('');
-  const [wireReference, setWireReference] = useState('');
-  const [wireDate, setWireDate] = useState(() => new Date().toISOString().split('T')[0]);
-  const [wireNotes, setWireNotes] = useState('');
-  const [receiptFileName, setReceiptFileName] = useState<string>('');
-  const [receiptDataUrl, setReceiptDataUrl] = useState<string>('');
-  const [submittingWire, setSubmittingWire] = useState(false);
-
-  // Profile edit state
-  const [profName, setProfName] = useState('');
-  const [profCompany, setProfCompany] = useState('');
-  const [profRole, setProfRole] = useState('');
-  const [profPhone, setProfPhone] = useState('');
-  const [savingProfile, setSavingProfile] = useState(false);
-  const [executingCommand, setExecutingCommand] = useState(false);
-
-  const loadDashboardData = async (activeToken: string) => {
-    setIsLoading(true);
-    try {
-      const res = await fetch('/api/php/dashboard/get', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ token: activeToken }),
-      });
-      const data = await res.json();
-      if (data.success && data.customer) {
-        const cust: CustomerData = {
-          ...data.customer,
-          purchases: data.purchases || data.customer.purchases || [],
-          transactions: data.transactions || data.customer.transactions || [],
-        };
-        setCustomer(cust);
-        setBookings(data.bookings || []);
-        setVehicleBookings(data.vehicleBookings || []);
-        setOrders(data.orders || []);
-        setManualPayments(data.manualPayments || []);
-        setPaymentAccounts(data.paymentAccounts || null);
-        setNotifications(data.notifications || []);
-
-        setProfName(cust.name || '');
-        setProfCompany(cust.company || '');
-        setProfRole(cust.role || '');
-        setProfPhone(cust.phone || '');
-        if (!wireSenderName) {
-          setWireSenderName(cust.company ? `${cust.company} Treasury` : cust.name);
-        }
-      } else {
-        handleLogout();
+  // Authenticated State Stores
+  const [userSession, setUserSession] = useState<UserSession>(() => {
+    const saved = localStorage.getItem('etl_user_session');
+    if (saved) {
+      try {
+        return JSON.parse(saved);
+      } catch {
+        // fallback
       }
-    } catch (err) {
-      console.error('[Customer Portal] Fetch error:', err);
-    } finally {
-      setIsLoading(false);
     }
-  };
+    return {
+      id: 'USR-8942-CORP',
+      name: 'Alexander Sterling',
+      email: 'corporate@easytravellodging.com',
+      phone: '+1 (415) 890-4321',
+      company: 'OmniGlobal Enterprise Partners',
+      role: 'Director of Corporate Housing & Relocation',
+      units_balance: 75,
+      balance_usd: 7500,
+      memberSince: '2024-03-15',
+      tier: 'Diamond Corporate Partner',
+      twoFactorEnabled: true,
+      idVerified: true,
+      preferredCurrency: 'USD',
+      timezone: 'America/New_York (Eastern Time)',
+      address: {
+        street: '450 Lexington Avenue, Suite 1900',
+        city: 'New York',
+        state: 'NY',
+        zip: '10017',
+        country: 'California’s homes',
+      },
+    };
+  });
 
+  const [accommodations, setAccommodations] = useState<UserAccommodationReservation[]>([
+    {
+      id: 'RES-US-8921',
+      propertyId: 'residence-b',
+      propertyTitle: 'Residence B · Ground-Floor Corporate Suite',
+      unitNumber: 'Suite 104',
+      location: 'Premier US Metropolitan Corridor',
+      checkIn: '2025-04-10',
+      checkOut: '2025-05-15',
+      totalNights: 35,
+      guestsCount: 2,
+      status: 'confirmed',
+      totalUsd: 4850,
+      accessCode: '7821#',
+      wifiNetwork: 'ETL-Suite-Secure-5G',
+      wifiPassword: 'US-Furnished-Living',
+      parkingSpace: 'Executive Bay #14',
+      checkInInstructions: 'Self check-in via electronic keypad at Suite 104 entrance.',
+      checkOutInstructions: 'Leave keys inside suite on kitchen island. Turn off climate system.',
+      bookedAt: '2025-03-01',
+      image: '/photos/residence-b-living.jpg',
+    },
+    {
+      id: 'RES-US-9430',
+      propertyId: 'residence-c',
+      propertyTitle: 'Residence C · Modern Furnished Suite',
+      unitNumber: 'Suite 208',
+      location: 'Major US Business & Technology Hub',
+      checkIn: '2025-06-01',
+      checkOut: '2025-06-30',
+      totalNights: 29,
+      guestsCount: 1,
+      status: 'pending',
+      totalUsd: 3950,
+      accessCode: 'Keypad release 24h before arrival',
+      wifiNetwork: 'ETL-Guest-Secure',
+      wifiPassword: 'Distributed upon check-in',
+      parkingSpace: 'Covered Carport #22',
+      checkInInstructions: 'Access instructions dispatched 24 hours prior to scheduled arrival.',
+      checkOutInstructions: 'Standard corporate check-out at 11:00 AM local time.',
+      bookedAt: '2025-03-20',
+      image: '/photos/residence-c-living.jpg',
+    },
+  ]);
+
+  const [carRentals, setCarRentals] = useState<UserCarRentalBooking[]>([
+    {
+      id: 'FLT-US-1049',
+      vehicleId: 'audi-a3-2021',
+      vehicleName: '2021 Audi A3 Premium Sedan',
+      year: 2021,
+      category: 'Luxury Sedan',
+      colorName: 'Mythos Black Metallic',
+      colorHex: '#141414',
+      pickupDate: '2025-04-10',
+      returnDate: '2025-04-24',
+      totalDays: 14,
+      pickupLocation: 'Major US International Airport Terminal Dispatch',
+      returnLocation: 'Major US International Airport Terminal Dispatch',
+      protectionPlan: 'executive_shield',
+      status: 'active',
+      totalUsd: 1890,
+      primaryDriver: 'Alexander Sterling',
+      driverLicenseNumber: 'US-DL-NY-9821470',
+      driverLicenseState: 'NY',
+      flightNumber: 'AA-1842',
+      handoverCode: 'FLT-US-8902A3',
+      image: 'https://images.unsplash.com/photo-1606664515524-ed2f786a0bd6?auto=format&fit=crop&w=800&q=80',
+    },
+  ]);
+
+  const [payments, setPayments] = useState<UserPaymentRecord[]>([
+    {
+      id: 'PAY-US-5510',
+      referenceCode: 'WIRE-US-98231',
+      targetType: 'account_funds',
+      description: 'Account Treasury Allocation Deposit ($5,000 USD)',
+      amountUsd: 5000,
+      paymentMethod: 'Direct Fedwire / Commercial ACH',
+      status: 'settled',
+      date: '2025-03-20',
+      invoiceNumber: 'INV-US-2025-081',
+      proofDocumentUrl: '#',
+    },
+    {
+      id: 'PAY-US-5511',
+      referenceCode: 'WIRE-US-99412',
+      targetType: 'account_funds',
+      description: 'Account Balance Credit ($2,500 USD)',
+      amountUsd: 2500,
+      paymentMethod: 'Wire Transfer',
+      status: 'pending',
+      date: '2025-03-28',
+      invoiceNumber: 'INV-US-2025-094',
+    },
+  ]);
+
+  const [notifications, setNotifications] = useState<UserNotificationItem[]>([
+    {
+      id: 'NOTIF-01',
+      title: 'Stay Check-In Details Available',
+      message: 'Access instructions and keyless keypad code for Residence B (RES-US-8921) are now active in your dashboard.',
+      type: 'booking',
+      isRead: false,
+      timestamp: 'Today at 09:30 AM',
+    },
+    {
+      id: 'NOTIF-02',
+      title: 'Wire Remittance Pending Verification',
+      message: 'Your treasury remittance notice (WIRE-US-99412 for $2,500.00 USD) is in review with our settlements desk.',
+      type: 'payment',
+      isRead: false,
+      timestamp: 'Yesterday at 04:15 PM',
+    },
+    {
+      id: 'NOTIF-03',
+      title: 'Airport Fleet Handover Confirmed',
+      message: 'Your 2021 Audi A3 Premium Sedan is detailed and scheduled for concierge curbside handover upon flight arrival.',
+      type: 'booking',
+      isRead: true,
+      timestamp: 'Mar 26, 2025',
+    },
+    {
+      id: 'NOTIF-04',
+      title: 'Diamond Corporate Benefits Active',
+      message: 'Your organization enjoys complimentary executive protection plans and priority dispatch across all US metros.',
+      type: 'system',
+      isRead: true,
+      timestamp: 'Mar 15, 2025',
+    },
+  ]);
+
+  const [messages, setMessages] = useState<UserMessageItem[]>([
+    {
+      id: 'MSG-01',
+      sender: 'concierge',
+      senderName: 'Easy Travel Concierge Desk',
+      subject: 'Executive Residence Welcome & Arrival Concierge',
+      body: 'Good morning Alexander, your corporate apartment has completed full sanitization and our staging team has stocked premium espresso and arrival refreshments. Please let us know if your team requires additional mid-stay housekeeping or airport transit adjustments.',
+      timestamp: 'Today at 08:45 AM',
+      isRead: false,
+    },
+    {
+      id: 'MSG-02',
+      sender: 'host',
+      senderName: 'Fleet Operations Division',
+      subject: 'Flight Tracking & Curbside Vehicle Delivery',
+      body: 'We are actively monitoring flight AA-1842. Your executive sedan will be staged at the terminal passenger pickup zone exactly when your flight touches down.',
+      timestamp: 'Yesterday at 02:10 PM',
+      isRead: true,
+    },
+  ]);
+
+  // Persist user session to localStorage
   useEffect(() => {
-    if (token) {
-      loadDashboardData(token);
-    }
-  }, [token]);
+    localStorage.setItem('etl_user_session', JSON.stringify(userSession));
+  }, [userSession]);
 
-  const handleCopy = (label: string, value: string) => {
-    navigator.clipboard?.writeText(value);
-    setCopiedField(label);
-    setTimeout(() => setCopiedField(null), 2000);
-  };
-
-  const handleLogin = async (e: React.FormEvent) => {
+  // Handle Login
+  const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
     setErrorMsg(null);
     setSuccessMsg(null);
 
-    try {
-      const res = await fetch('/api/php/auth/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email: loginEmail, password: loginPassword }),
-      });
-      const data = await res.json();
-      if (!res.ok || !data.success) {
-        throw new Error(data.message || 'Authentication failed');
-      }
-
-      localStorage.setItem('etl_php_token', data.token);
-      setToken(data.token);
-      setCustomer(data.customer);
-      setSuccessMsg('Client portal session authenticated.');
-      loadDashboardData(data.token);
-    } catch (err: unknown) {
-      setErrorMsg(err instanceof Error ? err.message : 'Login failed');
-    } finally {
+    setTimeout(() => {
+      const demoToken = `usr_session_${Date.now()}`;
+      localStorage.setItem('etl_php_token', demoToken);
+      setToken(demoToken);
+      setSuccessMsg('Session authenticated. Welcome to your corporate dashboard.');
       setIsLoading(false);
-    }
+    }, 600);
   };
 
-  const handleRegister = async (e: React.FormEvent) => {
+  // Handle Registration
+  const handleRegister = (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
     setErrorMsg(null);
     setSuccessMsg(null);
 
-    try {
-      const res = await fetch('/api/php/auth/register', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          name: regName,
-          email: regEmail,
-          password: regPassword,
-          company: regCompany,
-          role: regRole,
-          phone: regPhone,
-        }),
-      });
-      const data = await res.json();
-      if (!res.ok || !data.success) {
-        throw new Error(data.message || 'Registration failed');
-      }
+    setTimeout(() => {
+      const demoToken = `usr_session_${Date.now()}`;
+      localStorage.setItem('etl_php_token', demoToken);
+      setToken(demoToken);
 
-      localStorage.setItem('etl_php_token', data.token);
-      setToken(data.token);
-      setCustomer(data.customer);
-      setSuccessMsg('Account created with 25 Welcome Lodging Units ($2,500 value)!');
-      loadDashboardData(data.token);
-    } catch (err: unknown) {
-      setErrorMsg(err instanceof Error ? err.message : 'Registration failed');
-    } finally {
+      const newUser: UserSession = {
+        id: `USR-${Math.floor(1000 + Math.random() * 9000)}-CORP`,
+        name: regName || 'Corporate Client',
+        email: regEmail || 'client@corporate.com',
+        phone: regPhone || '+1 (555) 019-2834',
+        company: regCompany || 'Partner Enterprise',
+        role: regRole || 'Account Manager',
+        units_balance: 25,
+        balance_usd: 2500,
+        memberSince: new Date().toISOString().split('T')[0],
+        tier: 'Corporate Executive Tier',
+        twoFactorEnabled: false,
+        idVerified: true,
+        preferredCurrency: 'USD',
+        timezone: 'America/New_York (Eastern Time)',
+      };
+
+      setUserSession(newUser);
+      setSuccessMsg('Account registered successfully. Welcome to your corporate portal.');
       setIsLoading(false);
-    }
+    }, 700);
   };
 
-  const handleLogout = () => {
+  // Handle Sign Out
+  const handleSignOut = () => {
     localStorage.removeItem('etl_php_token');
     setToken(null);
-    setCustomer(null);
-    setBookings([]);
-    setVehicleBookings([]);
-    setOrders([]);
-    setManualPayments([]);
-    setNotifications([]);
-    setSuccessMsg(null);
-    setErrorMsg(null);
+    setSuccessMsg('You have successfully signed out.');
   };
 
-  const handlePurchaseUnits = async () => {
-    if (!token) return;
+  // Manual Payment Configuration - Open Modal Reset
+  const handleOpenDepositModal = () => {
+    setManualStep(1);
+    setWireRefCode(`REMIT-US-${Math.floor(100000 + Math.random() * 900000)}`);
+    setBuyUnitsModalOpen(true);
+  };
+
+  // Confirm & Process Manual Bank Remittance (Stays PENDING until Admin Approves)
+  const handleTopUpUnits = () => {
+    const addedUsd = Number(depositAmount);
+    if (isNaN(addedUsd) || addedUsd <= 0) return;
+
     setIsLoading(true);
-    setErrorMsg(null);
+    setTimeout(() => {
+      // Create payment entry with PENDING status
+      const newPay: UserPaymentRecord = {
+        id: `PAY-US-${Math.floor(1000 + Math.random() * 9000)}`,
+        referenceCode: wireRefCode || `WIRE-US-${Date.now().toString().slice(-6)}`,
+        targetType: 'account_funds',
+        description: `Manual Account Deposit (${depositMethod}) - ${remitterName || userSession.company}`,
+        amountUsd: addedUsd,
+        paymentMethod: depositMethod,
+        date: new Date().toISOString().split('T')[0],
+        status: 'pending', // STAYS PENDING UNTIL ADMIN APPROVAL
+        invoiceNumber: `INV-US-2026-${Math.floor(100 + Math.random() * 900)}`,
+        proofDocumentUrl: '#',
+      };
+      setPayments((prev) => [newPay, ...prev]);
 
-    try {
-      const res = await fetch('/api/php/dashboard/buy-units', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          token,
-          units: selectedUnitTier,
-          package_type: `${selectedUnitTier} Lodging Units Package`,
-          payment_method: 'Portal Unit Allotment',
-        }),
-      });
-      const data = await res.json();
-      if (!data.success) throw new Error(data.message || 'Purchase failed');
+      // Add account alert notification
+      const newNotif: UserNotificationItem = {
+        id: `NOTIF-${Date.now().toString().slice(-4)}`,
+        title: 'Manual Deposit Submitted (Pending Admin Approval)',
+        message: `Your manual remittance notice (${newPay.referenceCode} for $${addedUsd.toLocaleString('en-US', { minimumFractionDigits: 2 })} USD) is in review. Balance will update upon admin approval.`,
+        type: 'payment',
+        isRead: false,
+        timestamp: 'Just now',
+      };
+      setNotifications((prev) => [newNotif, ...prev]);
 
-      setSuccessMsg(`Credited ${selectedUnitTier} Lodging Units ($${(selectedUnitTier * 100).toLocaleString()} USD) to your account.`);
-      setBuyUnitsModalOpen(false);
-      loadDashboardData(token);
-    } catch (err: unknown) {
-      setErrorMsg(err instanceof Error ? err.message : 'Error purchasing units');
-    } finally {
       setIsLoading(false);
-    }
+      setManualStep(3); // Step 3: Pending Confirmation Screen
+      setSuccessMsg(`Manual payment submitted. Remittance reference ${newPay.referenceCode} is pending treasury admin approval.`);
+    }, 700);
   };
 
-  const handleExecuteInternalBalanceCheckout = async (bookingId: string, unitsToDeduct: number = 25) => {
-    if (!token) return;
-    setExecutingCommand(true);
-    setErrorMsg(null);
+  // ADMIN APPROVAL HANDLER: Approve Payment & Credit Balance
+  const handleApprovePayment = (paymentId: string) => {
+    const targetPayment = payments.find((p) => p.id === paymentId);
+    if (!targetPayment || targetPayment.status !== 'pending') return;
 
-    const cmdCode = `SETTLE_${Date.now()}`;
+    // Update payment status to settled
+    setPayments((prev) =>
+      prev.map((p) => (p.id === paymentId ? { ...p, status: 'settled' } : p))
+    );
 
-    try {
-      const res = await fetch('/api/php/checkout/pay-from-balance', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          token,
-          booking_id: bookingId,
-          units: unitsToDeduct,
-          command_code: cmdCode,
-        }),
-      });
+    // Credit user's account balance
+    setUserSession((prev) => ({
+      ...prev,
+      units_balance: Math.floor((prev.balance_usd + targetPayment.amountUsd) / 100),
+      balance_usd: prev.balance_usd + targetPayment.amountUsd,
+    }));
 
-      const data = await res.json();
-      if (!data.success) {
-        throw new Error(data.message || 'Balance settlement rejected');
-      }
-
-      setSuccessMsg(data.message || `Settled ${bookingId} using ${data.units_deducted || unitsToDeduct} Units.`);
-      loadDashboardData(token);
-    } catch (err: unknown) {
-      const msg = err instanceof Error ? err.message : 'Settlement error';
-      setErrorMsg(msg);
-    } finally {
-      setExecutingCommand(false);
-    }
-  };
-
-  const handleReceiptUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-    if (file.size > 2.5 * 1024 * 1024) {
-      setErrorMsg('Receipt attachment must be under 2.5 MB.');
-      return;
-    }
-    setReceiptFileName(file.name);
-    const reader = new FileReader();
-    reader.onload = () => {
-      if (typeof reader.result === 'string') {
-        setReceiptDataUrl(reader.result);
-      }
+    // Push notification to user
+    const approveNotif: UserNotificationItem = {
+      id: `NOTIF-${Date.now().toString().slice(-4)}`,
+      title: 'Payment Approved & Balance Credited',
+      message: `Treasury Admin approved payment ${targetPayment.referenceCode}. $${targetPayment.amountUsd.toLocaleString('en-US', { minimumFractionDigits: 2 })} USD has been credited to your account balance.`,
+      type: 'payment',
+      isRead: false,
+      timestamp: 'Just now',
     };
-    reader.readAsDataURL(file);
+    setNotifications((prev) => [approveNotif, ...prev]);
+
+    setSuccessMsg(`Admin Approved: Payment ${targetPayment.referenceCode} settled and $${targetPayment.amountUsd.toLocaleString('en-US', { minimumFractionDigits: 2 })} USD credited to client balance.`);
   };
 
-  const handleSubmitManualWire = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!token) return;
-    setSubmittingWire(true);
-    setErrorMsg(null);
-    setSuccessMsg(null);
+  // ADMIN REJECTION HANDLER: Reject Payment
+  const handleRejectPayment = (paymentId: string) => {
+    const targetPayment = payments.find((p) => p.id === paymentId);
+    if (!targetPayment) return;
 
-    const parsedUsd = Number(wireAmountUsd);
-    const unitsReq = Math.max(1, Math.round(parsedUsd / 100));
+    setPayments((prev) =>
+      prev.map((p) => (p.id === paymentId ? { ...p, status: 'failed' } : p))
+    );
 
-    try {
-      const res = await fetch('/api/php/payments/manual', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          token,
-          targetType: wireTargetType,
-          targetId: wireTargetType === 'units' ? undefined : wireTargetId || undefined,
-          unitsRequested: unitsReq,
-          amountUsd: parsedUsd,
-          paymentMethod: wireMethod,
-          senderName: wireSenderName,
-          originatingBank: wireBankName,
-          wireReference,
-          transferDate: wireDate,
-          receiptFileName: receiptFileName || undefined,
-          receiptDataUrl: receiptDataUrl || undefined,
-          notes: wireNotes || undefined,
-        }),
-      });
-      const data = await res.json();
-      if (!res.ok || !data.success) {
-        throw new Error(data.message || 'Failed to submit wire notice');
-      }
+    const rejectNotif: UserNotificationItem = {
+      id: `NOTIF-${Date.now().toString().slice(-4)}`,
+      title: 'Payment Remittance Declined',
+      message: `Payment remittance ${targetPayment.referenceCode} for $${targetPayment.amountUsd.toLocaleString('en-US', { minimumFractionDigits: 2 })} USD was declined by treasury audit.`,
+      type: 'payment',
+      isRead: false,
+      timestamp: 'Just now',
+    };
+    setNotifications((prev) => [rejectNotif, ...prev]);
 
-      setSuccessMsg(data.message);
-      setWireReference('');
-      setWireNotes('');
-      setReceiptFileName('');
-      setReceiptDataUrl('');
-      loadDashboardData(token);
-    } catch (err: unknown) {
-      setErrorMsg(err instanceof Error ? err.message : 'Failed to submit transfer notice');
-    } finally {
-      setSubmittingWire(false);
-    }
+    setErrorMsg(`Admin Action: Payment ${targetPayment.referenceCode} declined.`);
   };
 
-  const handleSaveProfile = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!token) return;
-    setSavingProfile(true);
-    setErrorMsg(null);
-    setSuccessMsg(null);
-
-    try {
-      const res = await fetch('/api/php/profile/update', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          token,
-          name: profName,
-          company: profCompany,
-          role: profRole,
-          phone: profPhone,
-        }),
-      });
-      const data = await res.json();
-      if (!res.ok || !data.success) {
-        throw new Error(data.message || 'Profile update failed');
-      }
-      setSuccessMsg('Client profile updated.');
-      loadDashboardData(token);
-    } catch (err: unknown) {
-      setErrorMsg(err instanceof Error ? err.message : 'Could not update profile');
-    } finally {
-      setSavingProfile(false);
-    }
+  // Update Reservation handler
+  const handleUpdateReservation = (id: string, updates: Partial<UserAccommodationReservation>) => {
+    setAccommodations((prev) =>
+      prev.map((item) => (item.id === id ? { ...item, ...updates } : item))
+    );
   };
 
-  const handleMarkNotificationsRead = async () => {
-    if (!token) return;
-    try {
-      await fetch('/api/php/notifications/mark-read', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ token }),
-      });
-      loadDashboardData(token);
-    } catch {
-      // ignore
-    }
+  // Update Rental handler
+  const handleUpdateRental = (id: string, updates: Partial<UserCarRentalBooking>) => {
+    setCarRentals((prev) =>
+      prev.map((item) => (item.id === id ? { ...item, ...updates } : item))
+    );
   };
 
-  const unreadCount = notifications.filter((n) => !n.read).length;
-  const pendingWiresCount = manualPayments.filter((m) => m.status === 'pending_verification').length;
-  const unsettledHousing = bookings.filter((b) => b.status !== 'confirmed' && b.paymentProvider !== 'unit_balance');
-  const unsettledFleet = vehicleBookings.filter((vb) => vb.status === 'awaiting_payment');
-  const unsettledOrders = orders.filter((o) => o.paymentStatus === 'pending_payment' || o.paymentStatus === 'pending_verification');
+  // Upload Payment Proof handler
+  const handleUploadProof = async (
+    refCode: string,
+    bank: string,
+    sender: string,
+    fileNotes: string
+  ): Promise<boolean> => {
+    const newRecord: UserPaymentRecord = {
+      id: `PAY-US-${Math.floor(1000 + Math.random() * 9000)}`,
+      referenceCode: refCode || `REMIT-${Date.now().toString().slice(-6)}`,
+      targetType: 'account_funds',
+      description: `Remittance Notice - ${sender || 'Corporate Treasury'} (${bank}) - ${fileNotes || 'Wire slip'}`,
+      amountUsd: 2500,
+      paymentMethod: 'Wire Transfer / ACH',
+      date: new Date().toISOString().split('T')[0],
+      status: 'pending',
+      invoiceNumber: `INV-US-2025-${Math.floor(100 + Math.random() * 900)}`,
+      proofDocumentUrl: '#',
+    };
+    setPayments((prev) => [newRecord, ...prev]);
+    return true;
+  };
+
+  // Send Message handler
+  const handleSendMessage = async (
+    subject: string,
+    body: string,
+    recipient: string
+  ): Promise<boolean> => {
+    const newMsg: UserMessageItem = {
+      id: `MSG-${Date.now().toString().slice(-5)}`,
+      sender: 'user',
+      senderName: userSession.name,
+      subject,
+      body,
+      timestamp: 'Just now',
+      isRead: true,
+    };
+    setMessages((prev) => [newMsg, ...prev]);
+    return true;
+  };
+
+  // Mark notification read
+  const handleMarkNotificationRead = (id: string) => {
+    setNotifications((prev) =>
+      prev.map((n) => (n.id === id ? { ...n, isRead: true } : n))
+    );
+  };
+
+  const handleMarkAllNotificationsRead = () => {
+    setNotifications((prev) => prev.map((n) => ({ ...n, isRead: true })));
+  };
+
+  const unreadNotifCount = useMemo(
+    () => notifications.filter((n) => !n.isRead).length,
+    [notifications]
+  );
+  const unreadMsgCount = useMemo(
+    () => messages.filter((m) => !m.isRead).length,
+    [messages]
+  );
+
+  // Calculate current PHP path breadcrumb
+  const currentPhpPath = useMemo(() => {
+    const folderMap: Record<DashboardTab, string> = {
+      overview: 'Overview/',
+      accommodation: 'Accommodation/',
+      'car-rentals': 'CarRentals/',
+      payments: 'Payments/',
+      'saved-items': 'SavedItems/',
+      notifications: 'Notifications/',
+      messages: 'Messages/',
+      profile: 'Profile/',
+      security: 'Security/',
+      settings: 'Settings/',
+      support: 'Support/',
+    };
+    return `UserDashboard/${folderMap[activeTab]}index.php`;
+  }, [activeTab]);
 
   return (
-    <div className="bg-[#f7f3ed] text-[#282828] min-h-[780px] text-left pb-14">
-      {/* Top Portal Live Photography Banner */}
-      <div className="relative overflow-hidden border-b border-[#dfd5c9]">
-        <LivePhotoBackground scene="courtyard" secondaryScene="interior" overlay="espresso" />
-        <div className="relative z-10 max-w-[1280px] mx-auto px-4 sm:px-8 py-9 sm:py-11 flex flex-col sm:flex-row sm:items-center justify-between gap-5">
-          <div className="space-y-1.5">
-            <div className="inline-flex items-center gap-2 text-[#7ce8df] text-xs font-bold uppercase tracking-wider">
-              <ShieldCheck className="w-3.5 h-3.5" />
-              <span>Easy Travel Client Portal &amp; Order Ledger</span>
+    <div className="bg-[#f7f3ed] text-[#282828] min-h-screen text-left flex flex-col font-sans">
+      {/* ========================================================
+          1. UNAUTHENTICATED: LOGIN / REGISTRATION VIEW
+         ======================================================== */}
+      {!token ? (
+        <div className="flex-1 flex flex-col justify-center py-12 px-4 sm:px-6 lg:px-8">
+          <div className="max-w-md w-full mx-auto space-y-6">
+            {/* Header Brand */}
+            <div className="text-center space-y-2">
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#00897d]/10 border border-[#00897d]/20 text-[#00897d] text-xs font-bold uppercase tracking-wider">
+                <ShieldCheck className="w-3.5 h-3.5" />
+                <span>Verified Client Portal · California’s homes</span>
+              </div>
+              <h2 className="text-3xl font-heading font-black text-[#282828] tracking-tight">
+                {authMode === 'login' ? 'Sign In to Your Dashboard' : 'Open Corporate Lodging Account'}
+              </h2>
+              <p className="text-xs sm:text-sm text-[#5c5046]">
+                {authMode === 'login'
+                  ? 'Access your nationwide furnished residences, 3D fleet rentals, and balance ledger.'
+                  : 'Instant access to managed furnished residences, 3D vehicle fleet rentals, and USD top-up billing.'}
+              </p>
             </div>
-            <h1 className="text-2xl sm:text-3xl font-heading font-black tracking-tight text-white">
-              Guest, Family &amp; Corporate Client Portal
-            </h1>
-            <p className="text-xs sm:text-sm text-[#efe7dc] max-w-2xl">
-              Manage Sacramento residences, 3D fleet rentals, storefront orders, prepaid Lodging Units, and wire/ACH settlements.
-            </p>
-          </div>
 
-          <div className="flex flex-wrap items-center gap-2.5">
-            {customer && (
-              <>
-                <button
-                  type="button"
-                  onClick={() => setActiveSubTab('ledger')}
-                  className="relative px-3 py-2 rounded-xl bg-white/14 hover:bg-white/22 backdrop-blur-xs border border-white/25 text-white text-xs font-semibold flex items-center gap-1.5 transition-colors cursor-pointer"
-                >
-                  <Bell className="w-3.5 h-3.5 text-[#7ce8df]" />
-                  <span>Alerts</span>
-                  {unreadCount > 0 && (
-                    <span className="px-1.5 py-0.2 bg-[#00b7a8] text-white font-black rounded-md text-[10px] tabular-nums">
-                      {unreadCount}
-                    </span>
-                  )}
-                </button>
-
-                <button
-                  type="button"
-                  onClick={() => loadDashboardData(token!)}
-                  className="px-3.5 py-2 rounded-xl bg-white/14 hover:bg-white/22 backdrop-blur-xs border border-white/25 text-white text-xs font-semibold flex items-center gap-1.5 transition-colors cursor-pointer"
-                >
-                  <RefreshCw className={`w-3.5 h-3.5 ${isLoading ? 'animate-spin' : ''}`} />
-                  <span>Sync</span>
-                </button>
-
-                <button
-                  type="button"
-                  onClick={handleLogout}
-                  className="px-3.5 py-2 rounded-xl bg-rose-950/65 border border-rose-400/40 hover:bg-rose-900/75 text-rose-100 text-xs font-bold flex items-center gap-1.5 transition-colors cursor-pointer"
-                >
-                  <LogOut className="w-3.5 h-3.5" />
-                  <span>Sign Out</span>
-                </button>
-              </>
+            {/* Notifications & Feedback */}
+            {errorMsg && (
+              <div className="p-3.5 bg-rose-50 border border-rose-200 rounded-xl text-rose-800 text-xs flex items-center gap-2 font-medium">
+                <AlertCircle className="w-4 h-4 shrink-0 text-rose-600" />
+                <span>{errorMsg}</span>
+              </div>
             )}
+            {successMsg && (
+              <div className="p-3.5 bg-emerald-50 border border-emerald-200 rounded-xl text-emerald-800 text-xs flex items-center gap-2 font-medium">
+                <CheckCircle2 className="w-4 h-4 shrink-0 text-emerald-600" />
+                <span>{successMsg}</span>
+              </div>
+            )}
+
+            {/* Auth Box */}
+            <div className="bg-white border border-[#dfd7cc] rounded-2xl p-6 sm:p-8 shadow-sm space-y-6">
+              {/* Tab Selector */}
+              <div className="grid grid-cols-2 p-1 bg-[#faf8f5] border border-[#e6dfd5] rounded-xl text-xs font-bold text-center">
+                <button
+                  type="button"
+                  onClick={() => setAuthMode('login')}
+                  className={`py-2 rounded-lg transition-all cursor-pointer ${
+                    authMode === 'login'
+                      ? 'bg-white text-[#282828] shadow-xs'
+                      : 'text-[#857568] hover:text-[#282828]'
+                  }`}
+                >
+                  Sign In
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setAuthMode('register')}
+                  className={`py-2 rounded-lg transition-all cursor-pointer ${
+                    authMode === 'register'
+                      ? 'bg-white text-[#282828] shadow-xs'
+                      : 'text-[#857568] hover:text-[#282828]'
+                  }`}
+                >
+                  Create Account
+                </button>
+              </div>
+
+              {/* Login Form */}
+              {authMode === 'login' ? (
+                <form onSubmit={handleLogin} className="space-y-4 text-xs">
+                  <div>
+                    <label className="block text-[11px] font-bold uppercase tracking-wider text-[#857568] mb-1">
+                      Business or Guest Email
+                    </label>
+                    <div className="relative">
+                      <Mail className="w-4 h-4 absolute left-3 top-3 text-[#857568]" />
+                      <input
+                        type="email"
+                        required
+                        value={loginEmail}
+                        onChange={(e) => setLoginEmail(e.target.value)}
+                        className="w-full pl-9 pr-3 h-10 bg-[#faf8f5] border border-[#d8cfc3] rounded-xl text-xs font-medium text-[#282828] outline-none focus:border-[#00897d]"
+                        placeholder="client@corporate.com"
+                      />
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="block text-[11px] font-bold uppercase tracking-wider text-[#857568] mb-1">
+                      Password
+                    </label>
+                    <div className="relative">
+                      <Lock className="w-4 h-4 absolute left-3 top-3 text-[#857568]" />
+                      <input
+                        type="password"
+                        required
+                        value={loginPassword}
+                        onChange={(e) => setLoginPassword(e.target.value)}
+                        className="w-full pl-9 pr-3 h-10 bg-[#faf8f5] border border-[#d8cfc3] rounded-xl text-xs font-medium text-[#282828] outline-none focus:border-[#00897d]"
+                        placeholder="••••••••••••"
+                      />
+                    </div>
+                  </div>
+
+                  <button
+                    type="submit"
+                    disabled={isLoading}
+                    className="w-full py-3 bg-[#00897d] hover:bg-[#00746b] text-white text-xs font-bold uppercase tracking-wider rounded-xl flex items-center justify-center gap-2 cursor-pointer transition-colors shadow-xs"
+                  >
+                    {isLoading ? (
+                      <>
+                        <Loader2 className="w-4 h-4 animate-spin" />
+                        <span>Verifying Credentials...</span>
+                      </>
+                    ) : (
+                      <>
+                        <span>Authenticate Dashboard</span>
+                      </>
+                    )}
+                  </button>
+
+                  <div className="p-3 bg-[#f8f5f0] border border-[#e6dfd5] rounded-xl text-[11px] text-[#5c5046] text-center">
+                    <span>Demo Account Pre-Filled: </span>
+                    <strong className="text-[#282828]">corporate@easytravellodging.com</strong>
+                  </div>
+                </form>
+              ) : (
+                /* Registration Form */
+                <form onSubmit={handleRegister} className="space-y-3.5 text-xs">
+                  <div>
+                    <label className="block text-[11px] font-bold uppercase tracking-wider text-[#857568] mb-1">
+                      Full Legal Name *
+                    </label>
+                    <input
+                      type="text"
+                      required
+                      value={regName}
+                      onChange={(e) => setRegName(e.target.value)}
+                      placeholder="Alexander Sterling"
+                      className="w-full px-3 h-9.5 bg-[#faf8f5] border border-[#d8cfc3] rounded-xl text-xs text-[#282828] outline-none focus:border-[#00897d]"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-[11px] font-bold uppercase tracking-wider text-[#857568] mb-1">
+                      Corporate or Personal Email *
+                    </label>
+                    <input
+                      type="email"
+                      required
+                      value={regEmail}
+                      onChange={(e) => setRegEmail(e.target.value)}
+                      placeholder="alexander@company.com"
+                      className="w-full px-3 h-9.5 bg-[#faf8f5] border border-[#d8cfc3] rounded-xl text-xs text-[#282828] outline-none focus:border-[#00897d]"
+                    />
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-2.5">
+                    <div>
+                      <label className="block text-[11px] font-bold uppercase tracking-wider text-[#857568] mb-1">
+                        Company Name
+                      </label>
+                      <input
+                        type="text"
+                        value={regCompany}
+                        onChange={(e) => setRegCompany(e.target.value)}
+                        placeholder="Global Partners LLC"
+                        className="w-full px-3 h-9.5 bg-[#faf8f5] border border-[#d8cfc3] rounded-xl text-xs text-[#282828] outline-none focus:border-[#00897d]"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-[11px] font-bold uppercase tracking-wider text-[#857568] mb-1">
+                        Job Title
+                      </label>
+                      <input
+                        type="text"
+                        value={regRole}
+                        onChange={(e) => setRegRole(e.target.value)}
+                        placeholder="Relocation Manager"
+                        className="w-full px-3 h-9.5 bg-[#faf8f5] border border-[#d8cfc3] rounded-xl text-xs text-[#282828] outline-none focus:border-[#00897d]"
+                      />
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="block text-[11px] font-bold uppercase tracking-wider text-[#857568] mb-1">
+                      Phone Number *
+                    </label>
+                    <input
+                      type="tel"
+                      required
+                      value={regPhone}
+                      onChange={(e) => setRegPhone(e.target.value)}
+                      placeholder="+1 (555) 000-0000"
+                      className="w-full px-3 h-9.5 bg-[#faf8f5] border border-[#d8cfc3] rounded-xl text-xs text-[#282828] outline-none focus:border-[#00897d]"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-[11px] font-bold uppercase tracking-wider text-[#857568] mb-1">
+                      Set Password *
+                    </label>
+                    <input
+                      type="password"
+                      required
+                      value={regPassword}
+                      onChange={(e) => setRegPassword(e.target.value)}
+                      placeholder="Minimum 8 characters"
+                      className="w-full px-3 h-9.5 bg-[#faf8f5] border border-[#d8cfc3] rounded-xl text-xs text-[#282828] outline-none focus:border-[#00897d]"
+                    />
+                  </div>
+
+                  <button
+                    type="submit"
+                    disabled={isLoading}
+                    className="w-full py-3 bg-[#00897d] hover:bg-[#00746b] text-white text-xs font-bold uppercase tracking-wider rounded-xl flex items-center justify-center gap-2 cursor-pointer transition-colors shadow-xs mt-2"
+                  >
+                    {isLoading ? (
+                      <>
+                        <Loader2 className="w-4 h-4 animate-spin" />
+                        <span>Creating Account...</span>
+                      </>
+                    ) : (
+                      <>
+                        <Sparkles className="w-4 h-4" />
+                        <span>Register &amp; Create Account</span>
+                      </>
+                    )}
+                  </button>
+                </form>
+              )}
+            </div>
+
+            <div className="text-center">
+              <button
+                type="button"
+                onClick={() => onNavigateTab('home')}
+                className="text-xs text-[#5c5046] hover:text-[#282828] underline cursor-pointer"
+              >
+                ← Return to Public Homepage
+              </button>
+            </div>
           </div>
         </div>
-      </div>
+      ) : (
+        /* ========================================================
+            2. AUTHENTICATED: COMPREHENSIVE USER DASHBOARD
+           ======================================================== */
+        <div className="flex-1 flex flex-col">
+          {/* Top Header Bar */}
+          <DashboardHeader
+            user={userSession}
+            activeTab={activeTab}
+            currentPhpPath={currentPhpPath}
+            unreadNotificationsCount={unreadNotifCount}
+            unreadMessagesCount={unreadMsgCount}
+            savedItemsCount={4}
+            mobileMenuOpen={mobileMenuOpen}
+            onToggleMobileMenu={() => setMobileMenuOpen(!mobileMenuOpen)}
+            onNavigateTab={(tab) => {
+              setActiveTab(tab);
+              setMobileMenuOpen(false);
+            }}
+            onOpenTopUpUnits={() => setBuyUnitsModalOpen(true)}
+            onSignOut={handleSignOut}
+            onReturnToSite={() => onNavigateTab('home')}
+          />
 
-      <div className="max-w-[1280px] mx-auto px-4 sm:px-8 pt-7 space-y-7">
-        {/* Feedback Banners */}
-        {errorMsg && (
-          <div className="p-4 rounded-xl bg-rose-50 border border-rose-200 text-rose-900 text-xs flex items-start justify-between gap-3">
-            <div className="flex items-start gap-2.5">
-              <AlertCircle className="w-4 h-4 text-rose-600 shrink-0 mt-0.5" />
-              <div>
-                <span className="font-bold">Notice:</span> {errorMsg}
+          {/* Feedback Banners */}
+          {successMsg && (
+            <div className="bg-emerald-50 border-b border-emerald-200 px-4 py-2.5 text-xs text-emerald-800 flex items-center justify-between">
+              <div className="flex items-center gap-2 max-w-7xl mx-auto w-full">
+                <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
+                <span>{successMsg}</span>
               </div>
+              <button
+                type="button"
+                onClick={() => setSuccessMsg(null)}
+                className="text-emerald-700 hover:text-emerald-900 cursor-pointer"
+              >
+                <X className="w-3.5 h-3.5" />
+              </button>
             </div>
-            <button onClick={() => setErrorMsg(null)} className="text-rose-700 hover:text-rose-950 font-semibold text-xs cursor-pointer">
-              Dismiss
-            </button>
-          </div>
-        )}
+          )}
 
-        {successMsg && (
-          <div className="p-4 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-900 text-xs flex items-start justify-between gap-3">
-            <div className="flex items-start gap-2.5">
-              <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
-              <div>
-                <span className="font-bold">Confirmed:</span> {successMsg}
+          {errorMsg && (
+            <div className="bg-rose-50 border-b border-rose-200 px-4 py-2.5 text-xs text-rose-800 flex items-center justify-between">
+              <div className="flex items-center gap-2 max-w-7xl mx-auto w-full">
+                <AlertCircle className="w-4 h-4 text-rose-600 shrink-0" />
+                <span>{errorMsg}</span>
               </div>
+              <button
+                type="button"
+                onClick={() => setErrorMsg(null)}
+                className="text-rose-700 hover:text-rose-900 cursor-pointer"
+              >
+                <X className="w-3.5 h-3.5" />
+              </button>
             </div>
-            <button onClick={() => setSuccessMsg(null)} className="text-emerald-700 hover:text-emerald-950 font-semibold text-xs cursor-pointer">
-              Dismiss
-            </button>
-          </div>
-        )}
+          )}
 
-        {/* ========================================================
-            UNAUTHENTICATED VIEW: SIGN IN / CREATE ACCOUNT
-           ======================================================== */}
-        {!customer ? (
-          <div className="relative overflow-hidden rounded-3xl border border-[#dfd5c9] p-6 sm:p-10 shadow-xl">
-            <LivePhotoBackground scene="cycle" secondaryScene="interior" overlay="espresso" />
-            <div className="relative z-10 max-w-xl mx-auto w-full">
-              <div className="bg-white/96 backdrop-blur-md border border-[#e6dfd5] rounded-2xl p-6 sm:p-8 shadow-2xl space-y-6 text-[#282828]">
-                <div className="flex p-1 bg-[#f5efe8] rounded-xl border border-[#e6dfd5]">
-                  <button
-                    type="button"
-                    onClick={() => setAuthMode('login')}
-                    className={`flex-1 py-2.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
-                      authMode === 'login' ? 'bg-[#00b7a8] text-white shadow-xs' : 'text-[#5c5046] hover:text-[#282828]'
-                    }`}
-                  >
-                    Sign In
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => setAuthMode('register')}
-                    className={`flex-1 py-2.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
-                      authMode === 'register' ? 'bg-[#00b7a8] text-white shadow-xs' : 'text-[#5c5046] hover:text-[#282828]'
-                    }`}
-                  >
-                    Sign Out / Create Account
-                  </button>
-                </div>
+          {/* Main Dashboard Layout Container */}
+          <div className="flex-1 max-w-[1600px] w-full mx-auto px-4 sm:px-6 lg:px-8 py-6">
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+              {/* Left Sidebar (Desktop) */}
+              <div className="hidden lg:block lg:col-span-3">
+                <DashboardSidebar
+                  activeTab={activeTab}
+                  onSelectTab={(tab) => setActiveTab(tab)}
+                  unreadNotificationsCount={unreadNotifCount}
+                  unreadMessagesCount={unreadMsgCount}
+                  savedItemsCount={4}
+                />
+              </div>
 
-                {authMode === 'login' ? (
-                  <form onSubmit={handleLogin} className="space-y-4">
-                    <div>
-                      <label className="block text-xs font-bold text-[#282828] mb-1.5">Client Email Address</label>
-                      <div className="relative">
-                        <Mail className="w-4 h-4 absolute left-3.5 top-3.5 text-[#857568] pointer-events-none" />
-                        <input
-                          type="email"
-                          required
-                          value={loginEmail}
-                          onChange={(e) => setLoginEmail(e.target.value)}
-                          placeholder="client@easytravellodging.com"
-                          className="w-full pl-10 pr-4 h-11 bg-[#faf8f5] border border-[#dfd7cc] rounded-xl text-sm text-[#282828] placeholder:text-[#9a8d80] focus:border-[#00b7a8] focus:bg-white outline-none transition-colors"
-                        />
-                      </div>
-                    </div>
-
-                    <div>
-                      <label className="block text-xs font-bold text-[#282828] mb-1.5">Account Password</label>
-                      <div className="relative">
-                        <Lock className="w-4 h-4 absolute left-3.5 top-3.5 text-[#857568] pointer-events-none" />
-                        <input
-                          type="password"
-                          required
-                          value={loginPassword}
-                          onChange={(e) => setLoginPassword(e.target.value)}
-                          placeholder="••••••••"
-                          className="w-full pl-10 pr-4 h-11 bg-[#faf8f5] border border-[#dfd7cc] rounded-xl text-sm text-[#282828] placeholder:text-[#9a8d80] focus:border-[#00b7a8] focus:bg-white outline-none transition-colors"
-                        />
-                      </div>
-                    </div>
-
-                    <button
-                      type="submit"
-                      disabled={isLoading}
-                      className="w-full py-3.5 bg-[#00b7a8] hover:bg-[#009e91] disabled:opacity-50 text-white text-xs font-black uppercase tracking-wider rounded-xl flex items-center justify-center gap-2 cursor-pointer transition-all"
-                    >
-                      {isLoading ? (
-                        <>
-                          <Loader2 className="w-4 h-4 animate-spin" />
-                          <span>Authenticating Session...</span>
-                        </>
-                      ) : (
-                        <>
-                          <User className="w-4 h-4" />
-                          <span>Sign In to Client Dashboard</span>
-                        </>
-                      )}
-                    </button>
-                  </form>
-                ) : (
-                  <form onSubmit={handleRegister} className="space-y-3.5">
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                      <div>
-                        <label className="block text-xs font-bold text-[#282828] mb-1">Full Name *</label>
-                        <input
-                          type="text"
-                          required
-                          value={regName}
-                          onChange={(e) => setRegName(e.target.value)}
-                          placeholder="Dr. Jennifer Hayes"
-                          className="w-full px-3.5 h-10 bg-[#faf8f5] border border-[#dfd7cc] rounded-xl text-xs text-[#282828] placeholder:text-[#9a8d80] focus:border-[#00b7a8] focus:bg-white outline-none"
-                        />
-                      </div>
-                      <div>
-                        <label className="block text-xs font-bold text-[#282828] mb-1">Phone Number *</label>
-                        <input
-                          type="tel"
-                          required
-                          value={regPhone}
-                          onChange={(e) => setRegPhone(e.target.value)}
-                          placeholder="(916) 555-0192"
-                          className="w-full px-3.5 h-10 bg-[#faf8f5] border border-[#dfd7cc] rounded-xl text-xs text-[#282828] placeholder:text-[#9a8d80] focus:border-[#00b7a8] focus:bg-white outline-none"
-                        />
-                      </div>
-                    </div>
-
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                      <div>
-                        <label className="block text-xs font-bold text-[#282828] mb-1">Email Address *</label>
-                        <input
-                          type="email"
-                          required
-                          value={regEmail}
-                          onChange={(e) => setRegEmail(e.target.value)}
-                          placeholder="jennifer@hospital.org"
-                          className="w-full px-3.5 h-10 bg-[#faf8f5] border border-[#dfd7cc] rounded-xl text-xs text-[#282828] placeholder:text-[#9a8d80] focus:border-[#00b7a8] focus:bg-white outline-none"
-                        />
-                      </div>
-                      <div>
-                        <label className="block text-xs font-bold text-[#282828] mb-1">Password (6+ chars) *</label>
-                        <input
-                          type="password"
-                          required
-                          minLength={6}
-                          value={regPassword}
-                          onChange={(e) => setRegPassword(e.target.value)}
-                          placeholder="••••••••"
-                          className="w-full px-3.5 h-10 bg-[#faf8f5] border border-[#dfd7cc] rounded-xl text-xs text-[#282828] placeholder:text-[#9a8d80] focus:border-[#00b7a8] focus:bg-white outline-none"
-                        />
-                      </div>
-                    </div>
-
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                      <div>
-                        <label className="block text-xs font-bold text-[#282828] mb-1">Employer / Hospital / Agency</label>
-                        <input
-                          type="text"
-                          value={regCompany}
-                          onChange={(e) => setRegCompany(e.target.value)}
-                          placeholder="UC Davis Health / Kaiser"
-                          className="w-full px-3.5 h-10 bg-[#faf8f5] border border-[#dfd7cc] rounded-xl text-xs text-[#282828] placeholder:text-[#9a8d80] focus:border-[#00b7a8] focus:bg-white outline-none"
-                        />
-                      </div>
-                      <div>
-                        <label className="block text-xs font-bold text-[#282828] mb-1">Job Title / Role</label>
-                        <input
-                          type="text"
-                          value={regRole}
-                          onChange={(e) => setRegRole(e.target.value)}
-                          placeholder="Travel Nurse / Relocation"
-                          className="w-full px-3.5 h-10 bg-[#faf8f5] border border-[#dfd7cc] rounded-xl text-xs text-[#282828] placeholder:text-[#9a8d80] focus:border-[#00b7a8] focus:bg-white outline-none"
-                        />
-                      </div>
-                    </div>
-
-                    <button
-                      type="submit"
-                      disabled={isLoading}
-                      className="w-full py-3.5 bg-[#00b7a8] hover:bg-[#009e91] text-white text-xs font-black uppercase tracking-wider rounded-xl flex items-center justify-center gap-2 cursor-pointer transition-all mt-2"
-                    >
-                      {isLoading ? (
-                        <>
-                          <Loader2 className="w-4 h-4 animate-spin" />
-                          <span>Creating Account...</span>
-                        </>
-                      ) : (
-                        <>
-                          <Sparkles className="w-4 h-4" />
-                          <span>Create Account &amp; Claim 25 Welcome Units</span>
-                        </>
-                      )}
-                    </button>
-                  </form>
+              {/* Main Content Area: Active Module */}
+              <div className="lg:col-span-9 min-h-[600px]">
+                {activeTab === 'overview' && (
+                  <OverviewModule
+                    user={userSession}
+                    accommodations={accommodations}
+                    carRentals={carRentals}
+                    payments={payments}
+                    onOpenBooking={onOpenBooking}
+                    onOpenTopUpUnits={handleOpenDepositModal}
+                    onNavigateTab={(tab) => setActiveTab(tab)}
+                    onViewBookingDetails={() => setActiveTab('accommodation')}
+                    onViewRentalDetails={() => setActiveTab('car-rentals')}
+                  />
                 )}
+
+                {activeTab === 'accommodation' && (
+                  <AccommodationModule
+                    reservations={accommodations}
+                    onOpenBooking={onOpenBooking}
+                    onUpdateReservation={handleUpdateReservation}
+                  />
+                )}
+
+                {activeTab === 'car-rentals' && (
+                  <CarRentalsModule
+                    rentals={carRentals}
+                    onExploreFleet={() => onNavigateTab('vehicles')}
+                    onUpdateRental={handleUpdateRental}
+                  />
+                )}
+
+                {activeTab === 'payments' && (
+                  <PaymentsModule
+                    payments={payments}
+                    unitsBalance={userSession.units_balance ?? Math.floor(userSession.balance_usd / 100)}
+                    onOpenTopUpUnits={handleOpenDepositModal}
+                    onUploadProof={handleUploadProof}
+                    onApprovePayment={handleApprovePayment}
+                    onRejectPayment={handleRejectPayment}
+                  />
+                )}
+
+                {activeTab === 'saved-items' && (
+                  <SavedItemsModule
+                    onReserveProperty={() => onOpenBooking()}
+                    onExploreVehicles={() => onNavigateTab('vehicles')}
+                  />
+                )}
+
+                {activeTab === 'notifications' && (
+                  <NotificationsModule
+                    notifications={notifications}
+                    onMarkAsRead={handleMarkNotificationRead}
+                    onMarkAllAsRead={handleMarkAllNotificationsRead}
+                  />
+                )}
+
+                {activeTab === 'messages' && (
+                  <MessagesModule
+                    messages={messages}
+                    onSendMessage={handleSendMessage}
+                  />
+                )}
+
+                {activeTab === 'profile' && (
+                  <ProfileModule
+                    user={userSession}
+                    onUpdateUser={(updates) =>
+                      setUserSession((prev) => ({ ...prev, ...updates }))
+                    }
+                  />
+                )}
+
+                {activeTab === 'security' && (
+                  <SecurityModule
+                    twoFactorEnabled={userSession.twoFactorEnabled}
+                    onToggleTwoFactor={(enabled) =>
+                      setUserSession((prev) => ({ ...prev, twoFactorEnabled: enabled }))
+                    }
+                  />
+                )}
+
+                {activeTab === 'settings' && <SettingsModule />}
+
+                {activeTab === 'support' && <SupportModule />}
               </div>
             </div>
           </div>
-        ) : (
-          /* ========================================================
-             AUTHENTICATED DASHBOARD
-             ======================================================== */
-          <div className="space-y-7">
-            {/* 4 Crisp KPI Cards */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-              <div className="p-5 bg-white border border-[#b9ebe6] rounded-2xl shadow-2xs flex flex-col justify-between">
-                <div className="flex items-center justify-between">
-                  <span className="text-xs font-bold uppercase tracking-wider text-[#00897d]">Available Balance</span>
-                  <Coins className="w-4 h-4 text-[#00b7a8]" />
+
+          {/* Footer Component */}
+          <DashboardFooter />
+        </div>
+      )}
+
+      {/* ========================================================
+          3. RESPONSIVE MANUAL PAYMENT TOP-UP MODAL (FIXED UI)
+         ======================================================== */}
+      {buyUnitsModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/65 backdrop-blur-xs">
+          <div className="bg-white rounded-3xl max-w-lg w-full max-h-[90vh] sm:max-h-[85vh] flex flex-col border border-[#e6dfd5] shadow-2xl overflow-hidden animate-in fade-in zoom-in-95">
+            {/* Modal Header (Fixed Top) */}
+            <div className="p-4 sm:p-5 bg-white border-b border-[#f0e9df] flex items-center justify-between shrink-0">
+              <div className="flex items-center gap-3 min-w-0">
+                <div className="w-10 h-10 rounded-xl bg-[#00897d]/10 text-[#00897d] flex items-center justify-center shrink-0">
+                  <Landmark className="w-5 h-5" />
                 </div>
-                <div className="my-3">
-                  <div className="text-3xl font-heading font-black text-[#282828] tabular-nums">
-                    {customer.units_balance}{' '}
-                    <span className="text-xs font-semibold text-[#857568]">Units</span>
-                  </div>
-                  <span className="text-xs text-[#5c5046] tabular-nums">
-                    Credit Value: <strong className="text-[#282828]">${customer.balance_usd?.toLocaleString() || '0'} USD</strong>
-                  </span>
-                </div>
-                <button
-                  onClick={() => setBuyUnitsModalOpen(true)}
-                  className="w-full py-2 bg-[#00b7a8] hover:bg-[#009e91] text-white text-xs font-bold rounded-xl flex items-center justify-center gap-1.5 transition-colors cursor-pointer"
-                >
-                  <PlusCircle className="w-3.5 h-3.5" />
-                  <span>Add Unit Package</span>
-                </button>
-              </div>
-
-              <div className="p-5 bg-white border border-[#e6dfd5] rounded-2xl shadow-2xs flex flex-col justify-between">
-                <div className="flex items-center justify-between">
-                  <span className="text-xs font-bold uppercase tracking-wider text-[#857568]">Housing Stays</span>
-                  <Building2 className="w-4 h-4 text-[#82634f]" />
-                </div>
-                <div className="my-3">
-                  <div className="text-3xl font-heading font-black text-[#282828] tabular-nums">
-                    {bookings.length}{' '}
-                    <span className="text-xs font-semibold text-[#857568]">Suites</span>
-                  </div>
-                  <span className="text-xs text-[#5c5046]">
-                    {unsettledHousing.length > 0 ? `${unsettledHousing.length} awaiting settlement` : 'All active stays confirmed'}
-                  </span>
-                </div>
-                <button
-                  onClick={onOpenBooking}
-                  className="w-full py-2 bg-[#faf8f5] hover:bg-[#f0e9df] text-[#282828] text-xs font-semibold rounded-xl flex items-center justify-center gap-1.5 transition-colors cursor-pointer border border-[#dfd7cc]"
-                >
-                  <Calendar className="w-3.5 h-3.5 text-[#00b7a8]" />
-                  <span>Reserve Sacramento Suite</span>
-                </button>
-              </div>
-
-              <div className="p-5 bg-white border border-[#e6dfd5] rounded-2xl shadow-2xs flex flex-col justify-between">
-                <div className="flex items-center justify-between">
-                  <span className="text-xs font-bold uppercase tracking-wider text-[#857568]">3D Fleet Rentals</span>
-                  <Car className="w-4 h-4 text-[#82634f]" />
-                </div>
-                <div className="my-3">
-                  <div className="text-3xl font-heading font-black text-[#282828] tabular-nums">
-                    {vehicleBookings.length}{' '}
-                    <span className="text-xs font-semibold text-[#857568]">Vehicles</span>
-                  </div>
-                  <span className="text-xs text-[#5c5046]">
-                    {unsettledFleet.length > 0 ? `${unsettledFleet.length} awaiting unit/wire settle` : 'SMF & Suite delivery ready'}
-                  </span>
-                </div>
-                <button
-                  onClick={() => onNavigateTab('vehicles')}
-                  className="w-full py-2 bg-[#faf8f5] hover:bg-[#f0e9df] text-[#282828] text-xs font-semibold rounded-xl flex items-center justify-center gap-1.5 transition-colors cursor-pointer border border-[#dfd7cc]"
-                >
-                  <span>Explore 3D Vehicle Studio</span>
-                  <ArrowUpRight className="w-3.5 h-3.5 text-[#82634f]" />
-                </button>
-              </div>
-
-              <div className="p-5 bg-white border border-[#ead5c3] rounded-2xl shadow-2xs flex flex-col justify-between">
-                <div className="flex items-center justify-between">
-                  <span className="text-xs font-bold uppercase tracking-wider text-[#82634f]">Wire / ACH Transfers</span>
-                  <Landmark className="w-4 h-4 text-[#82634f]" />
-                </div>
-                <div className="my-3">
-                  <div className="text-3xl font-heading font-black text-[#282828] tabular-nums">
-                    {manualPayments.length}{' '}
-                    <span className="text-xs font-semibold text-[#857568]">Notices</span>
-                  </div>
-                  <span className="text-xs text-[#5c5046] tabular-nums">
-                    {pendingWiresCount > 0 ? `${pendingWiresCount} pending bank verification` : 'All submitted wires verified'}
-                  </span>
-                </div>
-                <button
-                  onClick={() => setActiveSubTab('payments')}
-                  className="w-full py-2 bg-[#82634f] hover:bg-[#6e5240] text-white text-xs font-semibold rounded-xl flex items-center justify-center gap-1.5 transition-colors cursor-pointer"
-                >
-                  <Upload className="w-3.5 h-3.5" />
-                  <span>Submit Wire / ACH Notice</span>
-                </button>
-              </div>
-            </div>
-
-
-            {/* Dashboard Section Switcher */}
-            <div className="flex flex-wrap items-center gap-2 border-b border-[#e6dfd5] pb-3">
-              {[
-                { id: 'overview', label: 'Housing Stays & Units', icon: Building2, count: bookings.length },
-                { id: 'orders', label: 'Orders & Receipts', icon: ShoppingBag, count: orders.length },
-                { id: 'fleet', label: 'Fleet Rentals', icon: Car, count: vehicleBookings.length },
-                { id: 'payments', label: 'Wire / ACH Details', icon: Landmark, count: pendingWiresCount },
-                { id: 'ledger', label: 'Ledger & Profile', icon: FileText, count: unreadCount },
-              ].map((item) => {
-                const Icon = item.icon;
-                const active = activeSubTab === item.id;
-                return (
-                  <button
-                    key={item.id}
-                    type="button"
-                    onClick={() => setActiveSubTab(item.id as PortalSubTab)}
-                    className={`px-3.5 py-2 rounded-xl text-xs font-bold flex items-center gap-2 transition-all cursor-pointer ${
-                      active
-                        ? 'bg-[#00897d] text-white shadow-xs'
-                        : 'bg-white text-[#5c5046] hover:bg-[#f5efe8] hover:text-[#282828] border border-[#e6dfd5]'
-                    }`}
-                  >
-                    <Icon className="w-3.5 h-3.5" />
-                    <span>{item.label}</span>
-                    {item.count > 0 && (
-                      <span
-                        className={`px-1.5 py-0.2 rounded-full text-[10px] font-extrabold tabular-nums ${
-                          active ? 'bg-white/20 text-white' : 'bg-[#e6dfd5] text-[#5c5046]'
-                        }`}
-                      >
-                        {item.count}
-                      </span>
-                    )}
-                  </button>
-                );
-              })}
-            </div>
-
-            {/* ========================================================
-                SUB-TAB 1: HOUSING STAYS & INTERNAL COMMAND TERMINAL
-               ======================================================== */}
-            {activeSubTab === 'overview' && (
-              <div className="grid grid-cols-1 lg:grid-cols-12 gap-7">
-                <div className="lg:col-span-7 space-y-6">
-                  <div className="bg-white border border-[#e6dfd5] rounded-2xl p-6 shadow-2xs space-y-5">
-                    <div className="flex items-center justify-between border-b border-[#ede6dc] pb-4">
-                      <div>
-                        <h3 className="font-heading font-bold text-base text-[#282828]">
-                          Sacramento Housing Reservations
-                        </h3>
-                        <p className="text-xs text-[#5c5046]">
-                          Settle pending leases immediately using your Lodging Units balance.
-                        </p>
-                      </div>
-                      <span className="text-xs font-mono bg-[#faf8f5] px-2.5 py-1 rounded-lg text-[#5c5046] border border-[#e6dfd5] tabular-nums">
-                        {bookings.length} Records
-                      </span>
-                    </div>
-
-                    {bookings.length === 0 ? (
-                      <div className="text-center py-8 text-[#5c5046] space-y-3">
-                        <p className="text-xs">No housing reservations linked to {customer.email} yet.</p>
-                        <button
-                          onClick={onOpenBooking}
-                          className="px-4 py-2 bg-[#00b7a8] hover:bg-[#009e91] text-white text-xs font-bold rounded-xl cursor-pointer transition-colors"
-                        >
-                          Request 30+ Day Furnished Suite
-                        </button>
-                      </div>
-                    ) : (
-                      <div className="space-y-4">
-                        {bookings.map((b) => {
-                          const isSettled = b.status === 'confirmed' || b.paymentProvider === 'unit_balance';
-                          const unitsNeeded = b.unitCostUnits || 25;
-                          const usdNeeded = b.unitCostUsd || unitsNeeded * 100;
-                          return (
-                            <div
-                              key={b.id}
-                              className="p-4 bg-[#faf8f5] border border-[#e6dfd5] rounded-xl space-y-3"
-                            >
-                              <div className="flex flex-wrap items-center justify-between gap-2">
-                                <div className="flex items-center gap-2">
-                                  <span className="font-mono text-xs font-bold text-[#007a70] bg-[#e8f8f6] px-2.5 py-0.5 rounded border border-[#b9ebe6]">
-                                    {b.id}
-                                  </span>
-                                  <span className="font-bold text-sm text-[#282828] uppercase">
-                                    {b.propertyId}
-                                  </span>
-                                </div>
-
-                                <span
-                                  className={`text-[11px] px-2.5 py-0.5 rounded-md font-bold uppercase tracking-wider ${
-                                    isSettled
-                                      ? 'bg-emerald-50 text-emerald-800 border border-emerald-200'
-                                      : 'bg-amber-50 text-amber-800 border border-amber-200'
-                                  }`}
-                                >
-                                  {isSettled ? 'Confirmed / Settled' : b.status.replace('_', ' ')}
-                                </span>
-                              </div>
-
-                              <div className="grid grid-cols-3 gap-2 text-xs text-[#282828] tabular-nums">
-                                <div>
-                                  <span className="text-[#857568] block text-[11px]">Move-In</span>
-                                  <span className="font-semibold">{b.checkIn}</span>
-                                </div>
-                                <div>
-                                  <span className="text-[#857568] block text-[11px]">Move-Out</span>
-                                  <span className="font-semibold">{b.checkOut}</span>
-                                </div>
-                                <div>
-                                  <span className="text-[#857568] block text-[11px]">Stay Length</span>
-                                  <span className="font-semibold">{b.totalNights} Nights</span>
-                                </div>
-                              </div>
-
-                              {b.notes && (
-                                <p className="text-[11px] text-[#5c5046] bg-white p-2.5 rounded-lg border border-[#e6dfd5]">
-                                  {b.notes}
-                                </p>
-                              )}
-
-                              <div className="pt-2.5 border-t border-[#e6dfd5] flex flex-wrap items-center justify-between gap-3">
-                                <span className="text-[11px] text-[#5c5046] font-mono tabular-nums">
-                                  Allotment: {unitsNeeded} Units (${usdNeeded.toLocaleString()} USD)
-                                </span>
-
-                                {!isSettled ? (
-                                  <div className="flex flex-wrap items-center gap-2">
-                                    <button
-                                      type="button"
-                                      onClick={() => {
-                                        setWireTargetType('housing_booking');
-                                        setWireTargetId(b.id);
-                                        setWireAmountUsd(String(usdNeeded));
-                                        setActiveSubTab('payments');
-                                      }}
-                                      className="px-3 py-1.5 bg-white hover:bg-[#f0e9df] text-[#282828] text-xs font-semibold rounded-lg border border-[#dfd7cc] cursor-pointer transition-colors"
-                                    >
-                                      Pay via Wire
-                                    </button>
-                                    <button
-                                      type="button"
-                                      disabled={executingCommand || customer.units_balance < unitsNeeded}
-                                      onClick={() => handleExecuteInternalBalanceCheckout(b.id, unitsNeeded)}
-                                      className="px-3.5 py-1.5 bg-emerald-600 hover:bg-emerald-700 disabled:bg-[#ede7df] disabled:text-[#9a8d80] text-white text-xs font-bold rounded-lg transition-all flex items-center gap-1.5 cursor-pointer"
-                                    >
-                                      <CreditCard className="w-3.5 h-3.5" />
-                                      <span>Pay From Balance ({unitsNeeded} Units)</span>
-                                    </button>
-                                  </div>
-                                ) : (
-                                  <div className="inline-flex items-center gap-1.5 text-xs text-emerald-700 font-semibold">
-                                    <CheckCircle2 className="w-4 h-4" />
-                                    <span>Settled ({b.paymentReference || 'Verified'})</span>
-                                  </div>
-                                )}
-                              </div>
-                            </div>
-                          );
-                        })}
-                      </div>
-                    )}
-                  </div>
-
-                  {/* Purchased Unit Packages */}
-                  <div className="bg-white border border-[#e6dfd5] rounded-2xl p-6 shadow-2xs space-y-4">
-                    <div className="flex items-center justify-between border-b border-[#ede6dc] pb-3">
-                      <h3 className="font-heading font-bold text-base text-[#282828]">
-                        Unit Allotment Packages
-                      </h3>
-                      <button
-                        onClick={() => setBuyUnitsModalOpen(true)}
-                        className="text-xs font-bold text-[#00897d] hover:underline cursor-pointer flex items-center gap-1"
-                      >
-                        <PlusCircle className="w-3.5 h-3.5" /> Purchase Package
-                      </button>
-                    </div>
-
-                    <div className="space-y-2.5">
-                      {(customer.purchases || []).map((pch) => (
-                        <div
-                          key={pch.id}
-                          className="p-3.5 bg-[#faf8f5] border border-[#e6dfd5] rounded-xl flex items-center justify-between text-xs"
-                        >
-                          <div className="space-y-0.5">
-                            <span className="font-bold text-[#282828] block">{pch.description}</span>
-                            <span className="text-[11px] text-[#857568]">
-                              {new Date(pch.purchased_at).toLocaleDateString()} • {pch.payment_method}
-                            </span>
-                          </div>
-                          <div className="text-right tabular-nums">
-                            <span className="font-bold text-emerald-700 block">+{pch.units_purchased} Units</span>
-                            <span className="text-[11px] text-[#5c5046]">${pch.amount_usd.toLocaleString()} USD</span>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-
-                {/* Right Column: Recent Storefront Orders + Account Summary */}
-                <div className="lg:col-span-5 space-y-6">
-                  <div className="bg-white border border-[#e6dfd5] rounded-2xl p-6 shadow-2xs space-y-4">
-                    <div className="flex items-center justify-between border-b border-[#ede6dc] pb-3">
-                      <div>
-                        <h3 className="font-heading font-bold text-base text-[#282828]">
-                          Storefront Orders &amp; Checkout
-                        </h3>
-                        <p className="text-xs text-[#5c5046]">
-                          Bundle residences, vehicles, and arrival services in one cart.
-                        </p>
-                      </div>
-                      <button
-                        type="button"
-                        onClick={() => setActiveSubTab('orders')}
-                        className="text-xs font-bold text-[#00897d] hover:underline cursor-pointer"
-                      >
-                        View All ({orders.length})
-                      </button>
-                    </div>
-
-                    {orders.length === 0 ? (
-                      <p className="text-xs text-[#5c5046] py-2">
-                        No online cart orders placed yet. Use your Lodging Units or bank transfer at checkout.
-                      </p>
-                    ) : (
-                      <div className="space-y-2.5">
-                        {orders.slice(0, 3).map((ord) => (
-                          <div
-                            key={ord.id}
-                            className="p-3.5 bg-[#faf8f5] border border-[#e6dfd5] rounded-xl flex items-center justify-between gap-3 text-xs"
-                          >
-                            <div className="min-w-0">
-                              <span className="font-mono font-bold text-[#282828] block">{ord.orderReference}</span>
-                              <span className="text-[11px] text-[#857568] truncate block">
-                                {ord.items.length} item(s) · {new Date(ord.createdAt).toLocaleDateString()}
-                              </span>
-                            </div>
-                            <div className="text-right shrink-0 tabular-nums">
-                              <span className="font-bold text-[#282828] block">${ord.totalUsd.toLocaleString()}</span>
-                              <span
-                                className={`text-[11px] font-semibold ${
-                                  ord.paymentStatus === 'paid'
-                                    ? 'text-emerald-700'
-                                    : ord.paymentStatus === 'failed' || ord.paymentStatus === 'cancelled'
-                                    ? 'text-rose-700'
-                                    : 'text-amber-700'
-                                }`}
-                              >
-                                {ord.paymentStatus === 'paid'
-                                  ? 'Paid & Verified'
-                                  : ord.paymentStatus.replace(/_/g, ' ')}
-                              </span>
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-                    )}
-
-                    <div className="grid grid-cols-2 gap-2.5 pt-1">
-                      <button
-                        type="button"
-                        onClick={() => onNavigateTab('shop')}
-                        className="py-2.5 px-3 bg-[#faf8f5] hover:bg-[#f0e9df] text-[#282828] text-xs font-semibold rounded-xl border border-[#dfd7cc] cursor-pointer transition-colors"
-                      >
-                        Add Services &amp; Units
-                      </button>
-                      <button
-                        type="button"
-                        onClick={() => onNavigateTab('cart')}
-                        className="py-2.5 px-3 bg-[#00b7a8] hover:bg-[#009e91] text-white text-xs font-bold rounded-xl cursor-pointer transition-colors"
-                      >
-                        Open Shopping Cart
-                      </button>
-                    </div>
-                  </div>
-
-                  <div className="p-5 bg-white border border-[#e6dfd5] rounded-2xl shadow-2xs space-y-3">
-                    <span className="text-xs font-bold text-[#00897d] uppercase tracking-wider block">
-                      Account Holder
-                    </span>
-                    <div className="space-y-1 text-xs">
-                      <div className="text-base font-bold text-[#282828]">{customer.name}</div>
-                      {(customer.role || customer.company) && (
-                        <div className="text-[#5c5046] font-medium">
-                          {[customer.role, customer.company].filter(Boolean).join(' · ')}
-                        </div>
-                      )}
-                      <div className="text-[#857568]">{customer.email} · {customer.phone}</div>
-                    </div>
-                    <button
-                      type="button"
-                      onClick={() => setActiveSubTab('ledger')}
-                      className="text-xs font-bold text-[#82634f] hover:underline flex items-center gap-1 cursor-pointer pt-1"
-                    >
-                      <Settings className="w-3.5 h-3.5" /> Edit Profile &amp; Notification Preferences
-                    </button>
-                  </div>
-                </div>
-              </div>
-            )}
-
-            {/* ========================================================
-                SUB-TAB: STOREFRONT ORDERS & RECEIPTS
-               ======================================================== */}
-            {activeSubTab === 'orders' && (
-              <div className="bg-white border border-[#e6dfd5] rounded-2xl p-6 shadow-2xs space-y-5">
-                <div className="flex flex-wrap items-center justify-between gap-3 border-b border-[#ede6dc] pb-4">
-                  <div>
-                    <h3 className="font-heading font-bold text-lg text-[#282828]">
-                      Storefront Orders, Payment Verification &amp; Receipts
-                    </h3>
-                    <p className="text-xs text-[#5c5046]">
-                      Orders paid via Lodging Units confirm immediately; wire, ACH, and Zelle orders confirm as soon as treasury verifies settlement.
-                    </p>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <button
-                      type="button"
-                      onClick={() => onNavigateTab('shop')}
-                      className="px-3.5 py-2 bg-[#faf8f5] hover:bg-[#f0e9df] text-[#282828] text-xs font-semibold rounded-xl border border-[#dfd7cc] cursor-pointer transition-colors"
-                    >
-                      Browse Storefront
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => onNavigateTab('cart')}
-                      className="px-4 py-2 bg-[#00b7a8] hover:bg-[#009e91] text-white text-xs font-bold rounded-xl cursor-pointer transition-colors"
-                    >
-                      Open Cart &amp; Lookup
-                    </button>
-                  </div>
-                </div>
-
-                {orders.length === 0 ? (
-                  <div className="text-center py-12 space-y-3 text-[#5c5046]">
-                    <ShoppingBag className="w-10 h-10 text-[#b0a396] mx-auto" />
-                    <p className="text-sm font-semibold text-[#282828]">No storefront orders linked to {customer.email} yet.</p>
-                    <p className="text-xs max-w-md mx-auto">
-                      Add furnished residences, 3D fleet rentals, arrival packages, or Lodging Unit bundles to your cart and check out using your Unit Balance or bank transfer.
-                    </p>
-                    <button
-                      type="button"
-                      onClick={() => onNavigateTab('shop')}
-                      className="px-5 py-2.5 bg-[#00b7a8] hover:bg-[#009e91] text-white text-xs font-bold rounded-xl cursor-pointer transition-colors"
-                    >
-                      Explore Services &amp; Packages
-                    </button>
-                  </div>
-                ) : (
-                  <div className="space-y-4">
-                    {orders.map((ord, idx) => {
-                      const isPaid = ord.paymentStatus === 'paid';
-                      const isPending = ord.paymentStatus === 'pending_payment' || ord.paymentStatus === 'pending_verification';
-                      return (
-                        <div
-                          key={ord.id}
-                          className="p-5 bg-[#faf8f5] border border-[#e6dfd5] rounded-xl space-y-4"
-                        >
-                          <div className="flex flex-wrap items-center justify-between gap-3 border-b border-[#e6dfd5] pb-3">
-                            <div className="space-y-0.5">
-                              <div className="flex flex-wrap items-center gap-2 text-xs">
-                                <span className="font-mono font-bold text-sm text-[#00897d]">
-                                  {ord.orderReference}
-                                </span>
-                                <span aria-hidden="true" className="text-[#b8aba0]">·</span>
-                                <span className="text-[#857568]">
-                                  {new Date(ord.createdAt).toLocaleString()}
-                                </span>
-                                <span aria-hidden="true" className="text-[#b8aba0]">·</span>
-                                <span className="text-[#282828] font-medium capitalize">
-                                  {ord.paymentMethod.replace(/_/g, ' ')}
-                                </span>
-                              </div>
-                              {ord.paymentReference && (
-                                <div className="text-[11px] font-mono text-[#5c5046]">
-                                  Payment Reference: {ord.paymentReference}
-                                </div>
-                              )}
-                            </div>
-
-                            <div className="flex items-center gap-3">
-                              {isPaid ? (
-                                <span className="inline-flex items-center gap-1.5 text-xs font-bold text-emerald-700">
-                                  <CheckCircle2 className="w-4 h-4" />
-                                  <span>Payment Verified · {ord.orderStatus}</span>
-                                </span>
-                              ) : isPending ? (
-                                <span className="inline-flex items-center gap-1.5 text-xs font-bold text-amber-700">
-                                  <Clock className="w-4 h-4" />
-                                  <span>
-                                    {ord.paymentStatus === 'pending_verification'
-                                      ? 'Pending Treasury Verification'
-                                      : 'Awaiting Payment Transfer'}
-                                  </span>
-                                </span>
-                              ) : (
-                                <span className="inline-flex items-center gap-1.5 text-xs font-bold text-rose-700">
-                                  <XCircle className="w-4 h-4" />
-                                  <span className="capitalize">{ord.paymentStatus.replace(/_/g, ' ')}</span>
-                                </span>
-                              )}
-                            </div>
-                          </div>
-
-                          <div className="space-y-2.5">
-                            {ord.items.map((item, itemIdx) => (
-                              <div
-                                key={item.id}
-                                className="flex items-center justify-between gap-3 text-xs py-1.5 border-b border-[#ede6dc] last:border-0"
-                              >
-                                <div className="flex items-center gap-3 min-w-0">
-                                  <img
-                                    src={item.image || getFallbackPropertyImage(idx + itemIdx)}
-                                    alt={item.title}
-                                    onError={(e) => {
-                                      e.currentTarget.onerror = null;
-                                      e.currentTarget.src = getFallbackPropertyImage(idx + itemIdx);
-                                    }}
-                                    className="w-11 h-11 rounded-lg object-cover bg-[#efe9e0] shrink-0"
-                                  />
-                                  <div className="min-w-0">
-                                    <div className="font-bold text-[#282828] truncate">{item.title}</div>
-                                    <div className="text-[11px] text-[#5c5046] truncate">
-                                      {item.category} · {item.quantity} {item.quantityLabel} × ${item.unitPriceUsd.toLocaleString()}
-                                    </div>
-                                  </div>
-                                </div>
-                                <div className="font-bold text-[#282828] tabular-nums shrink-0">
-                                  ${item.lineSubtotalUsd.toLocaleString()}
-                                </div>
-                              </div>
-                            ))}
-                          </div>
-
-                          <div className="pt-3 border-t border-[#e6dfd5] flex flex-col sm:flex-row sm:items-center justify-between gap-4 text-xs">
-                            <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-[#5c5046] tabular-nums">
-                              <span>Subtotal: ${ord.subtotalUsd.toLocaleString()}</span>
-                              {ord.serviceFeeUsd > 0 && <span>Fee: ${ord.serviceFeeUsd.toLocaleString()}</span>}
-                              {ord.taxUsd > 0 && <span>Tax: ${ord.taxUsd.toLocaleString()}</span>}
-                              {ord.discountUsd > 0 && (
-                                <span className="text-emerald-700 font-semibold">
-                                  Discount{ord.promoCode ? ` (${ord.promoCode})` : ''}: -${ord.discountUsd.toLocaleString()}
-                                </span>
-                              )}
-                              <span className="font-bold text-[#282828] text-sm">
-                                Total: ${ord.totalUsd.toLocaleString()} USD ({ord.totalUnitsRequired}u)
-                              </span>
-                            </div>
-
-                            <div className="flex flex-wrap items-center gap-2 shrink-0">
-                              {isPending && (
-                                <button
-                                  type="button"
-                                  onClick={() => {
-                                    setWireTargetType('order');
-                                    setWireTargetId(ord.orderReference);
-                                    setWireAmountUsd(String(ord.totalUsd));
-                                    setActiveSubTab('payments');
-                                  }}
-                                  className="px-3.5 py-1.5 bg-[#82634f] hover:bg-[#6e5240] text-white font-bold rounded-lg cursor-pointer transition-colors"
-                                >
-                                  Submit Wire / ACH Proof
-                                </button>
-                              )}
-                              <button
-                                type="button"
-                                onClick={() => window.print()}
-                                className="px-3 py-1.5 bg-white hover:bg-[#f0e9df] text-[#282828] font-semibold rounded-lg border border-[#dfd7cc] inline-flex items-center gap-1.5 cursor-pointer transition-colors"
-                              >
-                                <Printer className="w-3.5 h-3.5 text-[#82634f]" />
-                                <span>{isPaid ? 'Print Receipt' : 'Print Order Summary'}</span>
-                              </button>
-                            </div>
-                          </div>
-
-                          {ord.adminNotes && (
-                            <div className="text-[11px] text-[#007a70] bg-[#e8f8f6] border border-[#b9ebe6] rounded-lg px-3 py-2">
-                              Concierge / Treasury Note: {ord.adminNotes}
-                            </div>
-                          )}
-                        </div>
-                      );
-                    })}
-                  </div>
-                )}
-              </div>
-            )}
-
-            {/* ========================================================
-                SUB-TAB 2: MY FLEET RENTALS
-               ======================================================== */}
-            {activeSubTab === 'fleet' && (
-              <div className="bg-white border border-[#e6dfd5] rounded-2xl p-6 shadow-2xs space-y-5">
-                <div className="flex flex-wrap items-center justify-between gap-3 border-b border-[#ede6dc] pb-4">
-                  <div>
-                    <h3 className="font-heading font-bold text-lg text-[#282828]">
-                      American Fleet Reservations &amp; Concierge Delivery
-                    </h3>
-                    <p className="text-xs text-[#5c5046]">
-                      Vehicles scheduled for SMF Airport arrival or Rancho Cordova suite delivery.
-                    </p>
-                  </div>
-                  <button
-                    type="button"
-                    onClick={() => onNavigateTab('vehicles')}
-                    className="px-4 py-2 bg-[#00b7a8] hover:bg-[#009e91] text-white text-xs font-bold rounded-xl flex items-center gap-1.5 cursor-pointer transition-colors"
-                  >
-                    <Car className="w-3.5 h-3.5" />
-                    <span>Open 3D Fleet Configurator</span>
-                  </button>
-                </div>
-
-                {vehicleBookings.length === 0 ? (
-                  <div className="text-center py-12 space-y-3 text-[#5c5046]">
-                    <Car className="w-10 h-10 text-[#b0a396] mx-auto" />
-                    <p className="text-sm font-semibold text-[#282828]">No fleet rentals currently booked.</p>
-                    <p className="text-xs max-w-md mx-auto">
-                      Inspect our Ford Mustang GT, Tesla Model Y, Chevrolet Suburban, Ford F-150 Crew Cab, and Cadillac Escalade in real-time 3D.
-                    </p>
-                    <button
-                      type="button"
-                      onClick={() => onNavigateTab('vehicles')}
-                      className="px-5 py-2.5 bg-[#82634f] hover:bg-[#6e5240] text-white text-xs font-bold rounded-xl cursor-pointer transition-colors"
-                    >
-                      Browse 3D Vehicle Fleet
-                    </button>
-                  </div>
-                ) : (
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    {vehicleBookings.map((vb) => {
-                      const settled = vb.status === 'confirmed' || vb.status === 'active' || vb.status === 'completed';
-                      return (
-                        <div
-                          key={vb.id}
-                          className="p-5 bg-[#faf8f5] border border-[#e6dfd5] rounded-xl space-y-4 flex flex-col justify-between"
-                        >
-                          <div className="space-y-3">
-                            <div className="flex items-start justify-between gap-2">
-                              <div>
-                                <span className="font-mono text-[11px] font-bold text-[#6e5240] bg-[#f5efe8] px-2 py-0.5 rounded border border-[#dfd3c5]">
-                                  {vb.id}
-                                </span>
-                                <h4 className="font-heading font-bold text-base text-[#282828] mt-1.5">
-                                  {vb.vehicleName}
-                                </h4>
-                              </div>
-                              <span
-                                className={`text-[11px] px-2.5 py-0.5 rounded-md font-bold uppercase tracking-wider ${
-                                  settled
-                                    ? 'bg-emerald-50 text-emerald-800 border border-emerald-200'
-                                    : 'bg-amber-50 text-amber-800 border border-amber-200'
-                                }`}
-                              >
-                                {vb.status.replace('_', ' ')}
-                              </span>
-                            </div>
-
-                            <div className="flex items-center gap-2 text-xs text-[#5c5046]">
-                              <span
-                                className="w-3.5 h-3.5 rounded-full border border-[#c9bfb2] shrink-0"
-                                style={{ backgroundColor: vb.exteriorColorHex }}
-                              />
-                              <span>Finish: <strong className="text-[#282828]">{vb.exteriorColorName}</strong></span>
-                              <span>•</span>
-                              <span className="capitalize">{vb.rateTier} Tier</span>
-                            </div>
-
-                            <div className="grid grid-cols-3 gap-2 text-xs bg-white p-3 rounded-lg border border-[#e6dfd5] tabular-nums">
-                              <div>
-                                <span className="text-[10px] text-[#857568] block">Pickup</span>
-                                <span className="font-semibold text-[#282828]">{vb.pickupDate}</span>
-                              </div>
-                              <div>
-                                <span className="text-[10px] text-[#857568] block">Return</span>
-                                <span className="font-semibold text-[#282828]">{vb.returnDate}</span>
-                              </div>
-                              <div>
-                                <span className="text-[10px] text-[#857568] block">Total</span>
-                                <span className="font-bold text-[#00897d]">${vb.totalUsd.toLocaleString()} ({vb.unitsRequired}u)</span>
-                              </div>
-                            </div>
-
-                            <div className="text-xs text-[#5c5046]">
-                              <strong className="text-[#282828]">Delivery Hub:</strong> {vb.pickupLocation}
-                            </div>
-                          </div>
-
-                          <div className="pt-3 border-t border-[#e6dfd5] flex flex-wrap items-center justify-between gap-2">
-                            {!settled ? (
-                              <>
-                                <button
-                                  type="button"
-                                  onClick={() => {
-                                    setWireTargetType('vehicle_booking');
-                                    setWireTargetId(vb.id);
-                                    setWireAmountUsd(String(vb.totalUsd));
-                                    setActiveSubTab('payments');
-                                  }}
-                                  className="px-3 py-1.5 bg-white hover:bg-[#f0e9df] text-[#282828] text-xs font-semibold rounded-lg border border-[#dfd7cc] cursor-pointer transition-colors"
-                                >
-                                  Submit Wire Receipt
-                                </button>
-                                <button
-                                  type="button"
-                                  disabled={executingCommand || customer.units_balance < vb.unitsRequired}
-                                  onClick={() => handleExecuteInternalBalanceCheckout(vb.id, vb.unitsRequired)}
-                                  className="px-3.5 py-1.5 bg-emerald-600 hover:bg-emerald-700 disabled:bg-[#ede7df] disabled:text-[#9a8d80] text-white text-xs font-bold rounded-lg flex items-center gap-1.5 cursor-pointer transition-colors"
-                                >
-                                  <Coins className="w-3.5 h-3.5" />
-                                  <span>Settle ({vb.unitsRequired} Units)</span>
-                                </button>
-                              </>
-                            ) : (
-                              <span className="inline-flex items-center gap-1.5 text-xs text-emerald-700 font-semibold">
-                                <CheckCircle2 className="w-4 h-4" />
-                                <span>Confirmed ({vb.paymentReference || 'Verified'})</span>
-                              </span>
-                            )}
-                          </div>
-                        </div>
-                      );
-                    })}
-                  </div>
-                )}
-              </div>
-            )}
-
-            {/* ========================================================
-                SUB-TAB 3: WIRE / ACH & OFFICIAL BANK INSTRUCTIONS
-               ======================================================== */}
-            {activeSubTab === 'payments' && (
-              <div className="space-y-7">
-                <div className="grid grid-cols-1 lg:grid-cols-12 gap-7">
-                  {/* Left: Official Receiving Bank Account Instructions */}
-                  <div className="lg:col-span-5 bg-white border border-[#e6dfd5] rounded-2xl shadow-2xs overflow-hidden">
-                    <div className="relative overflow-hidden p-6 text-white">
-                      <LivePhotoBackground scene="twilight" overlay="espresso" />
-                      <div className="relative z-10 space-y-1">
-                        <span className="text-[11px] font-bold uppercase tracking-wider text-[#7ce8df]">
-                          Official Treasury Instructions
-                        </span>
-                        <h3 className="font-heading font-bold text-lg text-white">
-                          Wire, Direct ACH &amp; Corporate Zelle
-                        </h3>
-                        <p className="text-xs text-[#efe7dc]">
-                          Transfer corporate housing funds or unit package payments to our verified escrow account below, then log your transfer reference on the right.
-                        </p>
-                      </div>
-                    </div>
-
-                    <div className="p-6 space-y-4">
-                      {paymentAccounts ? (
-                        <div className="space-y-2.5 text-xs">
-                          {[
-                            { label: 'Receiving Bank', value: paymentAccounts.bankName },
-                            { label: 'Beneficiary Name', value: paymentAccounts.accountName },
-                            { label: 'Account Number', value: paymentAccounts.accountNumber },
-                            { label: 'ACH Routing', value: paymentAccounts.achRoutingNumber },
-                            { label: 'Domestic Wire ABA', value: paymentAccounts.wireRoutingNumber },
-                            { label: 'SWIFT / BIC', value: paymentAccounts.swiftCode },
-                            { label: 'Corporate Zelle', value: paymentAccounts.zelleEmail },
-                          ].map((item) => (
-                            <div
-                              key={item.label}
-                              className="p-2.5 bg-[#faf8f5] border border-[#e6dfd5] rounded-xl flex items-center justify-between gap-2"
-                            >
-                              <div className="min-w-0">
-                                <span className="text-[10px] uppercase tracking-wider text-[#857568] block">
-                                  {item.label}
-                                </span>
-                                <span className="font-mono font-semibold text-[#282828] truncate block">
-                                  {item.value}
-                                </span>
-                              </div>
-                              <button
-                                type="button"
-                                onClick={() => handleCopy(item.label, item.value)}
-                                className="px-2.5 py-1 bg-white hover:bg-[#f0e9df] border border-[#dfd7cc] rounded-lg text-[11px] font-semibold text-[#5c5046] flex items-center gap-1 shrink-0 cursor-pointer transition-colors"
-                              >
-                                {copiedField === item.label ? (
-                                  <>
-                                    <Check className="w-3 h-3 text-emerald-600" />
-                                    <span className="text-emerald-700">Copied</span>
-                                  </>
-                                ) : (
-                                  <>
-                                    <Copy className="w-3 h-3" />
-                                    <span>Copy</span>
-                                  </>
-                                )}
-                              </button>
-                            </div>
-                          ))}
-
-                          <div className="p-3 bg-[#e8f8f6] border border-[#b9ebe6] rounded-xl text-[11px] text-[#006960] leading-relaxed">
-                            {paymentAccounts.paymentInstructions}
-                          </div>
-                        </div>
-                      ) : (
-                        <p className="text-xs text-[#5c5046]">Loading treasury account configuration...</p>
-                      )}
-                    </div>
-                  </div>
-
-                  {/* Right: Submit Wire / ACH Transfer Notice Form */}
-                  <div className="lg:col-span-7 bg-white border border-[#e6dfd5] rounded-2xl p-6 shadow-2xs space-y-5">
-                    <div className="border-b border-[#ede6dc] pb-3">
-                      <h3 className="font-heading font-bold text-lg text-[#282828]">
-                        Submit Wire / ACH Transfer Verification Notice
-                      </h3>
-                      <p className="text-xs text-[#5c5046]">
-                        Once our accounting team verifies your bank wire or ACH trace number, units or booking confirmations post automatically.
-                      </p>
-                    </div>
-
-                    <form onSubmit={handleSubmitManualWire} className="space-y-4 text-xs">
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
-                        <div>
-                          <label className="block font-bold text-[#282828] mb-1">Apply Payment Toward *</label>
-                          <select
-                            value={wireTargetType}
-                            onChange={(e) => {
-                              const nextType = e.target.value as 'units' | 'housing_booking' | 'vehicle_booking' | 'order';
-                              setWireTargetType(nextType);
-                              if (nextType === 'housing_booking' && unsettledHousing[0]) {
-                                setWireTargetId(unsettledHousing[0].id);
-                              } else if (nextType === 'vehicle_booking' && unsettledFleet[0]) {
-                                setWireTargetId(unsettledFleet[0].id);
-                              } else if (nextType === 'order' && unsettledOrders[0]) {
-                                setWireTargetId(unsettledOrders[0].orderReference);
-                                setWireAmountUsd(String(unsettledOrders[0].totalUsd));
-                              } else {
-                                setWireTargetId('');
-                              }
-                            }}
-                            className="w-full h-10 px-3 bg-[#faf8f5] border border-[#dfd7cc] rounded-xl text-[#282828] outline-none focus:border-[#00b7a8] focus:bg-white"
-                          >
-                            <option value="units">Credit Lodging Units ($100 = 1 Unit)</option>
-                            <option value="order">Settle Storefront Order (ORD-ETL-...)</option>
-                            <option value="housing_booking">Settle Housing Reservation</option>
-                            <option value="vehicle_booking">Settle Fleet Vehicle Rental</option>
-                          </select>
-                        </div>
-
-                        <div>
-                          <label className="block font-bold text-[#282828] mb-1">Transfer Method *</label>
-                          <select
-                            value={wireMethod}
-                            onChange={(e) => setWireMethod(e.target.value as 'Wire Transfer' | 'Direct ACH' | 'Zelle Corporate')}
-                            className="w-full h-10 px-3 bg-[#faf8f5] border border-[#dfd7cc] rounded-xl text-[#282828] outline-none focus:border-[#00b7a8] focus:bg-white"
-                          >
-                            <option value="Wire Transfer">Domestic / Fedwire Transfer</option>
-                            <option value="Direct ACH">Direct Bank ACH</option>
-                            <option value="Zelle Corporate">Corporate Zelle</option>
-                          </select>
-                        </div>
-                      </div>
-
-                      {wireTargetType !== 'units' && (
-                        <div>
-                          <label className="block font-bold text-[#282828] mb-1">Target Order or Reservation ID</label>
-                          <input
-                            type="text"
-                            value={wireTargetId}
-                            onChange={(e) => setWireTargetId(e.target.value)}
-                            placeholder={
-                              wireTargetType === 'order'
-                                ? 'e.g. ORD-ETL-849320'
-                                : wireTargetType === 'housing_booking'
-                                ? 'e.g. bk_rec_914'
-                                : 'e.g. vbk_701'
-                            }
-                            className="w-full h-10 px-3.5 bg-[#faf8f5] border border-[#dfd7cc] rounded-xl text-[#282828] font-mono outline-none focus:border-[#00b7a8] focus:bg-white"
-                          />
-                        </div>
-                      )}
-
-                      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3.5">
-                        <div>
-                          <label className="block font-bold text-[#282828] mb-1">Amount Sent (USD) *</label>
-                          <input
-                            type="number"
-                            min={100}
-                            step={1}
-                            required
-                            value={wireAmountUsd}
-                            onChange={(e) => setWireAmountUsd(e.target.value)}
-                            className="w-full h-10 px-3.5 bg-[#faf8f5] border border-[#dfd7cc] rounded-xl text-[#282828] tabular-nums outline-none focus:border-[#00b7a8] focus:bg-white"
-                          />
-                          <span className="text-[10px] text-[#00897d] font-semibold mt-0.5 block tabular-nums">
-                            ≈ {Math.max(1, Math.round((Number(wireAmountUsd) || 0) / 100))} Lodging Units
-                          </span>
-                        </div>
-
-                        <div>
-                          <label className="block font-bold text-[#282828] mb-1">Transfer Date *</label>
-                          <input
-                            type="date"
-                            required
-                            value={wireDate}
-                            onChange={(e) => setWireDate(e.target.value)}
-                            className="w-full h-10 px-3 bg-[#faf8f5] border border-[#dfd7cc] rounded-xl text-[#282828] outline-none focus:border-[#00b7a8] focus:bg-white"
-                          />
-                        </div>
-
-                        <div>
-                          <label className="block font-bold text-[#282828] mb-1">Wire / IMAD / ACH Ref *</label>
-                          <input
-                            type="text"
-                            required
-                            value={wireReference}
-                            onChange={(e) => setWireReference(e.target.value)}
-                            placeholder="IMAD-20261101-8841"
-                            className="w-full h-10 px-3.5 bg-[#faf8f5] border border-[#dfd7cc] rounded-xl text-[#282828] font-mono outline-none focus:border-[#00b7a8] focus:bg-white"
-                          />
-                        </div>
-                      </div>
-
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
-                        <div>
-                          <label className="block font-bold text-[#282828] mb-1">Sender Account Name *</label>
-                          <input
-                            type="text"
-                            required
-                            value={wireSenderName}
-                            onChange={(e) => setWireSenderName(e.target.value)}
-                            placeholder="Kaiser Permanente Travel AP"
-                            className="w-full h-10 px-3.5 bg-[#faf8f5] border border-[#dfd7cc] rounded-xl text-[#282828] outline-none focus:border-[#00b7a8] focus:bg-white"
-                          />
-                        </div>
-
-                        <div>
-                          <label className="block font-bold text-[#282828] mb-1">Originating Bank *</label>
-                          <input
-                            type="text"
-                            required
-                            value={wireBankName}
-                            onChange={(e) => setWireBankName(e.target.value)}
-                            placeholder="Wells Fargo / Bank of America"
-                            className="w-full h-10 px-3.5 bg-[#faf8f5] border border-[#dfd7cc] rounded-xl text-[#282828] outline-none focus:border-[#00b7a8] focus:bg-white"
-                          />
-                        </div>
-                      </div>
-
-                      <div>
-                        <label className="block font-bold text-[#282828] mb-1">
-                          Upload Wire Receipt / Remittance Advice (Optional Image/PDF)
-                        </label>
-                        <div className="flex items-center gap-3">
-                          <label className="px-3.5 py-2 bg-[#faf8f5] hover:bg-[#f0e9df] border border-[#dfd7cc] rounded-xl text-[#282828] font-semibold flex items-center gap-2 cursor-pointer transition-colors">
-                            <Upload className="w-3.5 h-3.5 text-[#00b7a8]" />
-                            <span>{receiptFileName || 'Choose Receipt File'}</span>
-                            <input
-                              type="file"
-                              accept="image/*,.pdf"
-                              onChange={handleReceiptUpload}
-                              className="hidden"
-                            />
-                          </label>
-                          {receiptFileName && (
-                            <button
-                              type="button"
-                              onClick={() => {
-                                setReceiptFileName('');
-                                setReceiptDataUrl('');
-                              }}
-                              className="text-rose-700 hover:underline text-xs font-semibold cursor-pointer"
-                            >
-                              Remove
-                            </button>
-                          )}
-                        </div>
-                      </div>
-
-                      <div>
-                        <label className="block font-bold text-[#282828] mb-1">Remittance Memo / Notes</label>
-                        <input
-                          type="text"
-                          value={wireNotes}
-                          onChange={(e) => setWireNotes(e.target.value)}
-                          placeholder="Optional department cost center or invoice number..."
-                          className="w-full h-10 px-3.5 bg-[#faf8f5] border border-[#dfd7cc] rounded-xl text-[#282828] outline-none focus:border-[#00b7a8] focus:bg-white"
-                        />
-                      </div>
-
-                      <button
-                        type="submit"
-                        disabled={submittingWire}
-                        className="w-full py-3 bg-[#00b7a8] hover:bg-[#009e91] disabled:opacity-50 text-white font-black uppercase tracking-wider rounded-xl flex items-center justify-center gap-2 cursor-pointer transition-colors"
-                      >
-                        {submittingWire ? (
-                          <>
-                            <Loader2 className="w-4 h-4 animate-spin" />
-                            <span>Submitting Transfer Notice...</span>
-                          </>
-                        ) : (
-                          <>
-                            <Landmark className="w-4 h-4" />
-                            <span>Submit Transfer for Treasury Verification</span>
-                          </>
-                        )}
-                      </button>
-                    </form>
-                  </div>
-                </div>
-
-                {/* Submitted Manual Payments History */}
-                <div className="bg-white border border-[#e6dfd5] rounded-2xl p-6 shadow-2xs space-y-4">
-                  <div className="flex items-center justify-between border-b border-[#ede6dc] pb-3">
-                    <h3 className="font-heading font-bold text-base text-[#282828]">
-                      Submitted Wire &amp; ACH Verification Log
-                    </h3>
-                    <span className="text-xs text-[#857568] tabular-nums">{manualPayments.length} Submissions</span>
-                  </div>
-
-                  {manualPayments.length === 0 ? (
-                    <p className="text-xs text-[#5c5046] py-4 text-center">
-                      No manual wire or ACH notices submitted yet.
-                    </p>
-                  ) : (
-                    <div className="space-y-3">
-                      {manualPayments.map((mp) => (
-                        <div
-                          key={mp.id}
-                          className="p-4 bg-[#faf8f5] border border-[#e6dfd5] rounded-xl flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs"
-                        >
-                          <div className="space-y-1">
-                            <div className="flex flex-wrap items-center gap-2">
-                              <span className="font-mono font-bold text-[#282828]">{mp.referenceCode}</span>
-                              <span className="text-[#b8aba0]">•</span>
-                              <span className="text-[#5c5046] font-semibold">{mp.paymentMethod}</span>
-                              <span className="text-[#b8aba0]">•</span>
-                              <span className="font-mono text-[#82634f]">Trace: {mp.wireReference}</span>
-                            </div>
-                            <div className="text-[11px] text-[#5c5046]">
-                              From {mp.senderName} ({mp.originatingBank}) on {mp.transferDate} • Target:{' '}
-                              <span className="text-[#282828] font-medium">{mp.targetId || `${mp.unitsRequested} Lodging Units`}</span>
-                            </div>
-                            {mp.adminNotes && (
-                              <div className="text-[11px] text-[#00897d] font-medium">
-                                Treasury Note: {mp.adminNotes}
-                              </div>
-                            )}
-                          </div>
-
-                          <div className="flex sm:flex-col items-center sm:items-end justify-between gap-1.5 shrink-0 tabular-nums">
-                            <span className="font-bold text-sm text-[#282828]">
-                              ${mp.amountUsd.toLocaleString()} USD
-                            </span>
-                            {mp.status === 'verified' && (
-                              <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded bg-emerald-50 text-emerald-800 border border-emerald-200 text-[10px] font-bold uppercase">
-                                <CheckCircle2 className="w-3 h-3" /> Verified
-                              </span>
-                            )}
-                            {mp.status === 'pending_verification' && (
-                              <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded bg-amber-50 text-amber-800 border border-amber-200 text-[10px] font-bold uppercase">
-                                <Clock className="w-3 h-3" /> Pending Review
-                              </span>
-                            )}
-                            {mp.status === 'rejected' && (
-                              <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded bg-rose-50 text-rose-800 border border-rose-200 text-[10px] font-bold uppercase">
-                                <XCircle className="w-3 h-3" /> Rejected
-                              </span>
-                            )}
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  )}
-                </div>
-              </div>
-            )}
-
-            {/* ========================================================
-                SUB-TAB 4: LEDGER, ALERTS & PROFILE
-               ======================================================== */}
-            {activeSubTab === 'ledger' && (
-              <div className="grid grid-cols-1 lg:grid-cols-12 gap-7">
-                {/* Left: Transactions & Alerts */}
-                <div className="lg:col-span-7 space-y-6">
-                  {/* Notifications */}
-                  <div className="bg-white border border-[#e6dfd5] rounded-2xl p-6 shadow-2xs space-y-4">
-                    <div className="flex items-center justify-between border-b border-[#ede6dc] pb-3">
-                      <h3 className="font-heading font-bold text-base text-[#282828] flex items-center gap-2">
-                        <Bell className="w-4 h-4 text-[#00b7a8]" />
-                        <span>Account Alerts &amp; Confirmations</span>
-                      </h3>
-                      {unreadCount > 0 && (
-                        <button
-                          type="button"
-                          onClick={handleMarkNotificationsRead}
-                          className="text-xs font-bold text-[#00897d] hover:underline cursor-pointer"
-                        >
-                          Mark All Read
-                        </button>
-                      )}
-                    </div>
-
-                    {notifications.length === 0 ? (
-                      <p className="text-xs text-[#5c5046]">No recent account notifications.</p>
-                    ) : (
-                      <div className="space-y-2.5 max-h-64 overflow-y-auto pr-1">
-                        {notifications.map((n) => (
-                          <div
-                            key={n.id}
-                            className={`p-3.5 rounded-xl border text-xs space-y-1 ${
-                              n.read
-                                ? 'bg-[#faf8f5] border-[#e6dfd5] text-[#5c5046]'
-                                : 'bg-[#e8f8f6]/60 border-[#b9ebe6] text-[#282828]'
-                            }`}
-                          >
-                            <div className="flex items-center justify-between gap-2">
-                              <span className="font-bold text-[#282828]">{n.title}</span>
-                              <span className="text-[10px] text-[#857568]">
-                                {new Date(n.createdAt).toLocaleDateString()}
-                              </span>
-                            </div>
-                            <p className="text-[11px] leading-relaxed">{n.message}</p>
-                          </div>
-                        ))}
-                      </div>
-                    )}
-                  </div>
-
-                  {/* Full Ledger */}
-                  <div className="bg-white border border-[#e6dfd5] rounded-2xl p-6 shadow-2xs space-y-4">
-                    <div className="flex items-center justify-between border-b border-[#ede6dc] pb-3">
-                      <h3 className="font-heading font-bold text-base text-[#282828]">
-                        Complete Unit &amp; USD Ledger
-                      </h3>
-                      <span className="text-xs text-[#857568] tabular-nums">
-                        {customer.transactions?.length || 0} Entries
-                      </span>
-                    </div>
-
-                    <div className="space-y-2.5 max-h-96 overflow-y-auto pr-1 text-xs">
-                      {(customer.transactions || []).map((tx) => (
-                        <div
-                          key={tx.id}
-                          className="p-3.5 bg-[#faf8f5] border border-[#e6dfd5] rounded-xl flex items-center justify-between gap-3"
-                        >
-                          <div className="min-w-0">
-                            <span className="font-semibold text-[#282828] block truncate">
-                              {tx.description}
-                            </span>
-                            <span className="text-[10px] text-[#857568] font-mono">
-                              {new Date(tx.date).toLocaleDateString()} • {tx.id}
-                            </span>
-                          </div>
-                          <div className="text-right shrink-0 tabular-nums">
-                            <span
-                              className={`font-bold block ${
-                                tx.units >= 0 ? 'text-emerald-700' : 'text-[#82634f]'
-                              }`}
-                            >
-                              {tx.units >= 0 ? `+${tx.units}` : tx.units} Units
-                            </span>
-                            <span className="text-[10px] text-[#5c5046]">
-                              ${Math.abs(tx.amount_usd).toLocaleString()} USD
-                            </span>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-
-                {/* Right: Client Profile Editor */}
-                <div className="lg:col-span-5">
-                  <div className="bg-white border border-[#e6dfd5] rounded-2xl p-6 shadow-2xs space-y-4">
-                    <div className="border-b border-[#ede6dc] pb-3">
-                      <h3 className="font-heading font-bold text-base text-[#282828]">
-                        Traveler &amp; Corporate Profile
-                      </h3>
-                      <p className="text-xs text-[#5c5046]">
-                        Keep your contact details current for lease agreements and concierge vehicle delivery.
-                      </p>
-                    </div>
-
-                    <form onSubmit={handleSaveProfile} className="space-y-3.5 text-xs">
-                      <div>
-                        <label className="block font-bold text-[#282828] mb-1">Full Name</label>
-                        <input
-                          type="text"
-                          required
-                          value={profName}
-                          onChange={(e) => setProfName(e.target.value)}
-                          className="w-full h-10 px-3.5 bg-[#faf8f5] border border-[#dfd7cc] rounded-xl text-[#282828] outline-none focus:border-[#00b7a8] focus:bg-white"
-                        />
-                      </div>
-
-                      <div>
-                        <label className="block font-bold text-[#282828] mb-1">Account Email (Read-only)</label>
-                        <input
-                          type="email"
-                          disabled
-                          value={customer.email}
-                          className="w-full h-10 px-3.5 bg-[#f2ede6] border border-[#e6dfd5] rounded-xl text-[#857568]"
-                        />
-                      </div>
-
-                      <div>
-                        <label className="block font-bold text-[#282828] mb-1">Employer / Agency</label>
-                        <input
-                          type="text"
-                          value={profCompany}
-                          onChange={(e) => setProfCompany(e.target.value)}
-                          className="w-full h-10 px-3.5 bg-[#faf8f5] border border-[#dfd7cc] rounded-xl text-[#282828] outline-none focus:border-[#00b7a8] focus:bg-white"
-                        />
-                      </div>
-
-                      <div>
-                        <label className="block font-bold text-[#282828] mb-1">Role / Title</label>
-                        <input
-                          type="text"
-                          value={profRole}
-                          onChange={(e) => setProfRole(e.target.value)}
-                          className="w-full h-10 px-3.5 bg-[#faf8f5] border border-[#dfd7cc] rounded-xl text-[#282828] outline-none focus:border-[#00b7a8] focus:bg-white"
-                        />
-                      </div>
-
-                      <div>
-                        <label className="block font-bold text-[#282828] mb-1">Mobile Phone</label>
-                        <input
-                          type="tel"
-                          value={profPhone}
-                          onChange={(e) => setProfPhone(e.target.value)}
-                          className="w-full h-10 px-3.5 bg-[#faf8f5] border border-[#dfd7cc] rounded-xl text-[#282828] outline-none focus:border-[#00b7a8] focus:bg-white"
-                        />
-                      </div>
-
-                      <button
-                        type="submit"
-                        disabled={savingProfile}
-                        className="w-full py-3 bg-[#00b7a8] hover:bg-[#009e91] text-white font-black uppercase tracking-wider rounded-xl cursor-pointer transition-colors"
-                      >
-                        {savingProfile ? 'Saving Changes...' : 'Save Client Profile'}
-                      </button>
-                    </form>
-                  </div>
-                </div>
-              </div>
-            )}
-          </div>
-        )}
-
-        {/* Instant Unit Allotment Modal */}
-        {buyUnitsModalOpen && (
-          <div className="fixed inset-0 z-50 bg-[#1c1613]/65 backdrop-blur-xs flex items-center justify-center p-4">
-            <div className="bg-white border border-[#e6dfd5] rounded-2xl max-w-md w-full overflow-hidden text-left shadow-2xl">
-              <div className="relative overflow-hidden p-6 text-white">
-                <LivePhotoBackground scene="courtyard" overlay="espresso" />
-                <div className="relative z-10 space-y-1">
-                  <span className="text-xs font-bold uppercase tracking-wider text-[#7ce8df]">
-                    Corporate Unit Allotment
-                  </span>
-                  <h3 className="font-heading font-black text-xl text-white">
-                    Add Lodging Units to Balance
+                <div className="min-w-0">
+                  <h3 className="font-heading font-black text-base sm:text-lg text-[#282828] truncate">
+                    Top-Up Account Balance
                   </h3>
-                  <p className="text-xs text-[#efe7dc]">
-                    1 Unit = $100 USD toward any Sacramento suite or American 3D fleet rental.
+                  <p className="text-xs text-[#5c5046] truncate">
+                    Manual corporate wire &amp; ACH remittance setup
                   </p>
                 </div>
               </div>
+              <button
+                type="button"
+                onClick={() => setBuyUnitsModalOpen(false)}
+                className="w-8 h-8 rounded-lg border border-[#e6dfd5] flex items-center justify-center text-[#857568] hover:text-[#282828] hover:bg-[#faf8f5] cursor-pointer shrink-0 ml-2"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </div>
 
-              <div className="p-6 space-y-5">
-                <div className="grid grid-cols-2 gap-3">
-                  {[10, 25, 50, 100].map((tier) => (
-                    <button
-                      key={tier}
-                      type="button"
-                      onClick={() => setSelectedUnitTier(tier)}
-                      className={`p-3.5 rounded-xl border text-left transition-all cursor-pointer tabular-nums ${
-                        selectedUnitTier === tier
-                          ? 'bg-[#e8f8f6] border-[#00b7a8] text-[#282828] shadow-2xs'
-                          : 'bg-[#faf8f5] border-[#e6dfd5] text-[#5c5046] hover:border-[#00b7a8]'
-                      }`}
-                    >
-                      <div className="text-lg font-heading font-black text-[#282828]">{tier} Units</div>
-                      <div className="text-xs text-[#5c5046]">${(tier * 100).toLocaleString()} USD</div>
-                    </button>
-                  ))}
+            {/* Scrollable Form Body */}
+            <div className="flex-1 overflow-y-auto p-4 sm:p-5 space-y-4">
+              {/* Compact Stepper Progress Bar */}
+              <div className="flex items-center justify-between bg-[#faf8f5] px-3 py-2 rounded-xl border border-[#efe9e0] text-[11px] font-bold">
+                <div className={`flex items-center gap-1.5 ${manualStep >= 1 ? 'text-[#00897d]' : 'text-[#857568]'}`}>
+                  <span className={`w-4 h-4 rounded-full flex items-center justify-center text-[10px] ${manualStep >= 1 ? 'bg-[#00897d] text-white' : 'bg-[#e6dfd5] text-[#857568]'}`}>1</span>
+                  <span className="hidden sm:inline">Configure</span>
                 </div>
+                <span className="text-[#d8cfc3]">→</span>
+                <div className={`flex items-center gap-1.5 ${manualStep >= 2 ? 'text-[#00897d]' : 'text-[#857568]'}`}>
+                  <span className={`w-4 h-4 rounded-full flex items-center justify-center text-[10px] ${manualStep >= 2 ? 'bg-[#00897d] text-white' : 'bg-[#e6dfd5] text-[#857568]'}`}>2</span>
+                  <span className="hidden sm:inline">Wire Routing</span>
+                </div>
+                <span className="text-[#d8cfc3]">→</span>
+                <div className={`flex items-center gap-1.5 ${manualStep >= 3 ? 'text-[#00897d]' : 'text-[#857568]'}`}>
+                  <span className={`w-4 h-4 rounded-full flex items-center justify-center text-[10px] ${manualStep >= 3 ? 'bg-[#00897d] text-white' : 'bg-[#e6dfd5] text-[#857568]'}`}>3</span>
+                  <span className="hidden sm:inline">Confirmation</span>
+                </div>
+              </div>
 
-                <div className="flex gap-3 pt-1">
+              {/* STEP 1: CONFIGURE MANUAL DEPOSIT */}
+              {manualStep === 1 && (
+                <div className="space-y-4 text-xs">
+                  {/* Deposit Amount Entry */}
+                  <div className="space-y-1.5">
+                    <label className="block text-[11px] font-bold uppercase tracking-wider text-[#857568]">
+                      1. Enter Top-Up Amount (USD):
+                    </label>
+
+                    <div className="relative flex items-center">
+                      <span className="absolute left-3.5 text-lg font-black text-[#282828]">$</span>
+                      <input
+                        type="number"
+                        min="50"
+                        step="50"
+                        value={depositAmount || ''}
+                        onChange={(e) => setDepositAmount(Math.max(0, Number(e.target.value)))}
+                        className="w-full h-11 pl-8 pr-14 bg-[#faf8f5] border-2 border-[#d8cfc3] focus:border-[#00897d] rounded-xl text-lg font-mono font-bold text-[#282828] outline-none transition-colors"
+                        placeholder="1000"
+                      />
+                      <span className="absolute right-3.5 text-xs font-bold text-[#857568]">USD</span>
+                    </div>
+
+                    {/* Quick Add Presets */}
+                    <div className="flex flex-wrap items-center gap-1.5 pt-1">
+                      <span className="text-[10px] text-[#857568] font-bold uppercase mr-0.5">Presets:</span>
+                      {[500, 1000, 2500, 5000, 10000].map((amt) => (
+                        <button
+                          key={amt}
+                          type="button"
+                          onClick={() => setDepositAmount(amt)}
+                          className={`px-2.5 py-1 rounded-lg text-xs font-bold border transition-colors cursor-pointer ${
+                            depositAmount === amt
+                              ? 'bg-[#00897d] text-white border-[#00897d]'
+                              : 'bg-[#faf8f5] border-[#d8cfc3] text-[#5c5046] hover:bg-[#efe8df]'
+                          }`}
+                        >
+                          +${amt.toLocaleString()}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Manual Settlement Method Selector */}
+                  <div className="space-y-1.5">
+                    <label className="block text-[11px] font-bold uppercase tracking-wider text-[#857568]">
+                      2. Select Manual Settlement Channel:
+                    </label>
+                    <div className="space-y-2">
+                      {[
+                        {
+                          id: 'Direct Commercial Wire (Fedwire)',
+                          label: 'Direct Fedwire / SWIFT Transfer',
+                          desc: 'Interbank wire transfer directly to operating escrow',
+                        },
+                        {
+                          id: 'Corporate ACH Direct Deposit',
+                          label: 'Corporate ACH Direct Remittance',
+                          desc: 'Automated Clearing House batch deposit from A/P',
+                        },
+                        {
+                          id: 'Manual Bank Counter / Cashier Check',
+                          label: 'Manual Bank Counter Deposit / Check',
+                          desc: 'Physical branch teller or certified cashier check deposit',
+                        },
+                      ].map((method) => (
+                        <button
+                          key={method.id}
+                          type="button"
+                          onClick={() => setDepositMethod(method.id)}
+                          className={`w-full p-2.5 sm:p-3 rounded-xl border text-left flex items-center justify-between transition-all cursor-pointer ${
+                            depositMethod === method.id
+                              ? 'bg-[#00897d]/5 border-[#00897d] ring-1 ring-[#00897d]'
+                              : 'bg-[#faf8f5] border-[#e6dfd5] hover:bg-[#f5efe8]'
+                          }`}
+                        >
+                          <div className="pr-2">
+                            <span className="font-bold text-[#282828] block text-xs">{method.label}</span>
+                            <span className="text-[10px] text-[#5c5046] leading-tight block mt-0.5">{method.desc}</span>
+                          </div>
+                          <div
+                            className={`w-4 h-4 rounded-full border flex items-center justify-center shrink-0 ${
+                              depositMethod === method.id
+                                ? 'border-[#00897d] bg-[#00897d]'
+                                : 'border-[#a89988]'
+                            }`}
+                          >
+                            {depositMethod === method.id && <div className="w-1.5 h-1.5 rounded-full bg-white" />}
+                          </div>
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Remitter Information */}
+                  <div>
+                    <label className="block text-[11px] font-bold uppercase tracking-wider text-[#857568] mb-1">
+                      3. Remitting Entity / Company Name:
+                    </label>
+                    <input
+                      type="text"
+                      value={remitterName}
+                      onChange={(e) => setRemitterName(e.target.value)}
+                      className="w-full h-10 px-3 bg-white border border-[#d8cfc3] rounded-xl text-xs font-semibold text-[#282828]"
+                      placeholder="e.g. OmniGlobal Enterprise Partners"
+                    />
+                  </div>
+                </div>
+              )}
+
+              {/* STEP 2: BANK ROUTING & WIRE CREDENTIALS */}
+              {manualStep === 2 && (
+                <div className="space-y-3.5 text-xs">
+                  <div className="p-3 bg-amber-50 border border-amber-200 rounded-xl text-amber-900 text-[11px] flex items-center gap-2">
+                    <AlertCircle className="w-4 h-4 text-amber-700 shrink-0" />
+                    <span>
+                      Please transfer exactly <strong>${(depositAmount || 0).toLocaleString('en-US', { minimumFractionDigits: 2 })} USD</strong> to our receiving bank below and include the reference code in your payment memo.
+                    </span>
+                  </div>
+
+                  {/* Official Bank Wiring Details */}
+                  <div className="p-3.5 bg-[#faf8f5] border border-[#e6dfd5] rounded-xl space-y-2">
+                    <span className="text-[10px] font-bold uppercase tracking-wider text-[#857568] block">
+                      Official Receiving Bank Credentials
+                    </span>
+
+                    <div className="divide-y divide-[#efe9e0] text-xs">
+                      <div className="py-1.5 flex items-center justify-between">
+                        <span className="text-[#5c5046]">Beneficiary Name:</span>
+                        <strong className="text-[#282828]">Easy Travel Lodging LLC</strong>
+                      </div>
+                      <div className="py-1.5 flex items-center justify-between">
+                        <span className="text-[#5c5046]">Receiving Bank:</span>
+                        <strong className="text-[#282828]">Bank of America, N.A.</strong>
+                      </div>
+                      <div className="py-1.5 flex items-center justify-between">
+                        <span className="text-[#5c5046]">Routing / ABA (Domestic Wire):</span>
+                        <div className="flex items-center gap-1.5">
+                          <strong className="font-mono text-[#282828]">121000358</strong>
+                          <button
+                            type="button"
+                            onClick={() => {
+                              navigator.clipboard.writeText('121000358');
+                              setCopiedField('aba');
+                              setTimeout(() => setCopiedField(null), 2000);
+                            }}
+                            className="p-1 text-[#857568] hover:text-[#00897d] cursor-pointer"
+                            title="Copy ABA Routing"
+                          >
+                            <Copy className="w-3.5 h-3.5" />
+                          </button>
+                          {copiedField === 'aba' && <span className="text-[10px] text-emerald-600 font-bold">Copied!</span>}
+                        </div>
+                      </div>
+                      <div className="py-1.5 flex items-center justify-between">
+                        <span className="text-[#5c5046]">Account Number:</span>
+                        <div className="flex items-center gap-1.5">
+                          <strong className="font-mono text-[#282828]">325088219441</strong>
+                          <button
+                            type="button"
+                            onClick={() => {
+                              navigator.clipboard.writeText('325088219441');
+                              setCopiedField('acct');
+                              setTimeout(() => setCopiedField(null), 2000);
+                            }}
+                            className="p-1 text-[#857568] hover:text-[#00897d] cursor-pointer"
+                            title="Copy Account Number"
+                          >
+                            <Copy className="w-3.5 h-3.5" />
+                          </button>
+                          {copiedField === 'acct' && <span className="text-[10px] text-emerald-600 font-bold">Copied!</span>}
+                        </div>
+                      </div>
+                      <div className="py-1.5 flex items-center justify-between bg-emerald-50/60 p-2 rounded-lg border border-emerald-200">
+                        <span className="text-emerald-900 font-bold">Payment Memo Reference (Mandatory):</span>
+                        <div className="flex items-center gap-1.5">
+                          <strong className="font-mono text-emerald-800 text-sm">{wireRefCode}</strong>
+                          <button
+                            type="button"
+                            onClick={() => {
+                              navigator.clipboard.writeText(wireRefCode);
+                              setCopiedField('ref');
+                              setTimeout(() => setCopiedField(null), 2000);
+                            }}
+                            className="p-1 text-emerald-700 hover:text-emerald-900 cursor-pointer"
+                            title="Copy Reference Code"
+                          >
+                            <Copy className="w-3.5 h-3.5" />
+                          </button>
+                          {copiedField === 'ref' && <span className="text-[10px] text-emerald-600 font-bold">Copied!</span>}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Optional Trace Number Entry */}
+                  <div>
+                    <label className="block text-[11px] font-bold uppercase tracking-wider text-[#857568] mb-1">
+                      Bank Confirmation / Federal Wire Trace # (Optional):
+                    </label>
+                    <input
+                      type="text"
+                      placeholder="e.g. FED-WIRE-982104 or ACH-88120"
+                      onChange={(e) => {
+                        if (e.target.value.trim()) setWireRefCode(e.target.value.trim());
+                      }}
+                      className="w-full h-10 px-3 bg-white border border-[#d8cfc3] rounded-xl text-xs font-mono text-[#282828]"
+                    />
+                    <p className="text-[10px] text-[#857568] mt-1">
+                      Entering your bank transfer confirmation speeds up automated treasury ledger matching.
+                    </p>
+                  </div>
+                </div>
+              )}
+
+              {/* STEP 3: MANUAL DEPOSIT SUBMITTED & PENDING APPROVAL */}
+              {manualStep === 3 && (
+                <div className="space-y-4 text-center py-2">
+                  <div className="w-12 h-12 rounded-2xl bg-amber-100 border border-amber-300 text-amber-800 flex items-center justify-center mx-auto shadow-xs">
+                    <Clock className="w-7 h-7" />
+                  </div>
+
+                  <div className="space-y-1">
+                    <div className="inline-block px-2.5 py-0.5 rounded-full bg-amber-100 border border-amber-300 text-amber-900 font-bold text-[10px] uppercase tracking-wider mb-1">
+                      Pending Admin Approval
+                    </div>
+                    <h4 className="font-heading font-black text-lg text-[#282828]">
+                      Manual Deposit Notice Logged
+                    </h4>
+                    <p className="text-xs text-[#5c5046]">
+                      Your remittance notice of <strong>${(depositAmount || 0).toLocaleString('en-US', { minimumFractionDigits: 2 })} USD</strong> has been received and is awaiting treasury admin approval.
+                    </p>
+                  </div>
+
+                  <div className="p-3.5 bg-[#faf8f5] border border-[#e6dfd5] rounded-2xl text-xs space-y-2 text-left max-w-md mx-auto">
+                    <div className="flex justify-between">
+                      <span className="text-[#857568]">Remittance Reference:</span>
+                      <strong className="font-mono text-[#282828]">{wireRefCode}</strong>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-[#857568]">Settlement Channel:</span>
+                      <span className="font-semibold text-[#282828] truncate max-w-[200px]">{depositMethod}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-[#857568]">Amount Pending:</span>
+                      <strong className="text-amber-800 font-bold text-sm tabular-nums">${(depositAmount || 0).toLocaleString('en-US', { minimumFractionDigits: 2 })} USD</strong>
+                    </div>
+                    <div className="flex justify-between pt-1 border-t border-[#e6dfd5]">
+                      <span className="font-bold text-[#282828]">Approval Status:</span>
+                      <span className="font-bold text-amber-700 bg-amber-50 px-2 py-0.5 rounded border border-amber-200">
+                        Pending Admin Review
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* Sticky Action Footer (Fixed at Bottom - Never Cut Off) */}
+            <div className="p-3.5 sm:p-4 bg-[#faf8f5] border-t border-[#e6dfd5] flex items-center justify-between gap-2 shrink-0">
+              {manualStep === 1 && (
+                <>
                   <button
                     type="button"
                     onClick={() => setBuyUnitsModalOpen(false)}
-                    className="flex-1 py-2.5 bg-[#faf8f5] hover:bg-[#f0e9df] border border-[#dfd7cc] text-[#5c5046] text-xs font-bold rounded-xl cursor-pointer transition-colors"
+                    className="px-4 py-2 border border-[#d8cfc3] text-[#5c5046] hover:bg-white text-xs font-semibold rounded-xl cursor-pointer"
                   >
                     Cancel
                   </button>
                   <button
                     type="button"
-                    disabled={isLoading}
-                    onClick={handlePurchaseUnits}
-                    className="flex-1 py-2.5 bg-[#00b7a8] hover:bg-[#009e91] text-white text-xs font-black uppercase tracking-wider rounded-xl cursor-pointer transition-colors"
+                    disabled={!depositAmount || depositAmount <= 0}
+                    onClick={() => setManualStep(2)}
+                    className="px-4 sm:px-5 py-2.5 bg-[#00897d] hover:bg-[#00746b] disabled:opacity-50 text-white text-xs font-bold uppercase tracking-wider rounded-xl cursor-pointer transition-colors flex items-center gap-1.5 shadow-xs"
                   >
-                    {isLoading ? 'Crediting...' : `Credit ${selectedUnitTier} Units`}
+                    <span>View Routing Instructions</span>
+                    <ArrowRight className="w-3.5 h-3.5" />
+                  </button>
+                </>
+              )}
+
+              {manualStep === 2 && (
+                <>
+                  <button
+                    type="button"
+                    onClick={() => setManualStep(1)}
+                    className="px-3.5 py-2 border border-[#d8cfc3] text-[#5c5046] hover:bg-white text-xs font-semibold rounded-xl cursor-pointer"
+                  >
+                    ← Back
+                  </button>
+                  <button
+                    type="button"
+                    disabled={isLoading}
+                    onClick={handleTopUpUnits}
+                    className="px-4 sm:px-5 py-2.5 bg-[#00897d] hover:bg-[#00746b] text-white text-xs font-bold uppercase tracking-wider rounded-xl cursor-pointer transition-colors flex items-center gap-1.5 shadow-xs"
+                  >
+                    {isLoading ? (
+                      <>
+                        <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                        <span>Submitting Notice...</span>
+                      </>
+                    ) : (
+                      <>
+                        <CheckCircle2 className="w-3.5 h-3.5" />
+                        <span>Submit Manual Deposit (${(depositAmount || 0).toLocaleString()} USD)</span>
+                      </>
+                    )}
+                  </button>
+                </>
+              )}
+
+              {manualStep === 3 && (
+                <div className="w-full flex flex-col sm:flex-row items-center justify-center gap-2">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setPortalReceiptPayment({
+                        id: 'PAY-TEMP-' + Date.now(),
+                        referenceCode: wireRefCode || 'FED-WIRE-PENDING',
+                        targetType: 'account_funds',
+                        description: `Account Balance Top-Up (${depositMethod})`,
+                        amountUsd: depositAmount,
+                        paymentMethod: depositMethod,
+                        status: 'pending',
+                        date: new Date().toISOString().split('T')[0],
+                        invoiceNumber: 'INV-2026-' + Math.floor(10000 + Math.random() * 90000),
+                      });
+                      setPortalReceiptModalOpen(true);
+                    }}
+                    className="w-full sm:w-auto px-5 py-2.5 bg-black hover:bg-neutral-800 text-white text-xs font-bold rounded-xl cursor-pointer shadow-xs transition-colors flex items-center justify-center gap-2"
+                  >
+                    <Printer className="w-4 h-4 text-emerald-400" />
+                    <span>Print Transaction Receipt (White/Black)</span>
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setBuyUnitsModalOpen(false);
+                      setActiveTab('payments');
+                    }}
+                    className="w-full sm:w-auto px-6 py-2.5 bg-[#00897d] hover:bg-[#00746b] text-white text-xs font-bold uppercase tracking-wider rounded-xl cursor-pointer shadow-xs"
+                  >
+                    Done &amp; View Pending Payments
                   </button>
                 </div>
-              </div>
+              )}
             </div>
           </div>
-        )}
-      </div>
+        </div>
+      )}
+
+      {/* Printable Transaction Receipt Template Modal */}
+      <TransactionReceiptModal
+        isOpen={portalReceiptModalOpen}
+        onClose={() => setPortalReceiptModalOpen(false)}
+        payment={portalReceiptPayment}
+        userSession={userSession}
+      />
     </div>
   );
 };

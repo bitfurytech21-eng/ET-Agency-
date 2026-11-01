@@ -193,9 +193,13 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
       if (Array.isArray(data.properties) && data.properties.length > 0) {
         const merged: Property[] = data.properties.map((srvProp: any) => {
           const fallback = PROPERTIES.find((p) => p.id === srvProp.id);
+          const srvImages = Array.isArray(srvProp.images) ? srvProp.images : [];
+          const fallbackImages = fallback?.images || [];
+          const resolvedImages = srvImages.length >= fallbackImages.length && srvImages.length > 0 ? srvImages : fallbackImages;
           return {
             ...(fallback || {}),
             ...srvProp,
+            images: resolvedImages,
             liveUrl: srvProp.liveUrl || fallback?.liveUrl || 'https://easytravellodging.com/',
           };
         });

@@ -145,8 +145,8 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ preselectedPrope
                   <MapPin className="w-5 h-5" />
                 </div>
                 <div>
-                  <span className="text-xs text-[#857568] font-bold block uppercase tracking-wider">Location</span>
-                  <span className="text-base font-extrabold text-[#282828]">Sacramento &amp; Rancho Cordova, CA</span>
+                  <span className="text-xs text-[#857568] font-bold block uppercase tracking-wider">Coverage</span>
+                  <span className="text-base font-extrabold text-[#282828]">California’s homes · Regional Operations</span>
                 </div>
               </div>
             </div>
@@ -357,7 +357,7 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ preselectedPrope
                       rows={3}
                       value={message}
                       onChange={(e) => setMessage(e.target.value)}
-                      placeholder="Please share details about your stay, number of occupants, or any questions about our Sacramento properties..."
+                      placeholder="Please share details about your stay, desired destination, number of occupants, or any questions about our residences and fleet..."
                       className="w-full px-3.5 py-2.5 rounded-xl border border-[#d8cfc3] text-sm bg-white focus:border-[#00b7a8] focus:ring-1 focus:ring-[#00b7a8] outline-none"
                     />
                   </div>

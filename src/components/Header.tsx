@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { PROPERTIES } from '../data/lodgingData';
 import { useCart } from '../context/CartContext';
-import { WeatherWidget } from './WeatherWidget';
 import { Search, ChevronDown, Menu, X, User, ShoppingBag } from 'lucide-react';
 
 interface HeaderProps {
@@ -92,7 +91,7 @@ export const Header: React.FC<HeaderProps> = ({
                 </button>
               </li>
 
-              {/* Residences Dropdown */}
+              {/* Accommodation (Residences) Dropdown */}
               <li
                 className="relative menu-item-has-children"
                 onMouseEnter={() => setPortfolioDropdownOpen(true)}
@@ -106,7 +105,7 @@ export const Header: React.FC<HeaderProps> = ({
                       : ''
                   }`}
                 >
-                  <span>Residences</span>
+                  <span>Accommodation</span>
                   <ChevronDown className="w-3.5 h-3.5" />
                 </button>
 
@@ -117,18 +116,18 @@ export const Header: React.FC<HeaderProps> = ({
                         onClick={() => handleNavClick('portfolio')}
                         className="w-full text-left px-4 py-1.5 text-[#282828] hover:text-[#00b7a8] hover:bg-[#faf8f5] font-bold cursor-pointer"
                       >
-                        All Furnished Residences (#A – #E)
+                        All Accommodation Listings
                       </button>
                     </li>
                     <li className="border-t border-[#efe9e0] my-1"></li>
-                    {navProperties.map((prop) => (
+                    {navProperties.slice(0, 8).map((prop) => (
                       <li key={prop.id}>
                         <button
                           onClick={() => handleNavClick(`listing:${prop.id}`)}
                           className="w-full text-left px-4 py-1.5 text-[#555555] hover:text-[#00b7a8] hover:bg-[#faf8f5] text-xs flex justify-between items-center gap-2 cursor-pointer"
                         >
                           <span className="truncate">
-                            {prop.unitNumber} ({prop.code}) · {prop.bedrooms}BR/{prop.bathrooms}BA
+                            {prop.unitNumber} ({prop.code})
                           </span>
                           <span className="text-[#82634f] font-semibold tabular-nums shrink-0">
                             ${prop.monthlyRate.toLocaleString()}/mo
@@ -142,37 +141,21 @@ export const Header: React.FC<HeaderProps> = ({
                         onClick={() => handleNavClick('guide')}
                         className="w-full text-left px-4 py-1.5 text-[#555555] hover:text-[#00b7a8] hover:bg-[#faf8f5] font-medium cursor-pointer"
                       >
-                        Regional Area Guide
-                      </button>
-                    </li>
-                    <li>
-                      <button
-                        onClick={() => handleNavClick('faq')}
-                        className="w-full text-left px-4 py-1.5 text-[#555555] hover:text-[#00b7a8] hover:bg-[#faf8f5] font-medium cursor-pointer"
-                      >
-                        FAQs &amp; Guest Help
-                      </button>
-                    </li>
-                    <li>
-                      <button
-                        onClick={() => handleNavClick('terms')}
-                        className="w-full text-left px-4 py-1.5 text-[#555555] hover:text-[#00b7a8] hover:bg-[#faf8f5] font-medium cursor-pointer"
-                      >
-                        Booking Terms &amp; Guidelines
+                        Destination &amp; Area Guide
                       </button>
                     </li>
                   </ul>
                 )}
               </li>
 
-              <li className={currentTab === 'corporate' ? 'current-menu-item' : ''}>
+              <li className={currentTab === 'vehicles' ? 'current-menu-item' : ''}>
                 <button
-                  onClick={() => handleNavClick('corporate')}
+                  onClick={() => handleNavClick('vehicles')}
                   className={`hover:text-[#00b7a8] transition-colors cursor-pointer ${
-                    currentTab === 'corporate' ? 'text-[#00b7a8] font-bold' : ''
+                    currentTab === 'vehicles' ? 'text-[#00b7a8] font-bold' : ''
                   }`}
                 >
-                  Extended &amp; Group Stays
+                  Car Rentals
                 </button>
               </li>
 
@@ -184,28 +167,6 @@ export const Header: React.FC<HeaderProps> = ({
                   }`}
                 >
                   About Us
-                </button>
-              </li>
-
-              <li className={currentTab === 'beahost' ? 'current-menu-item' : ''}>
-                <button
-                  onClick={() => handleNavClick('beahost')}
-                  className={`hover:text-[#00b7a8] transition-colors cursor-pointer ${
-                    currentTab === 'beahost' ? 'text-[#00b7a8] font-bold' : ''
-                  }`}
-                >
-                  Host Services
-                </button>
-              </li>
-
-              <li className={currentTab === 'blog' ? 'current-menu-item' : ''}>
-                <button
-                  onClick={() => handleNavClick('blog')}
-                  className={`hover:text-[#00b7a8] transition-colors cursor-pointer ${
-                    currentTab === 'blog' ? 'text-[#00b7a8] font-bold' : ''
-                  }`}
-                >
-                  Insights
                 </button>
               </li>
 
@@ -223,9 +184,6 @@ export const Header: React.FC<HeaderProps> = ({
           </nav>
 
           <div className="flex items-center gap-2.5 pl-1 border-l border-[#e6dfd5]">
-            {/* Live Weather Widget Badge for California Guests */}
-            <WeatherWidget compact className="hidden xl:inline-flex" />
-
             {/* Live Shopping Cart Drawer Trigger */}
             <button
               type="button"
@@ -244,18 +202,28 @@ export const Header: React.FC<HeaderProps> = ({
               </span>
             </button>
 
-            {/* Client Portal Sign In */}
+            {/* Sign In Action */}
             <button
               type="button"
-              onClick={() => handleNavClick('portal')}
-              className={`inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg text-xs font-bold transition-colors cursor-pointer border ${
-                currentTab === 'portal'
-                  ? 'bg-[#82634f] text-white border-[#82634f]'
-                  : 'bg-[#faf8f5] hover:bg-[#e6f8f6] text-[#282828] border-[#dcd3c7] hover:border-[#00b7a8] hover:text-[#00897d]'
+              onClick={() => handleNavClick('login')}
+              className={`text-xs font-bold px-3 py-2 rounded-lg transition-colors cursor-pointer ${
+                currentTab === 'login' ? 'text-[#00b7a8] font-extrabold' : 'text-[#555555] hover:text-[#00b7a8]'
               }`}
             >
-              <User className={`w-3.5 h-3.5 ${currentTab === 'portal' ? 'text-white' : 'text-[#00b7a8]'}`} />
-              <span>Client Portal</span>
+              Sign In
+            </button>
+
+            {/* Sign Up Action */}
+            <button
+              type="button"
+              onClick={() => handleNavClick('register')}
+              className={`text-xs font-bold px-3.5 py-2 rounded-lg transition-colors cursor-pointer border ${
+                currentTab === 'register'
+                  ? 'bg-[#00b7a8] text-white border-[#00b7a8]'
+                  : 'bg-white hover:bg-[#e6f8f6] text-[#00897d] border-[#00b7a8]/40'
+              }`}
+            >
+              Sign Up
             </button>
 
             {/* Search Icon */}
@@ -341,80 +309,71 @@ export const Header: React.FC<HeaderProps> = ({
 
       {/* Mobile & Tablet Navigation Drawer */}
       {mobileMenuOpen && (
-        <div className="xl:hidden bg-white border-t border-[#e6dfd5] px-6 py-4 space-y-1.5 shadow-md">
+        <div className="xl:hidden bg-white border-t border-[#e6dfd5] px-6 py-4 space-y-2 shadow-md animate-in fade-in">
           <button
             onClick={() => handleNavClick('home')}
             className={`block w-full text-left py-2 text-sm font-semibold cursor-pointer ${
-              currentTab === 'home' ? 'text-[#00b7a8]' : 'text-[#555555]'
+              currentTab === 'home' ? 'text-[#00b7a8] font-bold' : 'text-[#282828]'
             }`}
           >
             Home
           </button>
+
+          <button
+            onClick={() => handleNavClick('portfolio')}
+            className={`block w-full text-left py-2 text-sm font-semibold cursor-pointer ${
+              ['portfolio', 'faq', 'terms'].includes(currentTab) || currentTab.startsWith('listing:') ? 'text-[#00b7a8] font-bold' : 'text-[#282828]'
+            }`}
+          >
+            Accommodation
+          </button>
+
+          <button
+            onClick={() => handleNavClick('vehicles')}
+            className={`block w-full text-left py-2 text-sm font-semibold cursor-pointer ${
+              currentTab === 'vehicles' ? 'text-[#00b7a8] font-bold' : 'text-[#282828]'
+            }`}
+          >
+            Car Rentals
+          </button>
+
           <button
             onClick={() => handleNavClick('about')}
             className={`block w-full text-left py-2 text-sm font-semibold cursor-pointer ${
-              currentTab === 'about' ? 'text-[#00b7a8]' : 'text-[#555555]'
+              currentTab === 'about' ? 'text-[#00b7a8] font-bold' : 'text-[#282828]'
             }`}
           >
             About Us
           </button>
-          <button
-            onClick={() => handleNavClick('beahost')}
-            className={`block w-full text-left py-2 text-sm font-semibold cursor-pointer ${
-              currentTab === 'beahost' ? 'text-[#00b7a8]' : 'text-[#555555]'
-            }`}
-          >
-            Property Owner &amp; Host Services
-          </button>
-          <button
-            onClick={() => handleNavClick('guide')}
-            className={`block w-full text-left py-2 text-sm font-semibold cursor-pointer ${
-              currentTab === 'guide' ? 'text-[#00b7a8]' : 'text-[#555555]'
-            }`}
-          >
-            Regional Area Guide
-          </button>
-          <button
-            onClick={() => handleNavClick('faq')}
-            className={`block w-full text-left py-2 text-xs font-semibold pl-4 cursor-pointer ${
-              currentTab === 'faq' ? 'text-[#00b7a8]' : 'text-[#777777]'
-            }`}
-          >
-            ↳ FAQs &amp; Help
-          </button>
-          <button
-            onClick={() => handleNavClick('terms')}
-            className={`block w-full text-left py-2 text-xs font-semibold pl-4 cursor-pointer ${
-              currentTab === 'terms' ? 'text-[#00b7a8]' : 'text-[#777777]'
-            }`}
-          >
-            ↳ Terms &amp; Guidelines
-          </button>
-          <button
-            onClick={() => handleNavClick('portal')}
-            className={`w-full text-left py-2 text-sm font-semibold flex items-center gap-2 cursor-pointer ${
-              currentTab === 'portal' ? 'text-[#00b7a8]' : 'text-[#555555]'
-            }`}
-          >
-            <User className="w-4 h-4 text-[#00b7a8]" />
-            <span>Client Portal &amp; Lodging Units</span>
-          </button>
-          <button
-            onClick={() => handleNavClick('blog')}
-            className={`block w-full text-left py-2 text-sm font-semibold cursor-pointer ${
-              currentTab === 'blog' ? 'text-[#00b7a8]' : 'text-[#555555]'
-            }`}
-          >
-            Insights &amp; Articles
-          </button>
+
           <button
             onClick={() => handleNavClick('contact')}
             className={`block w-full text-left py-2 text-sm font-semibold cursor-pointer ${
-              currentTab === 'contact' ? 'text-[#00b7a8]' : 'text-[#555555]'
+              currentTab === 'contact' ? 'text-[#00b7a8] font-bold' : 'text-[#282828]'
             }`}
           >
-            Contact Us
+            Contact
           </button>
+
+          <div className="pt-2 border-t border-[#efe9e0] space-y-2">
+            <button
+              onClick={() => handleNavClick('login')}
+              className={`block w-full text-left py-2 text-sm font-semibold cursor-pointer ${
+                currentTab === 'login' ? 'text-[#00b7a8] font-bold' : 'text-[#555555]'
+              }`}
+            >
+              Sign In
+            </button>
+
+            <button
+              onClick={() => handleNavClick('register')}
+              className={`block w-full text-left py-2 text-sm font-semibold cursor-pointer ${
+                currentTab === 'register' ? 'text-[#00b7a8] font-bold' : 'text-[#555555]'
+              }`}
+            >
+              Sign Up
+            </button>
+          </div>
         </div>
       )}
     </header>

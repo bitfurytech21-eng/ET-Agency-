@@ -1,6 +1,6 @@
 {
   "name": "Easy Travel Lodging",
-  "description": "Turnkey furnished short and extended-stay residences, 3D fleet vehicle rentals, and concierge arrival services in Sacramento and Rancho Cordova, California.",
+  "description": "Turnkey furnished short and extended-stay residences, 3D fleet vehicle rentals, and concierge arrival services across California’s homes.",
   "requestFramePermissions": [],
   "majorCapabilities": [
     "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"

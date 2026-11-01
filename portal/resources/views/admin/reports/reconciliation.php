@@ -1,1 +1,0 @@
-<?php require __DIR__ . '/../../layouts/admin.php'; ?>\n<div class='portal-card'><h2>Reconciliation Summary</h2><div class='stat-card'><span class='stat-label'>Verified Revenue</span><span class='stat-value'>$<?= number_format((float)($summary['verified_manual_revenue']??0),2) ?></span></div></div></body></html>

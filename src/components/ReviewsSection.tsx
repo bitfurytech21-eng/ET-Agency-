@@ -7,15 +7,18 @@ export const ReviewsSection: React.FC = () => {
     <>
       {/* Hospitality Promise Banner */}
       <section className="et_section_brown py-12 sm:py-16 text-left">
-        <div className="max-w-[1200px] mx-auto px-4 sm:px-8 space-y-4">
-          <h2 className="et_teal_h2 text-3xl sm:text-5xl font-bold text-[#00b7a8]">
-            HOSPITALITY THAT FEELS LIKE HOME
+        <div className="max-w-[1200px] mx-auto px-4 sm:px-8 space-y-3.5">
+          <span className="text-[11px] font-bold uppercase tracking-[0.22em] text-[#7ce8df] block">
+            Nationwide Hospitality Promise
+          </span>
+          <h2 className="font-heading font-black text-2xl sm:text-4xl text-white tracking-tight leading-tight">
+            Hospitality That Feels Like Home
           </h2>
-          <p className="font-heading font-semibold text-xl sm:text-2xl text-[#000000] leading-snug max-w-3xl">
+          <p className="font-heading font-semibold text-base sm:text-lg text-[#f3ede6] leading-snug max-w-3xl">
             Whether you are in town for a week, bridging a home closing, visiting family, or settling in for several months, every detail is ready before you arrive.
           </p>
-          <p className="text-[16px] text-[#000000] leading-relaxed max-w-4xl">
-            Co-founders Bill Wheelock and Dr. Marlena Uhrik personally oversee each residence—pairing full kitchens, in-unit laundry, reserved parking, and responsive local support so every guest enjoys a calm, reliable stay in Greater Sacramento.
+          <p className="text-xs sm:text-sm text-[#ddd1c4] leading-relaxed max-w-4xl">
+            Co-founders Bill Wheelock and Dr. Marlena Uhrik personally oversee each residence—pairing full kitchens, in-unit laundry, reserved parking, and responsive concierge support so every guest enjoys a calm, reliable stay across our nationwide residences.
           </p>
         </div>
       </section>

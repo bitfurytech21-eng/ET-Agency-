@@ -22,11 +22,12 @@ import { PrivacyPolicyView } from './components/PrivacyPolicyView';
 import { BrochureModal } from './components/BrochureModal';
 import { PropertyDetailView } from './components/PropertyDetailView';
 import { Footer } from './components/Footer';
-import { SmartsupChat } from './components/SmartsupChat';
 import { BookingModal } from './components/BookingModal';
 import { VehicleBookingModal } from './components/VehicleBookingModal';
 import { VehiclesSection } from './components/VehiclesSection';
 import { CustomerPortal } from './components/CustomerPortal';
+import { SignInView } from './components/SignInView';
+import { RegisterView } from './components/RegisterView';
 import { AdminPortal } from './components/AdminPortal';
 import { CartDrawer } from './components/CartDrawer';
 import { ShopServicesSection } from './components/ShopServicesSection';
@@ -35,6 +36,7 @@ import { LivePhotoBackground } from './components/LivePhotoBackground';
 import { CartProvider, useCart } from './context/CartContext';
 import { PROPERTIES } from './data/lodgingData';
 import { UsVehicle } from './data/vehicleData';
+import { FloatingConcierge } from './components/FloatingConcierge';
 
 function AppShell() {
   const { liveProperties } = useCart();
@@ -54,6 +56,19 @@ function AppShell() {
 
   // Portfolio search filter state
   const [portfolioSearchQuery, setPortfolioSearchQuery] = useState<string>('');
+
+  // Auth state & redirect notice
+  const [authToken, setAuthToken] = useState<string | null>(() => localStorage.getItem('etl_php_token'));
+  const [authNotice, setAuthNotice] = useState<string | null>(null);
+
+  // Sync token state on change
+  useEffect(() => {
+    const handleStorage = () => {
+      setAuthToken(localStorage.getItem('etl_php_token'));
+    };
+    window.addEventListener('storage', handleStorage);
+    return () => window.removeEventListener('storage', handleStorage);
+  }, []);
 
   // Handle URL hash if any
   useEffect(() => {
@@ -97,22 +112,35 @@ function AppShell() {
         checkout: 'checkout',
         orders: 'cart',
         'track-order': 'cart',
-        portal: 'portal',
-        'client-portal': 'portal',
-        login: 'portal',
-        dashboard: 'portal',
-        units: 'portal',
+        portal: 'dashboard',
+        'client-portal': 'dashboard',
+        dashboard: 'dashboard',
+        units: 'dashboard',
+        login: 'login',
+        signin: 'login',
+        'sign-in': 'login',
+        register: 'register',
+        signup: 'register',
+        'sign-up': 'register',
+        'create-account': 'register',
         admin: 'admin',
         'admin-portal': 'admin',
       };
 
-      if (tabMap[hash]) {
-        setCurrentTab(tabMap[hash]);
-        return;
+      const resolved = tabMap[hash] || (hash.startsWith('listing:') ? hash : null);
+
+      if (resolved === 'dashboard') {
+        const token = localStorage.getItem('etl_php_token');
+        if (!token) {
+          setAuthNotice('Sign in required to access your User Dashboard. Create an account below if you do not have one yet.');
+          setCurrentTab('login');
+          window.location.hash = 'login';
+          return;
+        }
       }
 
-      if (hash.startsWith('listing:')) {
-        setCurrentTab(hash);
+      if (resolved) {
+        setCurrentTab(resolved);
         return;
       }
 
@@ -143,6 +171,17 @@ function AppShell() {
   };
 
   const navigateToTab = (tab: string) => {
+    if (tab === 'dashboard' || tab === 'portal') {
+      const token = localStorage.getItem('etl_php_token');
+      if (!token) {
+        setAuthNotice('Sign in required to access your User Dashboard. Create an account below if you do not have one yet.');
+        setCurrentTab('login');
+        window.location.hash = 'login';
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        return;
+      }
+    }
+
     setCurrentTab(tab);
     window.location.hash = tab;
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -164,6 +203,9 @@ function AppShell() {
     'cart',
     'checkout',
     'portal',
+    'dashboard',
+    'login',
+    'register',
     'admin',
   ];
 
@@ -216,13 +258,13 @@ function AppShell() {
               <LivePhotoBackground scene="courtyard" secondaryScene="interior" overlay="espresso" />
               <div className="relative z-10 max-w-3xl mx-auto">
                 <span className="text-xs uppercase font-extrabold text-[#4de0d2] tracking-widest">
-                  Furnished Residences · Greater Sacramento
+                  Furnished Residences · California’s homes
                 </span>
                 <h1 className="text-3xl sm:text-5xl font-heading font-black mt-2 text-white">
-                  1- &amp; 2-Bedroom Furnished Apartments
+                  1- &amp; 2-Bedroom Furnished Apartments &amp; Suites
                 </h1>
                 <p className="text-[#ede5dc] text-sm sm:text-base max-w-2xl mx-auto mt-3 leading-relaxed">
-                  Move-in-ready residences in Rancho Cordova for short visits (5+ nights), extended 30+ day stays, family relocations, home renovations, and organizational housing.
+                  Move-in-ready furnished residences and corporate housing across California’s homes for flexible stays (5+ nights), extended 30+ day corporate leases, family relocations, and organizational housing.
                 </p>
               </div>
             </div>
@@ -274,13 +316,13 @@ function AppShell() {
               <LivePhotoBackground scene="river" secondaryScene="courtyard" overlay="espresso" />
               <div className="relative z-10 max-w-3xl mx-auto">
                 <span className="text-xs uppercase font-extrabold text-[#4de0d2] tracking-widest">
-                  Regional Guide &amp; Neighborhood Highlights
+                  California’s homes Corridor &amp; Regional Guide
                 </span>
                 <h1 className="text-3xl sm:text-5xl font-heading font-black mt-2 text-white">
-                  Greater Sacramento &amp; Rancho Cordova Guide
+                  California’s homes Metropolitan &amp; Destination Guide
                 </h1>
                 <p className="text-[#ede5dc] text-sm sm:text-base max-w-xl mx-auto mt-3 leading-relaxed">
-                  Explore American River Parkway trails, local dining, the Barrel District, cultural landmarks, and weekend trips from Gold Country to Lake Tahoe.
+                  Explore corporate hubs, scenic outdoor trails, cultural landmarks, culinary districts, and seamless connectivity across major California’s homes regions.
                 </p>
               </div>
             </div>
@@ -326,21 +368,46 @@ function AppShell() {
           <CartCheckoutView initialMode="checkout" onNavigate={navigateToTab} />
         )}
 
-        {currentTab === 'portal' && (
+        {(currentTab === 'portal' || currentTab === 'dashboard') && (
           <CustomerPortal
             onOpenBooking={() => handleOpenBooking()}
             onNavigateTab={navigateToTab}
           />
         )}
 
+        {currentTab === 'login' && (
+          <SignInView
+            onNavigateTab={navigateToTab}
+            authNotice={authNotice}
+            onLoginSuccess={(token) => {
+              setAuthToken(token);
+              setAuthNotice(null);
+              navigateToTab('dashboard');
+            }}
+          />
+        )}
+
+        {currentTab === 'register' && (
+          <RegisterView
+            onNavigateTab={navigateToTab}
+            onRegisterSuccess={(token) => {
+              setAuthToken(token);
+              setAuthNotice(null);
+              navigateToTab('dashboard');
+            }}
+          />
+        )}
+
         {currentTab === 'admin' && <AdminPortal onNavigateTab={navigateToTab} />}
       </main>
 
-      <Footer
-        onNavClick={navigateToTab}
-        onOpenBooking={() => handleOpenBooking()}
-        onOpenBrochure={() => setBrochureOpen(true)}
-      />
+      {!['portal', 'dashboard', 'admin'].includes(currentTab) && (
+        <Footer
+          onNavClick={navigateToTab}
+          onOpenBooking={() => handleOpenBooking()}
+          onOpenBrochure={() => setBrochureOpen(true)}
+        />
+      )}
 
       <CartDrawer onNavigate={navigateToTab} />
 
@@ -360,14 +427,14 @@ function AppShell() {
         initialColorHex={selectedVehicleColor}
         onOpenPortal={() => {
           setVehicleModalOpen(false);
-          navigateToTab('portal');
+          navigateToTab('dashboard');
         }}
         onNavigate={navigateToTab}
       />
 
       <BrochureModal isOpen={brochureOpen} onClose={() => setBrochureOpen(false)} />
 
-      <SmartsupChat />
+      <FloatingConcierge />
     </div>
   );
 }

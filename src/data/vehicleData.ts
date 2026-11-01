@@ -1,7 +1,16 @@
+export interface SketchfabEmbedInfo {
+  modelId: string;
+  embedUrl: string;
+  modelUrl: string;
+  authorName: string;
+  authorUrl: string;
+  title: string;
+}
+
 export interface UsVehicle {
   id: string;
   name: string;
-  make: 'Ford' | 'Tesla' | 'Chevrolet' | 'Cadillac' | 'Jeep';
+  make: 'Nissan' | 'Skoda' | 'Audi' | 'Volkswagen' | string;
   category: string;
   year: number;
   engine: string;
@@ -23,253 +32,254 @@ export interface UsVehicle {
   };
   defaultColor: string;
   availableColors: { name: string; hex: string }[];
-  style3d: {
-    bodyShape: 'suv' | 'muscle' | 'luxury_suv' | 'offroad' | 'sedan';
-    dimensions: [number, number, number]; // width, height, length
-    wheelRadius: number;
-    wheelWidth: number;
-    hasRoofRack?: boolean;
-    hasConvertibleTop?: boolean;
-    hasExhaustPipes?: boolean;
-    isElectric?: boolean;
+  sketchfab: SketchfabEmbedInfo;
+  style3d?: {
+    bodyShape?: 'suv' | 'muscle' | 'luxury_suv' | 'offroad' | 'sedan';
+    dimensions?: [number, number, number];
+    wheelRadius?: number;
+    wheelWidth?: number;
   };
 }
 
 export const US_VEHICLES: UsVehicle[] = [
   {
-    id: 'ford-mustang-gt',
-    name: 'Ford Mustang GT Convertible',
-    make: 'Ford',
-    category: 'American Muscle & Open Air Touring',
-    year: 2025,
-    engine: '5.0L Ti-VCT Coyote V8',
-    drivetrain: 'Rear-Wheel Drive (RWD) with Active Exhaust',
-    seating: 4,
-    luggage: 2,
-    dailyRate: 119,
-    weeklyRate: 690,
-    monthlyRate: 2350,
-    tagline: 'Open-Air California Touring & Weekend Escapes',
-    description:
-      'Enjoy sunny Northern California drives in Ford’s classic open-top grand tourer. Equipped with a responsive 5.0L V8, heated and ventilated leather seating, MagneRide adaptive damping, and an 8-second power soft-top—well suited for coastal day trips, Napa afternoons, or everyday Sacramento cruising.',
-    features: [
-      'Power soft-top convertible with quick 8-second deploy',
-      'Selectable active valve performance exhaust',
-      '12.4-inch digital driver display with Apple CarPlay & Android Auto',
-      'Bang & Olufsen 12-speaker audio system',
-      'Heated and ventilated leather front seats',
-      'Prepared for Greater Sacramento & regional highway travel',
-    ],
-    specs: {
-      horsepower: '480 HP @ 7,150 RPM',
-      acceleration: '0–60 mph in 4.1 sec',
-      topSpeed: '155 mph',
-      efficiency: '18 MPG City / 24 MPG Hwy',
-      fuelType: 'Premium Gasoline',
-    },
-    defaultColor: '#c8102e',
-    availableColors: [
-      { name: 'Race Red', hex: '#c8102e' },
-      { name: 'Shadow Black', hex: '#111317' },
-      { name: 'Grabber Blue', hex: '#005bb5' },
-      { name: 'Oxford White', hex: '#f0f3f6' },
-      { name: 'Carbonized Gray', hex: '#3d444b' },
-    ],
-    style3d: {
-      bodyShape: 'muscle',
-      dimensions: [1.9, 1.25, 4.4],
-      wheelRadius: 0.38,
-      wheelWidth: 0.28,
-      hasConvertibleTop: true,
-      hasExhaustPipes: true,
-    },
-  },
-  {
-    id: 'tesla-model-y',
-    name: 'Tesla Model Y Performance',
-    make: 'Tesla',
-    category: 'All-Electric Dual Motor Crossover SUV',
-    year: 2025,
-    engine: 'Dual AC Permanent Magnet Electric Motors',
-    drivetrain: 'All-Wheel Drive (AWD)',
-    seating: 5,
-    luggage: 4,
-    dailyRate: 110,
-    weeklyRate: 640,
-    monthlyRate: 2200,
-    tagline: 'Quiet All-Electric Comfort for Daily Errands & Regional Travel',
-    description:
-      'An effortless all-electric crossover with Dual Motor all-wheel drive, generous cargo space for suitcases or strollers, and seamless Supercharger access across Northern California. Popular with families, airport arrivals, and multi-week residents.',
-    features: [
-      'Dual Motor AWD with smooth, quiet acceleration',
-      'Tinted panoramic glass roof',
-      '15-inch touchscreen navigation with live charger routing',
-      'Available for SMF Airport pickup or residence doorstep delivery',
-      'HEPA cabin air filtration',
-      '76 cu ft total cargo space including front trunk',
-    ],
-    specs: {
-      horsepower: '455 HP Equivalent',
-      acceleration: '0–60 mph in 3.5 sec',
-      topSpeed: '155 mph',
-      efficiency: '115 MPGe (303 mi range)',
-      fuelType: '100% Electric (Supercharger Access)',
-    },
-    defaultColor: '#2563eb',
-    availableColors: [
-      { name: 'Deep Metallic Blue', hex: '#1e40af' },
-      { name: 'Pearl White Multi-Coat', hex: '#f8fafc' },
-      { name: 'Solid Black', hex: '#09090b' },
-      { name: 'Midnight Silver Metallic', hex: '#475569' },
-      { name: 'Ultra Red', hex: '#991b1b' },
-    ],
-    style3d: {
-      bodyShape: 'suv',
-      dimensions: [1.95, 1.45, 4.5],
-      wheelRadius: 0.4,
-      wheelWidth: 0.26,
-      isElectric: true,
-    },
-  },
-  {
-    id: 'chevy-suburban',
-    name: 'Chevrolet Suburban High Country',
-    make: 'Chevrolet',
-    category: 'Full-Size Three-Row Family & Group SUV',
-    year: 2025,
-    engine: '6.2L EcoTec3 V8 with Dynamic Fuel Management',
-    drivetrain: 'Four-Wheel Drive (4WD) with Autotrac 2-speed',
+    id: 'nissan-terra-2020',
+    name: 'Nissan Terra 2020',
+    make: 'Nissan',
+    category: '7-Passenger Rugged 4x4 SUV',
+    year: 2020,
+    engine: '2.5L Turbo Diesel 4-Cylinder',
+    drivetrain: 'Part-Time 4WD with Shift-on-the-Fly & Rear Diff Lock',
     seating: 7,
-    luggage: 6,
-    dailyRate: 165,
-    weeklyRate: 980,
-    monthlyRate: 3400,
-    tagline: 'Three-Row Space for Families, Relocations & Group Trips',
-    description:
-      'Roomy, composed, and built for long stretches of highway. With seating for up to seven, second-row captain’s chairs, adaptive air suspension, and expansive luggage capacity, the Suburban handles family visits, household moves, and group outings with ease.',
-    features: [
-      'Four-Corner Air Ride Adaptive Suspension',
-      'Second-row captain’s chairs with tri-zone climate control',
-      '10-speed automatic transmission with 4WD',
-      'Dual rear-seat entertainment screens for passengers',
-      'HD Surround Vision camera views for easy parking',
-      '144.7 cu ft maximum cargo capacity',
-    ],
-    specs: {
-      horsepower: '420 HP @ 5,600 RPM',
-      acceleration: '0–60 mph in 6.1 sec',
-      topSpeed: '130 mph',
-      efficiency: '15 MPG City / 20 MPG Hwy',
-      fuelType: 'Gasoline',
-    },
-    defaultColor: '#1c1917',
-    availableColors: [
-      { name: 'Black Onyx', hex: '#18181b' },
-      { name: 'Summit White', hex: '#f4f4f5' },
-      { name: 'Dark Ash Metallic', hex: '#334155' },
-      { name: 'Auburn Metallic', hex: '#78350f' },
-    ],
-    style3d: {
-      bodyShape: 'luxury_suv',
-      dimensions: [2.05, 1.7, 5.3],
-      wheelRadius: 0.44,
-      wheelWidth: 0.32,
-      hasRoofRack: true,
-      hasExhaustPipes: true,
-    },
-  },
-  {
-    id: 'cadillac-escalade',
-    name: 'Cadillac Escalade ESV Platinum',
-    make: 'Cadillac',
-    category: 'Extended-Length Luxury Three-Row SUV',
-    year: 2025,
-    engine: '6.2L V8 with Magnetic Ride Control 4.0',
-    drivetrain: 'Electronic Full-Time All-Wheel Drive',
-    seating: 7,
-    luggage: 6,
-    dailyRate: 195,
-    weeklyRate: 1190,
-    monthlyRate: 4100,
-    tagline: 'First-Class Cabin Quietness & Extended Three-Row Comfort',
-    description:
-      'Our flagship full-size luxury SUV pairs whisper-quiet highway poise with extended ESV luggage room. Featuring curved OLED displays, AKG 36-speaker audio, semi-aniline leather seating, and Magnetic Ride damping for special occasions, family travel, or VIP arrivals.',
-    features: [
-      'Curved 38-inch diagonal OLED driver and infotainment display',
-      'AKG Studio Reference 36-speaker sound system',
-      'Semi-aniline leather with heated, ventilated, massaging front seats',
-      'Night Vision driver assistance',
-      'Power retractable assist steps and hands-free liftgate',
-      'Optional SMF Airport curbside delivery',
-    ],
-    specs: {
-      horsepower: '420 HP @ 5,600 RPM',
-      acceleration: '0–60 mph in 5.9 sec',
-      topSpeed: '130 mph',
-      efficiency: '14 MPG City / 19 MPG Hwy',
-      fuelType: 'Premium Gasoline',
-    },
-    defaultColor: '#0f172a',
-    availableColors: [
-      { name: 'Black Raven', hex: '#09090b' },
-      { name: 'Galactic Deep Blue', hex: '#0f172a' },
-      { name: 'Crystal White Tricoat', hex: '#fafafa' },
-      { name: 'Dark Emerald Metallic', hex: '#064e3b' },
-    ],
-    style3d: {
-      bodyShape: 'luxury_suv',
-      dimensions: [2.1, 1.75, 5.4],
-      wheelRadius: 0.46,
-      wheelWidth: 0.34,
-      hasRoofRack: true,
-      hasExhaustPipes: true,
-    },
-  },
-  {
-    id: 'jeep-wrangler',
-    name: 'Jeep Wrangler Rubicon 4xe',
-    make: 'Jeep',
-    category: 'Plug-In Hybrid 4x4 Adventure SUV',
-    year: 2025,
-    engine: '2.0L Turbo I4 + Plug-In Electric Hybrid Drive',
-    drivetrain: 'Rock-Trac Full-Time 4x4',
-    seating: 5,
-    luggage: 3,
+    luggage: 5,
     dailyRate: 125,
     weeklyRate: 740,
-    monthlyRate: 2550,
-    tagline: 'Sierra Foothills, Lake Tahoe & Everyday Hybrid Versatility',
+    monthlyRate: 2450,
+    tagline: 'Spacious 7-Passenger 4x4 SUV for Family & Sierra Excursions',
     description:
-      'Ready for weekend trips to Lake Tahoe, Folsom Lake, or Yosemite while offering quiet plug-in hybrid driving around Sacramento neighborhoods. All-weather 4x4 capability meets open-air removable roof panels.',
+      'The Nissan Terra combines genuine truck-based ladder frame durability with premium three-row seating for seven passengers. Perfect for visiting families, hospital teams, and Tahoe trips with fold-flat seating, multi-link rear suspension, and Nissan Intelligent Mobility safety suite.',
     features: [
-      'Removable 3-piece Freedom Top hardtop panels',
-      'Full-time Rock-Trac 4x4 capability for mountain weather',
-      'Plug-in hybrid mode for quiet local errands',
-      'Alpine 9-speaker all-weather audio system',
-      'Durable washout-ready interior flooring',
-      'Optional bike rack or winter traction kit on request',
+      'Genuine 7-passenger three-row configuration with one-touch tumble fold',
+      'Selectable 4WD with low-range transfer case and electronic locking rear differential',
+      'Around View Monitor with Moving Object Detection',
+      'Dual-zone climate control with dedicated rear ceiling AC vents',
+      'Roof rails, running boards, and full underbody protection',
+      'Prepared for all-season nationwide highway, metropolitan, and alpine travel',
     ],
     specs: {
-      horsepower: '375 HP / 470 lb-ft Torque',
-      acceleration: '0–60 mph in 5.2 sec',
-      topSpeed: '115 mph',
-      efficiency: '49 MPGe / 370 Miles Combined Range',
-      fuelType: 'Plug-In Hybrid (Electric + Gasoline)',
+      horsepower: '190 HP @ 3,600 RPM',
+      acceleration: '0–60 mph in 8.9 sec',
+      topSpeed: '118 mph',
+      efficiency: '22 MPG City / 28 MPG Hwy',
+      fuelType: 'Ultra-Low Sulfur Diesel',
     },
-    defaultColor: '#0284c7', // Hydro Blue
+    defaultColor: '#1d2a3a',
     availableColors: [
-      { name: 'Hydro Blue Metallic', hex: '#0284c7' },
-      { name: 'Firecracker Red', hex: '#dc2626' },
-      { name: 'Sarge Green', hex: '#3f6212' },
-      { name: 'Bright White', hex: '#f8fafc' },
-      { name: 'Granite Crystal', hex: '#4b5563' }
+      { name: 'Twilight Pearl Navy', hex: '#1d2a3a' },
+      { name: 'Brilliant Silver Metallic', hex: '#b3b9be' },
+      { name: 'Pearl White Diamond', hex: '#f4f4f4' },
+      { name: 'Earth Brown Metallic', hex: '#4a3828' },
+      { name: 'Galaxy Black', hex: '#111214' },
     ],
-    style3d: {
-      bodyShape: 'offroad',
-      dimensions: [1.9, 1.65, 4.3],
-      wheelRadius: 0.45,
-      wheelWidth: 0.35,
-      hasRoofRack: true,
-    }
-  }
+    sketchfab: {
+      modelId: '46727bb6f4f84df5878bed50c58a70bf',
+      embedUrl: 'https://sketchfab.com/models/46727bb6f4f84df5878bed50c58a70bf/embed?autostart=1&preload=1&ui_theme=dark&ui_watermark_link=0&ui_color=00b7a8',
+      modelUrl: 'https://sketchfab.com/3d-models/nissan-terra-2020-46727bb6f4f84df5878bed50c58a70bf',
+      authorName: 'Asadawut.Kaewma',
+      authorUrl: 'https://sketchfab.com/Asadawut.Kaewma',
+      title: 'Nissan Terra 2020',
+    },
+  },
+  {
+    id: 'skoda-karoq-2019',
+    name: '2019 Skoda Karoq',
+    make: 'Skoda',
+    category: 'European Executive Compact Crossover',
+    year: 2019,
+    engine: '1.5L TSI EVO Turbocharged 4-Cylinder',
+    drivetrain: 'Front-Wheel Drive with 7-Speed Dual-Clutch DSG',
+    seating: 5,
+    luggage: 4,
+    dailyRate: 95,
+    weeklyRate: 560,
+    monthlyRate: 1890,
+    tagline: 'Intelligent European Engineering & Agile City-to-Country Utility',
+    description:
+      'Refined European crossover practicality with Skoda’s renowned VarioFlex modular rear seating. The Karoq delivers crisp handling, responsive turbocharged power, exceptional cargo versatility, and full smartphone integration for visiting medical professionals and consultants.',
+    features: [
+      'VarioFlex removable & sliding three-piece rear seating system',
+      'Columbus 9.2-inch infotainment with Apple CarPlay & Android Auto',
+      'Adaptive Cruise Control with Front Assist Emergency Braking',
+      'Panoramic glass sunroof with electric sunblind',
+      'Electrically operated tailgate with virtual pedal kick sensor',
+      'Drive Mode Select with Eco, Normal, Sport, and Individual presets',
+    ],
+    specs: {
+      horsepower: '150 HP @ 5,000 RPM',
+      acceleration: '0–60 mph in 8.4 sec',
+      topSpeed: '127 mph',
+      efficiency: '30 MPG City / 38 MPG Hwy',
+      fuelType: 'Regular Unleaded Gasoline',
+    },
+    defaultColor: '#2b5275',
+    availableColors: [
+      { name: 'Lava Blue Metallic', hex: '#2b5275' },
+      { name: 'Moon White Pearl', hex: '#f0f3f6' },
+      { name: 'Steel Grey Metallic', hex: '#49525c' },
+      { name: 'Velvet Red Metallic', hex: '#8c1626' },
+      { name: 'Black Magic Pearl', hex: '#121417' },
+    ],
+    sketchfab: {
+      modelId: '7e359874ebe744158eddc37c9da8f487',
+      embedUrl: 'https://sketchfab.com/models/7e359874ebe744158eddc37c9da8f487/embed?autostart=1&preload=1&ui_theme=dark&ui_watermark_link=0&ui_color=00b7a8',
+      modelUrl: 'https://sketchfab.com/3d-models/2019-skoda-karoq-7e359874ebe744158eddc37c9da8f487',
+      authorName: 'BHP3D',
+      authorUrl: 'https://sketchfab.com/BHP3D',
+      title: '2019 Skoda Karoq',
+    },
+  },
+  {
+    id: 'audi-a3-2021',
+    name: 'Audi A3 2021',
+    make: 'Audi',
+    category: 'Luxury Compact Executive Sport Sedan',
+    year: 2021,
+    engine: '2.0L 40 TFSI Turbocharged MHEV Mild Hybrid',
+    drivetrain: 'Front-Wheel Drive / 7-Speed S tronic Dual-Clutch',
+    seating: 5,
+    luggage: 3,
+    dailyRate: 115,
+    weeklyRate: 680,
+    monthlyRate: 2250,
+    tagline: 'German Luxury Craftsmanship & Crisp Highway Composure',
+    description:
+      'The 2021 Audi A3 presents a sculpted exterior with signature Singleframe grille and matrix-design LED headlights. Inside, enjoy Audi Virtual Cockpit digital instrument cluster, leather sport seats, and acoustic windshield glass for a hushed, relaxing commute along Highway 50 and I-80.',
+    features: [
+      'Audi Virtual Cockpit Plus 12.3-inch high-resolution customizable display',
+      'MMI 10.1-inch central touchscreen with acoustic feedback and nav',
+      'Panoramic power sunroof and ambient interior LED lighting package',
+      'Bang & Olufsen 3D Premium Sound System with 15 speakers',
+      'Audi Pre Sense Front with pedestrian & bicyclist avoidance assist',
+      'Heated 8-way power front leather seats with 4-way power lumbar',
+    ],
+    specs: {
+      horsepower: '201 HP @ 4,800 RPM',
+      acceleration: '0–60 mph in 6.6 sec',
+      topSpeed: '130 mph',
+      efficiency: '28 MPG City / 36 MPG Hwy',
+      fuelType: 'Premium Gasoline',
+    },
+    defaultColor: '#1d3557',
+    availableColors: [
+      { name: 'Navarra Blue Metallic', hex: '#1d3557' },
+      { name: 'Glacier White Metallic', hex: '#f2f4f7' },
+      { name: 'Mythos Black Metallic', hex: '#0e1013' },
+      { name: 'Manhattan Gray Metallic', hex: '#3e444b' },
+      { name: 'Tango Red Metallic', hex: '#a61c28' },
+    ],
+    sketchfab: {
+      modelId: 'db34a8426f684e299d53fcb2e331d35d',
+      embedUrl: 'https://sketchfab.com/models/db34a8426f684e299d53fcb2e331d35d/embed?autostart=1&preload=1&ui_theme=dark&ui_watermark_link=0&ui_color=00b7a8',
+      modelUrl: 'https://sketchfab.com/3d-models/audi-a3-2021-db34a8426f684e299d53fcb2e331d35d',
+      authorName: '3DStarving',
+      authorUrl: 'https://sketchfab.com/3DStarving',
+      title: 'Audi A3 2021',
+    },
+  },
+  {
+    id: 'vw-jetta-gli',
+    name: 'Volkswagen Jetta GLI',
+    make: 'Volkswagen',
+    category: 'Sport Performance Turbocharged Sedan',
+    year: 2022,
+    engine: '2.0L TSI EA888 Turbocharged 4-Cylinder',
+    drivetrain: 'Front-Wheel Drive with VAQ Mechanical Limited-Slip Differential',
+    seating: 5,
+    luggage: 4,
+    dailyRate: 105,
+    weeklyRate: 620,
+    monthlyRate: 2050,
+    tagline: 'Enthusiast Sport Sedan with Golf GTI DNA & Highway Agility',
+    description:
+      'The GTI with a trunk. The Jetta GLI packs a 228-horsepower turbocharged powerplant, multi-link rear suspension, DCC adaptive chassis dampers, red-stitched sport seats, and oversized performance brakes for an exhilarating Northern California road trip or executive commute.',
+    features: [
+      'DCC Adaptive Chassis Control with selectable suspension damping modes',
+      'VAQ torque-sensing electronically controlled limited-slip differential',
+      'Golf R performance braking system with vented red calipers',
+      'Titan Black leather sport seating with red contrast GLI stitching',
+      'BeatsAudio 400-watt 8-channel premium audio system',
+      'Wireless App-Connect with inductive wireless phone charging pad',
+    ],
+    specs: {
+      horsepower: '228 HP @ 5,000 RPM',
+      acceleration: '0–60 mph in 5.6 sec',
+      topSpeed: '126 mph',
+      efficiency: '26 MPG City / 37 MPG Hwy',
+      fuelType: 'Regular or Premium Gasoline',
+    },
+    defaultColor: '#8a1c22',
+    availableColors: [
+      { name: 'Tornado Red Sport', hex: '#8a1c22' },
+      { name: 'Pure White Gloss', hex: '#f7f7f8' },
+      { name: 'Deep Black Pearl', hex: '#0f1114' },
+      { name: 'Pure Gray Solid', hex: '#636970' },
+      { name: 'Rising Blue Metallic', hex: '#163c78' },
+    ],
+    sketchfab: {
+      modelId: 'fcca9d60045b4b2c94f221ce09d2e574',
+      embedUrl: 'https://sketchfab.com/models/fcca9d60045b4b2c94f221ce09d2e574/embed?autostart=1&preload=1&ui_theme=dark&ui_watermark_link=0&ui_color=00b7a8',
+      modelUrl: 'https://sketchfab.com/3d-models/volkswagen-jetta-gli-fcca9d60045b4b2c94f221ce09d2e574',
+      authorName: '3DStarving',
+      authorUrl: 'https://sketchfab.com/3DStarving',
+      title: 'Volkswagen Jetta GLI',
+    },
+  },
+  {
+    id: 'audi-rs5-2019',
+    name: 'Audi RS5 2019',
+    make: 'Audi',
+    category: 'High-Performance Twin-Turbo Sportback',
+    year: 2019,
+    engine: '2.9L Twin-Turbocharged TFSI V6',
+    drivetrain: 'Quattro Permanent All-Wheel Drive with Sport Rear Differential',
+    seating: 5,
+    luggage: 4,
+    dailyRate: 175,
+    weeklyRate: 1050,
+    monthlyRate: 3600,
+    tagline: 'Supercar Acceleration Meets 5-Door Grand Touring Prestige',
+    description:
+      'The Audi RS5 Sportback is the pinnacle of executive grand touring. Powered by a Porsche-developed 2.9L twin-turbo V6 generating 444 HP, it sprints from 0 to 60 mph in just 3.7 seconds. Finished with RS sport exhaust, honeycomb Fine Nappa leather, and Quattro all-weather grip.',
+    features: [
+      'Quattro permanent all-wheel drive with self-locking center differential',
+      'Dynamic Ride Control (DRC) hydraulic anti-roll active suspension',
+      'RS Sport Oval dual exhaust system with active bypass valves',
+      'Fine Nappa leather RS honeycomb sport seats with pneumatic massage',
+      'Carbon-fiber exterior trim package & mirror housings',
+      'Head-up display with lap timer and G-meter telemetry',
+    ],
+    specs: {
+      horsepower: '444 HP @ 6,700 RPM',
+      acceleration: '0–60 mph in 3.7 sec',
+      topSpeed: '174 mph',
+      efficiency: '18 MPG City / 26 MPG Hwy',
+      fuelType: '91+ Octane Premium Gasoline',
+    },
+    defaultColor: '#174033',
+    availableColors: [
+      { name: 'Sonoma Green Metallic', hex: '#174033' },
+      { name: 'Nardo Gray Solid', hex: '#585e65' },
+      { name: 'Mythos Black Metallic', hex: '#0a0b0d' },
+      { name: 'Glacier White Pearl', hex: '#f0f2f5' },
+      { name: 'Misano Red Pearl', hex: '#941724' },
+    ],
+    sketchfab: {
+      modelId: 'fae1a4186d464a6aae351ce9e9ff2401',
+      embedUrl: 'https://sketchfab.com/models/fae1a4186d464a6aae351ce9e9ff2401/embed?autostart=1&preload=1&ui_theme=dark&ui_watermark_link=0&ui_color=00b7a8',
+      modelUrl: 'https://sketchfab.com/3d-models/audi-rs5-2019-fae1a4186d464a6aae351ce9e9ff2401',
+      authorName: 'Indians',
+      authorUrl: 'https://sketchfab.com/Indians',
+      title: 'Audi RS5 2019',
+    },
+  },
 ];

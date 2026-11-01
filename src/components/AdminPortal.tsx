@@ -33,6 +33,16 @@ import {
 import { useCart } from '../context/CartContext';
 import { getFallbackPropertyImage } from '../data/lodgingData';
 import { LivePhotoBackground } from './LivePhotoBackground';
+import { AdminProperties } from './admin/AdminProperties';
+import { AdminReservations } from './admin/AdminReservations';
+import { AdminCarRentals } from './admin/AdminCarRentals';
+import { AdminPayments } from './admin/AdminPayments';
+import { AdminGuests } from './admin/AdminGuests';
+import { AdminHosts } from './admin/AdminHosts';
+import { AdminHousekeeping } from './admin/AdminHousekeeping';
+import { AdminReports } from './admin/AdminReports';
+import { AdminSettings } from './admin/AdminSettings';
+import type { AdminProperty, AdminReservation, AdminVehicle, AdminGuest } from './admin/adminTypes';
 
 interface AdminPortalProps {
   onNavigateTab: (tab: string) => void;
@@ -285,13 +295,29 @@ interface AdminPromoRecord {
   expiresAt?: string;
 }
 
-type AdminTab = 'overview' | 'orders' | 'catalog' | 'wires' | 'bookings' | 'fleet' | 'clients' | 'settings';
+type AdminTab =
+  | 'properties'
+  | 'reservations'
+  | 'car-rentals'
+  | 'payments'
+  | 'guests'
+  | 'hosts'
+  | 'housekeeping'
+  | 'reports'
+  | 'settings'
+  | 'overview'
+  | 'orders'
+  | 'catalog'
+  | 'wires'
+  | 'bookings'
+  | 'fleet'
+  | 'clients';
 
 export const AdminPortal: React.FC<AdminPortalProps> = ({ onNavigateTab }) => {
   const { refreshCatalog } = useCart();
   const [adminToken, setAdminToken] = useState<string | null>(() => localStorage.getItem('etl_admin_token'));
   const [adminProfile, setAdminProfile] = useState<{ name: string; email: string; role: string } | null>(null);
-  const [activeTab, setActiveTab] = useState<AdminTab>('overview');
+  const [activeTab, setActiveTab] = useState<AdminTab>('properties');
 
   // Login inputs
   const [loginEmail, setLoginEmail] = useState('admin@easytravellodging.com');
@@ -927,6 +953,157 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ onNavigateTab }) => {
     );
   });
 
+  const unifiedProperties: AdminProperty[] = properties.map((p) => ({
+    id: p.id,
+    unitNumber: p.unitNumber,
+    title: p.title,
+    category: p.category,
+    shortDesc: p.shortDesc,
+    fullDesc: p.fullDesc,
+    monthlyRate: p.monthlyRate,
+    pricingNote: p.pricingNote,
+    status: p.status,
+    minimumStayDays: p.minimumStayDays,
+    images: p.images,
+  }));
+
+  const unifiedReservations: AdminReservation[] = [
+    ...bookings.map((b) => ({
+      id: b.id,
+      type: 'accommodation' as const,
+      targetId: b.propertyId,
+      targetTitle: properties.find((p) => p.id === b.propertyId)?.title || b.propertyId,
+      guestName: b.guestName,
+      guestEmail: b.guestEmail,
+      guestPhone: b.guestPhone,
+      employer: b.employer,
+      startDate: b.checkIn,
+      endDate: b.checkOut,
+      totalDays: b.totalNights,
+      amountUsd: b.unitCostUsd || b.totalNights * 85,
+      unitsCost: b.unitCostUnits,
+      status: (b.status === 'awaiting_payment' ? 'pending' : b.status === 'confirmed' ? 'confirmed' : 'active') as AdminReservation['status'],
+      paymentReference: b.paymentReference,
+      notes: b.notes,
+      createdAt: new Date().toISOString(),
+    })),
+    ...vehicleBookings.map((vb) => ({
+      id: vb.id,
+      type: 'car-rental' as const,
+      targetId: vb.vehicleId,
+      targetTitle: `${vb.vehicleName} (${vb.exteriorColorName || 'Standard'})`,
+      guestName: vb.customerName,
+      guestEmail: vb.customerEmail,
+      guestPhone: vb.customerPhone,
+      startDate: vb.pickupDate,
+      endDate: vb.returnDate,
+      totalDays: vb.totalDays,
+      amountUsd: vb.totalUsd,
+      unitsCost: vb.unitsRequired,
+      status: (vb.status === 'awaiting_payment' ? 'pending' : vb.status === 'confirmed' ? 'confirmed' : 'active') as AdminReservation['status'],
+      paymentReference: vb.paymentReference,
+      createdAt: new Date().toISOString(),
+    })),
+  ];
+
+  const unifiedVehicles: AdminVehicle[] = vehicles.map((v) => ({
+    id: v.id,
+    name: v.name,
+    make: v.make,
+    category: v.category,
+    year: v.year,
+    licensePlate: v.licensePlate,
+    mileage: v.mileage,
+    hubLocation: v.hubLocation,
+    dailyRate: v.dailyRate,
+    weeklyRate: v.weeklyRate,
+    monthlyRate: v.monthlyRate,
+    inventoryStatus: v.inventoryStatus as AdminVehicle['inventoryStatus'],
+    maintenanceLogs: v.maintenanceLogs || [],
+  }));
+
+  const unifiedGuests: AdminGuest[] = customers.map((c) => ({
+    id: c.id,
+    name: c.name,
+    email: c.email,
+    phone: c.phone || '(916) 555-0199',
+    company: c.company || 'Private Corporate Client',
+    role: c.role || 'Guest',
+    units_balance: c.units_balance,
+    balance_usd: c.balance_usd,
+    totalStays: 2,
+    verifiedId: true,
+    corporateVerified: !!c.company,
+    createdAt: c.created_at,
+  }));
+
+  const handleUnifiedPropertyUpdate = async (updated: AdminProperty) => {
+    if (!adminToken) return;
+    try {
+      const res = await fetch(`/api/admin/properties/${updated.id}`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${adminToken}`,
+        },
+        body: JSON.stringify(updated),
+      });
+      if (!res.ok) throw new Error('Could not update property');
+      setSuccessMsg(`Updated ${updated.title}`);
+      await refreshCatalog();
+      fetchAdminDashboard(adminToken);
+    } catch (err: unknown) {
+      setErrorMsg(err instanceof Error ? err.message : 'Property update failed');
+    }
+  };
+
+  const handleUnifiedAddProperty = async (newProp: AdminProperty) => {
+    setProperties((prev) => [...prev, newProp as AdminPropertyRecord]);
+    setSuccessMsg(`Added ${newProp.title} to portfolio`);
+  };
+
+  const handleUnifiedReservationStatus = async (id: string, newStatus: AdminReservation['status']) => {
+    if (id.startsWith('vb_')) {
+      await handleVehicleBookingStatus(id, newStatus);
+    } else {
+      await handleHousingStatusChange(id, newStatus);
+    }
+  };
+
+  const handleUnifiedVehicleUpdate = async (veh: AdminVehicle) => {
+    await handleVehicleInventoryStatus(veh.id, veh.inventoryStatus as 'available' | 'rented' | 'maintenance');
+  };
+
+  const handleUnifiedAddVehicle = async (veh: AdminVehicle) => {
+    setVehicles((prev) => [...prev, veh as AdminVehicleInventory]);
+    setSuccessMsg(`Added ${veh.name} to nationwide 3D fleet`);
+  };
+
+  const handleUnifiedVerifyPayment = async (id: string, action: 'verify' | 'reject', notes: string) => {
+    wireNotesMap[id] = notes;
+    await handleVerifyWire(id, action === 'verify' ? 'verified' : 'rejected');
+  };
+
+  const handleUnifiedAllocateUnits = async (guestId: string, unitsDelta: number, reason: string) => {
+    if (!adminToken) return;
+    try {
+      const res = await fetch(`/api/admin/customers/${guestId}/allocate-units`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${adminToken}`,
+        },
+        body: JSON.stringify({ unitsDelta, reason }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.message || 'Unit allocation failed');
+      setSuccessMsg(data.message);
+      fetchAdminDashboard(adminToken);
+    } catch (err: unknown) {
+      setErrorMsg(err instanceof Error ? err.message : 'Unit allocation failed');
+    }
+  };
+
   return (
     <div className="bg-[#f7f3ed] text-[#282828] min-h-[820px] pb-16 text-left">
       {/* Live Realistic Photography Control Center Header */}
@@ -1224,14 +1401,16 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ onNavigateTab }) => {
             {/* Admin Navigation Tabs */}
             <div className="flex flex-wrap gap-2 border-b border-[#e6dfd5] pb-3">
               {[
-                { id: 'overview', label: 'Inquiries & Audit', icon: Inbox, badge: overview.newInquiriesCount },
-                { id: 'orders', label: 'Orders & Sales', icon: ShoppingBag, badge: overview.pendingOrdersCount || orders.length },
-                { id: 'catalog', label: 'Catalog, Suites & Promos', icon: Package, badge: properties.length + catalogItems.length },
-                { id: 'wires', label: 'Wire / ACH Verification', icon: Landmark, badge: overview.pendingWireCount },
-                { id: 'bookings', label: 'Residence Stays', icon: Building2, badge: overview.pendingBookings },
-                { id: 'fleet', label: 'Fleet & Maintenance', icon: Car },
-                { id: 'clients', label: 'Clients & Units', icon: Users, badge: customers.length },
-                { id: 'settings', label: 'Bank Accounts & CSV', icon: FileSpreadsheet },
+                { id: 'properties', label: 'Properties', icon: Building2, badge: properties.length },
+                { id: 'reservations', label: 'Reservations', icon: FileSpreadsheet, badge: overview.pendingBookings },
+                { id: 'car-rentals', label: 'Car Rentals', icon: Car, badge: vehicles.length },
+                { id: 'payments', label: 'Payments', icon: Landmark, badge: overview.pendingWireCount },
+                { id: 'guests', label: 'Guests', icon: Users, badge: customers.length },
+                { id: 'hosts', label: 'Hosts', icon: Users },
+                { id: 'housekeeping', label: 'Housekeeping', icon: Sparkles },
+                { id: 'reports', label: 'Reports', icon: FileSpreadsheet },
+                { id: 'settings', label: 'Settings', icon: Wrench },
+                { id: 'overview', label: 'Inquiries & Leads', icon: Inbox, badge: overview.newInquiriesCount },
               ].map((t) => {
                 const Icon = t.icon;
                 const active = activeTab === t.id;
@@ -1261,6 +1440,70 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ onNavigateTab }) => {
                 );
               })}
             </div>
+
+            {/* 1. PROPERTIES (admin/properties/) */}
+            {activeTab === 'properties' && (
+              <AdminProperties
+                properties={unifiedProperties}
+                onUpdateProperty={handleUnifiedPropertyUpdate}
+                onAddProperty={handleUnifiedAddProperty}
+              />
+            )}
+
+            {/* 2. RESERVATIONS (admin/reservations/) */}
+            {activeTab === 'reservations' && (
+              <AdminReservations
+                reservations={unifiedReservations}
+                onUpdateStatus={handleUnifiedReservationStatus}
+              />
+            )}
+
+            {/* 3. CAR RENTALS (admin/car-rentals/) */}
+            {activeTab === 'car-rentals' && (
+              <AdminCarRentals
+                vehicles={unifiedVehicles}
+                bookings={unifiedReservations}
+                onUpdateVehicle={handleUnifiedVehicleUpdate}
+                onAddVehicle={handleUnifiedAddVehicle}
+                onUpdateBookingStatus={handleUnifiedReservationStatus}
+              />
+            )}
+
+            {/* 4. PAYMENTS (admin/payments/) */}
+            {activeTab === 'payments' && (
+              <AdminPayments
+                manualPayments={manualPayments}
+                orders={orders}
+                onVerifyPayment={handleUnifiedVerifyPayment}
+              />
+            )}
+
+            {/* 5. GUESTS (admin/guests/) */}
+            {activeTab === 'guests' && (
+              <AdminGuests
+                guests={unifiedGuests}
+                onAllocateUnits={handleUnifiedAllocateUnits}
+              />
+            )}
+
+            {/* 6. HOSTS (admin/hosts/) */}
+            {activeTab === 'hosts' && <AdminHosts />}
+
+            {/* 7. HOUSEKEEPING (admin/housekeeping/) */}
+            {activeTab === 'housekeeping' && <AdminHousekeeping />}
+
+            {/* 8. REPORTS (admin/reports/) */}
+            {activeTab === 'reports' && (
+              <AdminReports
+                totalRevenue={overview.totalRevenue}
+                totalBookings={overview.totalBookings}
+                totalVehicleBookings={overview.totalVehicleBookings}
+                onExportCsv={exportCsv}
+              />
+            )}
+
+            {/* 9. SETTINGS (admin/settings/) */}
+            {activeTab === 'settings' && <AdminSettings auditLogs={auditLogs} />}
 
             {/* TAB 1: OVERVIEW — INQUIRIES & AUDIT TRAIL */}
             {activeTab === 'overview' && (
@@ -1764,7 +2007,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ onNavigateTab }) => {
 
                             <div className="flex items-center justify-between pt-1">
                               <span className="font-mono font-bold text-[#282828] tabular-nums">
-                                ${prop.monthlyRate.toLocaleString()}/mo · Min {prop.minimumStayDays}d
+                                ${prop.monthlyRate.toLocaleString()}/mo · Min {prop.minimumStayDays}d · {prop.images?.length || 0} Photos
                               </span>
                               <button
                                 type="button"
@@ -2274,7 +2517,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ onNavigateTab }) => {
               <div className="bg-white border border-[#e6dfd5] rounded-2xl p-6 shadow-xs space-y-4">
                 <div className="border-b border-[#e6dfd5] pb-3">
                   <h3 className="font-heading font-bold text-lg text-[#282828]">
-                    Rancho Cordova &amp; Sacramento Residence Reservations
+                    Nationwide Furnished Residence Reservations
                   </h3>
                   <p className="text-xs text-[#5c5046]">
                     Manage short-stay and 30+ day extended reservation statuses or record manual payment clearance.
@@ -2764,13 +3007,36 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ onNavigateTab }) => {
                   </div>
                 </div>
                 <div>
-                  <label className="block font-bold text-[#5c5046] mb-1">Primary Cover Image URL</label>
+                  <div className="flex items-center justify-between mb-1">
+                    <label className="block font-bold text-[#5c5046]">Primary Cover Image URL</label>
+                    <span className="text-[11px] text-[#00897d] font-bold">
+                      {editingProperty.images?.length || 0} Total Photos in Gallery
+                    </span>
+                  </div>
                   <input
                     type="url"
                     value={propPrimaryImage}
                     onChange={(e) => setPropPrimaryImage(e.target.value)}
                     className="w-full h-10 px-3 bg-[#faf8f5] border border-[#dfd6ca] rounded-xl text-[#282828] outline-none focus:border-[#00b7a8] focus:bg-white"
                   />
+                  {editingProperty.images && editingProperty.images.length > 0 && (
+                    <div className="mt-2 flex gap-1.5 overflow-x-auto pb-1 scrollbar-thin">
+                      {editingProperty.images.map((img, i) => (
+                        <div
+                          key={i}
+                          onClick={() => setPropPrimaryImage(img)}
+                          title={`Click to set as primary (Photo ${i + 1})`}
+                          className={`w-14 h-10 shrink-0 rounded-lg overflow-hidden border cursor-pointer ${
+                            propPrimaryImage === img
+                              ? 'border-[#00b7a8] ring-1 ring-[#00b7a8]'
+                              : 'border-[#dfd6ca] opacity-70 hover:opacity-100'
+                          }`}
+                        >
+                          <img src={img} alt="" className="w-full h-full object-cover" />
+                        </div>
+                      ))}
+                    </div>
+                  )}
                 </div>
                 <div>
                   <label className="block font-bold text-[#5c5046] mb-1">Short Description</label>

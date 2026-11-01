@@ -124,7 +124,7 @@ export const TermsView: React.FC<TermsViewProps> = ({ onOpenBooking }) => {
           <LivePhotoBackground scene="courtyard" overlay="espresso" />
           <div className="relative z-10 space-y-4">
             <h3 className="text-2xl font-heading font-black text-white">
-              Ready to Plan Your Stay in Greater Sacramento?
+              Ready to Plan Your Stay Across California’s homes?
             </h3>
             <p className="text-[#ede5dc] text-sm max-w-xl mx-auto leading-relaxed">
               By reserving with Easy Travel Lodging, you join a quiet, well-cared-for residential community shared by families, relocating homeowners, visiting guests, and extended-stay residents.

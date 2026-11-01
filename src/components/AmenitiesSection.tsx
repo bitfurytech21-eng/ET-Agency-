@@ -34,11 +34,11 @@ export const AmenitiesSection: React.FC = () => {
       <section className="bg-white py-14 sm:py-20 border-b border-[#e6dfd5]">
         <div className="max-w-[1200px] mx-auto px-4 sm:px-8 text-left space-y-10">
           <div className="space-y-2">
-            <h6 className="et_section_h6 text-[#282828]">
+            <h6 className="et_section_h6 text-[#82634f]">
               Included With Every Residence
             </h6>
-            <h2 className="font-heading font-bold text-3xl sm:text-5xl text-[#00b7a8] leading-tight mt-1">
-              Everyday Home Comforts &amp; Turnkey Essentials
+            <h2 className="font-heading font-extrabold text-3xl sm:text-4xl text-[#282828] leading-tight">
+              Everyday Home Comforts &amp; <span className="text-[#00897d]">Turnkey Essentials</span>
             </h2>
             <p className="text-sm sm:text-base text-[#5c5046] max-w-3xl pt-1">
               Every apartment includes utilities, household essentials, and full community amenities so you can settle in from your first evening without unexpected setup costs.
@@ -47,15 +47,15 @@ export const AmenitiesSection: React.FC = () => {
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8 pt-2">
             {amenities.map((item, index) => (
-              <div key={index} className="flex items-center gap-4 py-2">
-                <div className="w-9 h-9 rounded-full bg-[#00b7a8] flex items-center justify-center text-white shrink-0 shadow-xs">
-                  <Check className="w-5 h-5 stroke-[3]" />
+              <div key={index} className="flex items-start gap-3.5 py-2">
+                <div className="w-8 h-8 rounded-lg bg-[#faf7f2] border border-[#e5dcce] text-[#00897d] flex items-center justify-center shrink-0 mt-0.5 shadow-2xs">
+                  <Check className="w-4 h-4 stroke-[2.5]" />
                 </div>
                 <div>
-                  <h5 className="font-heading font-bold text-lg text-[#282828]">
+                  <h5 className="font-heading font-bold text-base text-[#282828]">
                     {item.title}
                   </h5>
-                  <p className="text-xs text-[#5c5046]">{item.desc}</p>
+                  <p className="text-xs text-[#5c5046] mt-0.5 leading-relaxed">{item.desc}</p>
                 </div>
               </div>
             ))}

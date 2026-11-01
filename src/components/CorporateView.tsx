@@ -9,7 +9,7 @@ import {
   Heart,
   ChevronRight
 } from 'lucide-react';
-import { getFallbackPropertyImage } from '../data/lodgingData';
+import { PROPERTIES, getFallbackPropertyImage } from '../data/lodgingData';
 import { LivePhotoBackground } from './LivePhotoBackground';
 
 interface CorporateViewProps {
@@ -72,10 +72,10 @@ export const CorporateView: React.FC<CorporateViewProps> = ({
               Extended Stays, Relocations &amp; Group Housing
             </h5>
             <h1 className="font-heading font-extrabold text-3xl sm:text-5xl md:text-6xl text-[#00b7a8] tracking-tight leading-tight mb-4">
-              Turnkey Furnished Living in Greater Sacramento
+              Turnkey Furnished Residences Across California’s homes
             </h1>
             <p className="text-[#282828] text-base sm:text-lg max-w-2xl leading-relaxed mb-8 font-medium">
-              Tailored for families between homes, homeowner insurance claims, medical and university stays, corporate relocations, and organizations coordinating multi-week or multi-month accommodations.
+              Tailored for families between homes, insurance temporary displacement, medical fellowships, corporate relocations, and government per diem travel nationwide.
             </p>
 
             <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 pt-2">
@@ -111,7 +111,7 @@ export const CorporateView: React.FC<CorporateViewProps> = ({
           </p>
 
           <p className="text-base sm:text-lg text-[#5c5046] leading-relaxed">
-            Welcome to <strong className="text-[#282828] font-bold">Easy Travel Lodging (ETL)</strong>. Whether you are coordinating housing for a relocating family, arranging temporary living during a home renovation, visiting UC Davis Health or regional medical centers, or managing employee travel, our goal is simple: to make every guest feel safe, comfortable, and genuinely cared for from arrival through departure.
+            Welcome to <strong className="text-[#282828] font-bold">Easy Travel Lodging (ETL)</strong>. Whether you are coordinating housing for a relocating family, arranging temporary living during a home renovation, visiting medical and research centers nationwide, or managing corporate and government employee travel, our goal is simple: to make every guest feel safe, comfortable, and genuinely cared for from arrival through departure.
           </p>
         </div>
       </section>
@@ -128,7 +128,7 @@ export const CorporateView: React.FC<CorporateViewProps> = ({
               </h2>
 
               <p className="text-[#5c5046] text-base sm:text-lg leading-relaxed">
-                Every apartment in our Rancho Cordova and Greater Sacramento collection is personally selected and inspected by our local team. We choose quiet residential communities with reliable parking, green outdoor spaces, and quick access to Highway 50, Folsom, and downtown Sacramento.
+                Every apartment in our nationwide portfolio is personally selected and inspected by our hospitality leadership. We choose quiet residential communities with reserved parking, peaceful landscaped grounds, and rapid access to major business corridors, medical complexes, and transport hubs nationwide.
               </p>
 
               <p className="text-[#5c5046] text-base sm:text-lg leading-relaxed">
@@ -368,6 +368,89 @@ export const CorporateView: React.FC<CorporateViewProps> = ({
                   <span className="bg-white/95 text-[#282828] px-3 py-1.5 rounded-lg text-xs font-bold shadow-md">
                     Click to Enlarge
                   </span>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* =========================================================================
+          SECTION 6B: Los Angeles Luxury Vacation Rentals Collection
+          (Imported & Rebranded from Stay A While -> Easy Travel Lodging)
+          ========================================================================= */}
+      <section className="py-16 sm:py-20 px-4 sm:px-8 bg-[#faf8f5] border-t border-[#e6dfd5]">
+        <div className="max-w-6xl mx-auto space-y-10">
+          <div className="text-center max-w-3xl mx-auto space-y-3">
+            <span className="font-heading font-bold uppercase text-xs sm:text-sm tracking-[4px] text-[#00b7a8]">
+              Collection 2 · Los Angeles Luxury Vacation Rentals
+            </span>
+            <h2 className="font-heading font-bold text-3xl sm:text-5xl text-[#282828]">
+              Los Angeles Luxury Estates &amp; Oceanfront Villas
+            </h2>
+            <p className="text-[#5c5046] text-base sm:text-lg leading-relaxed">
+              Curated under Easy Travel Lodging, explore luxury vacation villas, Bel-Air sanctuaries, Malibu oceanfront retreats, and Hollywood Hills panoramic estates.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            {PROPERTIES.filter((p) => p.id.startsWith('la-')).map((laProp) => (
+              <div
+                key={laProp.id}
+                className="bg-white rounded-2xl overflow-hidden border border-[#e6dfd5] shadow-md hover:shadow-xl transition-all duration-300 flex flex-col justify-between"
+              >
+                <div>
+                  <div className="relative aspect-16/10 overflow-hidden bg-[#f4efe9]">
+                    <img
+                      src={laProp.images[0]}
+                      alt={laProp.title}
+                      className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
+                      loading="lazy"
+                    />
+                    <div className="absolute top-3 left-3 bg-[#1d1714]/80 text-white text-xs font-bold px-3 py-1 rounded-full backdrop-blur-xs">
+                      {laProp.category}
+                    </div>
+                    <div className="absolute bottom-3 right-3 bg-white/95 text-[#282828] text-xs font-extrabold px-3 py-1 rounded-lg shadow-md tabular-nums">
+                      ${laProp.monthlyRate.toLocaleString()} / mo
+                    </div>
+                  </div>
+
+                  <div className="p-6 space-y-3">
+                    <h3 className="font-heading font-bold text-xl sm:text-2xl text-[#282828] leading-tight">
+                      {laProp.title}
+                    </h3>
+                    <p className="text-xs font-semibold text-[#00b7a8]">
+                      {laProp.location} · {laProp.bedrooms} Bedrooms · {laProp.bathrooms} Baths · {laProp.sqft}
+                    </p>
+                    <p className="text-sm text-[#5c5046] leading-relaxed line-clamp-3">
+                      {laProp.shortDesc}
+                    </p>
+
+                    <div className="pt-2 flex flex-wrap gap-2">
+                      {laProp.features.slice(0, 3).map((feat, idx) => (
+                        <span
+                          key={idx}
+                          className="inline-flex items-center gap-1 text-[11px] font-semibold text-[#3d352e] bg-[#f4efe9] px-2.5 py-1 rounded-md"
+                        >
+                          <Check className="w-3 h-3 text-[#00b7a8]" />
+                          {feat}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+
+                <div className="p-6 pt-0 flex items-center justify-between gap-4 border-t border-[#f4efe9] mt-4">
+                  <span className="text-xs text-[#857568] font-medium">
+                    {laProp.pricingNote}
+                  </span>
+                  <button
+                    type="button"
+                    onClick={onOpenBooking}
+                    className="et_pb_button et_pb_button_teal text-xs py-2 px-4 font-bold shrink-0 cursor-pointer shadow-xs"
+                  >
+                    Inquire Villa Stay
+                  </button>
                 </div>
               </div>
             ))}

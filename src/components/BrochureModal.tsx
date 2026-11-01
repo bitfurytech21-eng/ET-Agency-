@@ -80,7 +80,7 @@ export const BrochureModal: React.FC<BrochureModalProps> = ({ isOpen, onClose })
             <div className="space-y-4">
               <div className="p-4 bg-[#f5efe8] rounded-2xl border border-[#dfd3c5]">
                 <p className="text-[#3d2e24] text-xs sm:text-sm font-medium leading-relaxed">
-                  Our goal is to make every arrival effortless. Whether you are visiting family, relocating to Greater Sacramento, remodeling your home, or arranging extended housing, download our illustrated residence packet to review floor plans, amenities, and inclusions.
+                  Our goal is to make every arrival effortless. Whether you are visiting family, relocating across California’s homes, remodeling your home, or arranging extended corporate housing, download our illustrated residence packet to review floor plans, amenities, and inclusions.
                 </p>
               </div>
 
@@ -149,7 +149,7 @@ export const BrochureModal: React.FC<BrochureModalProps> = ({ isOpen, onClose })
                       EASY TRAVEL LODGING
                     </h4>
                     <p className="text-xs text-[#00897d] font-bold">
-                      Sacramento &amp; Rancho Cordova Furnished Residences
+                      Nationwide Furnished Residences &amp; Corporate Suites
                     </p>
                   </div>
                   <span className="text-xs text-[#82634f] font-bold">

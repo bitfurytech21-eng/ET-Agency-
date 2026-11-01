@@ -48,7 +48,7 @@ export const VehicleBookingModal: React.FC<VehicleBookingModalProps> = ({
   const [employer, setEmployer] = useState('');
   const [pickupDate, setPickupDate] = useState('');
   const [returnDate, setReturnDate] = useState('');
-  const [pickupLocation, setPickupLocation] = useState('SMF Sacramento Int’l Airport Concierge Delivery');
+  const [pickupLocation, setPickupLocation] = useState('Major US Airport Hub Delivery (Airport Concierge Terminal Handover)');
   const [protectionPlan, setProtectionPlan] = useState<'standard' | 'executive_shield'>('standard');
   const [paymentMethod, setPaymentMethod] = useState<'manual_wire' | 'unit_balance'>('manual_wire');
   const [notes, setNotes] = useState('');
@@ -448,14 +448,17 @@ export const VehicleBookingModal: React.FC<VehicleBookingModalProps> = ({
                       onChange={(e) => setPickupLocation(e.target.value)}
                       className="w-full pl-9 pr-3 h-10 bg-white border border-[#d8cfc3] rounded-xl text-xs text-[#282828] outline-none focus:border-[#00b7a8]"
                     >
-                      <option value="SMF Sacramento Int’l Airport Concierge Delivery">
-                        SMF Sacramento Int’l Airport Concierge Delivery (Complimentary)
+                      <option value="Major US Airport Hub Delivery (Airport Concierge Terminal Handover)">
+                        Major US Airport Hub Delivery (Airport Concierge Terminal Handover)
                       </option>
-                      <option value="Direct Delivery to ETL Rancho Cordova Suite">
-                        Direct Delivery to Your ETL Rancho Cordova Suite (Units 91 / 173 / 250 / 333 / 335)
+                      <option value="Direct Residence Curbside Delivery (Delivered to Your Reserved Furnished Suite)">
+                        Direct Residence Curbside Delivery (Delivered to Your Reserved Furnished Suite)
                       </option>
-                      <option value="Sacramento Executive Hub Pickup (Rancho Cordova)">
-                        Sacramento Executive Hub Pickup — Rancho Cordova
+                      <option value="Executive Dispatch Hub &amp; Private FBO Jet Center Delivery">
+                        Executive Dispatch Hub &amp; Private FBO Jet Center Delivery
+                      </option>
+                      <option value="Corporate Campus &amp; Office Delivery (Nationwide)">
+                        Corporate Campus &amp; Office Delivery (Nationwide)
                       </option>
                     </select>
                   </div>

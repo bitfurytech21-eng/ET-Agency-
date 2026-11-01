@@ -21,7 +21,7 @@ const SCENE_ASSETS: Record<
 > = {
   courtyard: {
     src: courtyardImg,
-    alt: 'Sunlit Sacramento furnished residence courtyard with travertine walkways and olive trees at golden hour',
+    alt: 'Sunlit furnished executive residence courtyard with travertine walkways and olive trees at golden hour',
   },
   interior: {
     src: interiorImg,
@@ -29,11 +29,11 @@ const SCENE_ASSETS: Record<
   },
   twilight: {
     src: twilightImg,
-    alt: 'Boutique California residential arrival drive illuminated by warm amber architectural sconces at dusk',
+    alt: 'Boutique residential arrival drive illuminated by warm amber architectural sconces at dusk',
   },
   river: {
     src: riverImg,
-    alt: 'Golden morning sunrise reflecting across the American River Parkway in Greater Sacramento',
+    alt: 'Tranquil morning sunrise reflecting across scenic waters near our executive residences',
   },
 };
 

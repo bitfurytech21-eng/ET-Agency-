@@ -134,7 +134,7 @@ export const HostDesignView: React.FC = () => {
               Explore what thoughtful positioning can do for your short-stay, vacation, or extended-stay property. Schedule a complimentary discovery call to discuss your floor plan, target guest profile, and revenue goals.
             </p>
             <div className="p-4 bg-[#e8f8f6] rounded-xl border border-[#b8ebe5] text-[#005951] text-xs sm:text-sm leading-relaxed">
-              <strong>Located outside Greater Sacramento?</strong> Our remote e-design packages deliver room-by-room mood boards, clickable shopping lists, floor-plan placement guides, and video walk-through coaching anywhere in the United States.
+              <strong>Property Owner Support:</strong> Our comprehensive design and staging packages deliver room-by-room mood boards, clickable procurement lists, floor-plan placement guides, and video walk-through coaching anywhere in California’s homes.
             </div>
           </div>
         </div>

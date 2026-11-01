@@ -39,7 +39,7 @@ export const Hero: React.FC<HeroProps> = ({
                 Thoughtfully furnished 1- and 2-bedroom residences, private vehicle rentals, and attentive local concierge services for short visits, family relocations, home transitions, and extended stays.
               </p>
               <p className="text-sm sm:text-[15px] text-[#4a3f37] max-w-[640px] leading-relaxed">
-                Whether you are visiting loved ones for a week, navigating a home remodel, relocating to Northern California, or booking housing for a multi-month project, reserve residences, vehicles, and arrival services together in one seamless cart.
+                Whether you are visiting loved ones for a week, navigating a home remodel, relocating across California’s homes, or booking housing for a multi-month project, reserve residences, vehicles, and arrival services together in one seamless cart.
               </p>
             </div>
 

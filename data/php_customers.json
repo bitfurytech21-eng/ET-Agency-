@@ -150,6 +150,40 @@
                     "status": "completed"
                 }
             ]
+        },
+        {
+            "id": "cust_1793529208321_533",
+            "name": "Alexander Sterling",
+            "email": "sterling@corporate.com",
+            "password_hash": "$2a$10$YMV1CbLFhy6W0N3CgSzl6uqKAHsNWXvv/LkrRnsjsu3p2g4Gve8Za",
+            "company": "OmniGlobal",
+            "role": "Director of Relocation",
+            "phone": "(415) 890-4321",
+            "balance_usd": 2500,
+            "units_balance": 25,
+            "created_at": "2026-11-01T10:33:28.450Z",
+            "purchases": [
+                {
+                    "id": "pch_1793529208450",
+                    "description": "Account Activation Welcome Allotment (25 Units)",
+                    "unit_number": "Sacramento Flex Allotment",
+                    "units_purchased": 25,
+                    "amount_usd": 2500,
+                    "status": "active",
+                    "purchased_at": "2026-11-01T10:33:28.450Z",
+                    "payment_method": "Welcome Credit Tier"
+                }
+            ],
+            "transactions": [
+                {
+                    "id": "tx_1793529208450",
+                    "type": "welcome_credit",
+                    "units": 25,
+                    "amount_usd": 2500,
+                    "description": "Welcome Account Activation Allotment",
+                    "date": "2026-11-01T10:33:28.450Z"
+                }
+            ]
         }
     ],
     "sessions": {
@@ -202,6 +236,11 @@
             "customer_id": "cust_demo_01",
             "created_at": "2026-10-31T22:54:51.497Z",
             "expires_at": "2026-11-07T22:54:51.497Z"
+        },
+        "2e9d18181fc0d0eb0753ca5e50cca6b748c1bd77c54dc345": {
+            "customer_id": "cust_1793529208321_533",
+            "created_at": "2026-11-01T10:33:28.450Z",
+            "expires_at": "2026-11-08T10:33:28.451Z"
         }
     }
 }

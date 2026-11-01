@@ -360,7 +360,7 @@ export const PropertyDetailView: React.FC<PropertyDetailViewProps> = ({
                 Residence Provisions &amp; Community Amenities
               </h5>
               <p>
-                Easy Travel Lodging welcomes individuals, couples, families, relocating homeowners, and business guests staying in Greater Sacramento for short visits (5+ nights) or extended 30+ day stays.
+                Easy Travel Lodging welcomes individuals, couples, families, relocating homeowners, and business guests across California’s homes for short visits (5+ nights) or extended 30+ day stays.
               </p>
               <p>
                 Community privileges include a 24-hour fitness center, swimming pools, heated spas, and outdoor volleyball and tennis courts. Inside, enjoy central air and heating, full kitchen appliances, updated counters, and an in-unit stackable washer and dryer.

@@ -86,7 +86,7 @@ export const VehiclesSection: React.FC<VehiclesSectionProps> = ({ onReserveVehic
         metadata: {
           billingUnit: 'day',
           pickupDate: pickupDate || undefined,
-          pickupLocation: liveInfo?.hubLocation || 'SMF Sacramento Int’l Airport Concierge Delivery',
+          pickupLocation: liveInfo?.hubLocation || 'Major US Airport Concierge Terminal Handover',
           exteriorColorName: selectedColorObj.name,
           exteriorColorHex: selectedColorObj.hex,
           protectionPlan,
@@ -104,10 +104,10 @@ export const VehiclesSection: React.FC<VehiclesSectionProps> = ({ onReserveVehic
     activeCategory === 'all'
       ? US_VEHICLES
       : US_VEHICLES.filter((v) => {
-          if (activeCategory === 'electric') return v.style3d.isElectric;
-          if (activeCategory === 'muscle') return v.style3d.bodyShape === 'muscle';
-          if (activeCategory === 'luxury') return v.style3d.bodyShape === 'luxury_suv';
-          if (activeCategory === 'offroad') return v.style3d.bodyShape === 'offroad';
+          if (activeCategory === 'suv') return v.id === 'nissan-terra-2020';
+          if (activeCategory === 'crossover') return v.id === 'skoda-karoq-2019';
+          if (activeCategory === 'sedan') return v.id === 'audi-a3-2021' || v.id === 'vw-jetta-gli';
+          if (activeCategory === 'performance') return v.id === 'audi-rs5-2019' || v.id === 'vw-jetta-gli';
           return true;
         });
 
@@ -127,17 +127,17 @@ export const VehiclesSection: React.FC<VehiclesSectionProps> = ({ onReserveVehic
           </h2>
 
           <p className="text-sm sm:text-base text-[#ede5dc] leading-relaxed">
-            Pair your stay—or book standalone transportation—with our curated fleet of late-model vehicles. Ideal for airport arrivals at SMF, family road trips to Lake Tahoe and Napa Valley, or convenient daily commuting during an extended stay.
+            Pair your stay—or book standalone transportation—with our curated fleet of late-model vehicles. Explore each car with interactive 3D orbit and zoom before reserving. Ideal for major US airport terminal arrivals, corporate travel, family road trips, or convenient executive commuting during an extended nationwide stay.
           </p>
 
           {/* Category Filter Tabs */}
           <div className="flex flex-wrap items-center justify-center gap-2 pt-4">
             {[
-              { id: 'all', label: 'All Fleet Vehicles' },
-              { id: 'muscle', label: 'Convertibles & Touring' },
-              { id: 'electric', label: 'All-Electric' },
-              { id: 'luxury', label: 'Full-Size Family & Luxury SUVs' },
-              { id: 'offroad', label: '4x4 All-Weather' },
+              { id: 'all', label: 'All Fleet Vehicles (5)' },
+              { id: 'suv', label: '7-Passenger & 4x4 SUV' },
+              { id: 'crossover', label: 'European Crossover' },
+              { id: 'sedan', label: 'Luxury & Sport Sedans' },
+              { id: 'performance', label: 'High-Performance' },
             ].map((cat) => (
               <button
                 key={cat.id}
@@ -186,13 +186,7 @@ export const VehiclesSection: React.FC<VehiclesSectionProps> = ({ onReserveVehic
                           : 'text-rose-300'
                       }`}
                     >
-                      {v.style3d.isElectric && status === 'available' ? (
-                        <>
-                          <Zap className="w-2.5 h-2.5" /> EV
-                        </>
-                      ) : (
-                        status
-                      )}
+                      {status === 'available' ? 'Available' : status}
                     </span>
                   </div>
                   <h4 className="font-heading font-black text-sm text-white leading-tight">
@@ -299,7 +293,7 @@ export const VehiclesSection: React.FC<VehiclesSectionProps> = ({ onReserveVehic
             <div className="p-4 rounded-2xl bg-[#1a1410]/85 border border-[#3a2f28] space-y-3">
               <div className="flex items-center justify-between text-xs tabular-nums">
                 <span className="font-bold text-[#ede5dc]">
-                  Configure Rental ({selectedColorObj.name})
+                  Configure Rental
                 </span>
                 <span className="font-extrabold text-emerald-400">
                   Est. ${estimatedTotal.toLocaleString()}

@@ -105,7 +105,7 @@ export const BlogView: React.FC<BlogViewProps> = ({ onOpenBooking }) => {
           </h1>
 
           <p className="text-[#ede5dc] text-base sm:text-lg leading-relaxed">
-            Practical advice for smooth home transitions, Sacramento and Rancho Cordova neighborhood highlights, and tips for feeling at home away from home.
+            Practical advice for smooth home transitions, nationwide travel and destination guides, and tips for feeling at home away from home.
           </p>
         </div>
       </section>

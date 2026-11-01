@@ -151,10 +151,10 @@ export const CartCheckoutView: React.FC<CartCheckoutViewProps> = ({
   const [company, setCompany] = useState('');
   const [role, setRole] = useState('');
   const [line1, setLine1] = useState('');
-  const [city, setCity] = useState('Sacramento');
-  const [stateCode, setStateCode] = useState('CA');
-  const [postalCode, setPostalCode] = useState('95814');
-  const [country, setCountry] = useState('United States');
+  const [city, setCity] = useState('');
+  const [stateCode, setStateCode] = useState('');
+  const [postalCode, setPostalCode] = useState('');
+  const [country, setCountry] = useState('California’s homes');
   const [guestNotes, setGuestNotes] = useState('');
 
   const [paymentMethod, setPaymentMethod] = useState<

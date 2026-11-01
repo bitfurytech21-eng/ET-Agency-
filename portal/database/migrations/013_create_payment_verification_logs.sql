@@ -1,1 +1,0 @@
-CREATE TABLE IF NOT EXISTS payment_verification_logs (id INTEGER PRIMARY KEY AUTOINCREMENT, manual_payment_id INTEGER NOT NULL, admin_id INTEGER NOT NULL, previous_status VARCHAR(50), new_status VARCHAR(50), notes TEXT, created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP);

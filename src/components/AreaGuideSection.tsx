@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
-import { Mail, Phone } from 'lucide-react';
+import { Mail, Phone, Compass } from 'lucide-react';
 import { LivePhotoBackground } from './LivePhotoBackground';
-import { WeatherWidget } from './WeatherWidget';
 
 interface AreaGuideSectionProps {
   onOpenBooking: () => void;
@@ -32,18 +31,19 @@ export const AreaGuideSection: React.FC<AreaGuideSectionProps> = ({
       {/* Area Attractions Accordions Section */}
       <section className="bg-white py-14 sm:py-20 border-b border-[#e6dfd5]">
         <div className="max-w-[1200px] mx-auto px-4 sm:px-8 text-left space-y-8">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-            <div className="lg:col-span-7 space-y-2">
-              <h2 className="et_teal_h2 text-3xl sm:text-5xl font-bold text-[#00b7a8]">
-                Explore Greater Sacramento &amp; Northern California
+          <div className="max-w-3xl space-y-3">
+            <div className="space-y-1.5">
+              <span className="text-[11px] font-bold uppercase tracking-[0.22em] text-[#82634f] flex items-center gap-2">
+                <Compass className="w-3.5 h-3.5 text-[#00897d]" />
+                Nationwide Destination &amp; Logistics Guide
+              </span>
+              <h2 className="font-heading font-extrabold text-3xl sm:text-4xl text-[#282828] leading-[1.2] tracking-tight">
+                Explore Premier Destinations &amp; <span className="text-[#00897d]">Coast-to-Coast Corridors</span>
               </h2>
-              <p className="text-sm sm:text-base text-[#5c5046] leading-relaxed">
-                Centrally situated near Highway 50 and the American River Parkway, Rancho Cordova connects you to neighborhood dining, museums, outdoor recreation, and iconic weekend destinations like Lake Tahoe &amp; Napa Valley.
-              </p>
             </div>
-            <div className="lg:col-span-5">
-              <WeatherWidget />
-            </div>
+            <p className="text-sm sm:text-base text-[#5c5046] leading-relaxed pt-1">
+              Whether you are traveling for healthcare assignments, corporate consulting, government relocations, or family transitions, Easy Travel Lodging coordinates move-in-ready furnished residences, airport fleet delivery, and attentive concierge support across California’s homes.
+            </p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-start pt-4">
@@ -202,7 +202,7 @@ export const AreaGuideSection: React.FC<AreaGuideSectionProps> = ({
                       <li><strong>Napa &amp; Sonoma Valleys (approx. 2 hours west):</strong> World-renowned vineyards, culinary tours, and scenic drives.</li>
                       <li><strong>San Francisco, Sausalito &amp; the Coast (approx. 2 hours west):</strong> Bayfront landmarks, museums, and Pacific beaches.</li>
                       <li><strong>Yosemite National Park (approx. 4 hours south):</strong> Iconic granite cliffs, waterfalls, and giant sequoia groves.</li>
-                      <li className="italic text-xs text-[#857568] list-none pt-2">Compiled in collaboration with Visit Rancho Cordova.</li>
+                      <li className="italic text-xs text-[#857568] list-none pt-2">Curated regional destination highlights across our California founding corridor and nationwide network.</li>
                     </ul>
                   </div>
                 )}
@@ -219,7 +219,7 @@ export const AreaGuideSection: React.FC<AreaGuideSectionProps> = ({
           <div className="flex flex-col md:flex-row items-center justify-between gap-8">
             <div className="space-y-2">
               <h6 className="et_section_h6 text-[#4de0d2] tracking-widest">
-                Stay in Greater Sacramento With Ease
+                Experience Turnkey Living Across California’s homes
               </h6>
               <h2 className="font-heading font-bold text-3xl sm:text-5xl text-white">
                 Check open dates or build your stay online.

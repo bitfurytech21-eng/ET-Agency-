@@ -1,3 +1,5 @@
+import { LA_PROPERTIES } from './laLodgingData';
+
 export interface PropertyListing {
   id: string;
   code: string;
@@ -89,11 +91,11 @@ export const COMPANY_INFO = {
   shortName: 'Easy Travel Lodging',
   tagline: 'Furnished Residences, Fleet Mobility & Concierge Care',
   subtagline:
-    'Thoughtfully equipped 1- and 2-bedroom apartments, flexible stays from 5 nights to 12+ months, and attentive local hospitality across Greater Sacramento.',
+    'Thoughtfully equipped 1- and 2-bedroom residences, flexible stays from 5 nights to 12+ months, and attentive executive hospitality across California’s homes.',
   phone: '916-800-3295',
   phoneClean: '9168003295',
   email: 'Contact@EasyTravelLodging.com',
-  location: 'Sacramento & Rancho Cordova, CA',
+  location: 'California’s homes · Regional Agency Network',
   hours: 'Available 7 Days a Week for Guest Support & Inquiries',
   checkInTime: '2:00 PM',
   checkOutTime: '11:00 AM',
@@ -103,7 +105,7 @@ export const COMPANY_INFO = {
     {
       name: 'Bill Wheelock',
       title: 'Co-Founder & Host',
-      bio: "Bill’s career in Information Systems Management had him busy traveling around the United States heading up teams installing enterprise computer systems across diverse industries. A Private Pilot for over 40 years, Radio Voiceover artist, and Navy Veteran who served in Vietnam, Bill holds an undergraduate degree from the University of San Francisco and an MBA from the University of Phoenix.",
+      bio: "Bill’s career in Information Systems Management had him busy traveling around California’s homes heading up teams installing enterprise computer systems across diverse industries. A Private Pilot for over 40 years, Radio Voiceover artist, and Navy Veteran who served in Vietnam, Bill holds an undergraduate degree from the University of San Francisco and an MBA from the University of Phoenix.",
       image: 'https://easytravellodging.com/wp-content/uploads/2023/01/Bill-Marlena-casual.jpg',
     },
     {
@@ -181,6 +183,7 @@ export const PROPERTIES: PropertyListing[] = [
       'https://easytravellodging.com/wp-content/plugins/vikbooking/site/resources/uploads/big_img_1662.jpg',
       'https://easytravellodging.com/wp-content/plugins/vikbooking/site/resources/uploads/big_img_1684.jpg',
       'https://easytravellodging.com/wp-content/plugins/vikbooking/site/resources/uploads/big_img_1686.jpg',
+      'https://easytravellodging.com/wp-content/plugins/vikbooking/site/resources/uploads/p91-lr.jpg',
     ],
     features: [
       'Updated full kitchen with full-size appliances, coffee maker, and cookware',
@@ -429,6 +432,7 @@ export const PROPERTIES: PropertyListing[] = [
       'https://easytravellodging.com/wp-content/plugins/vikbooking/site/resources/uploads/big_cc-335_img_5337.jpg',
       'https://easytravellodging.com/wp-content/plugins/vikbooking/site/resources/uploads/big_img_4228.jpg',
       'https://easytravellodging.com/wp-content/plugins/vikbooking/site/resources/uploads/big_img_2953.jpg',
+      'https://easytravellodging.com/wp-content/plugins/vikbooking/site/resources/uploads/cc-335-img_5259.jpg',
     ],
     features: [
       'Spacious two-bedroom, two-bathroom ground-floor layout',
@@ -450,6 +454,201 @@ export const PROPERTIES: PropertyListing[] = [
       'Pool & Spa Access',
     ],
   },
+  {
+    id: 'la-briarcrest-villa',
+    code: '#LA-01',
+    unitNumber: 'Villa Briarcrest',
+    slug: 'briarcrest-estate-beverly-hills-luxury-villa',
+    title: 'The Briarcrest Estate Villa (Los Angeles Collection)',
+    category: 'Luxury Vacation Villa • Beverly Hills / Hollywood Hills, CA',
+    shortDesc:
+      'Gated multi-level luxury estate with an infinity pool, heated spa, panoramic skyline views, outdoor chef kitchen, and private cinema.',
+    fullDesc:
+      'Rebranded and curated under Easy Travel Lodging, Villa Briarcrest stands atop a private knoll between Beverly Hills and the Hollywood Hills. Featuring over 6,500 square feet of indoor-outdoor entertainment space, floor-to-ceiling glass walls, a heated infinity-edge pool, private spa, and sun loungers overlooking the Los Angeles basin.\n\nIdeal for executive retreats, extended entertainment production stays, family reunions, and high-profile guests seeking maximum privacy with 24/7 concierge support, secure gated access, and private chef catering options.',
+    bedrooms: 5,
+    bathrooms: 6,
+    floor: 'Downstairs',
+    location: 'Beverly Hills / Los Angeles, CA',
+    monthlyRate: 12500,
+    startingRate: 'From $12,500 / Month',
+    pricingNote:
+      'Includes estate utilities, gigabit fiber Wi-Fi, bi-weekly pool & garden care, and gated driveway parking. Available for 5+ night short stays and 30+ day leases.',
+    status: 'Available',
+    sqft: '6,500 sq ft',
+    minimumStayDays: 5,
+    liveUrl: 'https://stayawhile.com/los-angeles-vacation-rentals',
+    images: [
+      'https://images.unsplash.com/photo-1613977257363-707ba9348227?auto=format&fit=crop&w=1600&q=80',
+      'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=1600&q=80',
+      'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=1600&q=80',
+      'https://images.unsplash.com/photo-1600566753376-12c8ab7fb75b?auto=format&fit=crop&w=1600&q=80',
+      'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1600&q=80',
+      'https://images.unsplash.com/photo-1600573472550-8090b5e0745e?auto=format&fit=crop&w=1600&q=80',
+    ],
+    features: [
+      'Private gated knoll with security surveillance & smart lock entry',
+      'Heated ocean-to-city infinity pool and 10-person whirlpool spa',
+      'Gourmet chef kitchen with Sub-Zero & Wolf appliances',
+      'Custom home cinema with Dolby Atmos surround sound',
+      'Outdoor dining pavilion with BBQ grill, fire pit, and lounge seating',
+      'Gigabit fiber Wi-Fi and smart home automation throughout',
+    ],
+    amenities: [
+      'WiFi',
+      'TV',
+      'Air Conditioning',
+      'Bathroom',
+      'Fireplace',
+      'Private Pool & Spa',
+      'In-Unit Washer/Dryer',
+      'Chef Kitchen',
+      'Gated Entry',
+    ],
+  },
+  {
+    id: 'la-belair-sanctuary',
+    code: '#LA-02',
+    unitNumber: 'Residence Bel-Air',
+    slug: 'bel-air-executive-sanctuary-residence',
+    title: 'The Bel-Air Executive Residence (Los Angeles Collection)',
+    category: 'Executive Residence • Bel-Air / Los Angeles, CA',
+    shortDesc:
+      'Gated Mediterranean villa featuring lush gardens, a private swimming pool, dual home offices, and an EV charging garage.',
+    fullDesc:
+      'Set behind stone gates in prestigious Bel-Air, this 4-bedroom executive sanctuary offers tranquility minutes from Sunset Boulevard and UCLA Medical Center. Handcrafted architectural details, high wood-beamed ceilings, a wood-burning fireplace, and formal dining create an elegant residence for relocating executives and families.\n\nOutdoors, step into manicured olive groves and a swimming pool. The home features dual executive office suites equipped with high-speed fiber internet and ergonomic seating, making remote management effortless.',
+    bedrooms: 4,
+    bathrooms: 4,
+    floor: 'Downstairs',
+    location: 'Bel-Air / Los Angeles, CA',
+    monthlyRate: 9800,
+    startingRate: 'From $9,800 / Month',
+    pricingNote:
+      'Includes utilities, gardener, pool service, and Level 2 EV charging. Available for 5+ night short stays and 30+ day tax-exempt leases.',
+    status: 'Available',
+    sqft: '4,800 sq ft',
+    minimumStayDays: 5,
+    liveUrl: 'https://stayawhile.com/los-angeles-vacation-rentals',
+    images: [
+      'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=1600&q=80',
+      'https://images.unsplash.com/photo-1600585154526-990dced4db0d?auto=format&fit=crop&w=1600&q=80',
+      'https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?auto=format&fit=crop&w=1600&q=80',
+      'https://images.unsplash.com/photo-1600573472591-ee6b816e133e?auto=format&fit=crop&w=1600&q=80',
+    ],
+    features: [
+      'Gated Bel-Air address with private motor court & EV charger',
+      'Heated pool and tranquil landscaped gardens',
+      'Dual dedicated home office spaces with fiber internet',
+      'Primary suite with private balcony, fireplace, and soaking tub',
+      'Sub-Zero kitchen appliances and breakfast nook',
+      'In-unit laundry room with high-capacity washer and dryer',
+    ],
+    amenities: [
+      'WiFi',
+      'TV',
+      'Air Conditioning',
+      'Bathroom',
+      'Fireplace',
+      'Private Pool & Spa',
+      'In-Unit Washer/Dryer',
+      'Dedicated Workspace',
+    ],
+  },
+  {
+    id: 'la-malibu-coastal-villa',
+    code: '#LA-03',
+    unitNumber: 'Villa Malibu Beach',
+    slug: 'malibu-oceanfront-coastal-retreat',
+    title: 'Malibu Oceanfront Retreat (Los Angeles Collection)',
+    category: 'Coastal Luxury Residence • Malibu, CA',
+    shortDesc:
+      'Oceanfront architectural home with direct beach staircase, panoramic Pacific Ocean views, floor-to-ceiling glass, and a wrap-around deck.',
+    fullDesc:
+      'Experience California coastal living at its finest. This Malibu oceanfront residence offers floor-to-ceiling glass walls framing views of Catalina Island, dolphins in the surf, and Pacific sunsets. Walk directly down your private staircase to sand and tide pools.\n\nInside, an open-concept living area features polished white oak floors, a stone fireplace, a gourmet kitchen, and plush master suites with ocean-view balconies. Prepared with Easy Travel Lodging’s signature guest kit and optional coastal concierge services.',
+    bedrooms: 3,
+    bathrooms: 3,
+    floor: 'Downstairs',
+    location: 'Malibu Beach / Los Angeles, CA',
+    monthlyRate: 11200,
+    startingRate: 'From $11,200 / Month',
+    pricingNote:
+      'Includes beach maintenance, ocean-front utilities, high-speed Wi-Fi, and private garage parking.',
+    status: 'Available',
+    sqft: '3,400 sq ft',
+    minimumStayDays: 5,
+    liveUrl: 'https://stayawhile.com/los-angeles-vacation-rentals',
+    images: [
+      'https://images.unsplash.com/photo-1580587771525-78b9dba3b914?auto=format&fit=crop&w=1600&q=80',
+      'https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&w=1600&q=80',
+      'https://images.unsplash.com/photo-1600566752355-35792bedcfea?auto=format&fit=crop&w=1600&q=80',
+      'https://images.unsplash.com/photo-1600585152220-90363fe7e115?auto=format&fit=crop&w=1600&q=80',
+    ],
+    features: [
+      'Direct beach stairs leading to Malibu sand & surf',
+      'Wrap-around oceanfront deck with outdoor fire table & glass railings',
+      'Master suite with ocean view balcony & spa soaking bath',
+      'Floor-to-ceiling architectural glass walls & motorized shades',
+      'Sound system, Smart TVs in every room, and fiber internet',
+      'Private 2-car garage with electronic keypad entry',
+    ],
+    amenities: [
+      'WiFi',
+      'TV',
+      'Air Conditioning',
+      'Bathroom',
+      'Fireplace',
+      'Private Balcony',
+      'In-Unit Washer/Dryer',
+      'Oceanfront',
+    ],
+  },
+  {
+    id: 'la-hollywood-view-estate',
+    code: '#LA-04',
+    unitNumber: 'Hollywood Skyline Haven',
+    slug: 'hollywood-hills-panoramic-skyline-villa',
+    title: 'Hollywood Hills Panoramic Haven (Los Angeles Collection)',
+    category: 'Architectural Villa • Hollywood Hills, CA',
+    shortDesc:
+      'Contemporary glass-walled villa perched in the Hollywood Hills featuring a infinity lounge deck, outdoor spa, and city light views.',
+    fullDesc:
+      'Overlooking the sparkling lights of Los Angeles and the iconic Hollywood Sign, this contemporary 3-bedroom architectural villa combines sleek design with cozy comfort. Sliding glass doors merge the open living space with a expansive terrace, complete with a heated spa, fire pit, and dining space.\n\nEquipped with high-speed fiber internet, dedicated gym space, smart lock keyless entry, and secure garage parking. Perfect for corporate stays, entertainment industry professionals, and vacationing families.',
+    bedrooms: 3,
+    bathrooms: 3,
+    floor: 'Upstairs',
+    location: 'Hollywood Hills / Los Angeles, CA',
+    monthlyRate: 8500,
+    startingRate: 'From $8,500 / Month',
+    pricingNote:
+      'Includes utilities, high-speed Wi-Fi, garage parking, and weekly maintenance.',
+    status: 'Available',
+    sqft: '3,100 sq ft',
+    minimumStayDays: 5,
+    liveUrl: 'https://stayawhile.com/los-angeles-vacation-rentals',
+    images: [
+      'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=1600&q=80',
+      'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=1600&q=80',
+      'https://images.unsplash.com/photo-1600566753376-12c8ab7fb75b?auto=format&fit=crop&w=1600&q=80',
+    ],
+    features: [
+      'Unobstructed city skyline and mountain views',
+      'Expansive lounge deck with heated whirlpool spa & fire pit',
+      'Private fitness room with Peloton bike & weights',
+      'Modern kitchen with quartz waterfall island',
+      '3 Smart TVs, Sonos audio, and fiber Wi-Fi',
+      'Attached 2-car garage with direct interior access',
+    ],
+    amenities: [
+      'WiFi',
+      'TV',
+      'Air Conditioning',
+      'Bathroom',
+      'Fireplace',
+      'Private Spa',
+      'In-Unit Washer/Dryer',
+      'Fitness Gym',
+    ],
+  },
+  ...LA_PROPERTIES,
 ];
 
 export const REVIEWS: ReviewItem[] = [
@@ -500,7 +699,7 @@ export const FAQS: FAQItem[] = [
     category: 'General',
     question: 'Who stays with Easy Travel Lodging?',
     answer:
-      'We welcome a wide range of guests—families visiting relatives or relocating to Greater Sacramento, homeowners bridging a closing or home renovation, individuals in the region for medical care or university programs, remote workers, leisure visitors staying five nights or longer, and organizations arranging extended accommodations.',
+      'We welcome a wide range of guests—families visiting relatives or relocating across California’s homes, homeowners bridging a closing or home renovation, traveling healthcare professionals and university fellows, remote consultants, and corporate organizations arranging extended accommodations nationwide.',
   },
   {
     id: 'faq-2',
@@ -716,10 +915,10 @@ export const BLOG_POSTS: BlogPost[] = [
     category: 'Guest Experience',
     date: 'November 2025',
     readTime: '4 min read',
-    excerpt: 'Whether you are visiting family, remodeling your home, relocating to Greater Sacramento, or arriving for an extended project, discover how a thoughtfully furnished residence changes the way you travel.',
+    excerpt: 'Whether you are visiting family, remodeling your home, relocating across California’s homes, or arriving for an extended project, discover how a thoughtfully furnished residence changes the way you travel.',
     coverImage: 'https://easytravellodging.com/wp-content/uploads/2023/04/CC-91-2.jpg',
     content: [
-      'Great hospitality starts with recognizing that no two guests travel for the exact same reason. Some arrive in Sacramento to welcome a new grandchild or support a loved one at a nearby medical center; others are waiting for a new home build to close, navigating a home renovation, working remotely, or managing a multi-month regional project.',
+      'Great hospitality starts with recognizing that no two guests travel for the exact same reason. Some arrive to welcome a new grandchild or support a loved one at a regional medical center; others are waiting for a new home build to close, navigating a home renovation, working remotely, or managing a multi-month corporate project nationwide.',
       'We understand that time away from your primary residence is far easier when your space feels genuinely livable. With warm residential interiors, indoor fireplaces, fully equipped kitchens, in-unit laundry, and arrival starter kits, each Easy Travel Lodging suite is prepared for real daily life rather than a cramped overnight stopover.',
       'Guests consistently tell us how reassuring it is to have responsive local hosts in Bill and Marlena. From smooth keyless self check-in to quiet evening hours and optional concierge add-ons, every detail is arranged so you can settle in from day one.'
     ]

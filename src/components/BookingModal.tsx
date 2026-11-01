@@ -345,7 +345,7 @@ export const BookingModal: React.FC<BookingModalProps> = ({
                   Thank You, {bookingSuccessData.guestName}!
                 </h3>
                 <p className="text-sm text-[#5c5046] max-w-lg mx-auto leading-relaxed">
-                  Your reservation inquiry has been transmitted directly to local Sacramento hosts <strong>Bill &amp; Marlena</strong>. A confirmation email has been dispatched to <strong>{bookingSuccessData.email}</strong>.
+                  Your reservation inquiry has been transmitted directly to agency founders <strong>Bill &amp; Marlena</strong>. A confirmation email has been dispatched to <strong>{bookingSuccessData.email}</strong>.
                 </p>
               </div>
 

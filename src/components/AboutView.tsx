@@ -37,13 +37,13 @@ export const AboutView: React.FC<AboutViewProps> = ({ onOpenBooking }) => {
         <LivePhotoBackground scene="courtyard" secondaryScene="interior" overlay="espresso" />
         <div className="relative z-10 max-w-5xl mx-auto text-center space-y-4">
           <span className="text-xs font-bold uppercase tracking-[4px] text-[#4de0d2] inline-block">
-            Locally Owned &amp; Operated Hospitality
+            Nationwide Agency Hospitality &amp; Travel Logistics
           </span>
           <h1 className="font-heading font-black text-4xl sm:text-6xl text-white tracking-tight">
             Meet Bill &amp; Marlena
           </h1>
           <p className="text-[#f2ebe2] text-lg sm:text-xl max-w-3xl mx-auto leading-relaxed pt-2">
-            We founded Easy Travel Lodging to give families, relocating homeowners, visiting guests, and extended-stay travelers a genuine home in Greater Sacramento—whether for a weeklong stay or several months.
+            We founded Easy Travel Lodging to give families, relocating homeowners, corporate teams, and extended-stay travelers a genuine home across California’s homes—whether for a weeklong stay or several months.
           </p>
           <p className="text-[#dfd3c5] text-sm sm:text-base max-w-3xl mx-auto leading-relaxed">
             Married for <strong>38 years</strong>, Bill Wheelock and Dr. Marlena Uhrik bring decades of leadership, education, and interior staging experience to hospitality—and enjoy kayaking, hiking, aviation, and time outdoors with family and friends.
@@ -81,7 +81,7 @@ export const AboutView: React.FC<AboutViewProps> = ({ onOpenBooking }) => {
               </h2>
               <div className="space-y-3 text-[#5c5046] text-base sm:text-lg leading-relaxed pt-2">
                 <p>
-                  Bill’s career in <strong className="text-[#282828]">Information Systems Management</strong> took him across the United States leading technical teams that deployed enterprise systems across diverse industries.
+                  Bill’s career in <strong className="text-[#282828]">Information Systems Management</strong> took him across California’s homes leading technical teams that deployed enterprise systems across diverse industries.
                 </p>
                 <p>
                   A <strong className="text-[#282828]">U.S. Navy veteran</strong>, radio voiceover artist, and <strong className="text-[#282828]">licensed private pilot for more than 40 years</strong>, Bill holds a bachelor’s degree from the University of San Francisco and an MBA from the University of Phoenix.
@@ -213,7 +213,7 @@ export const AboutView: React.FC<AboutViewProps> = ({ onOpenBooking }) => {
 
             <div className="p-6 bg-[#faf8f5] rounded-2xl border border-[#e6dfd5] space-y-2 text-left">
               <p className="text-[#3d352e] text-sm sm:text-base italic font-medium leading-relaxed">
-                &ldquo;Welcoming guests from down the street and around the world—and helping make their time in Sacramento easier—is what keeps us inspired.&rdquo;
+                &ldquo;Welcoming guests from down the street and across the country—and helping make their relocation and extended travel effortless—is what keeps us inspired.&rdquo;
               </p>
             </div>
 
@@ -231,7 +231,7 @@ export const AboutView: React.FC<AboutViewProps> = ({ onOpenBooking }) => {
                 We Would Love to Host Your Upcoming Stay
               </h3>
               <p className="text-[#ede5dc] text-base max-w-xl mx-auto">
-                Explore open dates across our Rancho Cordova and Greater Sacramento residences or reach out with questions anytime.
+                Explore open dates across our nationwide portfolio of furnished residences or reach out with questions anytime.
               </p>
               <div className="pt-2">
                 <button

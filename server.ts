@@ -3,8 +3,6 @@ import cors from 'cors';
 import helmet from 'helmet';
 import rateLimit from 'express-rate-limit';
 import type { Request, Response, NextFunction } from 'express';
-import { execFile, spawn } from 'child_process';
-import http from 'http';
 import path from 'path';
 import {
   addCartItem,
@@ -80,6 +78,8 @@ app.use(
     validate: { xForwardedForHeader: false },
   }),
 );
+
+app.use(express.static('public'));
 
 app.get('/api/health', async (_req: Request, res: Response) => {
   res.json({
@@ -572,24 +572,10 @@ async function runPhpService(scriptName: string, action: string, payload: any): 
       return { stdout: JSON.stringify(res), data: res };
     }
   } catch (err) {
-    console.warn('[Customer Engine] Fallback error:', err);
+    console.warn('[Customer Engine] Service error:', err);
   }
 
-  return new Promise((resolve) => {
-    const scriptPath = path.resolve('server/php', scriptName);
-    const payloadStr = JSON.stringify(payload ?? {});
-    execFile('php', [scriptPath, action, payloadStr], (err, stdout) => {
-      if (err) {
-        return resolve({ stdout: '', data: { success: false, message: 'Customer service error' } });
-      }
-      try {
-        const parsed = JSON.parse(stdout);
-        resolve({ stdout, data: parsed });
-      } catch {
-        resolve({ stdout, data: { raw: stdout } });
-      }
-    });
-  });
+  return { stdout: '', data: { success: false, message: 'Unrecognized customer service action', status: 400 } };
 }
 
 app.post('/api/php/auth/login', async (req: Request, res: Response) => {
@@ -934,50 +920,16 @@ app.delete('/api/admin/promos/:id', requireAdmin, async (req: Request, res: Resp
   }
 });
 
-// Portal Route Proxy / Smart Redirect Handler
+// Portal Route Handler: Redirect legacy PHP portal URLs directly to SPA views
 app.all('/portal*', (req: Request, res: Response) => {
-  const options = {
-    hostname: '127.0.0.1',
-    port: 8080,
-    path: req.originalUrl,
-    method: req.method,
-    headers: {
-      ...req.headers,
-      host: '127.0.0.1:8080',
-    },
-  };
-
-  const proxyReq = http.request(options, (proxyRes) => {
-    res.writeHead(proxyRes.statusCode || 200, proxyRes.headers);
-    proxyRes.pipe(res);
-  });
-
-  proxyReq.on('error', () => {
-    const urlLower = req.originalUrl.toLowerCase();
-    if (urlLower.includes('/admin')) {
-      return res.redirect('/#admin');
-    }
-    if (urlLower.includes('/car-rental') || urlLower.includes('/vehicle')) {
-      return res.redirect('/#vehicles');
-    }
-    return res.redirect('/#portal');
-  });
-
-  if (req.body && Object.keys(req.body).length > 0 && req.method !== 'GET') {
-    const contentType = req.headers['content-type'] || '';
-    let bodyData: string;
-    if (contentType.includes('application/json')) {
-      bodyData = JSON.stringify(req.body);
-    } else if (contentType.includes('application/x-www-form-urlencoded')) {
-      bodyData = new URLSearchParams(req.body as Record<string, string>).toString();
-    } else {
-      bodyData = typeof req.body === 'string' ? req.body : JSON.stringify(req.body);
-    }
-    proxyReq.write(bodyData);
-    proxyReq.end();
-  } else {
-    req.pipe(proxyReq);
+  const urlLower = req.originalUrl.toLowerCase();
+  if (urlLower.includes('/admin')) {
+    return res.redirect('/#admin');
   }
+  if (urlLower.includes('/car-rental') || urlLower.includes('/vehicle')) {
+    return res.redirect('/#vehicles');
+  }
+  return res.redirect('/#portal');
 });
 
 app.use((error: Error, _req: Request, res: Response, _next: NextFunction) => {
@@ -985,23 +937,7 @@ app.use((error: Error, _req: Request, res: Response, _next: NextFunction) => {
   res.status(500).json({ message: 'Unexpected server error', error: error.message });
 });
 
-function startPhpServerDaemon() {
-  try {
-    const phpProc = spawn('php', ['-S', '127.0.0.1:8080', '-t', 'portal/public'], {
-      detached: true,
-      stdio: 'ignore',
-    });
-    phpProc.on('error', () => {
-      console.log('PHP CLI binary not available in environment — using Node native platform & customer store');
-    });
-    phpProc.unref();
-  } catch {
-    console.log('PHP CLI not installed — operating using Node native platform & customer store');
-  }
-}
-
 async function startServer() {
-  startPhpServerDaemon();
 
   if (process.env.NODE_ENV !== 'production') {
     const viteServer = await createViteServer({

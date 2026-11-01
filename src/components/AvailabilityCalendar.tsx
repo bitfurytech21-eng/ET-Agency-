@@ -455,7 +455,7 @@ export const AvailabilityCalendar: React.FC<AvailabilityCalendarProps> = ({
               <div className="flex items-center gap-2 text-xs text-emerald-800 bg-emerald-50 p-2.5 border border-emerald-200">
                 <CheckCircle2 className="w-4 h-4 shrink-0 text-emerald-600" />
                 <span>
-                  Qualifies for Sacramento corporate housing rates ($0 utilities, 400+ Mbps WiFi, dedicated parking included).
+                  Qualifies for nationwide corporate housing rates ($0 utilities, 400+ Mbps WiFi, dedicated parking included).
                 </span>
               </div>
             )}

@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://easytravellodging.com/sitemap.xml
