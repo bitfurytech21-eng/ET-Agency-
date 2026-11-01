@@ -39,8 +39,6 @@
   --radius-xl: 28px;
   --radius-lg: 20px;
   --radius-md: 14px;
-  --hero-overlay: rgba(17, 28, 34, 0.18);
-  --section-ink: #edf2f4;
 }
 
 * {
@@ -57,7 +55,7 @@ html {
 body {
   margin: 0;
   background:
-    radial-gradient(circle at top left, rgba(27, 110, 123, 0.05), transparent 28%),
+    radial-gradient(circle at top left, rgba(27, 110, 123, 0.04), transparent 28%),
     linear-gradient(180deg, #f8f4ef 0%, #f3efe9 100%);
   color: var(--ink);
   line-height: 1.6;
