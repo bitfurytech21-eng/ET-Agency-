@@ -2,17 +2,15 @@ import React from 'react';
 
 export const DashboardFooter: React.FC = () => {
   return (
-    <footer className="mt-auto bg-[#faf8f5] border-t border-[#e6dfd5] py-4 px-4 sm:px-8 text-xs text-[#857568]">
-      <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3 text-center sm:text-left">
+    <footer className="mt-auto bg-white border-t border-slate-200 py-4 px-4 sm:px-8 type-support text-slate-500">
+      <div className="max-w-[1440px] mx-auto flex flex-col sm:flex-row items-center justify-between gap-3 text-center sm:text-left">
         <div>
-          <span className="font-bold text-[#282828]">Easy Travel Lodging LLC</span> · Nationwide Turnkey Furnished Housing &amp; 3D Fleet Dispatch
+          <span className="font-semibold text-[#0f172a]">Easy Travel Lodging LLC</span> · Furnished Residences &amp; Executive Car Rentals
         </div>
-        <div className="flex items-center gap-4 text-[#5c5046]">
-          <span>© {new Date().getFullYear()} All Rights Reserved</span>
-          <span>•</span>
-          <span>UserDashboard v2.5.0</span>
-          <span>•</span>
-          <a href="mailto:easytravelagency@trustagent.space" className="hover:text-[#00b7a8]">
+        <div className="flex items-center gap-3 text-slate-500">
+          <span className="tabular-nums">© {new Date().getFullYear()} All Rights Reserved</span>
+          <span aria-hidden="true">·</span>
+          <a href="mailto:easytravelagency@trustagent.space" className="type-nav hover:text-[#14616d] transition-colors">
             Direct Concierge Desk
           </a>
         </div>

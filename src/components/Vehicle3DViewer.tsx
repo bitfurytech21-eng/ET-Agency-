@@ -1,11 +1,11 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { UsVehicle } from '../data/vehicleData';
-import { 
-  Maximize2, 
-  Minimize2, 
-  ExternalLink, 
-  RotateCw, 
-  Compass
+import {
+  Maximize2,
+  Minimize2,
+  ExternalLink,
+  RotateCw,
+  Compass,
 } from 'lucide-react';
 
 interface Vehicle3DViewerProps {
@@ -22,12 +22,10 @@ export const Vehicle3DViewer: React.FC<Vehicle3DViewerProps> = ({
   const [isLoading, setIsLoading] = useState(true);
   const [reloadKey, setReloadKey] = useState(0);
 
-  // Reset loading state whenever vehicle or reload key changes
   useEffect(() => {
     setIsLoading(true);
   }, [vehicle.id, reloadKey]);
 
-  // Fullscreen change listener
   useEffect(() => {
     const handleFullscreenChange = () => {
       setIsFullscreen(Boolean(document.fullscreenElement));
@@ -58,38 +56,34 @@ export const Vehicle3DViewer: React.FC<Vehicle3DViewerProps> = ({
   return (
     <div
       ref={containerRef}
-      className={`relative w-full rounded-2xl sm:rounded-3xl overflow-hidden bg-[#14100d] border border-[#3f332b] shadow-2xl flex flex-col transition-all ${
-        isFullscreen ? 'h-screen p-4 sm:p-6' : 'h-[500px] sm:h-[580px] lg:h-[620px]'
+      className={`relative w-full rounded-2xl overflow-hidden bg-[#0b1120] border border-slate-700 shadow-xl flex flex-col transition-all ${
+        isFullscreen ? 'h-screen p-4 sm:p-6' : 'h-[480px] sm:h-[560px] lg:h-[600px]'
       }`}
     >
-      {/* Top Header Bar inside 3D Viewer */}
-      <div className="relative z-20 flex flex-wrap items-center justify-between gap-3 px-4 py-3 sm:px-6 sm:py-4 bg-[#1f1915]/95 backdrop-blur-md border-b border-[#3f332b]">
-        {/* Left: Vehicle Title & Specs */}
+      {/* Top Studio Header Bar */}
+      <div className="relative z-20 flex flex-wrap items-center justify-between gap-3 px-4 py-3 sm:px-5 sm:py-3.5 bg-[#0f172a]/95 backdrop-blur-md border-b border-slate-800">
         <div>
           <div className="flex flex-wrap items-baseline gap-2">
-            <h4 className="type-h4 text-white">
-              {vehicle.name}
-            </h4>
-            <span className="text-white/40" aria-hidden="true">·</span>
-            <span className="type-support font-semibold text-[#4de0d2]">
-              3D Interactive Studio
+            <h4 className="type-h4 text-white">{vehicle.name}</h4>
+            <span className="text-slate-500" aria-hidden="true">·</span>
+            <span className="type-support font-semibold text-[#5eead4]">
+              360° 3D Studio
             </span>
           </div>
-          <p className="type-support text-[#c8b9a9] hidden sm:block tabular-nums">
+          <p className="type-support text-slate-400 hidden sm:block tabular-nums mt-0.5">
             {vehicle.specs.horsepower} · {vehicle.drivetrain}
           </p>
         </div>
 
-        {/* Right Controls: Reset, Open in Sketchfab, Fullscreen */}
         <div className="flex items-center gap-2">
           <button
             type="button"
             onClick={handleReload}
             title="Reset 3D camera view"
-            className="p-2 sm:px-3.5 sm:py-2 rounded-xl border border-[#45382f] bg-[#2a211b]/80 hover:bg-[#392d24] text-[#ede5dc] hover:text-white type-btn whitespace-nowrap flex items-center gap-1.5 transition-colors cursor-pointer"
+            className="type-btn p-2 sm:px-3.5 sm:py-2 rounded-lg border border-slate-700 bg-[#1e293b] hover:bg-slate-700 text-slate-200 hover:text-white whitespace-nowrap flex items-center gap-1.5 transition-colors cursor-pointer"
           >
             <RotateCw className="w-4 h-4" />
-            <span className="hidden md:inline">Reset Camera</span>
+            <span className="hidden md:inline">Reset View</span>
           </button>
 
           <a
@@ -97,17 +91,17 @@ export const Vehicle3DViewer: React.FC<Vehicle3DViewerProps> = ({
             target="_blank"
             rel="noopener noreferrer"
             title="View original 3D asset on Sketchfab"
-            className="p-2 sm:px-3.5 sm:py-2 rounded-xl border border-[#45382f] bg-[#2a211b]/80 hover:bg-[#392d24] text-[#ede5dc] hover:text-white type-btn whitespace-nowrap flex items-center gap-1.5 transition-colors cursor-pointer"
+            className="type-btn p-2 sm:px-3.5 sm:py-2 rounded-lg border border-slate-700 bg-[#1e293b] hover:bg-slate-700 text-slate-200 hover:text-white whitespace-nowrap flex items-center gap-1.5 transition-colors cursor-pointer"
           >
-            <ExternalLink className="w-4 h-4 text-[#00b7a8]" />
-            <span className="hidden md:inline">Sketchfab Model</span>
+            <ExternalLink className="w-4 h-4 text-[#5eead4]" />
+            <span className="hidden md:inline">Sketchfab</span>
           </a>
 
           <button
             type="button"
             onClick={toggleFullscreen}
             title={isFullscreen ? 'Exit Fullscreen' : 'View Fullscreen'}
-            className="p-2 sm:px-3.5 sm:py-2 rounded-xl border border-[#00b7a8]/40 bg-[#00b7a8]/15 hover:bg-[#00b7a8]/30 text-[#4de0d2] type-btn whitespace-nowrap flex items-center gap-1.5 transition-colors cursor-pointer"
+            className="type-btn p-2 sm:px-3.5 sm:py-2 rounded-lg border border-[#14616d] bg-[#14616d] hover:bg-[#0f4952] text-white whitespace-nowrap flex items-center gap-1.5 transition-colors cursor-pointer"
           >
             {isFullscreen ? <Minimize2 className="w-4 h-4" /> : <Maximize2 className="w-4 h-4" />}
             <span className="hidden md:inline">{isFullscreen ? 'Exit Fullscreen' : 'Fullscreen'}</span>
@@ -115,22 +109,20 @@ export const Vehicle3DViewer: React.FC<Vehicle3DViewerProps> = ({
         </div>
       </div>
 
-      {/* Main 3D Iframe Container */}
-      <div className="relative flex-1 w-full h-full min-h-[300px] bg-[#0c0908] overflow-hidden">
-        {/* Loading overlay */}
+      {/* Main 3D Iframe Viewport */}
+      <div className="relative flex-1 w-full h-full min-h-[300px] bg-[#0b1120] overflow-hidden">
         {isLoading && (
-          <div className="absolute inset-0 z-10 flex flex-col items-center justify-center bg-[#15110e]/90 backdrop-blur-xs text-white space-y-3 pointer-events-none transition-opacity duration-300 px-4 text-center">
-            <div className="w-10 h-10 border-3 border-[#00b7a8]/30 border-t-[#00b7a8] rounded-full animate-spin" />
-            <div className="type-body font-semibold text-[#ede5dc]">
-              Loading interactive 3D model for {vehicle.name}...
+          <div className="absolute inset-0 z-10 flex flex-col items-center justify-center bg-[#0f172a]/90 backdrop-blur-xs text-white space-y-3 pointer-events-none px-4 text-center">
+            <div className="w-9 h-9 border-2 border-slate-700 border-t-[#5eead4] rounded-full animate-spin" />
+            <div className="type-body font-semibold text-slate-200">
+              Loading 3D studio model for {vehicle.name}...
             </div>
-            <div className="type-support text-[#a89988]">
-              Initializing WebGL, materials &amp; environment shaders
+            <div className="type-support text-slate-400">
+              Initializing interactive 360° camera controls
             </div>
           </div>
         )}
 
-        {/* The Official Sketchfab 3D Embed Iframe */}
         <iframe
           key={`${vehicle.id}-${reloadKey}`}
           title={vehicle.sketchfab.title}
@@ -141,23 +133,21 @@ export const Vehicle3DViewer: React.FC<Vehicle3DViewerProps> = ({
           onLoad={() => setIsLoading(false)}
         />
 
-        {/* Subtle Orbit Tip on bottom-left */}
-        <div className="absolute bottom-3 left-3 z-10 pointer-events-none hidden sm:flex items-center gap-2 px-3.5 py-2 rounded-xl bg-[#181310]/85 backdrop-blur-md border border-[#3f332b]/80 type-support text-[#ede5dc] shadow-lg">
-          <Compass className="w-4 h-4 text-[#00b7a8] shrink-0" />
-          <span>Click &amp; drag to rotate 360° · Scroll to zoom · Right-click to pan</span>
+        <div className="absolute bottom-3 left-3 z-10 pointer-events-none hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-lg bg-[#0f172a]/85 backdrop-blur-md border border-slate-700 type-support text-slate-300">
+          <Compass className="w-4 h-4 text-[#5eead4] shrink-0" />
+          <span>Drag to rotate 360° · Scroll to zoom · Right-click to pan</span>
         </div>
       </div>
 
       {/* Bottom Attribution Bar */}
-      <div className="relative z-20 px-4 py-2.5 sm:px-6 bg-[#191410] border-t border-[#3f332b] flex items-center justify-end text-right">
-        {/* Sketchfab Author Credit / Attribution */}
-        <div className="type-support text-[#a89988]">
+      <div className="relative z-20 px-4 py-2 sm:px-5 bg-[#0f172a] border-t border-slate-800 flex items-center justify-end text-right">
+        <div className="type-support text-slate-400">
           <span>3D Model: </span>
           <a
             href={vehicle.sketchfab.modelUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="font-semibold text-[#00b7a8] hover:underline"
+            className="font-medium text-slate-200 hover:text-[#5eead4] hover:underline"
           >
             {vehicle.sketchfab.title}
           </a>
@@ -166,7 +156,7 @@ export const Vehicle3DViewer: React.FC<Vehicle3DViewerProps> = ({
             href={vehicle.sketchfab.authorUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="font-semibold text-[#00b7a8] hover:underline"
+            className="font-medium text-slate-200 hover:text-[#5eead4] hover:underline"
           >
             {vehicle.sketchfab.authorName}
           </a>
@@ -175,7 +165,7 @@ export const Vehicle3DViewer: React.FC<Vehicle3DViewerProps> = ({
             href="https://sketchfab.com"
             target="_blank"
             rel="noopener noreferrer"
-            className="font-semibold text-[#00b7a8] hover:underline"
+            className="font-medium text-slate-200 hover:text-[#5eead4] hover:underline"
           >
             Sketchfab
           </a>

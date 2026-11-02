@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { UsVehicle, US_VEHICLES } from '../data/vehicleData';
+import { getVehicleImage } from '../data/fleetImages';
 import { LivePhotoBackground } from './LivePhotoBackground';
 import {
   X,
@@ -13,7 +14,6 @@ import {
   CheckCircle2,
   AlertCircle,
   Loader2,
-  Sparkles,
   Printer,
   ArrowRight,
   Check,
@@ -29,6 +29,34 @@ interface VehicleBookingModalProps {
   onOpenPortal?: () => void;
   onNavigate?: (view: string) => void;
 }
+
+const SWATCH_CLASS_BY_HEX: Record<string, string> = {
+  '#1d2a3a': 'bg-[#1d2a3a]',
+  '#b3b9be': 'bg-[#b3b9be]',
+  '#f4f4f4': 'bg-[#f4f4f4]',
+  '#4a3828': 'bg-[#4a3828]',
+  '#111214': 'bg-[#111214]',
+  '#2b5275': 'bg-[#2b5275]',
+  '#f0f3f6': 'bg-[#f0f3f6]',
+  '#49525c': 'bg-[#49525c]',
+  '#8c1626': 'bg-[#8c1626]',
+  '#121417': 'bg-[#121417]',
+  '#1d3557': 'bg-[#1d3557]',
+  '#f2f4f7': 'bg-[#f2f4f7]',
+  '#0e1013': 'bg-[#0e1013]',
+  '#3e444b': 'bg-[#3e444b]',
+  '#a61c28': 'bg-[#a61c28]',
+  '#8a1c22': 'bg-[#8a1c22]',
+  '#f7f7f8': 'bg-[#f7f7f8]',
+  '#0f1114': 'bg-[#0f1114]',
+  '#636970': 'bg-[#636970]',
+  '#163c78': 'bg-[#163c78]',
+  '#174033': 'bg-[#174033]',
+  '#585e65': 'bg-[#585e65]',
+  '#0a0b0d': 'bg-[#0a0b0d]',
+  '#f0f2f5': 'bg-[#f0f2f5]',
+  '#941724': 'bg-[#941724]',
+};
 
 export const VehicleBookingModal: React.FC<VehicleBookingModalProps> = ({
   isOpen,
@@ -48,7 +76,9 @@ export const VehicleBookingModal: React.FC<VehicleBookingModalProps> = ({
   const [employer, setEmployer] = useState('');
   const [pickupDate, setPickupDate] = useState('');
   const [returnDate, setReturnDate] = useState('');
-  const [pickupLocation, setPickupLocation] = useState('Major US Airport Hub Delivery (Airport Concierge Terminal Handover)');
+  const [pickupLocation, setPickupLocation] = useState(
+    'Major US Airport Hub Delivery (Airport Concierge Terminal Handover)',
+  );
   const [protectionPlan, setProtectionPlan] = useState<'standard' | 'executive_shield'>('standard');
   const [paymentMethod, setPaymentMethod] = useState<'manual_wire' | 'unit_balance'>('manual_wire');
   const [notes, setNotes] = useState('');
@@ -117,6 +147,7 @@ export const VehicleBookingModal: React.FC<VehicleBookingModalProps> = ({
             setCustomerName((prev) => prev || data.customer.name || '');
             setCustomerEmail((prev) => prev || data.customer.email || '');
             setCustomerPhone((prev) => prev || data.customer.phone || '');
+            setCustomerPhone((prev) => prev || data.customer.phone || '');
             setEmployer((prev) => prev || data.customer.company || '');
             setPortalUnitsBalance(Number(data.customer.units_balance || 0));
           }
@@ -127,7 +158,14 @@ export const VehicleBookingModal: React.FC<VehicleBookingModalProps> = ({
 
   const pricing = useMemo(() => {
     if (!pickupDate || !returnDate) {
-      return { totalDays: 7, rateTier: 'weekly', baseUsd: currentVehicle.weeklyRate, shieldUsd: 0, totalUsd: currentVehicle.weeklyRate, unitsRequired: Math.ceil(currentVehicle.weeklyRate / 100) };
+      return {
+        totalDays: 7,
+        rateTier: 'weekly',
+        baseUsd: currentVehicle.weeklyRate,
+        shieldUsd: 0,
+        totalUsd: currentVehicle.weeklyRate,
+        unitsRequired: Math.ceil(currentVehicle.weeklyRate / 100),
+      };
     }
     const s = new Date(pickupDate);
     const e = new Date(returnDate);
@@ -219,27 +257,28 @@ export const VehicleBookingModal: React.FC<VehicleBookingModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 overflow-y-auto bg-[#1c1613]/75 backdrop-blur-xs flex items-center justify-center p-3 sm:p-6 animate-fade-in">
-      <div className="bg-white text-[#282828] rounded-3xl max-w-3xl w-full max-h-[92vh] flex flex-col border border-[#e6dfd5] shadow-2xl overflow-hidden text-left animate-scale-in">
-        {/* Header with Live Realistic Twilight Arrival Photo */}
-        <div className="relative overflow-hidden px-6 sm:px-8 py-6 border-b border-[#3a2f28] text-white shrink-0">
+    <div className="fixed inset-0 z-50 overflow-y-auto bg-[#0f172a]/75 backdrop-blur-xs flex items-center justify-center p-3 sm:p-6 animate-fade-in">
+      <div className="bg-white text-[#0f172a] rounded-2xl max-w-3xl w-full max-h-[92vh] flex flex-col border border-[#e2e8f0] shadow-2xl overflow-hidden text-left animate-scale-in">
+        {/* Header */}
+        <div className="relative overflow-hidden px-6 sm:px-8 py-5 border-b border-[#1e293b] text-white shrink-0">
           <LivePhotoBackground scene="twilight" overlay="espresso" />
           <div className="relative z-10 flex items-start justify-between gap-4">
             <div className="space-y-1">
-              <div className="text-[11px] font-bold uppercase tracking-widest text-[#4de0d2]">
-                Fleet Rental &amp; Concierge Delivery
+              <div className="type-support font-semibold text-[#5eead4]">
+                Executive Fleet Rental &amp; Concierge Delivery
               </div>
-              <h2 className="text-xl sm:text-2xl font-heading font-black text-white tracking-tight">
+              <h2 className="type-h3 text-white">
                 Reserve {currentVehicle.year} {currentVehicle.name}
               </h2>
-              <p className="text-xs text-[#ede5dc]">
-                Complimentary SMF airport handover or direct delivery to your Rancho Cordova residence.
+              <p className="type-support text-slate-300">
+                Complimentary airport terminal handover or direct delivery to your furnished residence.
               </p>
             </div>
             <button
+              type="button"
               onClick={onClose}
               aria-label="Close modal"
-              className="p-2 rounded-xl text-[#ede5dc] hover:text-white hover:bg-white/15 transition-colors cursor-pointer"
+              className="p-2 rounded-lg text-slate-300 hover:text-white hover:bg-white/15 transition-colors cursor-pointer"
             >
               <X className="w-5 h-5" />
             </button>
@@ -247,60 +286,60 @@ export const VehicleBookingModal: React.FC<VehicleBookingModalProps> = ({
         </div>
 
         {/* Body */}
-        <div className="p-6 sm:p-8 overflow-y-auto flex-1 space-y-6 bg-[#fcfaf7]">
+        <div className="p-6 sm:p-8 overflow-y-auto flex-1 space-y-6 bg-[#f8fafc]">
           {confirmation ? (
             <div className="py-4 space-y-6 text-center">
-              <div className="w-16 h-16 bg-[#e8f8f6] border border-[#b8ebe5] text-[#00897d] rounded-2xl flex items-center justify-center mx-auto">
-                <CheckCircle2 className="w-9 h-9" />
+              <div className="w-14 h-14 bg-[#edf6f8] border border-[#14616d]/20 text-[#14616d] rounded-2xl flex items-center justify-center mx-auto">
+                <CheckCircle2 className="w-8 h-8" />
               </div>
 
               <div className="space-y-1.5">
-                <span className="text-xs font-bold uppercase tracking-wider text-[#00897d]">
+                <span className="type-support font-semibold text-[#14616d] block">
                   {confirmation.settledWithUnits
                     ? 'Payment Verified via Prepaid Lodging Units'
                     : 'Reservation Request Logged — Awaiting Transfer Settlement'}
                 </span>
-                <h3 className="text-2xl sm:text-3xl font-heading font-black text-[#282828]">
+                <h3 className="type-h3 text-[#0f172a]">
                   {confirmation.settledWithUnits
-                    ? `${confirmation.vehicleName} Confirmed!`
+                    ? `${confirmation.vehicleName} Confirmed`
                     : `${confirmation.vehicleName} Held Pending Payment`}
                 </h3>
-                <p className="text-xs sm:text-sm text-[#5c5046] max-w-lg mx-auto">
-                  Reference <strong className="font-mono text-[#00897d]">{confirmation.id}</strong> has been created for{' '}
-                  <strong className="text-[#282828]">{customerName}</strong> ({customerEmail}).
+                <p className="type-body text-[#475569] max-w-lg mx-auto">
+                  Reference <strong className="font-mono text-[#14616d]">{confirmation.id}</strong> has been created for{' '}
+                  <strong className="text-[#0f172a]">{customerName}</strong> ({customerEmail}).
                 </p>
               </div>
 
-              <div className="bg-white border border-[#e6dfd5] rounded-2xl p-5 max-w-lg mx-auto text-left space-y-3 text-xs shadow-2xs">
-                <div className="flex items-center justify-between border-b border-[#efe9e0] pb-2.5">
-                  <span className="text-[#857568] uppercase font-bold">Reservation ID</span>
-                  <span className="font-mono font-bold text-[#00897d] text-sm">{confirmation.id}</span>
+              <div className="bg-white border border-[#e2e8f0] rounded-2xl p-5 max-w-lg mx-auto text-left space-y-3 type-support shadow-xs">
+                <div className="flex items-center justify-between border-b border-[#f1f5f9] pb-2.5">
+                  <span className="text-[#64748b] font-semibold">Reservation ID</span>
+                  <span className="font-mono font-bold text-[#14616d] text-sm">{confirmation.id}</span>
                 </div>
                 <div className="grid grid-cols-2 gap-3 tabular-nums">
                   <div>
-                    <span className="text-[#857568] block">Vehicle &amp; Finish</span>
-                    <span className="font-bold text-[#282828]">{confirmation.colorName}</span>
+                    <span className="text-[#64748b] block">Vehicle &amp; Finish</span>
+                    <span className="font-semibold text-[#0f172a]">{confirmation.colorName}</span>
                   </div>
                   <div>
-                    <span className="text-[#857568] block">Duration</span>
-                    <span className="font-bold text-[#282828]">{confirmation.totalDays} Days</span>
+                    <span className="text-[#64748b] block">Duration</span>
+                    <span className="font-semibold text-[#0f172a]">{confirmation.totalDays} Days</span>
                   </div>
                   <div>
-                    <span className="text-[#857568] block">Pickup Date</span>
-                    <span className="font-bold text-[#282828]">{confirmation.pickupDate}</span>
+                    <span className="text-[#64748b] block">Pick-Up Date</span>
+                    <span className="font-semibold text-[#0f172a] font-mono">{confirmation.pickupDate}</span>
                   </div>
                   <div>
-                    <span className="text-[#857568] block">Return Date</span>
-                    <span className="font-bold text-[#282828]">{confirmation.returnDate}</span>
+                    <span className="text-[#64748b] block">Return Date</span>
+                    <span className="font-semibold text-[#0f172a] font-mono">{confirmation.returnDate}</span>
                   </div>
                   <div className="col-span-2">
-                    <span className="text-[#857568] block">Concierge Delivery Point</span>
-                    <span className="font-bold text-[#282828]">{confirmation.pickupLocation}</span>
+                    <span className="text-[#64748b] block">Concierge Delivery Point</span>
+                    <span className="font-semibold text-[#0f172a]">{confirmation.pickupLocation}</span>
                   </div>
                 </div>
-                <div className="pt-2.5 border-t border-[#efe9e0] flex items-center justify-between tabular-nums">
-                  <span className="text-[#5c5046] font-bold">Total Rental Value</span>
-                  <span className="text-base font-black text-[#00897d]">
+                <div className="pt-2.5 border-t border-[#f1f5f9] flex items-center justify-between tabular-nums">
+                  <span className="text-[#475569] font-semibold">Total Rental Value</span>
+                  <span className="text-base font-bold font-mono text-[#14616d]">
                     ${confirmation.totalUsd.toLocaleString()} USD ({confirmation.unitsRequired} Units)
                   </span>
                 </div>
@@ -308,7 +347,7 @@ export const VehicleBookingModal: React.FC<VehicleBookingModalProps> = ({
                   <div className="p-2.5 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-800 flex items-center gap-2">
                     <Coins className="w-4 h-4 shrink-0" />
                     <span>
-                      Paid with {confirmation.unitsRequired} Lodging Units • Remaining Balance:{' '}
+                      Paid with {confirmation.unitsRequired} Lodging Units · Remaining Balance:{' '}
                       <strong className="tabular-nums">{confirmation.remainingUnits} Units</strong>
                     </span>
                   </div>
@@ -319,9 +358,10 @@ export const VehicleBookingModal: React.FC<VehicleBookingModalProps> = ({
                 <button
                   type="button"
                   onClick={() => window.print()}
-                  className="px-4 py-2.5 rounded-xl border border-[#d8cfc3] text-[#5c5046] hover:bg-[#f4efe9] text-xs font-bold flex items-center gap-2 cursor-pointer"
+                  className="btn btn-sm btn-outline"
                 >
-                  <Printer className="w-3.5 h-3.5" /> Print Summary
+                  <Printer className="w-3.5 h-3.5" />
+                  <span>Print Summary</span>
                 </button>
                 {onOpenPortal && (
                   <button
@@ -330,7 +370,7 @@ export const VehicleBookingModal: React.FC<VehicleBookingModalProps> = ({
                       onClose();
                       onOpenPortal();
                     }}
-                    className="px-5 py-2.5 rounded-xl bg-[#00b7a8] hover:bg-[#009e91] text-white text-xs font-bold flex items-center gap-2 cursor-pointer"
+                    className="btn btn-sm btn-primary"
                   >
                     <span>View in Client Dashboard</span>
                     <ArrowRight className="w-3.5 h-3.5" />
@@ -339,67 +379,79 @@ export const VehicleBookingModal: React.FC<VehicleBookingModalProps> = ({
                 <button
                   type="button"
                   onClick={onClose}
-                  className="px-5 py-2.5 rounded-xl bg-[#82634f] hover:bg-[#6e5240] text-white text-xs font-bold cursor-pointer"
+                  className="btn btn-sm btn-secondary"
                 >
                   Done
                 </button>
               </div>
             </div>
           ) : (
-            <form onSubmit={handleSubmit} className="space-y-6">
+            <form onSubmit={handleSubmit} className="space-y-5">
               {errorMsg && (
-                <div className="p-3.5 rounded-xl bg-rose-50 border border-rose-200 text-rose-800 text-xs flex items-start gap-2.5">
+                <div className="p-3.5 rounded-xl bg-rose-50 border border-rose-200 text-rose-800 type-support flex items-start gap-2.5">
                   <AlertCircle className="w-4 h-4 text-rose-600 shrink-0 mt-0.5" />
                   <span>{errorMsg}</span>
                 </div>
               )}
 
-              {/* Vehicle & Exterior Paint Selector */}
-              <div className="p-4 bg-white border border-[#e6dfd5] rounded-2xl space-y-3 shadow-2xs">
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 items-center">
-                  <div>
-                    <label className="block text-[11px] font-bold uppercase tracking-wider text-[#857568] mb-1">
-                      Selected Fleet Model
-                    </label>
-                    <select
-                      value={selectedVehicleId}
-                      onChange={(e) => {
-                        const next = US_VEHICLES.find((v) => v.id === e.target.value) || US_VEHICLES[0];
-                        setSelectedVehicleId(next.id);
-                        setSelectedColorHex(next.defaultColor);
-                      }}
-                      className="w-full h-10 px-3 bg-[#faf8f5] border border-[#d8cfc3] rounded-xl text-xs font-bold text-[#282828] outline-none focus:border-[#00b7a8]"
-                    >
-                      {US_VEHICLES.map((v) => (
-                        <option key={v.id} value={v.id}>
-                          {v.year} {v.name} — ${v.dailyRate}/day • ${v.weeklyRate}/wk
-                        </option>
-                      ))}
-                    </select>
+              {/* Vehicle Thumbnail, Selector & Paint Swatches */}
+              <div className="p-4 bg-white border border-[#e2e8f0] rounded-2xl shadow-2xs">
+                <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center">
+                  <div className="w-full sm:w-32 aspect-[4/3] rounded-xl overflow-hidden bg-[#0f172a] border border-[#e2e8f0] shrink-0">
+                    <img
+                      src={getVehicleImage(currentVehicle.id)}
+                      alt={currentVehicle.name}
+                      referrerPolicy="no-referrer"
+                      className="w-full h-full object-cover"
+                    />
                   </div>
+                  <div className="flex-1 w-full grid grid-cols-1 sm:grid-cols-2 gap-4 items-center">
+                    <div>
+                      <label className="form-label text-[#475569]">
+                        Selected Fleet Model
+                      </label>
+                      <select
+                        value={selectedVehicleId}
+                        onChange={(e) => {
+                          const next = US_VEHICLES.find((v) => v.id === e.target.value) || US_VEHICLES[0];
+                          setSelectedVehicleId(next.id);
+                          setSelectedColorHex(next.defaultColor);
+                        }}
+                        className="form-select font-semibold"
+                      >
+                        {US_VEHICLES.map((v) => (
+                          <option key={v.id} value={v.id}>
+                            {v.year} {v.name} — ${v.dailyRate}/day · ${v.weeklyRate}/wk
+                          </option>
+                        ))}
+                      </select>
+                    </div>
 
-                  <div>
-                    <label className="block text-[11px] font-bold uppercase tracking-wider text-[#857568] mb-1">
-                      Exterior Finish: <span className="text-[#282828]">{selectedColorObj.name}</span>
-                    </label>
-                    <div className="flex items-center gap-2 pt-1">
-                      {currentVehicle.availableColors.map((col) => {
-                        const active = col.hex.toLowerCase() === selectedColorObj.hex.toLowerCase();
-                        return (
-                          <button
-                            key={col.name}
-                            type="button"
-                            onClick={() => setSelectedColorHex(col.hex)}
-                            title={col.name}
-                            className={`w-7 h-7 rounded-full border-2 flex items-center justify-center cursor-pointer transition-transform ${
-                              active ? 'border-[#282828] scale-110 ring-2 ring-[#00b7a8]' : 'border-[#c8bbaa] opacity-85 hover:opacity-100'
-                            }`}
-                            style={{ backgroundColor: col.hex }}
-                          >
-                            {active && <Check className="w-3.5 h-3.5 text-white mix-blend-difference" />}
-                          </button>
-                        );
-                      })}
+                    <div>
+                      <label className="form-label text-[#475569]">
+                        Exterior Finish: <span className="text-[#0f172a]">{selectedColorObj.name}</span>
+                      </label>
+                      <div className="flex items-center gap-2 pt-1">
+                        {currentVehicle.availableColors.map((col) => {
+                          const active = col.hex.toLowerCase() === selectedColorObj.hex.toLowerCase();
+                          const swatchClass = SWATCH_CLASS_BY_HEX[col.hex.toLowerCase()] || 'bg-slate-700';
+                          return (
+                            <button
+                              key={col.name}
+                              type="button"
+                              onClick={() => setSelectedColorHex(col.hex)}
+                              title={col.name}
+                              className={`w-7 h-7 rounded-full border-2 flex items-center justify-center cursor-pointer transition-transform ${swatchClass} ${
+                                active
+                                  ? 'border-[#0f172a] scale-110 ring-2 ring-[#14616d]'
+                                  : 'border-[#cbd5e1] opacity-85 hover:opacity-100'
+                              }`}
+                            >
+                              {active && <Check className="w-3.5 h-3.5 text-white mix-blend-difference" />}
+                            </button>
+                          );
+                        })}
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -408,45 +460,49 @@ export const VehicleBookingModal: React.FC<VehicleBookingModalProps> = ({
               {/* Dates & Delivery */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-xs font-bold text-[#282828] mb-1">Pickup / Delivery Date *</label>
+                  <label className="form-label">
+                    Pick-Up / Delivery Date *
+                  </label>
                   <div className="relative">
-                    <Calendar className="w-4 h-4 absolute left-3 top-3 text-[#857568] pointer-events-none" />
+                    <Calendar className="w-4 h-4 absolute left-3 top-3.5 text-[#64748b] pointer-events-none" />
                     <input
                       type="date"
                       required
                       min={todayStr}
                       value={pickupDate}
                       onChange={(e) => setPickupDate(e.target.value)}
-                      className="w-full pl-9 pr-3 h-10 bg-white border border-[#d8cfc3] rounded-xl text-xs text-[#282828] outline-none focus:border-[#00b7a8]"
+                      className="form-input pl-9 font-mono tabular-nums"
                     />
                   </div>
                 </div>
 
                 <div>
-                  <label className="block text-xs font-bold text-[#282828] mb-1">Return Date *</label>
+                  <label className="form-label">
+                    Return Date *
+                  </label>
                   <div className="relative">
-                    <Calendar className="w-4 h-4 absolute left-3 top-3 text-[#857568] pointer-events-none" />
+                    <Calendar className="w-4 h-4 absolute left-3 top-3.5 text-[#64748b] pointer-events-none" />
                     <input
                       type="date"
                       required
                       min={pickupDate || todayStr}
                       value={returnDate}
                       onChange={(e) => setReturnDate(e.target.value)}
-                      className="w-full pl-9 pr-3 h-10 bg-white border border-[#d8cfc3] rounded-xl text-xs text-[#282828] outline-none focus:border-[#00b7a8]"
+                      className="form-input pl-9 font-mono tabular-nums"
                     />
                   </div>
                 </div>
 
                 <div className="sm:col-span-2">
-                  <label className="block text-xs font-bold text-[#282828] mb-1">
+                  <label className="form-label">
                     Concierge Delivery / Handover Location
                   </label>
                   <div className="relative">
-                    <MapPin className="w-4 h-4 absolute left-3 top-3 text-[#00897d] pointer-events-none" />
+                    <MapPin className="w-4 h-4 absolute left-3 top-3.5 text-[#14616d] pointer-events-none" />
                     <select
                       value={pickupLocation}
                       onChange={(e) => setPickupLocation(e.target.value)}
-                      className="w-full pl-9 pr-3 h-10 bg-white border border-[#d8cfc3] rounded-xl text-xs text-[#282828] outline-none focus:border-[#00b7a8]"
+                      className="form-select pl-9"
                     >
                       <option value="Major US Airport Hub Delivery (Airport Concierge Terminal Handover)">
                         Major US Airport Hub Delivery (Airport Concierge Terminal Handover)
@@ -468,57 +524,65 @@ export const VehicleBookingModal: React.FC<VehicleBookingModalProps> = ({
               {/* Driver Information */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
                 <div>
-                  <label className="block text-xs font-bold text-[#282828] mb-1">Primary Driver Full Name *</label>
+                  <label className="form-label">
+                    Primary Driver Full Name *
+                  </label>
                   <div className="relative">
-                    <User className="w-4 h-4 absolute left-3 top-3 text-[#857568] pointer-events-none" />
+                    <User className="w-4 h-4 absolute left-3 top-3.5 text-[#64748b] pointer-events-none" />
                     <input
                       type="text"
                       required
                       value={customerName}
                       onChange={(e) => setCustomerName(e.target.value)}
-                      placeholder="Dr. Marcus Vance"
-                      className="w-full pl-9 pr-3 h-10 bg-white border border-[#d8cfc3] rounded-xl text-xs text-[#282828] outline-none focus:border-[#00b7a8]"
+                      placeholder="Full legal name"
+                      className="form-input pl-9"
                     />
                   </div>
                 </div>
                 <div>
-                  <label className="block text-xs font-bold text-[#282828] mb-1">Email Address *</label>
+                  <label className="form-label">
+                    Email Address *
+                  </label>
                   <div className="relative">
-                    <Mail className="w-4 h-4 absolute left-3 top-3 text-[#857568] pointer-events-none" />
+                    <Mail className="w-4 h-4 absolute left-3 top-3.5 text-[#64748b] pointer-events-none" />
                     <input
                       type="email"
                       required
                       value={customerEmail}
                       onChange={(e) => setCustomerEmail(e.target.value)}
-                      placeholder="easytravelagency@trustagent.space"
-                      className="w-full pl-9 pr-3 h-10 bg-white border border-[#d8cfc3] rounded-xl text-xs text-[#282828] outline-none focus:border-[#00b7a8]"
+                      placeholder="name@company.com"
+                      className="form-input pl-9"
                     />
                   </div>
                 </div>
                 <div>
-                  <label className="block text-xs font-bold text-[#282828] mb-1">Mobile Phone *</label>
+                  <label className="form-label">
+                    Mobile Phone *
+                  </label>
                   <div className="relative">
-                    <Phone className="w-4 h-4 absolute left-3 top-3 text-[#857568] pointer-events-none" />
+                    <Phone className="w-4 h-4 absolute left-3 top-3.5 text-[#64748b] pointer-events-none" />
                     <input
                       type="tel"
                       required
                       value={customerPhone}
                       onChange={(e) => setCustomerPhone(e.target.value)}
                       placeholder="916-800-3295"
-                      className="w-full pl-9 pr-3 h-10 bg-white border border-[#d8cfc3] rounded-xl text-xs text-[#282828] outline-none focus:border-[#00b7a8]"
+                      className="form-input pl-9 tabular-nums"
                     />
                   </div>
                 </div>
                 <div>
-                  <label className="block text-xs font-bold text-[#282828] mb-1">Organization or Company (Optional)</label>
+                  <label className="form-label">
+                    Organization or Company (Optional)
+                  </label>
                   <div className="relative">
-                    <Building2 className="w-4 h-4 absolute left-3 top-3 text-[#857568] pointer-events-none" />
+                    <Building2 className="w-4 h-4 absolute left-3 top-3.5 text-[#64748b] pointer-events-none" />
                     <input
                       type="text"
                       value={employer}
                       onChange={(e) => setEmployer(e.target.value)}
-                      placeholder="Personal Trip, Family Visit, or Company"
-                      className="w-full pl-9 pr-3 h-10 bg-white border border-[#d8cfc3] rounded-xl text-xs text-[#282828] outline-none focus:border-[#00b7a8]"
+                      placeholder="Personal Trip or Company"
+                      className="form-input pl-9"
                     />
                   </div>
                 </div>
@@ -527,78 +591,78 @@ export const VehicleBookingModal: React.FC<VehicleBookingModalProps> = ({
               {/* Coverage & Payment Options */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <label className="block text-xs font-bold text-[#282828]">Protection Package</label>
+                  <label className="form-label">Protection Package</label>
                   <button
                     type="button"
                     onClick={() => setProtectionPlan('standard')}
-                    className={`w-full p-3 rounded-xl border text-left text-xs cursor-pointer transition-all ${
+                    className={`w-full p-3.5 rounded-xl border text-left type-support cursor-pointer transition-colors ${
                       protectionPlan === 'standard'
-                        ? 'bg-[#e8f8f6] border-[#00b7a8] text-[#282828]'
-                        : 'bg-white border-[#e6dfd5] text-[#5c5046]'
+                        ? 'bg-[#edf6f8] border-[#14616d] text-[#0f172a]'
+                        : 'bg-white border-[#e2e8f0] text-[#475569]'
                     }`}
                   >
-                    <div className="flex justify-between font-bold">
+                    <div className="flex justify-between font-semibold">
                       <span>Standard Comprehensive Coverage</span>
                       <span className="text-emerald-700">Included</span>
                     </div>
-                    <span className="text-[11px] text-[#6e5f53] block mt-0.5">
+                    <span className="type-support text-[#64748b] block mt-0.5">
                       Comprehensive liability &amp; 24/7 roadside support
                     </span>
                   </button>
                   <button
                     type="button"
                     onClick={() => setProtectionPlan('executive_shield')}
-                    className={`w-full p-3 rounded-xl border text-left text-xs cursor-pointer transition-all ${
+                    className={`w-full p-3.5 rounded-xl border text-left type-support cursor-pointer transition-colors ${
                       protectionPlan === 'executive_shield'
-                        ? 'bg-[#e8f8f6] border-[#00b7a8] text-[#282828]'
-                        : 'bg-white border-[#e6dfd5] text-[#5c5046]'
+                        ? 'bg-[#edf6f8] border-[#14616d] text-[#0f172a]'
+                        : 'bg-white border-[#e2e8f0] text-[#475569]'
                     }`}
                   >
-                    <div className="flex justify-between font-bold">
+                    <div className="flex justify-between font-semibold">
                       <span>Zero-Deductible Protection Shield</span>
-                      <span className="text-[#00897d] tabular-nums">+$18/day</span>
+                      <span className="text-[#14616d] font-mono tabular-nums">+$18/day</span>
                     </div>
-                    <span className="text-[11px] text-[#6e5f53] block mt-0.5">
-                      $0 glass/tire/collision deductible + Sierra winter kit
+                    <span className="type-support text-[#64748b] block mt-0.5">
+                      $0 glass/tire/collision deductible + winter travel kit
                     </span>
                   </button>
                 </div>
 
                 <div className="space-y-2">
-                  <label className="block text-xs font-bold text-[#282828]">Settlement Method</label>
+                  <label className="form-label">Settlement Method</label>
                   <button
                     type="button"
                     onClick={() => setPaymentMethod('manual_wire')}
-                    className={`w-full p-3 rounded-xl border text-left text-xs cursor-pointer transition-all ${
+                    className={`w-full p-3.5 rounded-xl border text-left type-support cursor-pointer transition-colors ${
                       paymentMethod === 'manual_wire'
-                        ? 'bg-[#f5efe8] border-[#82634f] text-[#282828]'
-                        : 'bg-white border-[#e6dfd5] text-[#5c5046]'
+                        ? 'bg-[#edf6f8] border-[#14616d] text-[#0f172a]'
+                        : 'bg-white border-[#e2e8f0] text-[#475569]'
                     }`}
                   >
-                    <div className="flex justify-between font-bold">
+                    <div className="flex justify-between font-semibold">
                       <span>Bank Wire, ACH, or Zelle Invoice</span>
-                      <span className="text-[#82634f]">Hold Now</span>
+                      <span className="text-[#14616d]">Hold Now</span>
                     </div>
-                    <span className="text-[11px] text-[#6e5f53] block mt-0.5">
+                    <span className="type-support text-[#64748b] block mt-0.5">
                       Reserve vehicle now · Confirmed once transfer is verified
                     </span>
                   </button>
                   <button
                     type="button"
                     onClick={() => setPaymentMethod('unit_balance')}
-                    className={`w-full p-3 rounded-xl border text-left text-xs cursor-pointer transition-all ${
+                    className={`w-full p-3.5 rounded-xl border text-left type-support cursor-pointer transition-colors ${
                       paymentMethod === 'unit_balance'
-                        ? 'bg-[#e8f8f6] border-[#00b7a8] text-[#282828]'
-                        : 'bg-white border-[#e6dfd5] text-[#5c5046]'
+                        ? 'bg-[#edf6f8] border-[#14616d] text-[#0f172a]'
+                        : 'bg-white border-[#e2e8f0] text-[#475569]'
                     }`}
                   >
-                    <div className="flex justify-between font-bold">
+                    <div className="flex justify-between font-semibold">
                       <span>Pay with Client Portal Units</span>
-                      <span className="text-[#00897d] tabular-nums">{pricing.unitsRequired} Units</span>
+                      <span className="text-[#14616d] font-mono tabular-nums">{pricing.unitsRequired} Units</span>
                     </div>
-                    <span className="text-[11px] text-[#6e5f53] block mt-0.5">
+                    <span className="type-support text-[#64748b] block mt-0.5">
                       {portalUnitsBalance !== null
-                        ? `Signed in • Available Balance: ${portalUnitsBalance} Units`
+                        ? `Signed in · Available Balance: ${portalUnitsBalance} Units`
                         : 'Requires active sign-in on Client Portal'}
                     </span>
                   </button>
@@ -606,28 +670,28 @@ export const VehicleBookingModal: React.FC<VehicleBookingModalProps> = ({
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-[#282828] mb-1">
+                <label className="form-label">
                   Flight Number / Delivery Instructions (Optional)
                 </label>
                 <input
                   type="text"
                   value={notes}
                   onChange={(e) => setNotes(e.target.value)}
-                  placeholder="e.g. United UA 1492 arriving SMF at 3:15 PM, or park in Unit 173 stall #B"
-                  className="w-full px-3.5 h-10 bg-white border border-[#d8cfc3] rounded-xl text-xs text-[#282828] outline-none focus:border-[#00b7a8]"
+                  placeholder="e.g. United UA 1492 arriving at 3:15 PM, or park in Unit 173 stall #B"
+                  className="form-input"
                 />
               </div>
 
               {/* Live Rate Summary Footer */}
-              <div className="p-4 bg-white border border-[#e6dfd5] rounded-2xl flex flex-col sm:flex-row sm:items-center justify-between gap-4 tabular-nums shadow-2xs">
-                <div className="space-y-0.5 text-xs">
-                  <div className="text-[#6e5f53]">
-                    <strong className="text-[#282828]">{pricing.totalDays} Days</strong> • {pricing.rateTier}
+              <div className="p-4 bg-white border border-[#e2e8f0] rounded-2xl flex flex-col sm:flex-row sm:items-center justify-between gap-4 tabular-nums shadow-2xs">
+                <div className="space-y-0.5 type-support">
+                  <div className="text-[#64748b]">
+                    <strong className="text-[#0f172a]">{pricing.totalDays} Days</strong> · {pricing.rateTier}
                     {pricing.shieldUsd > 0 ? ` + $${pricing.shieldUsd} Shield` : ''}
                   </div>
-                  <div className="text-lg font-heading font-black text-[#282828]">
+                  <div className="text-lg font-heading font-bold font-mono text-[#0f172a]">
                     ${pricing.totalUsd.toLocaleString()} USD{' '}
-                    <span className="text-xs font-semibold text-[#82634f]">
+                    <span className="type-support font-sans font-medium text-[#64748b]">
                       (or {pricing.unitsRequired} Lodging Units)
                     </span>
                   </div>
@@ -660,15 +724,15 @@ export const VehicleBookingModal: React.FC<VehicleBookingModalProps> = ({
                       );
                       if (ok) onClose();
                     }}
-                    className="px-4 py-2.5 rounded-xl bg-[#82634f] hover:bg-[#6e5240] disabled:bg-[#e6dfd5] disabled:text-[#857568] text-white text-xs font-extrabold flex items-center gap-1.5 cursor-pointer transition-colors"
+                    className="btn btn-sm btn-outline"
                   >
-                    <ShoppingBag className="w-3.5 h-3.5" />
+                    <ShoppingBag className="w-3.5 h-3.5 text-[#14616d]" />
                     <span>Add to Cart</span>
                   </button>
                   <button
                     type="submit"
                     disabled={isSubmitting}
-                    className="px-5 py-2.5 rounded-xl bg-[#00b7a8] hover:bg-[#009e91] disabled:opacity-60 text-white text-xs font-bold flex items-center gap-2 shadow-sm cursor-pointer transition-colors"
+                    className="btn btn-sm btn-primary"
                   >
                     {isSubmitting ? (
                       <>
@@ -677,12 +741,12 @@ export const VehicleBookingModal: React.FC<VehicleBookingModalProps> = ({
                       </>
                     ) : (
                       <>
-                        <Sparkles className="w-4 h-4" />
                         <span>
                           {paymentMethod === 'unit_balance'
                             ? `Verify & Pay (${pricing.unitsRequired} Units)`
                             : 'Submit Reservation'}
                         </span>
+                        <ArrowRight className="w-3.5 h-3.5" />
                       </>
                     )}
                   </button>

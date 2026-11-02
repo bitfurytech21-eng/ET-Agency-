@@ -478,20 +478,20 @@ export const CartCheckoutView: React.FC<CartCheckoutViewProps> = ({
           <div className="flex items-start gap-3.5">
             <CheckCircle2 className="w-7 h-7 text-emerald-600 shrink-0 mt-0.5" />
             <div>
-              <span className="text-xs font-extrabold uppercase tracking-wider text-emerald-700">
+              <span className="type-support font-semibold text-emerald-700">
                 Backend Payment Verified
               </span>
-              <h3 className="font-heading font-extrabold text-xl text-gray-950">
+              <h3 className="type-h3 text-gray-950">
                 Payment Confirmed — Order {order.orderReference}
               </h3>
-              <p className="text-sm text-emerald-900 mt-1">
-                Verified via {order.verifiedBy || 'Platform Ledger'} • Reference:{' '}
+              <p className="type-body text-emerald-900 mt-1">
+                Verified via {order.verifiedBy || 'Platform Ledger'} · Reference:{' '}
                 <span className="font-mono font-bold">{order.paymentReference || 'Settled'}</span>. A confirmation receipt has been dispatched to{' '}
                 <span className="font-semibold">{order.customerEmail}</span>.
               </p>
             </div>
           </div>
-          <span className="px-3.5 py-1.5 rounded-lg bg-emerald-600 text-white text-xs font-extrabold uppercase tracking-wider shrink-0">
+          <span className="px-3.5 py-1.5 rounded-lg bg-emerald-600 text-white type-support font-semibold shrink-0">
             Paid &amp; Confirmed
           </span>
         </div>
@@ -504,20 +504,20 @@ export const CartCheckoutView: React.FC<CartCheckoutViewProps> = ({
           <div className="flex items-start gap-3.5">
             <Clock className="w-7 h-7 text-amber-600 shrink-0 mt-0.5" />
             <div>
-              <span className="text-xs font-extrabold uppercase tracking-wider text-amber-800">
+              <span className="type-support font-semibold text-amber-800">
                 Awaiting Treasury Verification
               </span>
-              <h3 className="font-heading font-extrabold text-xl text-gray-950">
+              <h3 className="type-h3 text-gray-950">
                 Order Recorded — Payment Pending Verification ({order.orderReference})
               </h3>
-              <p className="text-sm text-amber-950 mt-1">
+              <p className="type-body text-amber-950 mt-1">
                 We logged transfer reference{' '}
                 <span className="font-mono font-bold">{order.paymentReference}</span>. Payment is{' '}
                 <strong>not yet marked complete</strong>—final confirmation issues automatically once our accounting team verifies bank settlement (typically 2–4 business hours).
               </p>
             </div>
           </div>
-          <span className="px-3.5 py-1.5 rounded-lg bg-amber-600 text-white text-xs font-extrabold uppercase tracking-wider shrink-0">
+          <span className="px-3.5 py-1.5 rounded-lg bg-amber-600 text-white type-support font-semibold shrink-0">
             Pending Verification
           </span>
         </div>
@@ -530,19 +530,19 @@ export const CartCheckoutView: React.FC<CartCheckoutViewProps> = ({
           <div className="flex items-start gap-3.5">
             <AlertCircle className="w-7 h-7 text-rose-600 shrink-0 mt-0.5" />
             <div>
-              <span className="text-xs font-extrabold uppercase tracking-wider text-rose-700">
+              <span className="type-support font-semibold text-rose-700">
                 Action Required
               </span>
-              <h3 className="font-heading font-extrabold text-xl text-[#282828]">
+              <h3 className="type-h3 text-[#282828]">
                 Payment {order.paymentStatus === 'failed' ? 'Unverified / Failed' : 'Cancelled'} ({order.orderReference})
               </h3>
-              <p className="text-sm text-rose-900 mt-1">
+              <p className="type-body text-rose-900 mt-1">
                 {order.adminNotes ||
                   'We could not verify this payment reference. Please submit an updated wire/ACH/Zelle confirmation below or contact our team.'}
               </p>
             </div>
           </div>
-          <span className="px-3.5 py-1.5 rounded-lg bg-rose-600 text-white text-xs font-extrabold uppercase tracking-wider shrink-0">
+          <span className="px-3.5 py-1.5 rounded-lg bg-rose-600 text-white type-support font-semibold capitalize shrink-0">
             {order.paymentStatus.replace('_', ' ')}
           </span>
         </div>
@@ -554,18 +554,18 @@ export const CartCheckoutView: React.FC<CartCheckoutViewProps> = ({
         <div className="flex items-start gap-3.5">
           <Clock className="w-7 h-7 text-[#82634f] shrink-0 mt-0.5" />
           <div>
-            <span className="text-xs font-extrabold uppercase tracking-wider text-[#82634f]">
+            <span className="type-support font-semibold text-[#82634f]">
               Order Reserved — Payment Required
             </span>
-            <h3 className="font-heading font-extrabold text-xl text-[#282828]">
+            <h3 className="type-h3 text-[#282828]">
               Order {order.orderReference} Created — Awaiting Remittance
             </h3>
-            <p className="text-sm text-[#4a3d33] mt-1">
+            <p className="type-body text-[#4a3d33] mt-1">
               Your order invoice has been sent to <span className="font-semibold">{order.customerEmail}</span>. Complete your transfer using the receiving account coordinates below and submit your reference number so we can verify settlement.
             </p>
           </div>
         </div>
-        <span className="px-3.5 py-1.5 rounded-lg bg-[#82634f] text-white text-xs font-extrabold uppercase tracking-wider shrink-0">
+        <span className="px-3.5 py-1.5 rounded-lg bg-[#82634f] text-white type-support font-semibold shrink-0">
           Pending Payment
         </span>
       </div>
@@ -581,27 +581,27 @@ export const CartCheckoutView: React.FC<CartCheckoutViewProps> = ({
         <div className="lg:col-span-7 bg-white rounded-2xl border border-gray-200 p-6 space-y-6 shadow-xs">
           <div className="flex flex-wrap items-center justify-between gap-3 border-b border-gray-100 pb-4">
             <div>
-              <span className="text-xs text-gray-500">Order Reference</span>
-              <div className="font-mono font-black text-lg text-gray-950">{order.orderReference}</div>
+              <span className="type-support text-gray-500">Order Reference</span>
+              <div className="font-mono font-bold text-lg text-gray-950">{order.orderReference}</div>
             </div>
             <div className="text-right">
-              <span className="text-xs text-gray-500">Order Date</span>
-              <div className="text-sm font-semibold text-gray-900">
+              <span className="type-support text-gray-500">Order Date</span>
+              <div className="type-nav font-semibold text-gray-900 tabular-nums">
                 {new Date(order.createdAt).toLocaleString()}
               </div>
             </div>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs bg-gray-50 p-4 rounded-xl border border-gray-100">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 type-support bg-gray-50 p-4 rounded-xl border border-gray-100">
             <div>
-              <span className="font-bold text-gray-500 uppercase block mb-1">Guest / Account</span>
-              <p className="font-bold text-gray-900 text-sm">{order.customerName}</p>
+              <span className="font-semibold text-gray-500 block mb-1">Guest / Account</span>
+              <p className="font-semibold text-gray-900 type-nav">{order.customerName}</p>
               <p className="text-gray-600">{order.customerEmail}</p>
-              <p className="text-gray-600">{order.customerPhone}</p>
+              <p className="text-gray-600 tabular-nums">{order.customerPhone}</p>
               {order.company && <p className="text-gray-500 mt-0.5">{order.company}</p>}
             </div>
             <div>
-              <span className="font-bold text-gray-500 uppercase block mb-1">Billing Address</span>
+              <span className="font-semibold text-gray-500 block mb-1">Billing Address</span>
               <p className="text-gray-800">{order.billingAddress.line1}</p>
               <p className="text-gray-800">
                 {order.billingAddress.city}, {order.billingAddress.state}{' '}
@@ -612,7 +612,7 @@ export const CartCheckoutView: React.FC<CartCheckoutViewProps> = ({
           </div>
 
           <div className="space-y-3">
-            <h4 className="font-heading font-bold text-sm uppercase tracking-wider text-gray-700">
+            <h4 className="type-h4 text-gray-900">
               Ordered Residences, Vehicles &amp; Services
             </h4>
             {order.items.map((item) => (
@@ -630,21 +630,21 @@ export const CartCheckoutView: React.FC<CartCheckoutViewProps> = ({
                     className="w-14 h-14 rounded-lg object-cover bg-gray-100 border border-gray-200 shrink-0"
                   />
                   <div className="min-w-0">
-                    <div className="font-bold text-sm text-gray-900 truncate">{item.title}</div>
-                    <div className="text-xs text-gray-500">{item.subtitle}</div>
-                    <div className="text-xs text-gray-500 tabular-nums">
+                    <div className="type-nav font-semibold text-gray-900 truncate">{item.title}</div>
+                    <div className="type-support text-gray-500">{item.subtitle}</div>
+                    <div className="type-support text-gray-500 tabular-nums">
                       {item.quantity} {item.quantityLabel} × ${item.unitPriceUsd.toLocaleString()}
                     </div>
                   </div>
                 </div>
-                <div className="font-extrabold text-sm text-gray-950 tabular-nums shrink-0">
+                <div className="type-nav font-bold text-gray-950 tabular-nums shrink-0">
                   ${item.lineSubtotalUsd.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                 </div>
               </div>
             ))}
           </div>
 
-          <div className="pt-3 border-t border-gray-200 space-y-1.5 text-sm tabular-nums">
+          <div className="pt-3 border-t border-gray-200 space-y-1.5 type-support tabular-nums">
             <div className="flex justify-between text-gray-600">
               <span>Subtotal</span>
               <span>${order.subtotalUsd.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
@@ -665,7 +665,7 @@ export const CartCheckoutView: React.FC<CartCheckoutViewProps> = ({
                 <span>-${order.discountUsd.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
               </div>
             )}
-            <div className="pt-2 border-t border-gray-200 flex justify-between font-heading font-black text-lg text-gray-950">
+            <div className="pt-2 border-t border-gray-200 flex justify-between font-heading font-bold text-lg text-gray-950">
               <span>Order Total</span>
               <span>${order.totalUsd.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
             </div>
@@ -675,10 +675,10 @@ export const CartCheckoutView: React.FC<CartCheckoutViewProps> = ({
             <button
               type="button"
               onClick={() => window.print()}
-              className="px-4 py-2.5 rounded-xl border border-gray-300 hover:bg-gray-50 text-xs font-bold text-gray-800 inline-flex items-center gap-2 cursor-pointer"
+              className="btn btn-sm btn-outline"
             >
               <Printer className="w-4 h-4" />
-              Print Receipt / Invoice
+              <span>Print Receipt / Invoice</span>
             </button>
             <button
               type="button"
@@ -686,9 +686,9 @@ export const CartCheckoutView: React.FC<CartCheckoutViewProps> = ({
                 setCompletedOrder(null);
                 onNavigate('properties');
               }}
-              className="px-4 py-2.5 rounded-xl bg-[#82634f] hover:bg-[#6e5240] text-xs font-bold text-white inline-flex items-center gap-2 cursor-pointer"
+              className="px-4 py-2.5 rounded-xl bg-[#82634f] hover:bg-[#6e5240] type-btn text-white inline-flex items-center gap-2 cursor-pointer"
             >
-              Continue Exploring
+              <span>Continue Exploring</span>
             </button>
           </div>
         </div>
@@ -699,48 +699,48 @@ export const CartCheckoutView: React.FC<CartCheckoutViewProps> = ({
             <div className="relative overflow-hidden text-white rounded-2xl p-6 space-y-4 border border-[#3d3129]">
               <LivePhotoBackground scene="twilight" overlay="dark" />
               <div className="relative z-10 space-y-1">
-                <span className="text-xs font-bold uppercase tracking-wider text-[#7ce8df]">
+                <span className="type-support font-semibold text-[#7ce8df]">
                   Official Receiving Treasury
                 </span>
-                <h4 className="font-heading font-extrabold text-lg text-white">
+                <h4 className="type-h4 text-white">
                   Wire, Direct ACH &amp; Zelle Coordinates
                 </h4>
               </div>
 
-              <div className="relative z-10 space-y-2 text-xs bg-[#1c1612]/90 p-4 rounded-xl border border-[#4a3c32] tabular-nums">
+              <div className="relative z-10 space-y-2 type-support bg-[#1c1612]/90 p-4 rounded-xl border border-[#4a3c32] tabular-nums">
                 <div className="flex justify-between gap-2">
                   <span className="text-[#c8baaa]">Bank</span>
-                  <span className="font-bold text-right">{paymentAccounts.bankName}</span>
+                  <span className="font-semibold text-right">{paymentAccounts.bankName}</span>
                 </div>
                 <div className="flex justify-between gap-2">
                   <span className="text-[#c8baaa]">Beneficiary</span>
-                  <span className="font-bold text-right">{paymentAccounts.accountName}</span>
+                  <span className="font-semibold text-right">{paymentAccounts.accountName}</span>
                 </div>
                 <div className="flex justify-between gap-2">
                   <span className="text-[#c8baaa]">Account #</span>
-                  <span className="font-mono font-bold">{paymentAccounts.accountNumber}</span>
+                  <span className="font-mono font-semibold">{paymentAccounts.accountNumber}</span>
                 </div>
                 <div className="flex justify-between gap-2">
                   <span className="text-[#c8baaa]">ACH Routing</span>
-                  <span className="font-mono font-bold">{paymentAccounts.achRoutingNumber}</span>
+                  <span className="font-mono font-semibold">{paymentAccounts.achRoutingNumber}</span>
                 </div>
                 <div className="flex justify-between gap-2">
                   <span className="text-[#c8baaa]">Wire Routing</span>
-                  <span className="font-mono font-bold">{paymentAccounts.wireRoutingNumber}</span>
+                  <span className="font-mono font-semibold">{paymentAccounts.wireRoutingNumber}</span>
                 </div>
                 <div className="flex justify-between gap-2 pt-1.5 border-t border-[#4a3c32]">
                   <span className="text-[#c8baaa]">Zelle Address</span>
-                  <span className="font-mono font-bold text-[#7ce8df]">{paymentAccounts.zelleEmail}</span>
+                  <span className="font-mono font-semibold text-[#7ce8df]">{paymentAccounts.zelleEmail}</span>
                 </div>
                 <div className="flex justify-between gap-2">
                   <span className="text-[#c8baaa]">Required Memo</span>
-                  <span className="font-mono font-bold text-amber-300">{order.orderReference}</span>
+                  <span className="font-mono font-semibold text-amber-300">{order.orderReference}</span>
                 </div>
               </div>
 
               {(order.paymentStatus === 'pending_payment' || order.paymentStatus === 'failed') && (
                 <div className="relative z-10 pt-2 space-y-3 border-t border-white/15">
-                  <h5 className="font-heading font-bold text-sm text-white">
+                  <h5 className="type-label text-white">
                     Submit Transfer Confirmation Reference
                   </h5>
                   <input
@@ -748,27 +748,27 @@ export const CartCheckoutView: React.FC<CartCheckoutViewProps> = ({
                     value={proofSender}
                     onChange={(e) => setProofSender(e.target.value)}
                     placeholder="Sender Account or Organization Name"
-                    className="w-full h-10 px-3 rounded-xl bg-[#1c1612]/90 border border-[#4a3c32] text-xs text-white placeholder:text-[#9c8c7c] outline-none focus:border-[#00b7a8]"
+                    className="w-full h-11 px-3.5 rounded-xl bg-[#1c1612]/90 border border-[#4a3c32] text-base text-white placeholder:text-[#9c8c7c] outline-none focus:border-[#00b7a8]"
                   />
                   <input
                     type="text"
                     value={proofBank}
                     onChange={(e) => setProofBank(e.target.value)}
                     placeholder="Originating Bank (e.g. Chase, Bank of America)"
-                    className="w-full h-10 px-3 rounded-xl bg-[#1c1612]/90 border border-[#4a3c32] text-xs text-white placeholder:text-[#9c8c7c] outline-none focus:border-[#00b7a8]"
+                    className="w-full h-11 px-3.5 rounded-xl bg-[#1c1612]/90 border border-[#4a3c32] text-base text-white placeholder:text-[#9c8c7c] outline-none focus:border-[#00b7a8]"
                   />
                   <input
                     type="text"
                     value={proofRef}
                     onChange={(e) => setProofRef(e.target.value)}
                     placeholder="Wire IMAD / ACH Trace / Zelle Confirmation #"
-                    className="w-full h-10 px-3 rounded-xl bg-[#1c1612]/90 border border-[#4a3c32] text-xs text-white placeholder:text-[#9c8c7c] outline-none focus:border-[#00b7a8]"
+                    className="w-full h-11 px-3.5 rounded-xl bg-[#1c1612]/90 border border-[#4a3c32] text-base text-white placeholder:text-[#9c8c7c] outline-none focus:border-[#00b7a8]"
                   />
                   <button
                     type="button"
                     disabled={proofSubmitting}
                     onClick={() => handleSubmitProof(order.orderReference, isCompletedScreen)}
-                    className="w-full py-2.5 rounded-xl bg-[#00b7a8] hover:bg-[#009e91] text-white text-xs font-black uppercase tracking-wider cursor-pointer transition-colors"
+                    className="w-full py-2.5 px-4 rounded-xl bg-[#00b7a8] hover:bg-[#009e91] text-white type-btn cursor-pointer transition-colors"
                   >
                     {proofSubmitting ? 'Submitting...' : 'Submit Payment Reference for Verification'}
                   </button>
@@ -776,13 +776,13 @@ export const CartCheckoutView: React.FC<CartCheckoutViewProps> = ({
               )}
 
               {proofFeedback && (
-                <p className="relative z-10 text-xs text-[#7ce8df] font-medium">{proofFeedback}</p>
+                <p className="relative z-10 type-support text-[#7ce8df] font-medium">{proofFeedback}</p>
               )}
             </div>
           )}
 
-          <div className="bg-gray-50 border border-gray-200 rounded-2xl p-5 space-y-2 text-xs text-gray-600">
-            <div className="font-bold text-gray-900 flex items-center gap-1.5">
+          <div className="bg-gray-50 border border-gray-200 rounded-2xl p-5 space-y-2 type-support text-gray-600">
+            <div className="type-label text-gray-900 flex items-center gap-1.5">
               <FileText className="w-4 h-4 text-[#00b7a8]" />
               Transactional Confirmation &amp; Support
             </div>
@@ -793,10 +793,10 @@ export const CartCheckoutView: React.FC<CartCheckoutViewProps> = ({
                 minute: '2-digit',
               })}
               . Need to adjust arrival times or add a service? Call{' '}
-              <a href="tel:9168003295" className="font-bold text-gray-900 underline">
+              <a href="tel:9168003295" className="font-semibold text-gray-900 underline tabular-nums">
                 916-800-3295
               </a>{' '}
-              or reference <span className="font-mono font-bold">{order.orderReference}</span> in the Client Portal.
+              or reference <span className="font-mono font-semibold">{order.orderReference}</span> in the Client Portal.
             </p>
           </div>
         </div>
@@ -823,12 +823,12 @@ export const CartCheckoutView: React.FC<CartCheckoutViewProps> = ({
             <button
               type="button"
               onClick={() => onNavigate('home')}
-              className="text-xs font-bold text-[#7ce8df] hover:text-white inline-flex items-center gap-1.5 mb-2 cursor-pointer transition-colors"
+              className="type-nav font-semibold text-[#7ce8df] hover:text-white inline-flex items-center gap-1.5 mb-2 cursor-pointer transition-colors"
             >
-              <ArrowLeft className="w-3.5 h-3.5" />
-              Back to Storefront
+              <ArrowLeft className="w-4 h-4" />
+              <span>Back to Storefront</span>
             </button>
-            <h1 className="text-2xl md:text-3xl font-heading font-extrabold text-white tracking-tight">
+            <h1 className="type-h1 text-white">
               {completedOrder
                 ? `Order Summary — ${completedOrder.orderReference}`
                 : activeTab === 'cart'
@@ -847,7 +847,7 @@ export const CartCheckoutView: React.FC<CartCheckoutViewProps> = ({
                 setActiveTab('cart');
                 onNavigate('cart');
               }}
-              className={`px-4 py-2 rounded-lg text-xs font-bold transition-colors cursor-pointer tabular-nums ${
+              className={`px-4 py-2 rounded-lg type-btn transition-colors cursor-pointer tabular-nums ${
                 activeTab === 'cart' && !completedOrder
                   ? 'bg-[#00b7a8] text-white'
                   : 'text-[#5c5046] hover:text-[#282828]'
@@ -862,7 +862,7 @@ export const CartCheckoutView: React.FC<CartCheckoutViewProps> = ({
                 setActiveTab('checkout');
                 onNavigate('checkout');
               }}
-              className={`px-4 py-2 rounded-lg text-xs font-bold transition-colors cursor-pointer ${
+              className={`px-4 py-2 rounded-lg type-btn transition-colors cursor-pointer ${
                 activeTab === 'checkout' && !completedOrder
                   ? 'bg-[#00b7a8] text-white'
                   : 'text-[#5c5046] hover:text-[#282828]'
@@ -876,7 +876,7 @@ export const CartCheckoutView: React.FC<CartCheckoutViewProps> = ({
                 setCompletedOrder(null);
                 setActiveTab('track');
               }}
-              className={`px-4 py-2 rounded-lg text-xs font-bold transition-colors cursor-pointer ${
+              className={`px-4 py-2 rounded-lg type-btn transition-colors cursor-pointer ${
                 activeTab === 'track'
                   ? 'bg-[#00b7a8] text-white'
                   : 'text-[#5c5046] hover:text-[#282828]'
@@ -893,7 +893,7 @@ export const CartCheckoutView: React.FC<CartCheckoutViewProps> = ({
         {/* Live Context Feedback */}
         {banner && !completedOrder && (
           <div
-            className={`p-4 rounded-xl border text-xs font-semibold flex items-center justify-between gap-3 ${
+            className={`p-4 rounded-xl border type-support font-semibold flex items-center justify-between gap-3 ${
               banner.type === 'error'
                 ? 'bg-red-50 border-red-200 text-red-800'
                 : banner.type === 'success'
@@ -915,10 +915,10 @@ export const CartCheckoutView: React.FC<CartCheckoutViewProps> = ({
           /* ORDER TRACKER TAB */
           <div className="space-y-6">
             <div className="bg-white rounded-2xl border border-gray-200 p-6 md:p-8 shadow-xs max-w-3xl">
-              <h2 className="font-heading font-extrabold text-xl text-gray-900">
+              <h2 className="type-h2 text-gray-900">
                 Check Order &amp; Payment Verification Status
               </h2>
-              <p className="text-sm text-gray-600 mt-1">
+              <p className="type-body text-gray-600 mt-1.5">
                 Enter your Order Reference (for example,{' '}
                 <button
                   type="button"
@@ -926,7 +926,7 @@ export const CartCheckoutView: React.FC<CartCheckoutViewProps> = ({
                     setLookupInput('ORD-ETL-842105');
                     handleLookupOrder(undefined, 'ORD-ETL-842105');
                   }}
-                  className="font-mono font-bold text-[#358385] underline cursor-pointer"
+                  className="font-mono font-semibold text-[#358385] underline cursor-pointer"
                 >
                   ORD-ETL-842105
                 </button>{' '}
@@ -937,7 +937,7 @@ export const CartCheckoutView: React.FC<CartCheckoutViewProps> = ({
                     setLookupInput('ORD-ETL-849320');
                     handleLookupOrder(undefined, 'ORD-ETL-849320');
                   }}
-                  className="font-mono font-bold text-[#358385] underline cursor-pointer"
+                  className="font-mono font-semibold text-[#358385] underline cursor-pointer"
                 >
                   ORD-ETL-849320
                 </button>
@@ -950,12 +950,12 @@ export const CartCheckoutView: React.FC<CartCheckoutViewProps> = ({
                   value={lookupInput}
                   onChange={(e) => setLookupInput(e.target.value.toUpperCase())}
                   placeholder="ORD-ETL-XXXXXX"
-                  className="flex-1 h-12 px-4 rounded-xl border border-gray-300 font-mono text-sm uppercase outline-none focus:border-[#00b7a8]"
+                  className="flex-1 h-12 px-4 rounded-xl border border-gray-300 font-mono text-base uppercase outline-none focus:border-[#00b7a8]"
                 />
                 <button
                   type="submit"
                   disabled={lookupLoading || !lookupInput.trim()}
-                  className="h-12 px-6 rounded-xl bg-[#00b7a8] hover:bg-[#009f92] text-white text-xs font-extrabold uppercase tracking-wider inline-flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50"
+                  className="h-12 px-6 rounded-xl bg-[#00b7a8] hover:bg-[#009f92] text-white type-btn inline-flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50 whitespace-nowrap"
                 >
                   <Search className="w-4 h-4" />
                   <span>{lookupLoading ? 'Checking...' : 'Look Up Order'}</span>
@@ -963,7 +963,7 @@ export const CartCheckoutView: React.FC<CartCheckoutViewProps> = ({
               </form>
 
               {lookupError && (
-                <p className="mt-3 text-xs font-semibold text-red-600">{lookupError}</p>
+                <p className="mt-3 type-support font-semibold text-red-600">{lookupError}</p>
               )}
             </div>
 
@@ -972,7 +972,7 @@ export const CartCheckoutView: React.FC<CartCheckoutViewProps> = ({
         ) : isLoading ? (
           <div className="py-24 text-center space-y-3">
             <Loader2 className="w-8 h-8 animate-spin text-[#00b7a8] mx-auto" />
-            <p className="text-sm text-gray-500">Synchronizing your shopping cart...</p>
+            <p className="type-body text-gray-500">Synchronizing your shopping cart...</p>
           </div>
         ) : cart.items.length === 0 ? (
           /* EMPTY CART VIEW */
@@ -981,10 +981,10 @@ export const CartCheckoutView: React.FC<CartCheckoutViewProps> = ({
               <ShoppingBag className="w-8 h-8" />
             </div>
             <div className="space-y-2">
-              <h2 className="font-heading font-extrabold text-2xl text-gray-950">
+              <h2 className="type-h2 text-gray-950">
                 Your shopping cart is empty
               </h2>
-              <p className="text-sm text-gray-600 max-w-md mx-auto leading-relaxed">
+              <p className="type-body text-gray-600 max-w-md mx-auto">
                 Add a furnished 1- or 2-bedroom residence, a 3D fleet vehicle rental, concierge arrival services, or prepaid Lodging Unit bundles to get started.
               </p>
             </div>
@@ -992,21 +992,21 @@ export const CartCheckoutView: React.FC<CartCheckoutViewProps> = ({
               <button
                 type="button"
                 onClick={() => onNavigate('properties')}
-                className="px-5 py-3 rounded-xl bg-[#00b7a8] hover:bg-[#009f92] text-white text-xs font-extrabold uppercase tracking-wider cursor-pointer transition-colors"
+                className="px-5 py-3 rounded-xl bg-[#00b7a8] hover:bg-[#009f92] text-white type-btn cursor-pointer transition-colors"
               >
                 Browse Residences
               </button>
               <button
                 type="button"
                 onClick={() => onNavigate('vehicles')}
-                className="px-5 py-3 rounded-xl border border-gray-300 hover:bg-gray-50 text-gray-800 text-xs font-extrabold uppercase tracking-wider cursor-pointer transition-colors"
+                className="px-5 py-3 rounded-xl border border-gray-300 hover:bg-gray-50 text-gray-800 type-btn cursor-pointer transition-colors"
               >
                 Explore 3D Fleet
               </button>
               <button
                 type="button"
                 onClick={() => onNavigate('shop')}
-                className="px-5 py-3 rounded-xl border border-gray-300 hover:bg-gray-50 text-gray-800 text-xs font-extrabold uppercase tracking-wider cursor-pointer transition-colors"
+                className="px-5 py-3 rounded-xl border border-gray-300 hover:bg-gray-50 text-gray-800 type-btn cursor-pointer transition-colors"
               >
                 Services &amp; Unit Bundles
               </button>
@@ -1018,7 +1018,7 @@ export const CartCheckoutView: React.FC<CartCheckoutViewProps> = ({
             <div className="lg:col-span-8 space-y-6">
               <div className="bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-xs">
                 <div className="px-6 py-4 bg-gray-50 border-b border-gray-200 flex flex-wrap items-center justify-between gap-3">
-                  <span className="text-xs font-extrabold uppercase tracking-wider text-gray-700">
+                  <span className="type-label text-gray-800 tabular-nums">
                     Selected Items ({cart.items.length})
                   </span>
                   <div className="flex items-center gap-4">
@@ -1026,25 +1026,25 @@ export const CartCheckoutView: React.FC<CartCheckoutViewProps> = ({
                       type="button"
                       disabled={isMutating}
                       onClick={handleManualRevalidate}
-                      className="text-xs font-bold text-[#358385] hover:text-[#00b7a8] inline-flex items-center gap-1.5 cursor-pointer"
+                      className="type-support font-semibold text-[#358385] hover:text-[#00b7a8] inline-flex items-center gap-1.5 cursor-pointer"
                     >
                       <RefreshCw className={`w-3.5 h-3.5 ${isMutating ? 'animate-spin' : ''}`} />
-                      Revalidate Availability &amp; Pricing
+                      <span>Revalidate Availability &amp; Pricing</span>
                     </button>
                     <button
                       type="button"
                       disabled={isMutating}
                       onClick={() => clearCart()}
-                      className="text-xs font-bold text-red-600 hover:text-red-700 inline-flex items-center gap-1 cursor-pointer"
+                      className="type-support font-semibold text-red-600 hover:text-red-700 inline-flex items-center gap-1 cursor-pointer"
                     >
                       <Trash2 className="w-3.5 h-3.5" />
-                      Clear Cart
+                      <span>Clear Cart</span>
                     </button>
                   </div>
                 </div>
 
                 {revalidatedMessage && (
-                  <div className="px-6 py-3 bg-teal-50/70 border-b border-teal-200 text-xs text-teal-900 font-medium flex items-center gap-2">
+                  <div className="px-6 py-3 bg-teal-50/70 border-b border-teal-200 type-support text-teal-900 font-medium flex items-center gap-2">
                     <ShieldCheck className="w-4 h-4 text-[#00b7a8] shrink-0" />
                     <span>{revalidatedMessage}</span>
                   </div>
@@ -1065,15 +1065,15 @@ export const CartCheckoutView: React.FC<CartCheckoutViewProps> = ({
                       <div className="flex-1 min-w-0 flex flex-col justify-between gap-3">
                         <div className="flex items-start justify-between gap-3">
                           <div>
-                            <span className="text-[11px] font-bold uppercase tracking-wider text-[#358385]">
+                            <span className="type-support font-semibold text-[#358385]">
                               {item.category}
                             </span>
-                            <h3 className="font-heading font-extrabold text-base md:text-lg text-gray-950">
+                            <h3 className="type-h4 text-gray-950">
                               {item.title}
                             </h3>
-                            <p className="text-xs text-gray-500 mt-0.5">{item.subtitle}</p>
+                            <p className="type-support text-gray-500 mt-0.5">{item.subtitle}</p>
                             {!item.available && (
-                              <span className="inline-block mt-2 px-2.5 py-0.5 rounded bg-red-100 text-red-700 text-xs font-bold">
+                              <span className="inline-block mt-2 px-2.5 py-0.5 rounded bg-red-100 text-red-700 type-support font-semibold">
                                 {item.unavailableReason || 'Unavailable — Remove to proceed'}
                               </span>
                             )}
@@ -1100,7 +1100,7 @@ export const CartCheckoutView: React.FC<CartCheckoutViewProps> = ({
                               >
                                 <Minus className="w-3.5 h-3.5" />
                               </button>
-                              <span className="px-3.5 text-sm font-extrabold text-gray-900 tabular-nums">
+                              <span className="px-3.5 type-nav font-semibold text-gray-900 tabular-nums">
                                 {item.quantity}
                               </span>
                               <button
@@ -1112,16 +1112,16 @@ export const CartCheckoutView: React.FC<CartCheckoutViewProps> = ({
                                 <Plus className="w-3.5 h-3.5" />
                               </button>
                             </div>
-                            <span className="text-xs text-gray-500 font-medium">
+                            <span className="type-support text-gray-500 font-medium tabular-nums">
                               {item.quantityLabel} (min {item.minQuantity}, max {item.maxQuantity})
                             </span>
                           </div>
 
                           <div className="text-right tabular-nums">
-                            <div className="text-lg font-heading font-black text-gray-950">
+                            <div className="text-lg font-heading font-bold text-gray-950">
                               ${item.lineSubtotalUsd.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                             </div>
-                            <div className="text-xs text-gray-400">
+                            <div className="type-support text-gray-500">
                               ${item.unitPriceUsd.toLocaleString()} per unit
                             </div>
                           </div>
@@ -1137,15 +1137,15 @@ export const CartCheckoutView: React.FC<CartCheckoutViewProps> = ({
                 <button
                   type="button"
                   onClick={() => onNavigate('properties')}
-                  className="text-xs font-extrabold uppercase tracking-wider text-gray-700 hover:text-[#00b7a8] inline-flex items-center gap-1.5 cursor-pointer"
+                  className="type-nav font-semibold text-gray-700 hover:text-[#00b7a8] inline-flex items-center gap-1.5 cursor-pointer"
                 >
                   <ArrowLeft className="w-4 h-4" />
-                  Continue Shopping Residences &amp; Services
+                  <span>Continue Shopping Residences &amp; Services</span>
                 </button>
                 <button
                   type="button"
                   onClick={() => onNavigate('shop')}
-                  className="text-xs font-bold text-[#358385] hover:underline cursor-pointer"
+                  className="type-nav font-semibold text-[#358385] hover:underline cursor-pointer"
                 >
                   Browse All Add-On Services →
                 </button>
@@ -1153,7 +1153,7 @@ export const CartCheckoutView: React.FC<CartCheckoutViewProps> = ({
 
               {recommendedAddons.length > 0 && (
                 <div className="bg-white rounded-2xl border border-gray-200 p-6 space-y-4 shadow-xs">
-                  <h3 className="font-heading font-bold text-sm uppercase tracking-wider text-gray-700">
+                  <h3 className="type-h4 text-gray-900">
                     Popular Arrival &amp; Comfort Upgrades
                   </h3>
                   <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
@@ -1163,13 +1163,13 @@ export const CartCheckoutView: React.FC<CartCheckoutViewProps> = ({
                         className="p-4 rounded-xl border border-gray-200 flex flex-col justify-between gap-3"
                       >
                         <div>
-                          <div className="text-xs font-bold text-[#358385]">{addon.category}</div>
-                          <div className="font-heading font-bold text-sm text-gray-900 mt-0.5 line-clamp-2">
+                          <div className="type-support font-semibold text-[#358385]">{addon.category}</div>
+                          <div className="type-nav font-semibold text-gray-900 mt-0.5 line-clamp-2">
                             {addon.title}
                           </div>
                         </div>
                         <div className="flex items-center justify-between pt-2 border-t border-gray-100">
-                          <span className="font-extrabold text-sm text-gray-900 tabular-nums">
+                          <span className="type-nav font-bold text-gray-900 tabular-nums">
                             ${addon.priceUsd.toLocaleString()}
                           </span>
                           <button
@@ -1181,7 +1181,7 @@ export const CartCheckoutView: React.FC<CartCheckoutViewProps> = ({
                                 { openDrawer: false, successMessage: `Added "${addon.title}" to cart.` },
                               )
                             }
-                            className="px-3 py-1.5 rounded-lg bg-[#82634f] hover:bg-[#6e5240] text-white text-xs font-bold cursor-pointer"
+                            className="px-3.5 py-1.5 rounded-lg bg-[#82634f] hover:bg-[#6e5240] text-white type-btn cursor-pointer"
                           >
                             + Add
                           </button>
@@ -1195,15 +1195,15 @@ export const CartCheckoutView: React.FC<CartCheckoutViewProps> = ({
 
             {/* Right Column: Price Breakdown & Promo */}
             <div className="lg:col-span-4 bg-white rounded-2xl border border-[#e6dfd5] p-6 space-y-5 shadow-xs sticky top-24">
-              <h2 className="font-heading font-extrabold text-lg text-[#282828] border-b border-[#efe9e0] pb-3">
+              <h2 className="type-h3 text-[#282828] border-b border-[#efe9e0] pb-3">
                 Order Summary
               </h2>
 
               {/* Promo Code */}
               <div className="space-y-2">
-                <label className="text-xs font-bold text-[#5c5046] flex items-center gap-1.5">
+                <label className="form-label text-[#5c5046] flex items-center gap-1.5">
                   <Tag className="w-3.5 h-3.5 text-[#00b7a8]" />
-                  Promotional Code
+                  <span>Promotional Code</span>
                 </label>
                 <form onSubmit={handleApplyPromo} className="flex gap-2">
                   <input
@@ -1211,18 +1211,18 @@ export const CartCheckoutView: React.FC<CartCheckoutViewProps> = ({
                     value={promoInput}
                     onChange={(e) => setPromoInput(e.target.value.toUpperCase())}
                     placeholder={cart.promoCode || 'WELCOME10'}
-                    className="flex-1 h-10 px-3 rounded-xl border border-[#dfd7cc] text-xs font-bold uppercase outline-none focus:border-[#00b7a8]"
+                    className="flex-1 h-11 px-3.5 rounded-xl border border-[#dfd7cc] text-base font-mono uppercase outline-none focus:border-[#00b7a8]"
                   />
                   <button
                     type="submit"
                     disabled={isMutating || !promoInput.trim()}
-                    className="px-4 h-10 rounded-xl bg-[#82634f] hover:bg-[#6e5240] text-white text-xs font-bold disabled:opacity-40 cursor-pointer"
+                    className="px-4 h-11 rounded-xl bg-[#82634f] hover:bg-[#6e5240] text-white type-btn disabled:opacity-40 cursor-pointer"
                   >
                     Apply
                   </button>
                 </form>
                 {cart.promoCode && (
-                  <div className="flex items-center justify-between text-xs text-emerald-700 font-semibold">
+                  <div className="flex items-center justify-between type-support text-emerald-700 font-semibold">
                     <span>Applied: {cart.promoCode}</span>
                     <button
                       type="button"
@@ -1234,7 +1234,7 @@ export const CartCheckoutView: React.FC<CartCheckoutViewProps> = ({
                   </div>
                 )}
                 {cart.promoDescription && (
-                  <p className="text-[11px] text-gray-500">{cart.promoDescription}</p>
+                  <p className="type-support text-gray-500">{cart.promoDescription}</p>
                 )}
                 {!cart.promoCode && promoHints.length > 0 && (
                   <div className="flex flex-wrap gap-1.5 pt-1">
@@ -1243,7 +1243,7 @@ export const CartCheckoutView: React.FC<CartCheckoutViewProps> = ({
                         key={hint.code}
                         type="button"
                         onClick={() => applyPromo(hint.code)}
-                        className="px-2 py-0.5 rounded bg-teal-50 border border-teal-200 text-[10px] font-bold text-teal-900 hover:bg-teal-100 cursor-pointer"
+                        className="px-2.5 py-1 rounded bg-teal-50 border border-teal-200 type-support font-semibold text-teal-900 hover:bg-teal-100 cursor-pointer"
                         title={hint.description}
                       >
                         {hint.code}
@@ -1253,7 +1253,7 @@ export const CartCheckoutView: React.FC<CartCheckoutViewProps> = ({
                 )}
               </div>
 
-              <div className="space-y-2.5 pt-3 border-t border-gray-100 text-sm tabular-nums">
+              <div className="space-y-2.5 pt-3 border-t border-gray-100 type-support tabular-nums">
                 <div className="flex justify-between text-gray-600">
                   <span>Items Subtotal</span>
                   <span className="font-semibold text-gray-900">
@@ -1286,14 +1286,14 @@ export const CartCheckoutView: React.FC<CartCheckoutViewProps> = ({
                 )}
                 <div className="pt-3 border-t border-gray-200 flex items-baseline justify-between">
                   <div>
-                    <span className="font-heading font-extrabold text-base text-gray-950">
+                    <span className="type-nav font-bold text-gray-950">
                       Estimated Total
                     </span>
-                    <span className="block text-xs text-gray-500">
+                    <span className="block type-support text-gray-500">
                       Or {cart.totalUnitsRequired} Lodging Units
                     </span>
                   </div>
-                  <span className="text-2xl font-heading font-black text-gray-950">
+                  <span className="text-2xl font-heading font-bold text-gray-950">
                     ${cart.totalUsd.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                   </span>
                 </div>
@@ -1306,13 +1306,13 @@ export const CartCheckoutView: React.FC<CartCheckoutViewProps> = ({
                   setActiveTab('checkout');
                   onNavigate('checkout');
                 }}
-                className="w-full py-3.5 px-5 rounded-xl bg-[#00b7a8] hover:bg-[#009f92] disabled:bg-gray-300 text-white text-xs font-extrabold uppercase tracking-wider inline-flex items-center justify-center gap-2 transition-colors cursor-pointer disabled:cursor-not-allowed"
+                className="w-full py-3.5 px-5 rounded-xl bg-[#00b7a8] hover:bg-[#009f92] disabled:bg-gray-300 text-white type-btn inline-flex items-center justify-center gap-2 transition-colors cursor-pointer disabled:cursor-not-allowed"
               >
                 <span>Proceed to Checkout</span>
                 <ArrowRight className="w-4 h-4" />
               </button>
 
-              <p className="text-[11px] text-gray-500 leading-relaxed text-center">
+              <p className="type-support text-gray-500 text-center">
                 All totals are calculated on our server. Stays of 30+ consecutive days qualify for California occupancy tax exemption.
               </p>
             </div>
@@ -1322,7 +1322,7 @@ export const CartCheckoutView: React.FC<CartCheckoutViewProps> = ({
           <form onSubmit={handlePlaceOrder} className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
             <div className="lg:col-span-7 space-y-6">
               {checkoutError && (
-                <div className="p-4 rounded-xl bg-red-50 border border-red-200 text-xs font-semibold text-red-800 flex items-start gap-2.5">
+                <div className="p-4 rounded-xl bg-red-50 border border-red-200 type-support font-semibold text-red-800 flex items-start gap-2.5">
                   <AlertCircle className="w-4 h-4 text-red-600 shrink-0 mt-0.5" />
                   <span>{checkoutError}</span>
                 </div>
@@ -1331,50 +1331,50 @@ export const CartCheckoutView: React.FC<CartCheckoutViewProps> = ({
               {/* Guest / Contact Information */}
               <div className="bg-white rounded-2xl border border-gray-200 p-6 space-y-4 shadow-xs">
                 <div className="border-b border-gray-100 pb-3">
-                  <h2 className="font-heading font-extrabold text-lg text-gray-950">
+                  <h2 className="type-h3 text-gray-950">
                     1. Primary Guest or Purchaser Information
                   </h2>
-                  <p className="text-xs text-gray-500">
+                  <p className="type-support text-gray-500 mt-0.5">
                     Used for booking agreements, arrival instructions, and official payment receipts.
                   </p>
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-xs font-bold text-gray-700 mb-1">Full Name *</label>
+                    <label className="form-label text-gray-800">Full Name *</label>
                     <input
                       type="text"
                       required
                       value={customerName}
                       onChange={(e) => setCustomerName(e.target.value)}
                       placeholder="Alex Morgan"
-                      className="w-full h-11 px-3.5 rounded-xl border border-gray-300 text-sm outline-none focus:border-[#00b7a8]"
+                      className="form-input"
                     />
                   </div>
                   <div>
-                    <label className="block text-xs font-bold text-gray-700 mb-1">Email Address *</label>
+                    <label className="form-label text-gray-800">Email Address *</label>
                     <input
                       type="email"
                       required
                       value={customerEmail}
                       onChange={(e) => setCustomerEmail(e.target.value)}
                       placeholder="alex@example.com"
-                      className="w-full h-11 px-3.5 rounded-xl border border-gray-300 text-sm outline-none focus:border-[#00b7a8]"
+                      className="form-input"
                     />
                   </div>
                   <div>
-                    <label className="block text-xs font-bold text-gray-700 mb-1">Mobile Phone *</label>
+                    <label className="form-label text-gray-800">Mobile Phone *</label>
                     <input
                       type="tel"
                       required
                       value={customerPhone}
                       onChange={(e) => setCustomerPhone(e.target.value)}
                       placeholder="(916) 555-0192"
-                      className="w-full h-11 px-3.5 rounded-xl border border-gray-300 text-sm outline-none focus:border-[#00b7a8]"
+                      className="form-input tabular-nums"
                     />
                   </div>
                   <div>
-                    <label className="block text-xs font-bold text-gray-700 mb-1">
+                    <label className="form-label text-gray-800">
                       Household, Organization, or Company (Optional)
                     </label>
                     <input
@@ -1382,13 +1382,13 @@ export const CartCheckoutView: React.FC<CartCheckoutViewProps> = ({
                       value={company}
                       onChange={(e) => setCompany(e.target.value)}
                       placeholder="Optional — family stay, relocation, employer, etc."
-                      className="w-full h-11 px-3.5 rounded-xl border border-gray-300 text-sm outline-none focus:border-[#00b7a8]"
+                      className="form-input"
                     />
                   </div>
                 </div>
 
                 <div>
-                  <label className="block text-xs font-bold text-gray-700 mb-1">
+                  <label className="form-label text-gray-800">
                     Stay, Arrival, or Delivery Preferences (Optional)
                   </label>
                   <textarea
@@ -1396,7 +1396,7 @@ export const CartCheckoutView: React.FC<CartCheckoutViewProps> = ({
                     value={guestNotes}
                     onChange={(e) => setGuestNotes(e.target.value)}
                     placeholder="Flight arrival time, dietary notes for pantry provisioning, pet details, or check-in questions..."
-                    className="w-full p-3.5 rounded-xl border border-gray-300 text-sm outline-none focus:border-[#00b7a8]"
+                    className="form-textarea"
                   />
                 </div>
               </div>
@@ -1404,62 +1404,62 @@ export const CartCheckoutView: React.FC<CartCheckoutViewProps> = ({
               {/* Billing Address */}
               <div className="bg-white rounded-2xl border border-gray-200 p-6 space-y-4 shadow-xs">
                 <div className="border-b border-gray-100 pb-3">
-                  <h2 className="font-heading font-extrabold text-lg text-gray-950">
+                  <h2 className="type-h3 text-gray-950">
                     2. Billing Address
                   </h2>
                 </div>
 
                 <div className="space-y-4">
                   <div>
-                    <label className="block text-xs font-bold text-gray-700 mb-1">Street Address *</label>
+                    <label className="form-label text-gray-800">Street Address *</label>
                     <input
                       type="text"
                       required
                       value={line1}
                       onChange={(e) => setLine1(e.target.value)}
                       placeholder="400 Capitol Mall, Suite 100"
-                      className="w-full h-11 px-3.5 rounded-xl border border-gray-300 text-sm outline-none focus:border-[#00b7a8]"
+                      className="form-input"
                     />
                   </div>
                   <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
                     <div className="col-span-2 sm:col-span-2">
-                      <label className="block text-xs font-bold text-gray-700 mb-1">City *</label>
+                      <label className="form-label text-gray-800">City *</label>
                       <input
                         type="text"
                         required
                         value={city}
                         onChange={(e) => setCity(e.target.value)}
-                        className="w-full h-11 px-3.5 rounded-xl border border-gray-300 text-sm outline-none focus:border-[#00b7a8]"
+                        className="form-input"
                       />
                     </div>
                     <div>
-                      <label className="block text-xs font-bold text-gray-700 mb-1">State *</label>
+                      <label className="form-label text-gray-800">State *</label>
                       <input
                         type="text"
                         required
                         value={stateCode}
                         onChange={(e) => setStateCode(e.target.value)}
-                        className="w-full h-11 px-3.5 rounded-xl border border-gray-300 text-sm outline-none focus:border-[#00b7a8]"
+                        className="form-input"
                       />
                     </div>
                     <div>
-                      <label className="block text-xs font-bold text-gray-700 mb-1">ZIP / Postal *</label>
+                      <label className="form-label text-gray-800">ZIP / Postal *</label>
                       <input
                         type="text"
                         required
                         value={postalCode}
                         onChange={(e) => setPostalCode(e.target.value)}
-                        className="w-full h-11 px-3.5 rounded-xl border border-gray-300 text-sm outline-none focus:border-[#00b7a8]"
+                        className="form-input tabular-nums"
                       />
                     </div>
                   </div>
                   <div>
-                    <label className="block text-xs font-bold text-gray-700 mb-1">Country</label>
+                    <label className="form-label text-gray-800">Country</label>
                     <input
                       type="text"
                       value={country}
                       onChange={(e) => setCountry(e.target.value)}
-                      className="w-full h-11 px-3.5 rounded-xl border border-gray-300 text-sm outline-none focus:border-[#00b7a8]"
+                      className="form-input"
                     />
                   </div>
                 </div>
@@ -1468,10 +1468,10 @@ export const CartCheckoutView: React.FC<CartCheckoutViewProps> = ({
               {/* Payment Method */}
               <div className="bg-white rounded-2xl border border-gray-200 p-6 space-y-5 shadow-xs">
                 <div className="border-b border-gray-100 pb-3">
-                  <h2 className="font-heading font-extrabold text-lg text-gray-950">
+                  <h2 className="type-h3 text-gray-950">
                     3. Payment &amp; Settlement Method
                   </h2>
-                  <p className="text-xs text-gray-500">
+                  <p className="type-support text-gray-500 mt-0.5">
                     Orders paid with verified Client Portal Units confirm immediately. Bank Wire, Direct ACH, and Zelle orders remain Pending Verification until settlement is confirmed.
                   </p>
                 </div>
@@ -1529,10 +1529,10 @@ export const CartCheckoutView: React.FC<CartCheckoutViewProps> = ({
                           }`}
                         />
                         <div>
-                          <div className="font-heading font-bold text-sm text-gray-900">
+                          <div className="type-nav font-semibold text-gray-900">
                             {opt.label}
                           </div>
-                          <div className="text-xs text-gray-500 tabular-nums">{opt.sub}</div>
+                          <div className="type-support text-gray-500 tabular-nums">{opt.sub}</div>
                         </div>
                       </button>
                     );
@@ -1544,17 +1544,17 @@ export const CartCheckoutView: React.FC<CartCheckoutViewProps> = ({
                     {clientAccount ? (
                       <div className="space-y-2">
                         <div className="flex items-center justify-between">
-                          <span className="text-xs text-[#6b5c50]">Signed-In Client Account</span>
-                          <span className="text-xs font-bold text-[#00897d]">{clientAccount.email}</span>
+                          <span className="type-support text-[#6b5c50]">Signed-In Client Account</span>
+                          <span className="type-support font-semibold text-[#00897d]">{clientAccount.email}</span>
                         </div>
                         <div className="flex items-baseline justify-between pt-2 border-t border-[#dfd3c5] tabular-nums">
-                          <span className="text-sm font-bold text-[#282828]">Available Balance</span>
-                          <span className="text-xl font-heading font-black text-[#282828]">
+                          <span className="type-nav font-semibold text-[#282828]">Available Balance</span>
+                          <span className="text-xl font-heading font-bold text-[#282828]">
                             {clientAccount.units_balance} Units (${clientAccount.balance_usd.toLocaleString()})
                           </span>
                         </div>
                         {clientAccount.units_balance < cart.totalUnitsRequired && (
-                          <p className="text-xs text-amber-800 pt-1">
+                          <p className="type-support text-amber-800 pt-1">
                             Your balance ({clientAccount.units_balance} Units) is below the{' '}
                             {cart.totalUnitsRequired} Units required for this order. Choose Wire/ACH/Zelle or add Units in the Client Portal.
                           </p>
@@ -1562,7 +1562,7 @@ export const CartCheckoutView: React.FC<CartCheckoutViewProps> = ({
                       </div>
                     ) : (
                       <div className="space-y-3">
-                        <p className="text-xs text-[#4a3d33]">
+                        <p className="type-support text-[#4a3d33]">
                           Sign in to your Client Portal account to verify and deduct{' '}
                           <strong className="text-[#282828]">{cart.totalUnitsRequired} Lodging Units</strong>:
                         </p>
@@ -1572,24 +1572,24 @@ export const CartCheckoutView: React.FC<CartCheckoutViewProps> = ({
                             value={portalEmail}
                             onChange={(e) => setPortalEmail(e.target.value)}
                             placeholder="Client Email"
-                            className="h-10 px-3 rounded-lg bg-white border border-[#dfd3c5] text-xs text-[#282828] outline-none focus:border-[#00b7a8]"
+                            className="h-11 px-3.5 rounded-lg bg-white border border-[#dfd3c5] text-base text-[#282828] outline-none focus:border-[#00b7a8]"
                           />
                           <input
                             type="password"
                             value={portalPassword}
                             onChange={(e) => setPortalPassword(e.target.value)}
                             placeholder="Password"
-                            className="h-10 px-3 rounded-lg bg-white border border-[#dfd3c5] text-xs text-[#282828] outline-none focus:border-[#00b7a8]"
+                            className="h-11 px-3.5 rounded-lg bg-white border border-[#dfd3c5] text-base text-[#282828] outline-none focus:border-[#00b7a8]"
                           />
                         </div>
                         {portalAuthError && (
-                          <p className="text-xs text-rose-700 font-semibold">{portalAuthError}</p>
+                          <p className="type-support text-rose-700 font-semibold">{portalAuthError}</p>
                         )}
                         <button
                           type="button"
                           disabled={portalAuthLoading}
                           onClick={handlePortalQuickSignIn}
-                          className="px-4 py-2 rounded-lg bg-[#00b7a8] hover:bg-[#009e91] text-white text-xs font-black uppercase tracking-wider cursor-pointer"
+                          className="px-4 py-2.5 rounded-lg bg-[#00b7a8] hover:bg-[#009e91] text-white type-btn cursor-pointer"
                         >
                           {portalAuthLoading ? 'Signing In...' : 'Connect Client Balance'}
                         </button>
@@ -1599,30 +1599,30 @@ export const CartCheckoutView: React.FC<CartCheckoutViewProps> = ({
                 ) : (
                   <div className="p-5 rounded-xl bg-gray-50 border border-gray-200 space-y-4">
                     {paymentAccounts && (
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs bg-white p-3.5 rounded-xl border border-gray-200 tabular-nums">
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 type-support bg-white p-3.5 rounded-xl border border-gray-200 tabular-nums">
                         <div>
-                          <span className="text-gray-400 block">Receiving Bank</span>
-                          <span className="font-bold text-gray-900">{paymentAccounts.bankName}</span>
+                          <span className="text-gray-500 block">Receiving Bank</span>
+                          <span className="font-semibold text-gray-900">{paymentAccounts.bankName}</span>
                         </div>
                         <div>
-                          <span className="text-gray-400 block">Beneficiary</span>
-                          <span className="font-bold text-gray-900">{paymentAccounts.accountName}</span>
+                          <span className="text-gray-500 block">Beneficiary</span>
+                          <span className="font-semibold text-gray-900">{paymentAccounts.accountName}</span>
                         </div>
                         <div>
-                          <span className="text-gray-400 block">Account / Routing</span>
-                          <span className="font-mono font-bold text-gray-900">
-                            Acct {paymentAccounts.accountNumber} • ACH {paymentAccounts.achRoutingNumber}
+                          <span className="text-gray-500 block">Account / Routing</span>
+                          <span className="font-mono font-semibold text-gray-900">
+                            Acct {paymentAccounts.accountNumber} · ACH {paymentAccounts.achRoutingNumber}
                           </span>
                         </div>
                         <div>
-                          <span className="text-gray-400 block">Zelle Recipient</span>
-                          <span className="font-mono font-bold text-[#358385]">{paymentAccounts.zelleEmail}</span>
+                          <span className="text-gray-500 block">Zelle Recipient</span>
+                          <span className="font-mono font-semibold text-[#358385]">{paymentAccounts.zelleEmail}</span>
                         </div>
                       </div>
                     )}
 
                     <div className="space-y-3">
-                      <p className="text-xs text-gray-600 leading-relaxed">
+                      <p className="type-support text-gray-600">
                         <strong>Already initiated your transfer?</strong> Enter your remittance details below to queue immediate treasury verification, or leave blank to receive an official invoice first and submit your transfer reference afterward.
                       </p>
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -1631,32 +1631,32 @@ export const CartCheckoutView: React.FC<CartCheckoutViewProps> = ({
                           value={senderName}
                           onChange={(e) => setSenderName(e.target.value)}
                           placeholder="Sender Account Name (Optional now)"
-                          className="h-10 px-3 rounded-xl border border-gray-300 bg-white text-xs outline-none focus:border-[#00b7a8]"
+                          className="form-input"
                         />
                         <input
                           type="text"
                           value={originatingBank}
                           onChange={(e) => setOriginatingBank(e.target.value)}
                           placeholder="Originating Bank (Optional now)"
-                          className="h-10 px-3 rounded-xl border border-gray-300 bg-white text-xs outline-none focus:border-[#00b7a8]"
+                          className="form-input"
                         />
                         <input
                           type="text"
                           value={wireReference}
                           onChange={(e) => setWireReference(e.target.value)}
                           placeholder="Wire / ACH / Zelle Reference # (Optional now)"
-                          className="h-10 px-3 rounded-xl border border-gray-300 bg-white text-xs outline-none focus:border-[#00b7a8]"
+                          className="form-input"
                         />
                         <input
                           type="date"
                           value={transferDate}
                           onChange={(e) => setTransferDate(e.target.value)}
-                          className="h-10 px-3 rounded-xl border border-gray-300 bg-white text-xs outline-none focus:border-[#00b7a8]"
+                          className="form-input tabular-nums"
                         />
                       </div>
 
-                      <label className="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl border border-dashed border-gray-300 bg-white text-xs font-semibold text-gray-700 hover:border-[#00b7a8] cursor-pointer">
-                        <Upload className="w-3.5 h-3.5 text-[#00b7a8]" />
+                      <label className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl border border-dashed border-gray-300 bg-white type-label text-gray-700 hover:border-[#00b7a8] cursor-pointer">
+                        <Upload className="w-4 h-4 text-[#00b7a8]" />
                         <span>
                           {receiptFileName ? `Attached: ${receiptFileName}` : 'Attach Optional Transfer Receipt (PDF/Image)'}
                         </span>
@@ -1676,7 +1676,7 @@ export const CartCheckoutView: React.FC<CartCheckoutViewProps> = ({
             {/* Right: Final Order Review */}
             <div className="lg:col-span-5 bg-white rounded-2xl border border-gray-200 p-6 space-y-5 shadow-xs sticky top-24">
               <div className="flex items-center justify-between border-b border-gray-100 pb-3">
-                <h2 className="font-heading font-extrabold text-lg text-gray-950">
+                <h2 className="type-h3 text-gray-950">
                   Order Review ({cart.items.length})
                 </h2>
                 <button
@@ -1685,7 +1685,7 @@ export const CartCheckoutView: React.FC<CartCheckoutViewProps> = ({
                     setActiveTab('cart');
                     onNavigate('cart');
                   }}
-                  className="text-xs font-bold text-[#358385] hover:underline cursor-pointer"
+                  className="type-nav font-semibold text-[#358385] hover:underline cursor-pointer"
                 >
                   Edit Cart
                 </button>
@@ -1693,7 +1693,7 @@ export const CartCheckoutView: React.FC<CartCheckoutViewProps> = ({
 
               <div className="space-y-3 max-h-72 overflow-y-auto pr-1">
                 {cart.items.map((item) => (
-                  <div key={item.id} className="flex items-center justify-between gap-3 text-xs">
+                  <div key={item.id} className="flex items-center justify-between gap-3 type-support">
                     <div className="flex items-center gap-3 min-w-0">
                       <img
                         src={item.image || FALLBACK_IMAGE}
@@ -1704,21 +1704,21 @@ export const CartCheckoutView: React.FC<CartCheckoutViewProps> = ({
                         className="w-12 h-12 rounded-lg object-cover bg-gray-100 border border-gray-200 shrink-0"
                       />
                       <div className="min-w-0">
-                        <div className="font-bold text-gray-900 truncate">{item.title}</div>
+                        <div className="font-semibold text-gray-900 truncate">{item.title}</div>
                         <div className="text-gray-500 truncate">{item.subtitle}</div>
-                        <div className="text-gray-400 tabular-nums">
+                        <div className="text-gray-500 tabular-nums">
                           {item.quantity} {item.quantityLabel}
                         </div>
                       </div>
                     </div>
-                    <span className="font-extrabold text-gray-900 tabular-nums shrink-0">
+                    <span className="font-bold text-gray-900 tabular-nums shrink-0">
                       ${item.lineSubtotalUsd.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                     </span>
                   </div>
                 ))}
               </div>
 
-              <div className="space-y-2 pt-3 border-t border-gray-100 text-sm tabular-nums">
+              <div className="space-y-2 pt-3 border-t border-gray-100 type-support tabular-nums">
                 <div className="flex justify-between text-gray-600">
                   <span>Subtotal</span>
                   <span>${cart.subtotalUsd.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
@@ -1745,14 +1745,14 @@ export const CartCheckoutView: React.FC<CartCheckoutViewProps> = ({
                 )}
                 <div className="pt-3 border-t border-gray-200 flex items-baseline justify-between">
                   <div>
-                    <span className="font-heading font-extrabold text-base text-gray-950">
+                    <span className="type-nav font-bold text-gray-950">
                       Total Due
                     </span>
-                    <span className="block text-xs text-gray-500">
+                    <span className="block type-support text-gray-500">
                       {cart.totalUnitsRequired} Lodging Units equivalent
                     </span>
                   </div>
-                  <span className="text-2xl font-heading font-black text-gray-950">
+                  <span className="text-2xl font-heading font-bold text-gray-950">
                     ${cart.totalUsd.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                   </span>
                 </div>
@@ -1766,7 +1766,7 @@ export const CartCheckoutView: React.FC<CartCheckoutViewProps> = ({
                   (paymentMethod === 'unit_balance' &&
                     (!clientAccount || clientAccount.units_balance < cart.totalUnitsRequired))
                 }
-                className="w-full py-4 px-6 rounded-xl bg-[#00b7a8] hover:bg-[#009f92] disabled:bg-gray-300 text-white text-xs font-extrabold uppercase tracking-wider inline-flex items-center justify-center gap-2 transition-colors cursor-pointer disabled:cursor-not-allowed"
+                className="w-full py-4 px-6 rounded-xl bg-[#00b7a8] hover:bg-[#009f92] disabled:bg-gray-300 text-white type-btn inline-flex items-center justify-center gap-2 transition-colors cursor-pointer disabled:cursor-not-allowed"
               >
                 {submittingCheckout ? (
                   <>
@@ -1782,7 +1782,7 @@ export const CartCheckoutView: React.FC<CartCheckoutViewProps> = ({
                 )}
               </button>
 
-              <p className="text-[11px] text-gray-500 leading-relaxed">
+              <p className="type-support text-gray-500">
                 By placing your order, you agree to our house guidelines and cancellation terms. Bank wire, ACH, and Zelle orders are confirmed once settlement is verified by our accounting team.
               </p>
             </div>

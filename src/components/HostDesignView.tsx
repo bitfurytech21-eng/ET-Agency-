@@ -43,7 +43,7 @@ export const HostDesignView: React.FC = () => {
       <section className="relative overflow-hidden text-white py-16 sm:py-24 px-4 sm:px-8 border-b border-[#3a2f28] text-center">
         <LivePhotoBackground scene="interior" secondaryScene="courtyard" overlay="espresso" />
         <div className="relative z-10 max-w-4xl mx-auto space-y-4">
-          <span className="type-support font-semibold uppercase tracking-[0.14em] text-[#4de0d2] inline-block">
+          <span className="type-support font-semibold text-[#4de0d2] inline-block">
             Easy Travel Lodging Design Studio
           </span>
           <h1 className="type-h1 text-white">
@@ -108,7 +108,7 @@ export const HostDesignView: React.FC = () => {
       <section className="py-14 sm:py-20 px-4 sm:px-8 bg-[#faf8f5] border-b border-[#e6dfd5] text-left">
         <div className="max-w-5xl mx-auto space-y-8">
           <div>
-            <span className="type-support font-semibold uppercase tracking-[0.12em] text-[#14616d] block">
+            <span className="type-support font-semibold text-[#14616d] block">
               Turnkey Execution &amp; Return on Investment
             </span>
             <h2 className="type-h2 text-[#282828] mt-1.5">
@@ -234,7 +234,7 @@ export const HostDesignView: React.FC = () => {
             </div>
 
             <div className="lg:col-span-8 space-y-5">
-              <span className="type-support font-semibold uppercase tracking-[0.14em] text-[#4de0d2] block">
+              <span className="type-support font-semibold text-[#4de0d2] block">
                 Reviews &amp; Client Testimonial
               </span>
 
@@ -340,7 +340,7 @@ export const HostDesignView: React.FC = () => {
                     value={downloadName}
                     onChange={(e) => setDownloadName(e.target.value)}
                     placeholder="e.g. Sarah Jenkins"
-                    className="w-full h-11 px-3.5 rounded-xl border border-[#d8cfc3] text-sm sm:text-base focus:border-[#14616d] focus:ring-1 focus:ring-[#14616d] outline-none"
+                    className="w-full h-11 px-3.5 rounded-xl border border-[#d8cfc3] text-base focus:border-[#14616d] focus:ring-1 focus:ring-[#14616d] outline-none"
                   />
                 </div>
 
@@ -352,7 +352,7 @@ export const HostDesignView: React.FC = () => {
                     value={downloadEmail}
                     onChange={(e) => setDownloadEmail(e.target.value)}
                     placeholder="sarah@example.com"
-                    className="w-full h-11 px-3.5 rounded-xl border border-[#d8cfc3] text-sm sm:text-base focus:border-[#14616d] focus:ring-1 focus:ring-[#14616d] outline-none"
+                    className="w-full h-11 px-3.5 rounded-xl border border-[#d8cfc3] text-base focus:border-[#14616d] focus:ring-1 focus:ring-[#14616d] outline-none"
                   />
                 </div>
 

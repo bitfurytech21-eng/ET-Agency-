@@ -2,25 +2,20 @@ import React, { useState, useEffect, useMemo } from 'react';
 import {
   Lock,
   Mail,
-  Building2,
-  Coins,
   ShieldCheck,
-  Sparkles,
   Loader2,
   AlertCircle,
   CheckCircle2,
-  Phone,
-  User,
   X,
-  PlusCircle,
-  CreditCard,
   Landmark,
-  Check,
   ArrowRight,
   Copy,
   Clock,
+  Printer,
 } from 'lucide-react';
-import { LivePhotoBackground } from './LivePhotoBackground';
+import { LIVE_PHOTO_URLS } from './LivePhotoBackground';
+import { PROPERTIES } from '../data/lodgingData';
+import { getVehicleImage } from '../data/fleetImages';
 import {
   DashboardTab,
   UserSession,
@@ -34,7 +29,6 @@ import { DashboardHeader } from './dashboard/includes/DashboardHeader';
 import { DashboardSidebar } from './dashboard/includes/DashboardSidebar';
 import { DashboardFooter } from './dashboard/includes/DashboardFooter';
 import { TransactionReceiptModal } from './dashboard/components/TransactionReceiptModal';
-import { Printer } from 'lucide-react';
 
 // Modules
 import { OverviewModule } from './dashboard/modules/OverviewModule';
@@ -75,7 +69,7 @@ export const CustomerPortal: React.FC<CustomerPortalProps> = ({ onOpenBooking, o
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [successMsg, setSuccessMsg] = useState<string | null>(null);
   const [buyUnitsModalOpen, setBuyUnitsModalOpen] = useState(false);
-  
+
   // Manual Payment Configuration State
   const [depositAmount, setDepositAmount] = useState<number>(1000);
   const [depositMethod, setDepositMethod] = useState<string>('Direct Commercial Wire (Fedwire)');
@@ -98,6 +92,7 @@ export const CustomerPortal: React.FC<CustomerPortalProps> = ({ onOpenBooking, o
     }
     return {
       id: 'USR-8942-CORP',
+      dashboardId: 'WS-CA-8942',
       name: 'Alexander Sterling',
       email: 'easytravelagency@trustagent.space',
       phone: '+1 (415) 890-4321',
@@ -110,13 +105,13 @@ export const CustomerPortal: React.FC<CustomerPortalProps> = ({ onOpenBooking, o
       twoFactorEnabled: true,
       idVerified: true,
       preferredCurrency: 'USD',
-      timezone: 'America/New_York (Eastern Time)',
+      timezone: 'America/Los_Angeles (Pacific Time)',
       address: {
         street: '450 Lexington Avenue, Suite 1900',
         city: 'New York',
         state: 'NY',
         zip: '10017',
-        country: 'California’s homes',
+        country: 'United States',
       },
     };
   });
@@ -127,7 +122,7 @@ export const CustomerPortal: React.FC<CustomerPortalProps> = ({ onOpenBooking, o
       propertyId: 'residence-b',
       propertyTitle: 'Residence B · Ground-Floor Corporate Suite',
       unitNumber: 'Suite 104',
-      location: 'Premier US Metropolitan Corridor',
+      location: 'Sacramento Metropolitan Corridor, CA',
       checkIn: '2025-04-10',
       checkOut: '2025-05-15',
       totalNights: 35,
@@ -141,14 +136,14 @@ export const CustomerPortal: React.FC<CustomerPortalProps> = ({ onOpenBooking, o
       checkInInstructions: 'Self check-in via electronic keypad at Suite 104 entrance.',
       checkOutInstructions: 'Leave keys inside suite on kitchen island. Turn off climate system.',
       bookedAt: '2025-03-01',
-      image: '/photos/residence-b-living.jpg',
+      image: PROPERTIES[0]?.images?.[0] || LIVE_PHOTO_URLS.interior,
     },
     {
       id: 'RES-US-9430',
       propertyId: 'residence-c',
       propertyTitle: 'Residence C · Modern Furnished Suite',
       unitNumber: 'Suite 208',
-      location: 'Major US Business & Technology Hub',
+      location: 'Midtown Sacramento Business District, CA',
       checkIn: '2025-06-01',
       checkOut: '2025-06-30',
       totalNights: 29,
@@ -162,7 +157,7 @@ export const CustomerPortal: React.FC<CustomerPortalProps> = ({ onOpenBooking, o
       checkInInstructions: 'Access instructions dispatched 24 hours prior to scheduled arrival.',
       checkOutInstructions: 'Standard corporate check-out at 11:00 AM local time.',
       bookedAt: '2025-03-20',
-      image: '/photos/residence-c-living.jpg',
+      image: PROPERTIES[1]?.images?.[0] || LIVE_PHOTO_URLS.courtyard,
     },
   ]);
 
@@ -170,7 +165,7 @@ export const CustomerPortal: React.FC<CustomerPortalProps> = ({ onOpenBooking, o
     {
       id: 'FLT-US-1049',
       vehicleId: 'audi-a3-2021',
-      vehicleName: '2021 Audi A3 Premium Sedan',
+      vehicleName: 'Audi A3 Premium Sedan',
       year: 2021,
       category: 'Luxury Sedan',
       colorName: 'Mythos Black Metallic',
@@ -178,8 +173,8 @@ export const CustomerPortal: React.FC<CustomerPortalProps> = ({ onOpenBooking, o
       pickupDate: '2025-04-10',
       returnDate: '2025-04-24',
       totalDays: 14,
-      pickupLocation: 'Major US International Airport Terminal Dispatch',
-      returnLocation: 'Major US International Airport Terminal Dispatch',
+      pickupLocation: 'Sacramento International Airport (SMF) Terminal Dispatch',
+      returnLocation: 'Sacramento International Airport (SMF) Terminal Dispatch',
       protectionPlan: 'executive_shield',
       status: 'active',
       totalUsd: 1890,
@@ -188,7 +183,7 @@ export const CustomerPortal: React.FC<CustomerPortalProps> = ({ onOpenBooking, o
       driverLicenseState: 'NY',
       flightNumber: 'AA-1842',
       handoverCode: 'FLT-US-8902A3',
-      image: 'https://images.unsplash.com/photo-1606664515524-ed2f786a0bd6?auto=format&fit=crop&w=800&q=80',
+      image: getVehicleImage('audi-a3-2021'),
     },
   ]);
 
@@ -246,7 +241,7 @@ export const CustomerPortal: React.FC<CustomerPortalProps> = ({ onOpenBooking, o
     {
       id: 'NOTIF-04',
       title: 'Diamond Corporate Benefits Active',
-      message: 'Your organization enjoys complimentary executive protection plans and priority dispatch across all US metros.',
+      message: 'Your organization enjoys complimentary executive protection plans and priority dispatch across California metros.',
       type: 'system',
       isRead: true,
       timestamp: 'Mar 15, 2025',
@@ -268,18 +263,16 @@ export const CustomerPortal: React.FC<CustomerPortalProps> = ({ onOpenBooking, o
       sender: 'host',
       senderName: 'Fleet Operations Division',
       subject: 'Flight Tracking & Curbside Vehicle Delivery',
-      body: 'We are actively monitoring flight AA-1842. Your executive sedan will be staged at the terminal passenger pickup zone exactly when your flight touches down.',
+      body: 'We are actively monitoring flight AA-1842. Your executive sedan will be staged at the terminal passenger pickup zone upon touchdown.',
       timestamp: 'Yesterday at 02:10 PM',
       isRead: true,
     },
   ]);
 
-  // Persist user session to localStorage
   useEffect(() => {
     localStorage.setItem('etl_user_session', JSON.stringify(userSession));
   }, [userSession]);
 
-  // Handle Login
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
@@ -290,12 +283,11 @@ export const CustomerPortal: React.FC<CustomerPortalProps> = ({ onOpenBooking, o
       const demoToken = `usr_session_${Date.now()}`;
       localStorage.setItem('etl_php_token', demoToken);
       setToken(demoToken);
-      setSuccessMsg('Session authenticated. Welcome to your corporate dashboard.');
+      setSuccessMsg('Session authenticated. Welcome to your corporate workspace.');
       setIsLoading(false);
-    }, 600);
+    }, 500);
   };
 
-  // Handle Registration
   const handleRegister = (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
@@ -309,6 +301,7 @@ export const CustomerPortal: React.FC<CustomerPortalProps> = ({ onOpenBooking, o
 
       const newUser: UserSession = {
         id: `USR-${Math.floor(1000 + Math.random() * 9000)}-CORP`,
+        dashboardId: `WS-CA-${Math.floor(1000 + Math.random() * 9000)}`,
         name: regName || 'Corporate Client',
         email: regEmail || 'client@corporate.com',
         phone: regPhone || '+1 (555) 019-2834',
@@ -321,37 +314,33 @@ export const CustomerPortal: React.FC<CustomerPortalProps> = ({ onOpenBooking, o
         twoFactorEnabled: false,
         idVerified: true,
         preferredCurrency: 'USD',
-        timezone: 'America/New_York (Eastern Time)',
+        timezone: 'America/Los_Angeles (Pacific Time)',
       };
 
       setUserSession(newUser);
       setSuccessMsg('Account registered successfully. Welcome to your corporate portal.');
       setIsLoading(false);
-    }, 700);
+    }, 600);
   };
 
-  // Handle Sign Out
   const handleSignOut = () => {
     localStorage.removeItem('etl_php_token');
     setToken(null);
-    setSuccessMsg('You have successfully signed out.');
+    setSuccessMsg('You have signed out of your workspace.');
   };
 
-  // Manual Payment Configuration - Open Modal Reset
   const handleOpenDepositModal = () => {
     setManualStep(1);
     setWireRefCode(`REMIT-US-${Math.floor(100000 + Math.random() * 900000)}`);
     setBuyUnitsModalOpen(true);
   };
 
-  // Confirm & Process Manual Bank Remittance (Stays PENDING until Admin Approves)
   const handleTopUpUnits = () => {
     const addedUsd = Number(depositAmount);
     if (isNaN(addedUsd) || addedUsd <= 0) return;
 
     setIsLoading(true);
     setTimeout(() => {
-      // Create payment entry with PENDING status
       const newPay: UserPaymentRecord = {
         id: `PAY-US-${Math.floor(1000 + Math.random() * 9000)}`,
         referenceCode: wireRefCode || `WIRE-US-${Date.now().toString().slice(-6)}`,
@@ -360,17 +349,16 @@ export const CustomerPortal: React.FC<CustomerPortalProps> = ({ onOpenBooking, o
         amountUsd: addedUsd,
         paymentMethod: depositMethod,
         date: new Date().toISOString().split('T')[0],
-        status: 'pending', // STAYS PENDING UNTIL ADMIN APPROVAL
+        status: 'pending',
         invoiceNumber: `INV-US-2026-${Math.floor(100 + Math.random() * 900)}`,
         proofDocumentUrl: '#',
       };
       setPayments((prev) => [newPay, ...prev]);
 
-      // Add account alert notification
       const newNotif: UserNotificationItem = {
         id: `NOTIF-${Date.now().toString().slice(-4)}`,
-        title: 'Manual Deposit Submitted (Pending Admin Approval)',
-        message: `Your manual remittance notice (${newPay.referenceCode} for $${addedUsd.toLocaleString('en-US', { minimumFractionDigits: 2 })} USD) is in review. Balance will update upon admin approval.`,
+        title: 'Manual Deposit Submitted (Pending Verification)',
+        message: `Your manual remittance notice (${newPay.referenceCode} for $${addedUsd.toLocaleString('en-US', { minimumFractionDigits: 2 })} USD) is in review. Balance updates upon accounting verification.`,
         type: 'payment',
         isRead: false,
         timestamp: 'Just now',
@@ -378,84 +366,76 @@ export const CustomerPortal: React.FC<CustomerPortalProps> = ({ onOpenBooking, o
       setNotifications((prev) => [newNotif, ...prev]);
 
       setIsLoading(false);
-      setManualStep(3); // Step 3: Pending Confirmation Screen
-      setSuccessMsg(`Manual payment submitted. Remittance reference ${newPay.referenceCode} is pending treasury admin approval.`);
-    }, 700);
+      setManualStep(3);
+      setSuccessMsg(`Remittance reference ${newPay.referenceCode} logged and pending accounting verification.`);
+    }, 600);
   };
 
-  // ADMIN APPROVAL HANDLER: Approve Payment & Credit Balance
   const handleApprovePayment = (paymentId: string) => {
     const targetPayment = payments.find((p) => p.id === paymentId);
     if (!targetPayment || targetPayment.status !== 'pending') return;
 
-    // Update payment status to settled
     setPayments((prev) =>
-      prev.map((p) => (p.id === paymentId ? { ...p, status: 'settled' } : p))
+      prev.map((p) => (p.id === paymentId ? { ...p, status: 'settled' } : p)),
     );
 
-    // Credit user's account balance
     setUserSession((prev) => ({
       ...prev,
       units_balance: Math.floor((prev.balance_usd + targetPayment.amountUsd) / 100),
       balance_usd: prev.balance_usd + targetPayment.amountUsd,
     }));
 
-    // Push notification to user
     const approveNotif: UserNotificationItem = {
       id: `NOTIF-${Date.now().toString().slice(-4)}`,
       title: 'Payment Approved & Balance Credited',
-      message: `Treasury Admin approved payment ${targetPayment.referenceCode}. $${targetPayment.amountUsd.toLocaleString('en-US', { minimumFractionDigits: 2 })} USD has been credited to your account balance.`,
+      message: `Treasury approved payment ${targetPayment.referenceCode}. $${targetPayment.amountUsd.toLocaleString('en-US', { minimumFractionDigits: 2 })} USD credited to your account balance.`,
       type: 'payment',
       isRead: false,
       timestamp: 'Just now',
     };
     setNotifications((prev) => [approveNotif, ...prev]);
 
-    setSuccessMsg(`Admin Approved: Payment ${targetPayment.referenceCode} settled and $${targetPayment.amountUsd.toLocaleString('en-US', { minimumFractionDigits: 2 })} USD credited to client balance.`);
+    setSuccessMsg(`Payment ${targetPayment.referenceCode} settled and $${targetPayment.amountUsd.toLocaleString('en-US', { minimumFractionDigits: 2 })} USD credited.`);
   };
 
-  // ADMIN REJECTION HANDLER: Reject Payment
   const handleRejectPayment = (paymentId: string) => {
     const targetPayment = payments.find((p) => p.id === paymentId);
     if (!targetPayment) return;
 
     setPayments((prev) =>
-      prev.map((p) => (p.id === paymentId ? { ...p, status: 'failed' } : p))
+      prev.map((p) => (p.id === paymentId ? { ...p, status: 'failed' } : p)),
     );
 
     const rejectNotif: UserNotificationItem = {
       id: `NOTIF-${Date.now().toString().slice(-4)}`,
       title: 'Payment Remittance Declined',
-      message: `Payment remittance ${targetPayment.referenceCode} for $${targetPayment.amountUsd.toLocaleString('en-US', { minimumFractionDigits: 2 })} USD was declined by treasury audit.`,
+      message: `Payment remittance ${targetPayment.referenceCode} for $${targetPayment.amountUsd.toLocaleString('en-US', { minimumFractionDigits: 2 })} USD was declined during verification.`,
       type: 'payment',
       isRead: false,
       timestamp: 'Just now',
     };
     setNotifications((prev) => [rejectNotif, ...prev]);
 
-    setErrorMsg(`Admin Action: Payment ${targetPayment.referenceCode} declined.`);
+    setErrorMsg(`Payment ${targetPayment.referenceCode} declined.`);
   };
 
-  // Update Reservation handler
   const handleUpdateReservation = (id: string, updates: Partial<UserAccommodationReservation>) => {
     setAccommodations((prev) =>
-      prev.map((item) => (item.id === id ? { ...item, ...updates } : item))
+      prev.map((item) => (item.id === id ? { ...item, ...updates } : item)),
     );
   };
 
-  // Update Rental handler
   const handleUpdateRental = (id: string, updates: Partial<UserCarRentalBooking>) => {
     setCarRentals((prev) =>
-      prev.map((item) => (item.id === id ? { ...item, ...updates } : item))
+      prev.map((item) => (item.id === id ? { ...item, ...updates } : item)),
     );
   };
 
-  // Upload Payment Proof handler
   const handleUploadProof = async (
     refCode: string,
     bank: string,
     sender: string,
-    fileNotes: string
+    fileNotes: string,
   ): Promise<boolean> => {
     const newRecord: UserPaymentRecord = {
       id: `PAY-US-${Math.floor(1000 + Math.random() * 9000)}`,
@@ -473,11 +453,10 @@ export const CustomerPortal: React.FC<CustomerPortalProps> = ({ onOpenBooking, o
     return true;
   };
 
-  // Send Message handler
   const handleSendMessage = async (
     subject: string,
     body: string,
-    recipient: string
+    _recipient: string,
   ): Promise<boolean> => {
     const newMsg: UserMessageItem = {
       id: `MSG-${Date.now().toString().slice(-5)}`,
@@ -492,10 +471,9 @@ export const CustomerPortal: React.FC<CustomerPortalProps> = ({ onOpenBooking, o
     return true;
   };
 
-  // Mark notification read
   const handleMarkNotificationRead = (id: string) => {
     setNotifications((prev) =>
-      prev.map((n) => (n.id === id ? { ...n, isRead: true } : n))
+      prev.map((n) => (n.id === id ? { ...n, isRead: true } : n)),
     );
   };
 
@@ -505,80 +483,58 @@ export const CustomerPortal: React.FC<CustomerPortalProps> = ({ onOpenBooking, o
 
   const unreadNotifCount = useMemo(
     () => notifications.filter((n) => !n.isRead).length,
-    [notifications]
+    [notifications],
   );
   const unreadMsgCount = useMemo(
     () => messages.filter((m) => !m.isRead).length,
-    [messages]
+    [messages],
   );
 
-  // Calculate current PHP path breadcrumb
-  const currentPhpPath = useMemo(() => {
-    const folderMap: Record<DashboardTab, string> = {
-      overview: 'Overview/',
-      accommodation: 'Accommodation/',
-      'car-rentals': 'CarRentals/',
-      payments: 'Payments/',
-      'saved-items': 'SavedItems/',
-      notifications: 'Notifications/',
-      messages: 'Messages/',
-      profile: 'Profile/',
-      security: 'Security/',
-      settings: 'Settings/',
-      support: 'Support/',
-    };
-    return `UserDashboard/${folderMap[activeTab]}index.php`;
-  }, [activeTab]);
-
   return (
-    <div className="bg-[#f7f3ed] text-[#282828] min-h-screen text-left flex flex-col font-sans">
+    <div className="bg-[#f8fafc] text-[#0f172a] min-h-screen text-left flex flex-col font-sans">
       {/* ========================================================
           1. UNAUTHENTICATED: LOGIN / REGISTRATION VIEW
          ======================================================== */}
       {!token ? (
-        <div className="flex-1 flex flex-col justify-center py-12 px-4 sm:px-6 lg:px-8">
+        <div className="flex-1 flex flex-col justify-center py-14 px-4 sm:px-6 lg:px-8 bg-[#0f172a]">
           <div className="max-w-md w-full mx-auto space-y-6">
-            {/* Header Brand */}
             <div className="text-center space-y-2">
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#14616d]/10 border border-[#14616d]/20 text-[#14616d] text-xs font-bold uppercase tracking-wider">
-                <ShieldCheck className="w-3.5 h-3.5" />
-                <span>Verified Client Portal · California’s homes</span>
+              <div className="inline-flex items-center gap-2 text-[#5eead4] type-support font-semibold">
+                <ShieldCheck className="w-4 h-4" />
+                <span>Easy Travel Lodging · Client Workspace</span>
               </div>
-              <h2 className="text-3xl font-heading font-black text-[#282828] tracking-tight">
-                {authMode === 'login' ? 'Sign In to Your Dashboard' : 'Open Corporate Lodging Account'}
+              <h2 className="type-h2 text-white">
+                {authMode === 'login' ? 'Sign In to Client Portal' : 'Create Corporate Account'}
               </h2>
-              <p className="text-xs sm:text-sm text-[#5c5046]">
+              <p className="type-body text-slate-300">
                 {authMode === 'login'
-                  ? 'Access your nationwide furnished residences, 3D fleet rentals, and balance ledger.'
-                  : 'Instant access to managed furnished residences, 3D vehicle fleet rentals, and USD top-up billing.'}
+                  ? 'Access your furnished residence bookings, vehicle reservations, and financial ledger.'
+                  : 'Register for direct corporate housing reservations, vehicle dispatch, and consolidated invoicing.'}
               </p>
             </div>
 
-            {/* Notifications & Feedback */}
             {errorMsg && (
-              <div className="p-3.5 bg-rose-50 border border-rose-200 rounded-xl text-rose-800 text-xs flex items-center gap-2 font-medium">
+              <div className="p-3.5 bg-rose-50 border border-rose-200 rounded-xl text-rose-800 type-support flex items-center gap-2 font-medium">
                 <AlertCircle className="w-4 h-4 shrink-0 text-rose-600" />
                 <span>{errorMsg}</span>
               </div>
             )}
             {successMsg && (
-              <div className="p-3.5 bg-emerald-50 border border-emerald-200 rounded-xl text-emerald-800 text-xs flex items-center gap-2 font-medium">
+              <div className="p-3.5 bg-emerald-50 border border-emerald-200 rounded-xl text-emerald-800 type-support flex items-center gap-2 font-medium">
                 <CheckCircle2 className="w-4 h-4 shrink-0 text-emerald-600" />
                 <span>{successMsg}</span>
               </div>
             )}
 
-            {/* Auth Box */}
-            <div className="bg-white border border-[#dfd7cc] rounded-2xl p-6 sm:p-8 shadow-sm space-y-6">
-              {/* Tab Selector */}
-              <div className="grid grid-cols-2 p-1 bg-[#faf8f5] border border-[#e6dfd5] rounded-xl text-xs font-bold text-center">
+            <div className="bg-white border border-slate-200 rounded-2xl p-6 sm:p-8 shadow-xl space-y-6">
+              <div className="grid grid-cols-2 p-1 bg-slate-100 border border-slate-200 rounded-xl type-btn text-center">
                 <button
                   type="button"
                   onClick={() => setAuthMode('login')}
-                  className={`py-2 rounded-lg transition-all cursor-pointer ${
+                  className={`py-2 rounded-lg transition-colors cursor-pointer whitespace-nowrap ${
                     authMode === 'login'
-                      ? 'bg-white text-[#282828] shadow-xs'
-                      : 'text-[#857568] hover:text-[#282828]'
+                      ? 'bg-white text-[#0f172a] shadow-xs font-bold'
+                      : 'text-slate-600 hover:text-[#0f172a]'
                   }`}
                 >
                   Sign In
@@ -586,48 +542,43 @@ export const CustomerPortal: React.FC<CustomerPortalProps> = ({ onOpenBooking, o
                 <button
                   type="button"
                   onClick={() => setAuthMode('register')}
-                  className={`py-2 rounded-lg transition-all cursor-pointer ${
+                  className={`py-2 rounded-lg transition-colors cursor-pointer whitespace-nowrap ${
                     authMode === 'register'
-                      ? 'bg-white text-[#282828] shadow-xs'
-                      : 'text-[#857568] hover:text-[#282828]'
+                      ? 'bg-white text-[#0f172a] shadow-xs font-bold'
+                      : 'text-slate-600 hover:text-[#0f172a]'
                   }`}
                 >
                   Create Account
                 </button>
               </div>
 
-              {/* Login Form */}
               {authMode === 'login' ? (
-                <form onSubmit={handleLogin} className="space-y-4 text-xs">
+                <form onSubmit={handleLogin} className="space-y-4">
                   <div>
-                    <label className="block text-[11px] font-bold uppercase tracking-wider text-[#857568] mb-1">
-                      Business or Guest Email
-                    </label>
+                    <label className="form-label">Business or Guest Email</label>
                     <div className="relative">
-                      <Mail className="w-4 h-4 absolute left-3 top-3 text-[#857568]" />
+                      <Mail className="w-4 h-4 absolute left-3 top-3 text-slate-400" />
                       <input
                         type="email"
                         required
                         value={loginEmail}
                         onChange={(e) => setLoginEmail(e.target.value)}
-                        className="w-full pl-9 pr-3 h-10 bg-[#faf8f5] border border-[#d8cfc3] rounded-xl text-xs font-medium text-[#282828] outline-none focus:border-[#14616d] focus:ring-1 focus:ring-[#14616d]"
+                        className="form-input pl-9"
                         placeholder="client@corporate.com"
                       />
                     </div>
                   </div>
 
                   <div>
-                    <label className="block text-[11px] font-bold uppercase tracking-wider text-[#857568] mb-1">
-                      Password
-                    </label>
+                    <label className="form-label">Password</label>
                     <div className="relative">
-                      <Lock className="w-4 h-4 absolute left-3 top-3 text-[#857568]" />
+                      <Lock className="w-4 h-4 absolute left-3 top-3 text-slate-400" />
                       <input
                         type="password"
                         required
                         value={loginPassword}
                         onChange={(e) => setLoginPassword(e.target.value)}
-                        className="w-full pl-9 pr-3 h-10 bg-[#faf8f5] border border-[#d8cfc3] rounded-xl text-xs font-medium text-[#282828] outline-none focus:border-[#14616d] focus:ring-1 focus:ring-[#14616d]"
+                        className="form-input pl-9"
                         placeholder="••••••••••••"
                       />
                     </div>
@@ -636,115 +587,100 @@ export const CustomerPortal: React.FC<CustomerPortalProps> = ({ onOpenBooking, o
                   <button
                     type="submit"
                     disabled={isLoading}
-                    className="btn btn-primary w-full py-3 text-center flex items-center justify-center gap-2 cursor-pointer shadow-xs disabled:opacity-60"
+                    className="btn btn-primary w-full py-2.5 flex items-center justify-center gap-2 disabled:opacity-60"
                   >
                     {isLoading ? (
                       <>
                         <Loader2 className="w-4 h-4 animate-spin" />
-                        <span>Verifying Credentials...</span>
+                        <span>Signing In...</span>
                       </>
                     ) : (
-                      <>
-                        <span>Authenticate Dashboard</span>
-                      </>
+                      <span>Sign In to Dashboard</span>
                     )}
                   </button>
 
-                  <div className="p-3 bg-[#f8f5f0] border border-[#e6dfd5] rounded-xl text-[11px] text-[#5c5046] text-center">
-                    <span>Demo Account Pre-Filled: </span>
-                    <strong className="text-[#282828]">easytravelagency@trustagent.space</strong>
+                  <div className="p-3 bg-slate-50 border border-slate-200 rounded-xl type-support text-slate-600 text-center">
+                    <span>Pre-filled Demo Account: </span>
+                    <strong className="text-[#0f172a]">easytravelagency@trustagent.space</strong>
                   </div>
                 </form>
               ) : (
-                /* Registration Form */
-                <form onSubmit={handleRegister} className="space-y-3.5 text-xs">
+                <form onSubmit={handleRegister} className="space-y-3.5">
                   <div>
-                    <label className="block text-[11px] font-bold uppercase tracking-wider text-[#857568] mb-1">
-                      Full Legal Name *
-                    </label>
+                    <label className="form-label">Full Legal Name *</label>
                     <input
                       type="text"
                       required
                       value={regName}
                       onChange={(e) => setRegName(e.target.value)}
                       placeholder="Alexander Sterling"
-                      className="w-full px-3 h-9.5 bg-[#faf8f5] border border-[#d8cfc3] rounded-xl text-xs text-[#282828] outline-none focus:border-[#14616d] focus:ring-1 focus:ring-[#14616d]"
+                      className="form-input"
                     />
                   </div>
 
                   <div>
-                    <label className="block text-[11px] font-bold uppercase tracking-wider text-[#857568] mb-1">
-                      Corporate or Personal Email *
-                    </label>
+                    <label className="form-label">Corporate or Personal Email *</label>
                     <input
                       type="email"
                       required
                       value={regEmail}
                       onChange={(e) => setRegEmail(e.target.value)}
                       placeholder="alexander@company.com"
-                      className="w-full px-3 h-9.5 bg-[#faf8f5] border border-[#d8cfc3] rounded-xl text-xs text-[#282828] outline-none focus:border-[#14616d] focus:ring-1 focus:ring-[#14616d]"
+                      className="form-input"
                     />
                   </div>
 
-                  <div className="grid grid-cols-2 gap-2.5">
+                  <div className="grid grid-cols-2 gap-3">
                     <div>
-                      <label className="block text-[11px] font-bold uppercase tracking-wider text-[#857568] mb-1">
-                        Company Name
-                      </label>
+                      <label className="form-label">Company Name</label>
                       <input
                         type="text"
                         value={regCompany}
                         onChange={(e) => setRegCompany(e.target.value)}
                         placeholder="Global Partners LLC"
-                        className="w-full px-3 h-9.5 bg-[#faf8f5] border border-[#d8cfc3] rounded-xl text-xs text-[#282828] outline-none focus:border-[#14616d] focus:ring-1 focus:ring-[#14616d]"
+                        className="form-input"
                       />
                     </div>
                     <div>
-                      <label className="block text-[11px] font-bold uppercase tracking-wider text-[#857568] mb-1">
-                        Job Title
-                      </label>
+                      <label className="form-label">Job Title</label>
                       <input
                         type="text"
                         value={regRole}
                         onChange={(e) => setRegRole(e.target.value)}
                         placeholder="Relocation Manager"
-                        className="w-full px-3 h-9.5 bg-[#faf8f5] border border-[#d8cfc3] rounded-xl text-xs text-[#282828] outline-none focus:border-[#14616d] focus:ring-1 focus:ring-[#14616d]"
+                        className="form-input"
                       />
                     </div>
                   </div>
 
                   <div>
-                    <label className="block text-[11px] font-bold uppercase tracking-wider text-[#857568] mb-1">
-                      Phone Number *
-                    </label>
+                    <label className="form-label">Phone Number *</label>
                     <input
                       type="tel"
                       required
                       value={regPhone}
                       onChange={(e) => setRegPhone(e.target.value)}
                       placeholder="+1 (555) 000-0000"
-                      className="w-full px-3 h-9.5 bg-[#faf8f5] border border-[#d8cfc3] rounded-xl text-xs text-[#282828] outline-none focus:border-[#14616d] focus:ring-1 focus:ring-[#14616d]"
+                      className="form-input tabular-nums"
                     />
                   </div>
 
                   <div>
-                    <label className="block text-[11px] font-bold uppercase tracking-wider text-[#857568] mb-1">
-                      Set Password *
-                    </label>
+                    <label className="form-label">Set Password *</label>
                     <input
                       type="password"
                       required
                       value={regPassword}
                       onChange={(e) => setRegPassword(e.target.value)}
                       placeholder="Minimum 8 characters"
-                      className="w-full px-3 h-9.5 bg-[#faf8f5] border border-[#d8cfc3] rounded-xl text-xs text-[#282828] outline-none focus:border-[#14616d] focus:ring-1 focus:ring-[#14616d]"
+                      className="form-input"
                     />
                   </div>
 
                   <button
                     type="submit"
                     disabled={isLoading}
-                    className="btn btn-primary w-full py-3 text-center flex items-center justify-center gap-2 cursor-pointer shadow-xs mt-2 disabled:opacity-60"
+                    className="btn btn-primary w-full py-2.5 flex items-center justify-center gap-2 mt-2 disabled:opacity-60"
                   >
                     {isLoading ? (
                       <>
@@ -752,10 +688,7 @@ export const CustomerPortal: React.FC<CustomerPortalProps> = ({ onOpenBooking, o
                         <span>Creating Account...</span>
                       </>
                     ) : (
-                      <>
-                        <Sparkles className="w-4 h-4" />
-                        <span>Register &amp; Create Account</span>
-                      </>
+                      <span>Create Client Account</span>
                     )}
                   </button>
                 </form>
@@ -766,48 +699,45 @@ export const CustomerPortal: React.FC<CustomerPortalProps> = ({ onOpenBooking, o
               <button
                 type="button"
                 onClick={() => onNavigateTab('home')}
-                className="text-xs text-[#5c5046] hover:text-[#282828] underline cursor-pointer"
+                className="type-nav text-slate-300 hover:text-white underline cursor-pointer"
               >
-                ← Return to Public Homepage
+                ← Return to Public Website
               </button>
             </div>
           </div>
         </div>
       ) : (
         /* ========================================================
-            2. AUTHENTICATED: COMPREHENSIVE USER DASHBOARD
+            2. AUTHENTICATED: CLIENT WORKSPACE DASHBOARD
            ======================================================== */
         <div className="flex-1 flex flex-col">
-          {/* Top Header Bar */}
           <DashboardHeader
             user={userSession}
             activeTab={activeTab}
-            currentPhpPath={currentPhpPath}
             unreadNotificationsCount={unreadNotifCount}
             unreadMessagesCount={unreadMsgCount}
-            savedItemsCount={4}
+            savedItemsCount={3}
             mobileMenuOpen={mobileMenuOpen}
             onToggleMobileMenu={() => setMobileMenuOpen(!mobileMenuOpen)}
             onNavigateTab={(tab) => {
               setActiveTab(tab);
               setMobileMenuOpen(false);
             }}
-            onOpenTopUpUnits={() => setBuyUnitsModalOpen(true)}
+            onOpenTopUpUnits={handleOpenDepositModal}
             onSignOut={handleSignOut}
             onReturnToSite={() => onNavigateTab('home')}
           />
 
-          {/* Feedback Banners */}
           {successMsg && (
-            <div className="bg-emerald-50 border-b border-emerald-200 px-4 py-2.5 text-xs text-emerald-800 flex items-center justify-between">
-              <div className="flex items-center gap-2 max-w-7xl mx-auto w-full">
+            <div className="bg-emerald-50 border-b border-emerald-200 px-4 py-2.5 type-support text-emerald-900 flex items-center justify-between">
+              <div className="flex items-center gap-2 max-w-[1440px] mx-auto w-full">
                 <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
                 <span>{successMsg}</span>
               </div>
               <button
                 type="button"
                 onClick={() => setSuccessMsg(null)}
-                className="text-emerald-700 hover:text-emerald-900 cursor-pointer"
+                className="text-emerald-700 hover:text-emerald-950 cursor-pointer"
               >
                 <X className="w-3.5 h-3.5" />
               </button>
@@ -815,26 +745,24 @@ export const CustomerPortal: React.FC<CustomerPortalProps> = ({ onOpenBooking, o
           )}
 
           {errorMsg && (
-            <div className="bg-rose-50 border-b border-rose-200 px-4 py-2.5 text-xs text-rose-800 flex items-center justify-between">
-              <div className="flex items-center gap-2 max-w-7xl mx-auto w-full">
+            <div className="bg-rose-50 border-b border-rose-200 px-4 py-2.5 type-support text-rose-900 flex items-center justify-between">
+              <div className="flex items-center gap-2 max-w-[1440px] mx-auto w-full">
                 <AlertCircle className="w-4 h-4 text-rose-600 shrink-0" />
                 <span>{errorMsg}</span>
               </div>
               <button
                 type="button"
                 onClick={() => setErrorMsg(null)}
-                className="text-rose-700 hover:text-rose-900 cursor-pointer"
+                className="text-rose-700 hover:text-rose-950 cursor-pointer"
               >
                 <X className="w-3.5 h-3.5" />
               </button>
             </div>
           )}
 
-          {/* Main Dashboard Layout Container */}
-          <div className="flex-1 max-w-[1600px] w-full mx-auto px-4 sm:px-6 lg:px-8 py-6">
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-              {/* Left Sidebar (Desktop) */}
-              <div className="hidden lg:block lg:col-span-3">
+          <div className="flex-1 max-w-[1440px] w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-start">
+              <div className="hidden lg:block lg:col-span-3 sticky top-22">
                 <DashboardSidebar
                   user={userSession}
                   activeTab={activeTab}
@@ -842,192 +770,185 @@ export const CustomerPortal: React.FC<CustomerPortalProps> = ({ onOpenBooking, o
                   onSignOut={handleSignOut}
                   unreadNotificationsCount={unreadNotifCount}
                   unreadMessagesCount={unreadMsgCount}
-                  savedItemsCount={4}
+                  savedItemsCount={3}
                 />
               </div>
 
-              {/* Main Content Area: Active Module */}
-              <div className="lg:col-span-9 min-h-[600px]">
-                <div key={activeTab} className="page-transition-wrapper animate-fade-in">
-                {activeTab === 'overview' && (
-                  <OverviewModule
-                    user={userSession}
-                    accommodations={accommodations}
-                    carRentals={carRentals}
-                    payments={payments}
-                    onOpenBooking={onOpenBooking}
-                    onOpenTopUpUnits={handleOpenDepositModal}
-                    onNavigateTab={(tab) => setActiveTab(tab)}
-                    onViewBookingDetails={() => setActiveTab('accommodation')}
-                    onViewRentalDetails={() => setActiveTab('car-rentals')}
-                  />
-                )}
+              <div className="lg:col-span-9 min-h-[620px]">
+                <div key={activeTab} className="page-transition-wrapper">
+                  {activeTab === 'overview' && (
+                    <OverviewModule
+                      user={userSession}
+                      accommodations={accommodations}
+                      carRentals={carRentals}
+                      payments={payments}
+                      onOpenBooking={onOpenBooking}
+                      onExploreFleet={() => onNavigateTab('vehicles')}
+                      onOpenTopUpUnits={handleOpenDepositModal}
+                      onNavigateTab={(tab) => setActiveTab(tab)}
+                      onViewBookingDetails={() => setActiveTab('accommodation')}
+                      onViewRentalDetails={() => setActiveTab('car-rentals')}
+                    />
+                  )}
 
-                {activeTab === 'accommodation' && (
-                  <AccommodationModule
-                    reservations={accommodations}
-                    onOpenBooking={onOpenBooking}
-                    onUpdateReservation={handleUpdateReservation}
-                  />
-                )}
+                  {activeTab === 'accommodation' && (
+                    <AccommodationModule
+                      reservations={accommodations}
+                      onOpenBooking={onOpenBooking}
+                      onUpdateReservation={handleUpdateReservation}
+                    />
+                  )}
 
-                {activeTab === 'car-rentals' && (
-                  <CarRentalsModule
-                    rentals={carRentals}
-                    onExploreFleet={() => onNavigateTab('vehicles')}
-                    onUpdateRental={handleUpdateRental}
-                  />
-                )}
+                  {activeTab === 'car-rentals' && (
+                    <CarRentalsModule
+                      rentals={carRentals}
+                      onExploreFleet={() => onNavigateTab('vehicles')}
+                      onUpdateRental={handleUpdateRental}
+                    />
+                  )}
 
-                {activeTab === 'payments' && (
-                  <PaymentsModule
-                    payments={payments}
-                    unitsBalance={userSession.units_balance ?? Math.floor(userSession.balance_usd / 100)}
-                    onOpenTopUpUnits={handleOpenDepositModal}
-                    onUploadProof={handleUploadProof}
-                    onApprovePayment={handleApprovePayment}
-                    onRejectPayment={handleRejectPayment}
-                  />
-                )}
+                  {activeTab === 'payments' && (
+                    <PaymentsModule
+                      payments={payments}
+                      balanceUsd={userSession.balance_usd}
+                      unitsBalance={userSession.units_balance ?? Math.floor(userSession.balance_usd / 100)}
+                      userSession={userSession}
+                      onOpenTopUpUnits={handleOpenDepositModal}
+                      onUploadProof={handleUploadProof}
+                      onApprovePayment={handleApprovePayment}
+                      onRejectPayment={handleRejectPayment}
+                    />
+                  )}
 
-                {activeTab === 'saved-items' && (
-                  <SavedItemsModule
-                    onReserveProperty={() => onOpenBooking()}
-                    onExploreVehicles={() => onNavigateTab('vehicles')}
-                  />
-                )}
+                  {activeTab === 'saved-items' && (
+                    <SavedItemsModule
+                      onReserveProperty={() => onOpenBooking()}
+                      onExploreVehicles={() => onNavigateTab('vehicles')}
+                    />
+                  )}
 
-                {activeTab === 'notifications' && (
-                  <NotificationsModule
-                    notifications={notifications}
-                    onMarkAsRead={handleMarkNotificationRead}
-                    onMarkAllAsRead={handleMarkAllNotificationsRead}
-                  />
-                )}
+                  {activeTab === 'notifications' && (
+                    <NotificationsModule
+                      notifications={notifications}
+                      onMarkAsRead={handleMarkNotificationRead}
+                      onMarkAllAsRead={handleMarkAllNotificationsRead}
+                      onNavigateTab={(tab) => setActiveTab(tab)}
+                    />
+                  )}
 
-                {activeTab === 'messages' && (
-                  <MessagesModule
-                    messages={messages}
-                    onSendMessage={handleSendMessage}
-                  />
-                )}
+                  {activeTab === 'messages' && (
+                    <MessagesModule
+                      messages={messages}
+                      onSendMessage={handleSendMessage}
+                    />
+                  )}
 
-                {activeTab === 'profile' && (
-                  <ProfileModule
-                    user={userSession}
-                    onUpdateUser={(updates: Partial<UserSession>) =>
-                      setUserSession((prev) => ({ ...prev, ...updates }))
-                    }
-                  />
-                )}
+                  {activeTab === 'profile' && (
+                    <ProfileModule
+                      user={userSession}
+                      onUpdateUser={(updates: Partial<UserSession>) =>
+                        setUserSession((prev) => ({ ...prev, ...updates }))
+                      }
+                    />
+                  )}
 
-                {activeTab === 'security' && (
-                  <SecurityModule
-                    twoFactorEnabled={userSession.twoFactorEnabled}
-                    onToggleTwoFactor={(enabled) =>
-                      setUserSession((prev) => ({ ...prev, twoFactorEnabled: enabled }))
-                    }
-                  />
-                )}
+                  {activeTab === 'security' && (
+                    <SecurityModule
+                      twoFactorEnabled={userSession.twoFactorEnabled}
+                      onToggleTwoFactor={(enabled) =>
+                        setUserSession((prev) => ({ ...prev, twoFactorEnabled: enabled }))
+                      }
+                      onSignOut={handleSignOut}
+                    />
+                  )}
 
-                {activeTab === 'settings' && <SettingsModule />}
+                  {activeTab === 'settings' && <SettingsModule />}
 
-                {activeTab === 'support' && <SupportModule />}
+                  {activeTab === 'support' && <SupportModule />}
                 </div>
               </div>
             </div>
           </div>
 
-          {/* Footer Component */}
           <DashboardFooter />
         </div>
       )}
 
       {/* ========================================================
-          3. RESPONSIVE MANUAL PAYMENT TOP-UP MODAL (FIXED UI)
+          3. MANUAL PAYMENT TOP-UP MODAL
          ======================================================== */}
       {buyUnitsModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/65 backdrop-blur-xs">
-          <div className="bg-white rounded-3xl max-w-lg w-full max-h-[90vh] sm:max-h-[85vh] flex flex-col border border-[#e6dfd5] shadow-2xl overflow-hidden animate-in fade-in zoom-in-95">
-            {/* Modal Header (Fixed Top) */}
-            <div className="p-4 sm:p-5 bg-white border-b border-[#f0e9df] flex items-center justify-between shrink-0">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-slate-950/70 backdrop-blur-xs">
+          <div className="bg-white rounded-2xl max-w-lg w-full max-h-[90vh] flex flex-col border border-slate-200 shadow-2xl overflow-hidden">
+            <div className="p-4 sm:p-5 bg-white border-b border-slate-200 flex items-center justify-between shrink-0">
               <div className="flex items-center gap-3 min-w-0">
-                <div className="w-10 h-10 rounded-xl bg-[#00897d]/10 text-[#00897d] flex items-center justify-center shrink-0">
+                <div className="w-10 h-10 rounded-xl bg-[#edf6f8] text-[#14616d] flex items-center justify-center shrink-0">
                   <Landmark className="w-5 h-5" />
                 </div>
                 <div className="min-w-0">
-                  <h3 className="font-heading font-black text-base sm:text-lg text-[#282828] truncate">
-                    Top-Up Account Balance
+                  <h3 className="type-h3 text-[#0f172a] truncate">
+                    Add Account Funds
                   </h3>
-                  <p className="text-xs text-[#5c5046] truncate">
-                    Manual corporate wire &amp; ACH remittance setup
+                  <p className="type-support text-slate-500 truncate">
+                    Corporate wire &amp; ACH treasury remittance
                   </p>
                 </div>
               </div>
               <button
                 type="button"
                 onClick={() => setBuyUnitsModalOpen(false)}
-                className="w-8 h-8 rounded-lg border border-[#e6dfd5] flex items-center justify-center text-[#857568] hover:text-[#282828] hover:bg-[#faf8f5] cursor-pointer shrink-0 ml-2"
+                className="w-8 h-8 rounded-lg border border-slate-200 flex items-center justify-center text-slate-500 hover:text-[#0f172a] hover:bg-slate-50 cursor-pointer shrink-0 ml-2"
               >
                 <X className="w-4 h-4" />
               </button>
             </div>
 
-            {/* Scrollable Form Body */}
             <div className="flex-1 overflow-y-auto p-4 sm:p-5 space-y-4">
-              {/* Compact Stepper Progress Bar */}
-              <div className="flex items-center justify-between bg-[#faf8f5] px-3 py-2 rounded-xl border border-[#efe9e0] text-[11px] font-bold">
-                <div className={`flex items-center gap-1.5 ${manualStep >= 1 ? 'text-[#00897d]' : 'text-[#857568]'}`}>
-                  <span className={`w-4 h-4 rounded-full flex items-center justify-center text-[10px] ${manualStep >= 1 ? 'bg-[#00897d] text-white' : 'bg-[#e6dfd5] text-[#857568]'}`}>1</span>
+              <div className="flex items-center justify-between bg-slate-50 px-3.5 py-2.5 rounded-xl border border-slate-200 type-support font-semibold">
+                <div className={`flex items-center gap-1.5 ${manualStep >= 1 ? 'text-[#14616d]' : 'text-slate-400'}`}>
+                  <span className={`w-5 h-5 rounded-md flex items-center justify-center text-xs font-bold tabular-nums ${manualStep >= 1 ? 'bg-[#14616d] text-white' : 'bg-slate-200 text-slate-600'}`}>1</span>
                   <span className="hidden sm:inline">Configure</span>
                 </div>
-                <span className="text-[#d8cfc3]">→</span>
-                <div className={`flex items-center gap-1.5 ${manualStep >= 2 ? 'text-[#00897d]' : 'text-[#857568]'}`}>
-                  <span className={`w-4 h-4 rounded-full flex items-center justify-center text-[10px] ${manualStep >= 2 ? 'bg-[#00897d] text-white' : 'bg-[#e6dfd5] text-[#857568]'}`}>2</span>
+                <span className="text-slate-300">→</span>
+                <div className={`flex items-center gap-1.5 ${manualStep >= 2 ? 'text-[#14616d]' : 'text-slate-400'}`}>
+                  <span className={`w-5 h-5 rounded-md flex items-center justify-center text-xs font-bold tabular-nums ${manualStep >= 2 ? 'bg-[#14616d] text-white' : 'bg-slate-200 text-slate-600'}`}>2</span>
                   <span className="hidden sm:inline">Wire Routing</span>
                 </div>
-                <span className="text-[#d8cfc3]">→</span>
-                <div className={`flex items-center gap-1.5 ${manualStep >= 3 ? 'text-[#00897d]' : 'text-[#857568]'}`}>
-                  <span className={`w-4 h-4 rounded-full flex items-center justify-center text-[10px] ${manualStep >= 3 ? 'bg-[#00897d] text-white' : 'bg-[#e6dfd5] text-[#857568]'}`}>3</span>
+                <span className="text-slate-300">→</span>
+                <div className={`flex items-center gap-1.5 ${manualStep >= 3 ? 'text-[#14616d]' : 'text-slate-400'}`}>
+                  <span className={`w-5 h-5 rounded-md flex items-center justify-center text-xs font-bold tabular-nums ${manualStep >= 3 ? 'bg-[#14616d] text-white' : 'bg-slate-200 text-slate-600'}`}>3</span>
                   <span className="hidden sm:inline">Confirmation</span>
                 </div>
               </div>
 
-              {/* STEP 1: CONFIGURE MANUAL DEPOSIT */}
               {manualStep === 1 && (
-                <div className="space-y-4 text-xs">
-                  {/* Deposit Amount Entry */}
+                <div className="space-y-4">
                   <div className="space-y-1.5">
-                    <label className="block text-[11px] font-bold uppercase tracking-wider text-[#857568]">
-                      1. Enter Top-Up Amount (USD):
-                    </label>
-
+                    <label className="form-label">1. Deposit Amount (USD)</label>
                     <div className="relative flex items-center">
-                      <span className="absolute left-3.5 text-lg font-black text-[#282828]">$</span>
+                      <span className="absolute left-3.5 text-base font-bold text-[#0f172a]">$</span>
                       <input
                         type="number"
                         min="50"
                         step="50"
                         value={depositAmount || ''}
                         onChange={(e) => setDepositAmount(Math.max(0, Number(e.target.value)))}
-                        className="w-full h-11 pl-8 pr-14 bg-[#faf8f5] border-2 border-[#d8cfc3] focus:border-[#00897d] rounded-xl text-lg font-mono font-bold text-[#282828] outline-none transition-colors"
+                        className="w-full h-11 pl-8 pr-14 bg-slate-50 border border-slate-300 focus:border-[#14616d] focus:bg-white rounded-xl text-base font-mono font-bold text-[#0f172a] outline-none transition-colors tabular-nums"
                         placeholder="1000"
                       />
-                      <span className="absolute right-3.5 text-xs font-bold text-[#857568]">USD</span>
+                      <span className="absolute right-3.5 type-support font-semibold text-slate-500">USD</span>
                     </div>
 
-                    {/* Quick Add Presets */}
-                    <div className="flex flex-wrap items-center gap-1.5 pt-1">
-                      <span className="text-[10px] text-[#857568] font-bold uppercase mr-0.5">Presets:</span>
+                    <div className="flex flex-wrap items-center gap-1.5 pt-1 tabular-nums">
                       {[500, 1000, 2500, 5000, 10000].map((amt) => (
                         <button
                           key={amt}
                           type="button"
                           onClick={() => setDepositAmount(amt)}
-                          className={`px-2.5 py-1 rounded-lg text-xs font-bold border transition-colors cursor-pointer ${
+                          className={`type-btn px-3 py-1.5 rounded-lg border transition-colors cursor-pointer whitespace-nowrap ${
                             depositAmount === amt
-                              ? 'bg-[#00897d] text-white border-[#00897d]'
-                              : 'bg-[#faf8f5] border-[#d8cfc3] text-[#5c5046] hover:bg-[#efe8df]'
+                              ? 'bg-[#14616d] text-white border-[#14616d]'
+                              : 'bg-white border-slate-200 text-slate-700 hover:bg-slate-50'
                           }`}
                         >
                           +${amt.toLocaleString()}
@@ -1036,11 +957,8 @@ export const CustomerPortal: React.FC<CustomerPortalProps> = ({ onOpenBooking, o
                     </div>
                   </div>
 
-                  {/* Manual Settlement Method Selector */}
                   <div className="space-y-1.5">
-                    <label className="block text-[11px] font-bold uppercase tracking-wider text-[#857568]">
-                      2. Select Manual Settlement Channel:
-                    </label>
+                    <label className="form-label">2. Settlement Channel</label>
                     <div className="space-y-2">
                       {[
                         {
@@ -1055,29 +973,29 @@ export const CustomerPortal: React.FC<CustomerPortalProps> = ({ onOpenBooking, o
                         },
                         {
                           id: 'Manual Bank Counter / Cashier Check',
-                          label: 'Manual Bank Counter Deposit / Check',
-                          desc: 'Physical branch teller or certified cashier check deposit',
+                          label: 'Bank Counter Deposit / Certified Check',
+                          desc: 'Branch teller or certified corporate check deposit',
                         },
                       ].map((method) => (
                         <button
                           key={method.id}
                           type="button"
                           onClick={() => setDepositMethod(method.id)}
-                          className={`w-full p-2.5 sm:p-3 rounded-xl border text-left flex items-center justify-between transition-all cursor-pointer ${
+                          className={`w-full p-3 rounded-xl border text-left flex items-center justify-between transition-colors cursor-pointer ${
                             depositMethod === method.id
-                              ? 'bg-[#00897d]/5 border-[#00897d] ring-1 ring-[#00897d]'
-                              : 'bg-[#faf8f5] border-[#e6dfd5] hover:bg-[#f5efe8]'
+                              ? 'bg-[#edf6f8] border-[#14616d]'
+                              : 'bg-white border-slate-200 hover:bg-slate-50'
                           }`}
                         >
                           <div className="pr-2">
-                            <span className="font-bold text-[#282828] block text-xs">{method.label}</span>
-                            <span className="text-[10px] text-[#5c5046] leading-tight block mt-0.5">{method.desc}</span>
+                            <span className="type-btn text-[#0f172a] block">{method.label}</span>
+                            <span className="type-support text-slate-500 block mt-0.5">{method.desc}</span>
                           </div>
                           <div
                             className={`w-4 h-4 rounded-full border flex items-center justify-center shrink-0 ${
                               depositMethod === method.id
-                                ? 'border-[#00897d] bg-[#00897d]'
-                                : 'border-[#a89988]'
+                                ? 'border-[#14616d] bg-[#14616d]'
+                                : 'border-slate-300'
                             }`}
                           >
                             {depositMethod === method.id && <div className="w-1.5 h-1.5 rounded-full bg-white" />}
@@ -1087,51 +1005,46 @@ export const CustomerPortal: React.FC<CustomerPortalProps> = ({ onOpenBooking, o
                     </div>
                   </div>
 
-                  {/* Remitter Information */}
                   <div>
-                    <label className="block text-[11px] font-bold uppercase tracking-wider text-[#857568] mb-1">
-                      3. Remitting Entity / Company Name:
-                    </label>
+                    <label className="form-label">3. Remitting Entity / Company Name</label>
                     <input
                       type="text"
                       value={remitterName}
                       onChange={(e) => setRemitterName(e.target.value)}
-                      className="w-full h-10 px-3 bg-white border border-[#d8cfc3] rounded-xl text-xs font-semibold text-[#282828]"
+                      className="form-input"
                       placeholder="e.g. OmniGlobal Enterprise Partners"
                     />
                   </div>
                 </div>
               )}
 
-              {/* STEP 2: BANK ROUTING & WIRE CREDENTIALS */}
               {manualStep === 2 && (
-                <div className="space-y-3.5 text-xs">
-                  <div className="p-3 bg-amber-50 border border-amber-200 rounded-xl text-amber-900 text-[11px] flex items-center gap-2">
-                    <AlertCircle className="w-4 h-4 text-amber-700 shrink-0" />
+                <div className="space-y-3.5 type-support">
+                  <div className="p-3 bg-amber-50 border border-amber-200 rounded-xl text-amber-900 type-support flex items-start gap-2">
+                    <AlertCircle className="w-4 h-4 text-amber-700 shrink-0 mt-0.5" />
                     <span>
-                      Please transfer exactly <strong>${(depositAmount || 0).toLocaleString('en-US', { minimumFractionDigits: 2 })} USD</strong> to our receiving bank below and include the reference code in your payment memo.
+                      Transfer <strong className="tabular-nums">${(depositAmount || 0).toLocaleString('en-US', { minimumFractionDigits: 2 })} USD</strong> to the receiving bank below and include the memo reference code.
                     </span>
                   </div>
 
-                  {/* Official Bank Wiring Details */}
-                  <div className="p-3.5 bg-[#faf8f5] border border-[#e6dfd5] rounded-xl space-y-2">
-                    <span className="text-[10px] font-bold uppercase tracking-wider text-[#857568] block">
+                  <div className="p-4 bg-slate-50 border border-slate-200 rounded-xl space-y-2 tabular-nums">
+                    <span className="type-label text-[#0f172a] block">
                       Official Receiving Bank Credentials
                     </span>
 
-                    <div className="divide-y divide-[#efe9e0] text-xs">
-                      <div className="py-1.5 flex items-center justify-between">
-                        <span className="text-[#5c5046]">Beneficiary Name:</span>
-                        <strong className="text-[#282828]">Easy Travel Lodging LLC</strong>
+                    <div className="divide-y divide-slate-200 type-support">
+                      <div className="py-2 flex items-center justify-between">
+                        <span className="text-slate-600">Beneficiary Name</span>
+                        <strong className="text-[#0f172a]">Easy Travel Lodging LLC</strong>
                       </div>
-                      <div className="py-1.5 flex items-center justify-between">
-                        <span className="text-[#5c5046]">Receiving Bank:</span>
-                        <strong className="text-[#282828]">Bank of America, N.A.</strong>
+                      <div className="py-2 flex items-center justify-between">
+                        <span className="text-slate-600">Receiving Bank</span>
+                        <strong className="text-[#0f172a]">Bank of America, N.A.</strong>
                       </div>
-                      <div className="py-1.5 flex items-center justify-between">
-                        <span className="text-[#5c5046]">Routing / ABA (Domestic Wire):</span>
+                      <div className="py-2 flex items-center justify-between">
+                        <span className="text-slate-600">Routing / ABA</span>
                         <div className="flex items-center gap-1.5">
-                          <strong className="font-mono text-[#282828]">121000358</strong>
+                          <strong className="font-mono text-[#0f172a]">121000358</strong>
                           <button
                             type="button"
                             onClick={() => {
@@ -1139,18 +1052,18 @@ export const CustomerPortal: React.FC<CustomerPortalProps> = ({ onOpenBooking, o
                               setCopiedField('aba');
                               setTimeout(() => setCopiedField(null), 2000);
                             }}
-                            className="p-1 text-[#857568] hover:text-[#00897d] cursor-pointer"
+                            className="p-1 text-slate-500 hover:text-[#14616d] cursor-pointer"
                             title="Copy ABA Routing"
                           >
                             <Copy className="w-3.5 h-3.5" />
                           </button>
-                          {copiedField === 'aba' && <span className="text-[10px] text-emerald-600 font-bold">Copied!</span>}
+                          {copiedField === 'aba' && <span className="text-xs text-emerald-600 font-semibold">Copied</span>}
                         </div>
                       </div>
-                      <div className="py-1.5 flex items-center justify-between">
-                        <span className="text-[#5c5046]">Account Number:</span>
+                      <div className="py-2 flex items-center justify-between">
+                        <span className="text-slate-600">Account Number</span>
                         <div className="flex items-center gap-1.5">
-                          <strong className="font-mono text-[#282828]">325088219441</strong>
+                          <strong className="font-mono text-[#0f172a]">325088219441</strong>
                           <button
                             type="button"
                             onClick={() => {
@@ -1158,18 +1071,18 @@ export const CustomerPortal: React.FC<CustomerPortalProps> = ({ onOpenBooking, o
                               setCopiedField('acct');
                               setTimeout(() => setCopiedField(null), 2000);
                             }}
-                            className="p-1 text-[#857568] hover:text-[#00897d] cursor-pointer"
+                            className="p-1 text-slate-500 hover:text-[#14616d] cursor-pointer"
                             title="Copy Account Number"
                           >
                             <Copy className="w-3.5 h-3.5" />
                           </button>
-                          {copiedField === 'acct' && <span className="text-[10px] text-emerald-600 font-bold">Copied!</span>}
+                          {copiedField === 'acct' && <span className="text-xs text-emerald-600 font-semibold">Copied</span>}
                         </div>
                       </div>
-                      <div className="py-1.5 flex items-center justify-between bg-emerald-50/60 p-2 rounded-lg border border-emerald-200">
-                        <span className="text-emerald-900 font-bold">Payment Memo Reference (Mandatory):</span>
+                      <div className="py-2.5 flex items-center justify-between">
+                        <span className="text-[#0f172a] font-semibold">Payment Memo Reference</span>
                         <div className="flex items-center gap-1.5">
-                          <strong className="font-mono text-emerald-800 text-sm">{wireRefCode}</strong>
+                          <strong className="font-mono text-[#14616d] text-sm">{wireRefCode}</strong>
                           <button
                             type="button"
                             onClick={() => {
@@ -1177,88 +1090,74 @@ export const CustomerPortal: React.FC<CustomerPortalProps> = ({ onOpenBooking, o
                               setCopiedField('ref');
                               setTimeout(() => setCopiedField(null), 2000);
                             }}
-                            className="p-1 text-emerald-700 hover:text-emerald-900 cursor-pointer"
+                            className="p-1 text-[#14616d] hover:text-[#0f4952] cursor-pointer"
                             title="Copy Reference Code"
                           >
                             <Copy className="w-3.5 h-3.5" />
                           </button>
-                          {copiedField === 'ref' && <span className="text-[10px] text-emerald-600 font-bold">Copied!</span>}
+                          {copiedField === 'ref' && <span className="text-xs text-emerald-600 font-semibold">Copied</span>}
                         </div>
                       </div>
                     </div>
                   </div>
 
-                  {/* Optional Trace Number Entry */}
                   <div>
-                    <label className="block text-[11px] font-bold uppercase tracking-wider text-[#857568] mb-1">
-                      Bank Confirmation / Federal Wire Trace # (Optional):
-                    </label>
+                    <label className="form-label">Bank Confirmation / Federal Wire Trace # (Optional)</label>
                     <input
                       type="text"
                       placeholder="e.g. FED-WIRE-982104 or ACH-88120"
                       onChange={(e) => {
                         if (e.target.value.trim()) setWireRefCode(e.target.value.trim());
                       }}
-                      className="w-full h-10 px-3 bg-white border border-[#d8cfc3] rounded-xl text-xs font-mono text-[#282828]"
+                      className="form-input font-mono"
                     />
-                    <p className="text-[10px] text-[#857568] mt-1">
-                      Entering your bank transfer confirmation speeds up automated treasury ledger matching.
-                    </p>
                   </div>
                 </div>
               )}
 
-              {/* STEP 3: MANUAL DEPOSIT SUBMITTED & PENDING APPROVAL */}
               {manualStep === 3 && (
                 <div className="space-y-4 text-center py-2">
-                  <div className="w-12 h-12 rounded-2xl bg-amber-100 border border-amber-300 text-amber-800 flex items-center justify-center mx-auto shadow-xs">
-                    <Clock className="w-7 h-7" />
+                  <div className="w-12 h-12 rounded-xl bg-amber-50 border border-amber-200 text-amber-700 flex items-center justify-center mx-auto">
+                    <Clock className="w-6 h-6" />
                   </div>
 
                   <div className="space-y-1">
-                    <div className="inline-block px-2.5 py-0.5 rounded-full bg-amber-100 border border-amber-300 text-amber-900 font-bold text-[10px] uppercase tracking-wider mb-1">
-                      Pending Admin Approval
-                    </div>
-                    <h4 className="font-heading font-black text-lg text-[#282828]">
-                      Manual Deposit Notice Logged
+                    <span className="type-support font-semibold text-amber-700 block">
+                      Pending Accounting Verification
+                    </span>
+                    <h4 className="type-h3 text-[#0f172a]">
+                      Deposit Notice Recorded
                     </h4>
-                    <p className="text-xs text-[#5c5046]">
-                      Your remittance notice of <strong>${(depositAmount || 0).toLocaleString('en-US', { minimumFractionDigits: 2 })} USD</strong> has been received and is awaiting treasury admin approval.
+                    <p className="type-body text-slate-600">
+                      Your remittance notice of <strong className="tabular-nums">${(depositAmount || 0).toLocaleString('en-US', { minimumFractionDigits: 2 })} USD</strong> has been queued for treasury review.
                     </p>
                   </div>
 
-                  <div className="p-3.5 bg-[#faf8f5] border border-[#e6dfd5] rounded-2xl text-xs space-y-2 text-left max-w-md mx-auto">
+                  <div className="p-4 bg-slate-50 border border-slate-200 rounded-xl type-support space-y-2 text-left max-w-md mx-auto tabular-nums">
                     <div className="flex justify-between">
-                      <span className="text-[#857568]">Remittance Reference:</span>
-                      <strong className="font-mono text-[#282828]">{wireRefCode}</strong>
+                      <span className="text-slate-500">Reference</span>
+                      <strong className="font-mono text-[#0f172a]">{wireRefCode}</strong>
                     </div>
                     <div className="flex justify-between">
-                      <span className="text-[#857568]">Settlement Channel:</span>
-                      <span className="font-semibold text-[#282828] truncate max-w-[200px]">{depositMethod}</span>
+                      <span className="text-slate-500">Channel</span>
+                      <span className="font-semibold text-[#0f172a] truncate max-w-[210px]">{depositMethod}</span>
                     </div>
                     <div className="flex justify-between">
-                      <span className="text-[#857568]">Amount Pending:</span>
-                      <strong className="text-amber-800 font-bold text-sm tabular-nums">${(depositAmount || 0).toLocaleString('en-US', { minimumFractionDigits: 2 })} USD</strong>
-                    </div>
-                    <div className="flex justify-between pt-1 border-t border-[#e6dfd5]">
-                      <span className="font-bold text-[#282828]">Approval Status:</span>
-                      <span className="font-bold text-amber-700 bg-amber-50 px-2 py-0.5 rounded border border-amber-200">
-                        Pending Admin Review
-                      </span>
+                      <span className="text-slate-500">Amount Pending</span>
+                      <strong className="text-[#0f172a] font-bold">${(depositAmount || 0).toLocaleString('en-US', { minimumFractionDigits: 2 })} USD</strong>
                     </div>
                   </div>
                 </div>
               )}
             </div>
 
-            {/* Sticky Action Footer (Fixed at Bottom - Never Cut Off) */}
-            <div className="p-3.5 sm:p-4 bg-[#faf8f5] border-t border-[#e6dfd5] flex items-center justify-between gap-2 shrink-0">
+            <div className="p-4 bg-slate-50 border-t border-slate-200 flex items-center justify-between gap-2 shrink-0">
               {manualStep === 1 && (
                 <>
                   <button
                     type="button"
                     onClick={() => setBuyUnitsModalOpen(false)}
-                    className="px-4 py-2 border border-[#d8cfc3] text-[#5c5046] hover:bg-white text-xs font-semibold rounded-xl cursor-pointer"
+                    className="btn btn-outline btn-sm"
                   >
                     Cancel
                   </button>
@@ -1266,7 +1165,7 @@ export const CustomerPortal: React.FC<CustomerPortalProps> = ({ onOpenBooking, o
                     type="button"
                     disabled={!depositAmount || depositAmount <= 0}
                     onClick={() => setManualStep(2)}
-                    className="px-4 sm:px-5 py-2.5 bg-[#00897d] hover:bg-[#00746b] disabled:opacity-50 text-white text-xs font-bold uppercase tracking-wider rounded-xl cursor-pointer transition-colors flex items-center gap-1.5 shadow-xs"
+                    className="btn btn-primary btn-sm disabled:opacity-50"
                   >
                     <span>View Routing Instructions</span>
                     <ArrowRight className="w-3.5 h-3.5" />
@@ -1279,7 +1178,7 @@ export const CustomerPortal: React.FC<CustomerPortalProps> = ({ onOpenBooking, o
                   <button
                     type="button"
                     onClick={() => setManualStep(1)}
-                    className="px-3.5 py-2 border border-[#d8cfc3] text-[#5c5046] hover:bg-white text-xs font-semibold rounded-xl cursor-pointer"
+                    className="btn btn-outline btn-sm"
                   >
                     ← Back
                   </button>
@@ -1287,17 +1186,17 @@ export const CustomerPortal: React.FC<CustomerPortalProps> = ({ onOpenBooking, o
                     type="button"
                     disabled={isLoading}
                     onClick={handleTopUpUnits}
-                    className="px-4 sm:px-5 py-2.5 bg-[#00897d] hover:bg-[#00746b] text-white text-xs font-bold uppercase tracking-wider rounded-xl cursor-pointer transition-colors flex items-center gap-1.5 shadow-xs"
+                    className="btn btn-primary btn-sm"
                   >
                     {isLoading ? (
                       <>
                         <Loader2 className="w-3.5 h-3.5 animate-spin" />
-                        <span>Submitting Notice...</span>
+                        <span>Submitting...</span>
                       </>
                     ) : (
                       <>
                         <CheckCircle2 className="w-3.5 h-3.5" />
-                        <span>Submit Manual Deposit (${(depositAmount || 0).toLocaleString()} USD)</span>
+                        <span className="tabular-nums">Submit Deposit (${(depositAmount || 0).toLocaleString()} USD)</span>
                       </>
                     )}
                   </button>
@@ -1305,7 +1204,7 @@ export const CustomerPortal: React.FC<CustomerPortalProps> = ({ onOpenBooking, o
               )}
 
               {manualStep === 3 && (
-                <div className="w-full flex flex-col sm:flex-row items-center justify-center gap-2">
+                <div className="w-full flex flex-col sm:flex-row items-center justify-end gap-2">
                   <button
                     type="button"
                     onClick={() => {
@@ -1322,10 +1221,10 @@ export const CustomerPortal: React.FC<CustomerPortalProps> = ({ onOpenBooking, o
                       });
                       setPortalReceiptModalOpen(true);
                     }}
-                    className="w-full sm:w-auto px-5 py-2.5 bg-black hover:bg-neutral-800 text-white text-xs font-bold rounded-xl cursor-pointer shadow-xs transition-colors flex items-center justify-center gap-2"
+                    className="btn btn-outline btn-sm w-full sm:w-auto"
                   >
-                    <Printer className="w-4 h-4 text-emerald-400" />
-                    <span>Print Transaction Receipt (White/Black)</span>
+                    <Printer className="w-3.5 h-3.5" />
+                    <span>Print Receipt</span>
                   </button>
 
                   <button
@@ -1334,9 +1233,9 @@ export const CustomerPortal: React.FC<CustomerPortalProps> = ({ onOpenBooking, o
                       setBuyUnitsModalOpen(false);
                       setActiveTab('payments');
                     }}
-                    className="w-full sm:w-auto px-6 py-2.5 bg-[#00897d] hover:bg-[#00746b] text-white text-xs font-bold uppercase tracking-wider rounded-xl cursor-pointer shadow-xs"
+                    className="btn btn-primary btn-sm w-full sm:w-auto"
                   >
-                    Done &amp; View Pending Payments
+                    Done &amp; View Payments
                   </button>
                 </div>
               )}
@@ -1345,7 +1244,6 @@ export const CustomerPortal: React.FC<CustomerPortalProps> = ({ onOpenBooking, o
         </div>
       )}
 
-      {/* Printable Transaction Receipt Template Modal */}
       <TransactionReceiptModal
         isOpen={portalReceiptModalOpen}
         onClose={() => setPortalReceiptModalOpen(false)}

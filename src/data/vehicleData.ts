@@ -83,7 +83,7 @@ export const US_VEHICLES: UsVehicle[] = [
     ],
     sketchfab: {
       modelId: '46727bb6f4f84df5878bed50c58a70bf',
-      embedUrl: 'https://sketchfab.com/models/46727bb6f4f84df5878bed50c58a70bf/embed?autostart=1&preload=1&ui_theme=dark&ui_watermark_link=0&ui_color=00b7a8',
+      embedUrl: 'https://sketchfab.com/models/46727bb6f4f84df5878bed50c58a70bf/embed?autostart=1&preload=1&ui_theme=dark&ui_watermark_link=0&ui_color=14616d',
       modelUrl: 'https://sketchfab.com/3d-models/nissan-terra-2020-46727bb6f4f84df5878bed50c58a70bf',
       authorName: 'Asadawut.Kaewma',
       authorUrl: 'https://sketchfab.com/Asadawut.Kaewma',
@@ -131,7 +131,7 @@ export const US_VEHICLES: UsVehicle[] = [
     ],
     sketchfab: {
       modelId: '7e359874ebe744158eddc37c9da8f487',
-      embedUrl: 'https://sketchfab.com/models/7e359874ebe744158eddc37c9da8f487/embed?autostart=1&preload=1&ui_theme=dark&ui_watermark_link=0&ui_color=00b7a8',
+      embedUrl: 'https://sketchfab.com/models/7e359874ebe744158eddc37c9da8f487/embed?autostart=1&preload=1&ui_theme=dark&ui_watermark_link=0&ui_color=14616d',
       modelUrl: 'https://sketchfab.com/3d-models/2019-skoda-karoq-7e359874ebe744158eddc37c9da8f487',
       authorName: 'BHP3D',
       authorUrl: 'https://sketchfab.com/BHP3D',
@@ -179,7 +179,7 @@ export const US_VEHICLES: UsVehicle[] = [
     ],
     sketchfab: {
       modelId: 'db34a8426f684e299d53fcb2e331d35d',
-      embedUrl: 'https://sketchfab.com/models/db34a8426f684e299d53fcb2e331d35d/embed?autostart=1&preload=1&ui_theme=dark&ui_watermark_link=0&ui_color=00b7a8',
+      embedUrl: 'https://sketchfab.com/models/db34a8426f684e299d53fcb2e331d35d/embed?autostart=1&preload=1&ui_theme=dark&ui_watermark_link=0&ui_color=14616d',
       modelUrl: 'https://sketchfab.com/3d-models/audi-a3-2021-db34a8426f684e299d53fcb2e331d35d',
       authorName: '3DStarving',
       authorUrl: 'https://sketchfab.com/3DStarving',
@@ -227,7 +227,7 @@ export const US_VEHICLES: UsVehicle[] = [
     ],
     sketchfab: {
       modelId: 'fcca9d60045b4b2c94f221ce09d2e574',
-      embedUrl: 'https://sketchfab.com/models/fcca9d60045b4b2c94f221ce09d2e574/embed?autostart=1&preload=1&ui_theme=dark&ui_watermark_link=0&ui_color=00b7a8',
+      embedUrl: 'https://sketchfab.com/models/fcca9d60045b4b2c94f221ce09d2e574/embed?autostart=1&preload=1&ui_theme=dark&ui_watermark_link=0&ui_color=14616d',
       modelUrl: 'https://sketchfab.com/3d-models/volkswagen-jetta-gli-fcca9d60045b4b2c94f221ce09d2e574',
       authorName: '3DStarving',
       authorUrl: 'https://sketchfab.com/3DStarving',
@@ -275,7 +275,7 @@ export const US_VEHICLES: UsVehicle[] = [
     ],
     sketchfab: {
       modelId: 'fae1a4186d464a6aae351ce9e9ff2401',
-      embedUrl: 'https://sketchfab.com/models/fae1a4186d464a6aae351ce9e9ff2401/embed?autostart=1&preload=1&ui_theme=dark&ui_watermark_link=0&ui_color=00b7a8',
+      embedUrl: 'https://sketchfab.com/models/fae1a4186d464a6aae351ce9e9ff2401/embed?autostart=1&preload=1&ui_theme=dark&ui_watermark_link=0&ui_color=14616d',
       modelUrl: 'https://sketchfab.com/3d-models/audi-rs5-2019-fae1a4186d464a6aae351ce9e9ff2401',
       authorName: 'Indians',
       authorUrl: 'https://sketchfab.com/Indians',

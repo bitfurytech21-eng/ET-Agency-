@@ -36,7 +36,7 @@ export const AboutView: React.FC<AboutViewProps> = ({ onOpenBooking }) => {
       <section className="relative overflow-hidden text-white py-16 sm:py-24 px-4 sm:px-8 border-b border-[#3a2f28]">
         <LivePhotoBackground scene="courtyard" secondaryScene="interior" overlay="espresso" />
         <div className="relative z-10 max-w-5xl mx-auto text-center space-y-4">
-          <span className="type-support font-semibold uppercase tracking-[0.14em] text-[#4de0d2] inline-block">
+          <span className="type-support font-semibold text-[#4de0d2] inline-block">
             Nationwide Agency Hospitality &amp; Travel Logistics
           </span>
           <h1 className="type-h1 text-white">
@@ -73,7 +73,7 @@ export const AboutView: React.FC<AboutViewProps> = ({ onOpenBooking }) => {
             </div>
 
             <div className="lg:col-span-7 space-y-4 text-left">
-              <span className="type-support font-semibold uppercase tracking-[0.12em] text-[#14616d] block">
+              <span className="type-support font-semibold text-[#14616d] block">
                 Co-Founder &amp; Operations Lead
               </span>
               <h2 className="type-h2 text-[#182024]">
@@ -110,7 +110,7 @@ export const AboutView: React.FC<AboutViewProps> = ({ onOpenBooking }) => {
         <div className="max-w-6xl mx-auto">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-center">
             <div className="lg:col-span-7 space-y-4 text-left order-2 lg:order-1">
-              <span className="type-support font-semibold uppercase tracking-[0.12em] text-[#14616d] block">
+              <span className="type-support font-semibold text-[#14616d] block">
                 Co-Founder &amp; Design Director
               </span>
               <h2 className="type-h2 text-[#182024]">
@@ -253,7 +253,7 @@ export const AboutView: React.FC<AboutViewProps> = ({ onOpenBooking }) => {
         <LivePhotoBackground scene="courtyard" overlay="light" />
         <div className="relative z-10 max-w-6xl mx-auto bg-white/95 backdrop-blur-xs p-6 sm:p-12 rounded-2xl shadow-lg border border-[#e6dfd5] text-left">
           <div className="mb-8">
-            <span className="type-support font-semibold uppercase tracking-[0.14em] text-[#82634f] block mb-1.5">
+            <span className="type-support font-semibold text-[#82634f] block mb-1.5">
               Reviews
             </span>
             <h2 className="type-h2 text-[#282828]">

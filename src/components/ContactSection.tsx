@@ -224,7 +224,7 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ preselectedPrope
                         value={firstName}
                         onChange={(e) => setFirstName(e.target.value)}
                         placeholder="John"
-                        className="w-full px-3.5 h-11 rounded-xl border border-[#d8cfc3] text-sm sm:text-base bg-white focus:border-[#00b7a8] focus:ring-1 focus:ring-[#00b7a8] outline-none"
+                        className="w-full px-3.5 h-11 rounded-xl border border-[#d8cfc3] text-base bg-white focus:border-[#00b7a8] focus:ring-1 focus:ring-[#00b7a8] outline-none"
                       />
                     </div>
                     <div>
@@ -237,7 +237,7 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ preselectedPrope
                         value={lastName}
                         onChange={(e) => setLastName(e.target.value)}
                         placeholder="Doe"
-                        className="w-full px-3.5 h-11 rounded-xl border border-[#d8cfc3] text-sm sm:text-base bg-white focus:border-[#00b7a8] focus:ring-1 focus:ring-[#00b7a8] outline-none"
+                        className="w-full px-3.5 h-11 rounded-xl border border-[#d8cfc3] text-base bg-white focus:border-[#00b7a8] focus:ring-1 focus:ring-[#00b7a8] outline-none"
                       />
                     </div>
                   </div>
@@ -254,7 +254,7 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ preselectedPrope
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
                         placeholder="john.doe@example.com"
-                        className="w-full px-3.5 h-11 rounded-xl border border-[#d8cfc3] text-sm sm:text-base bg-white focus:border-[#14616d] focus:ring-1 focus:ring-[#14616d] outline-none"
+                        className="w-full px-3.5 h-11 rounded-xl border border-[#d8cfc3] text-base bg-white focus:border-[#14616d] focus:ring-1 focus:ring-[#14616d] outline-none"
                       />
                     </div>
                     <div>
@@ -267,7 +267,7 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ preselectedPrope
                         value={phone}
                         onChange={(e) => setPhone(e.target.value)}
                         placeholder="(916) 555-0123"
-                        className="w-full px-3.5 h-11 rounded-xl border border-[#d8cfc3] text-sm sm:text-base bg-white focus:border-[#14616d] focus:ring-1 focus:ring-[#14616d] outline-none tabular-nums"
+                        className="w-full px-3.5 h-11 rounded-xl border border-[#d8cfc3] text-base bg-white focus:border-[#14616d] focus:ring-1 focus:ring-[#14616d] outline-none tabular-nums"
                       />
                     </div>
                   </div>
@@ -283,7 +283,7 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ preselectedPrope
                         value={company}
                         onChange={(e) => setCompany(e.target.value)}
                         placeholder="e.g. Family Relocation, Home Remodel, Company"
-                        className="w-full px-3.5 h-11 rounded-xl border border-[#d8cfc3] text-sm sm:text-base bg-white focus:border-[#14616d] focus:ring-1 focus:ring-[#14616d] outline-none"
+                        className="w-full px-3.5 h-11 rounded-xl border border-[#d8cfc3] text-base bg-white focus:border-[#14616d] focus:ring-1 focus:ring-[#14616d] outline-none"
                       />
                     </div>
                     <div>
@@ -295,7 +295,7 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ preselectedPrope
                         value={jobTitle}
                         onChange={(e) => setJobTitle(e.target.value)}
                         placeholder="e.g. Short Visit, Extended Stay, Fleet Rental"
-                        className="w-full px-3.5 h-11 rounded-xl border border-[#d8cfc3] text-sm sm:text-base bg-white focus:border-[#14616d] focus:ring-1 focus:ring-[#14616d] outline-none"
+                        className="w-full px-3.5 h-11 rounded-xl border border-[#d8cfc3] text-base bg-white focus:border-[#14616d] focus:ring-1 focus:ring-[#14616d] outline-none"
                       />
                     </div>
                   </div>
@@ -309,7 +309,7 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ preselectedPrope
                       <select
                         value={propertyChoice}
                         onChange={(e) => setPropertyChoice(e.target.value)}
-                        className="w-full px-3 h-11 rounded-xl border border-[#d8cfc3] text-sm bg-white text-[#282828] focus:border-[#14616d] focus:ring-1 focus:ring-[#14616d] outline-none"
+                        className="w-full px-3 h-11 rounded-xl border border-[#d8cfc3] text-base bg-white text-[#282828] focus:border-[#14616d] focus:ring-1 focus:ring-[#14616d] outline-none"
                       >
                         <option value="any">Any Available Unit</option>
                         {PROPERTIES.map((p) => (
@@ -329,7 +329,7 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ preselectedPrope
                         required
                         value={moveInDate}
                         onChange={(e) => setMoveInDate(e.target.value)}
-                        className="w-full px-3 h-11 rounded-xl border border-[#d8cfc3] text-sm bg-white text-[#282828] tabular-nums focus:border-[#14616d] focus:ring-1 focus:ring-[#14616d] outline-none"
+                        className="w-full px-3 h-11 rounded-xl border border-[#d8cfc3] text-base bg-white text-[#282828] tabular-nums focus:border-[#14616d] focus:ring-1 focus:ring-[#14616d] outline-none"
                       />
                     </div>
 
@@ -340,7 +340,7 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ preselectedPrope
                       <select
                         value={stayDuration}
                         onChange={(e) => setStayDuration(e.target.value)}
-                        className="w-full px-3 h-11 rounded-xl border border-[#d8cfc3] text-sm bg-white text-[#282828] focus:border-[#14616d] focus:ring-1 focus:ring-[#14616d] outline-none"
+                        className="w-full px-3 h-11 rounded-xl border border-[#d8cfc3] text-base bg-white text-[#282828] focus:border-[#14616d] focus:ring-1 focus:ring-[#14616d] outline-none"
                       >
                         <option value="5-10">5 – 10 Days (Short Stay)</option>
                         <option value="10-30">10 – 30 Days</option>
@@ -363,7 +363,7 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ preselectedPrope
                       value={message}
                       onChange={(e) => setMessage(e.target.value)}
                       placeholder="Please share details about your stay, desired destination, number of occupants, or any questions about our residences and fleet..."
-                      className="w-full px-3.5 py-2.5 rounded-xl border border-[#d8cfc3] text-sm sm:text-base bg-white focus:border-[#14616d] focus:ring-1 focus:ring-[#14616d] outline-none"
+                      className="w-full px-3.5 py-2.5 rounded-xl border border-[#d8cfc3] text-base bg-white focus:border-[#14616d] focus:ring-1 focus:ring-[#14616d] outline-none"
                     />
                   </div>
 

@@ -392,7 +392,7 @@ export const AvailabilityCalendar: React.FC<AvailabilityCalendarProps> = ({
                 textStyle = 'text-rose-900 font-semibold';
                 cursorStyle = selectedStart && !selectedEnd && dateStr > selectedStart ? 'cursor-pointer' : 'cursor-not-allowed';
                 statusLabel = (
-                  <span className="text-[11px] font-medium text-rose-700 block truncate mt-0.5">
+                  <span className="text-xs font-medium text-rose-700 block truncate mt-0.5">
                     Reserved
                   </span>
                 );
@@ -401,7 +401,7 @@ export const AvailabilityCalendar: React.FC<AvailabilityCalendarProps> = ({
                 textStyle = 'text-amber-900 font-semibold';
                 cursorStyle = 'cursor-not-allowed';
                 statusLabel = (
-                  <span className="text-[11px] font-medium text-amber-700 block truncate mt-0.5">
+                  <span className="text-xs font-medium text-amber-700 block truncate mt-0.5">
                     Turnover
                   </span>
                 );
@@ -409,7 +409,7 @@ export const AvailabilityCalendar: React.FC<AvailabilityCalendarProps> = ({
                 cellBg = 'bg-white hover:bg-[#e6f8f6]';
                 textStyle = 'text-[#1b1d20] font-semibold';
                 statusLabel = (
-                  <span className="text-[11px] font-medium text-[#00897d] block truncate mt-0.5">
+                  <span className="text-xs font-medium text-[#00897d] block truncate mt-0.5">
                     Open
                   </span>
                 );
@@ -419,7 +419,7 @@ export const AvailabilityCalendar: React.FC<AvailabilityCalendarProps> = ({
                 cellBg = 'bg-[#00b7a8] text-white';
                 textStyle = 'text-white font-bold';
                 statusLabel = (
-                  <span className="text-[11px] font-semibold text-white block truncate mt-0.5">
+                  <span className="text-xs font-semibold text-white block truncate mt-0.5">
                     {isStart ? 'Check-In' : 'Check-Out'}
                   </span>
                 );
@@ -443,7 +443,7 @@ export const AvailabilityCalendar: React.FC<AvailabilityCalendarProps> = ({
                   className={`min-h-[50px] sm:min-h-[60px] p-1.5 sm:p-2 flex flex-col justify-between transition-colors relative tabular-nums ${cellBg} ${cursorStyle}`}
                 >
                   <div className="flex items-center justify-between">
-                    <span className={`text-xs sm:text-sm ${textStyle}`}>{day}</span>
+                    <span className={`type-support ${textStyle}`}>{day}</span>
                   </div>
                   {statusLabel}
                 </div>

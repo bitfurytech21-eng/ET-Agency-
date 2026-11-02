@@ -620,7 +620,7 @@ export const InteractiveBookingPanel: React.FC<InteractiveBookingPanelProps> = (
                 value={checkIn}
                 disabled={isReservedListing}
                 onChange={(e) => handleCheckInChange(e.target.value)}
-                className="w-full h-11 px-2.5 bg-[#faf8f5] border border-[#dfd7cc] rounded-lg text-sm font-medium text-[#1b1d20] tabular-nums focus:outline-none focus:border-[#00897d]"
+                className="w-full h-11 px-2.5 bg-[#faf8f5] border border-[#dfd7cc] rounded-lg text-base font-medium text-[#1b1d20] tabular-nums focus:outline-none focus:border-[#00897d]"
               />
             </div>
             <div>
@@ -631,7 +631,7 @@ export const InteractiveBookingPanel: React.FC<InteractiveBookingPanelProps> = (
                 value={checkOut}
                 disabled={isReservedListing}
                 onChange={(e) => onChangeDates(checkIn || todayIso, e.target.value)}
-                className="w-full h-11 px-2.5 bg-[#faf8f5] border border-[#dfd7cc] rounded-lg text-sm font-medium text-[#1b1d20] tabular-nums focus:outline-none focus:border-[#00897d]"
+                className="w-full h-11 px-2.5 bg-[#faf8f5] border border-[#dfd7cc] rounded-lg text-base font-medium text-[#1b1d20] tabular-nums focus:outline-none focus:border-[#00897d]"
               />
             </div>
           </div>
@@ -872,7 +872,7 @@ export const InteractiveBookingPanel: React.FC<InteractiveBookingPanelProps> = (
                       min={todayIso}
                       value={checkIn}
                       onChange={(e) => handleCheckInChange(e.target.value)}
-                      className="w-full h-11 px-3 bg-[#faf8f5] border border-[#dfd7cc] rounded-lg text-sm font-medium text-[#1b1d20] tabular-nums"
+                      className="w-full h-11 px-3 bg-[#faf8f5] border border-[#dfd7cc] rounded-lg text-base font-medium text-[#1b1d20] tabular-nums"
                     />
                   </div>
                   <div>
@@ -883,7 +883,7 @@ export const InteractiveBookingPanel: React.FC<InteractiveBookingPanelProps> = (
                       min={checkIn ? addDaysIso(checkIn, minStay) : addDaysIso(todayIso, minStay)}
                       value={checkOut}
                       onChange={(e) => onChangeDates(checkIn || todayIso, e.target.value)}
-                      className="w-full h-11 px-3 bg-[#faf8f5] border border-[#dfd7cc] rounded-lg text-sm font-medium text-[#1b1d20] tabular-nums"
+                      className="w-full h-11 px-3 bg-[#faf8f5] border border-[#dfd7cc] rounded-lg text-base font-medium text-[#1b1d20] tabular-nums"
                     />
                   </div>
                 </div>
@@ -905,7 +905,7 @@ export const InteractiveBookingPanel: React.FC<InteractiveBookingPanelProps> = (
                         value={guestName}
                         onChange={(e) => setGuestName(e.target.value)}
                         placeholder="Full legal name"
-                        className="w-full h-11 px-3 bg-[#faf8f5] border border-[#dfd7cc] rounded-lg text-sm text-[#1b1d20]"
+                        className="w-full h-11 px-3 bg-[#faf8f5] border border-[#dfd7cc] rounded-lg text-base text-[#1b1d20]"
                       />
                     </div>
                     <div>
@@ -916,7 +916,7 @@ export const InteractiveBookingPanel: React.FC<InteractiveBookingPanelProps> = (
                         value={guestEmail}
                         onChange={(e) => setGuestEmail(e.target.value)}
                         placeholder="name@company.com"
-                        className="w-full h-11 px-3 bg-[#faf8f5] border border-[#dfd7cc] rounded-lg text-sm text-[#1b1d20]"
+                        className="w-full h-11 px-3 bg-[#faf8f5] border border-[#dfd7cc] rounded-lg text-base text-[#1b1d20]"
                       />
                     </div>
                     <div>
@@ -927,7 +927,7 @@ export const InteractiveBookingPanel: React.FC<InteractiveBookingPanelProps> = (
                         value={guestPhone}
                         onChange={(e) => setGuestPhone(e.target.value)}
                         placeholder="(916) 555-0140"
-                        className="w-full h-11 px-3 bg-[#faf8f5] border border-[#dfd7cc] rounded-lg text-sm text-[#1b1d20]"
+                        className="w-full h-11 px-3 bg-[#faf8f5] border border-[#dfd7cc] rounded-lg text-base text-[#1b1d20]"
                       />
                     </div>
                     <div>
@@ -939,7 +939,7 @@ export const InteractiveBookingPanel: React.FC<InteractiveBookingPanelProps> = (
                         value={employer}
                         onChange={(e) => setEmployer(e.target.value)}
                         placeholder="Optional corporate / relocation sponsor"
-                        className="w-full h-11 px-3 bg-[#faf8f5] border border-[#dfd7cc] rounded-lg text-sm text-[#1b1d20]"
+                        className="w-full h-11 px-3 bg-[#faf8f5] border border-[#dfd7cc] rounded-lg text-base text-[#1b1d20]"
                       />
                     </div>
                   </div>
@@ -953,7 +953,7 @@ export const InteractiveBookingPanel: React.FC<InteractiveBookingPanelProps> = (
                       value={specialRequests}
                       onChange={(e) => setSpecialRequests(e.target.value)}
                       placeholder="Preferred arrival window, dietary preferences for chef/grocery service, or pet details..."
-                      className="w-full p-3 bg-[#faf8f5] border border-[#dfd7cc] rounded-lg text-sm text-[#1b1d20]"
+                      className="w-full p-3 bg-[#faf8f5] border border-[#dfd7cc] rounded-lg text-base text-[#1b1d20]"
                     />
                   </div>
                 </div>

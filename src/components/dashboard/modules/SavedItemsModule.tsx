@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { PROPERTIES } from '../../../data/lodgingData';
 import { US_VEHICLES } from '../../../data/vehicleData';
+import { getVehicleImage } from '../../../data/fleetImages';
 import { PropertyCard } from '../components/PropertyCard';
 import { EmptyState } from '../components/EmptyState';
 import { DashboardNav, SubTabOption } from '../includes/DashboardNav';
@@ -24,7 +25,7 @@ export const SavedItemsModule: React.FC<SavedItemsModuleProps> = ({
     } catch {
       // fallback
     }
-    return [PROPERTIES[0]?.id || 'unit-91', PROPERTIES[1]?.id || 'unit-173'].filter(Boolean);
+    return [PROPERTIES[0]?.id, PROPERTIES[1]?.id].filter(Boolean) as string[];
   });
 
   const [savedVehicleIds, setSavedVehicleIds] = useState<string[]>(() => {
@@ -34,7 +35,7 @@ export const SavedItemsModule: React.FC<SavedItemsModuleProps> = ({
     } catch {
       // fallback
     }
-    return [US_VEHICLES[0]?.id || 'veh-escalade'].filter(Boolean);
+    return [US_VEHICLES[0]?.id].filter(Boolean) as string[];
   });
 
   useEffect(() => {
@@ -72,17 +73,17 @@ export const SavedItemsModule: React.FC<SavedItemsModuleProps> = ({
         onSelectSubTab={(id) => setActiveSubTab(id as 'all' | 'properties' | 'vehicles')}
       />
 
-      <div className="px-4 sm:px-8 pb-8 space-y-8">
-        <div className="border-b border-[#e6dfd5] pb-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+      <div className="space-y-8">
+        <div className="border-b border-slate-200 pb-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           <div>
-            <h3 className="font-heading font-bold text-lg text-[#282828] flex items-center gap-2">
-              <Bookmark className="w-5 h-5 text-[#00b7a8]" /> Saved Residences &amp; Fleet Vehicles
+            <h3 className="font-heading font-bold text-lg text-[#0f172a] flex items-center gap-2">
+              <Bookmark className="w-5 h-5 text-[#14616d]" /> Saved Residences &amp; Fleet Vehicles
             </h3>
-            <p className="text-xs text-[#5c5046] mt-0.5">
-              Review and reserve your bookmarked California corporate housing and verified 3D fleet rentals.
+            <p className="text-xs text-slate-500 mt-0.5">
+              Review and reserve your bookmarked California corporate housing and 3D fleet rentals.
             </p>
           </div>
-          <div className="text-xs font-semibold text-[#857568]">
+          <div className="text-xs font-medium text-slate-500 tabular-nums">
             {totalCount} item{totalCount === 1 ? '' : 's'} bookmarked
           </div>
         </div>
@@ -97,17 +98,16 @@ export const SavedItemsModule: React.FC<SavedItemsModuleProps> = ({
           />
         ) : (
           <div className="space-y-8">
-            {/* Properties Section */}
             {(activeSubTab === 'all' || activeSubTab === 'properties') && (
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
-                  <h4 className="text-sm font-bold uppercase tracking-wider text-[#82634f] flex items-center gap-2">
-                    <Building2 className="w-4 h-4 text-[#00b7a8]" /> Executive Residences ({savedProperties.length})
+                  <h4 className="text-sm font-bold text-[#0f172a] flex items-center gap-2">
+                    <Building2 className="w-4 h-4 text-[#14616d]" /> Executive Residences ({savedProperties.length})
                   </h4>
                   <button
                     type="button"
                     onClick={onReserveProperty}
-                    className="text-xs text-[#00897d] hover:text-[#005f56] font-bold flex items-center gap-1 cursor-pointer"
+                    className="text-xs text-[#14616d] hover:underline font-semibold flex items-center gap-1 cursor-pointer whitespace-nowrap"
                   >
                     <span>Reserve New Stay</span>
                     <ArrowRight className="w-3.5 h-3.5" />
@@ -115,7 +115,7 @@ export const SavedItemsModule: React.FC<SavedItemsModuleProps> = ({
                 </div>
 
                 {savedProperties.length === 0 ? (
-                  <div className="p-6 bg-[#faf8f5] border border-[#e6dfd5] rounded-2xl text-center text-xs text-[#857568]">
+                  <div className="p-6 bg-white border border-slate-200 rounded-2xl text-center text-xs text-slate-500">
                     No residences currently bookmarked.
                   </div>
                 ) : (
@@ -134,80 +134,86 @@ export const SavedItemsModule: React.FC<SavedItemsModuleProps> = ({
               </div>
             )}
 
-            {/* Vehicles Section */}
             {(activeSubTab === 'all' || activeSubTab === 'vehicles') && (
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
-                  <h4 className="text-sm font-bold uppercase tracking-wider text-[#82634f] flex items-center gap-2">
-                    <Car className="w-4 h-4 text-[#00b7a8]" /> Curated Fleet Rentals ({savedVehicles.length})
+                  <h4 className="text-sm font-bold text-[#0f172a] flex items-center gap-2">
+                    <Car className="w-4 h-4 text-[#14616d]" /> Fleet Rentals ({savedVehicles.length})
                   </h4>
                   <button
                     type="button"
                     onClick={onExploreVehicles}
-                    className="text-xs text-[#00897d] hover:text-[#005f56] font-bold flex items-center gap-1 cursor-pointer"
+                    className="text-xs text-[#14616d] hover:underline font-semibold flex items-center gap-1 cursor-pointer whitespace-nowrap"
                   >
-                    <span>Browse 3D Fleet</span>
+                    <span>Browse Car Rentals</span>
                     <ArrowRight className="w-3.5 h-3.5" />
                   </button>
                 </div>
 
                 {savedVehicles.length === 0 ? (
-                  <div className="p-6 bg-[#faf8f5] border border-[#e6dfd5] rounded-2xl text-center text-xs text-[#857568]">
+                  <div className="p-6 bg-white border border-slate-200 rounded-2xl text-center text-xs text-slate-500">
                     No vehicles currently bookmarked.
                   </div>
                 ) : (
                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    {savedVehicles.map((veh) => (
-                      <div
-                        key={veh.id}
-                        className="bg-white border border-[#e6dfd5] rounded-2xl overflow-hidden shadow-2xs hover:border-[#00b7a8] transition-all flex flex-col justify-between"
-                      >
-                        <div className="relative h-40 w-full bg-[#1f1915] overflow-hidden flex flex-col items-center justify-center p-4 text-center">
-                          <Car className="w-12 h-12 text-[#00b7a8] mb-2" />
-                          <div className="text-white text-xs font-bold">{veh.make} · {veh.year}</div>
-                          <div className="absolute top-3 left-3 bg-black/75 backdrop-blur-xs text-white text-[11px] font-bold px-2.5 py-1 rounded-lg">
-                            {veh.category}
-                          </div>
-                          <button
-                            type="button"
-                            onClick={() => handleRemoveVehicle(veh.id)}
-                            title="Remove from saved"
-                            className="absolute top-3 right-3 w-8 h-8 rounded-full bg-white/90 backdrop-blur-xs flex items-center justify-center text-rose-500 hover:scale-110 transition-transform cursor-pointer shadow-xs"
-                          >
-                            <Trash2 className="w-4 h-4 text-rose-600" />
-                          </button>
-                        </div>
-
-                        <div className="p-4 space-y-3 flex-1 flex flex-col justify-between">
-                          <div className="space-y-1">
-                            <h5 className="font-heading font-black text-base text-[#282828]">
-                              {veh.name}
-                            </h5>
-                            <p className="text-xs text-[#5c5046] line-clamp-2">
-                              {veh.tagline || veh.description}
-                            </p>
-                            <div className="flex items-center gap-3 pt-2 text-[11px] text-[#857568] font-semibold">
-                              <span>Seats {veh.seating}</span>
-                              <span>·</span>
-                              <span>Luggage {veh.luggage}</span>
-                              <span>·</span>
-                              <span className="text-[#00897d] font-bold">${veh.dailyRate}/day</span>
+                    {savedVehicles.map((veh) => {
+                      const imgSrc = getVehicleImage(veh.id);
+                      return (
+                        <div
+                          key={veh.id}
+                          className="bg-white border border-slate-200 rounded-2xl overflow-hidden hover:border-slate-300 transition-colors flex flex-col justify-between"
+                        >
+                          <div className="relative aspect-[4/3] w-full bg-slate-900 overflow-hidden">
+                            <img
+                              src={imgSrc}
+                              alt={veh.name}
+                              referrerPolicy="no-referrer"
+                              className="w-full h-full object-cover hover:scale-103 transition-transform duration-200"
+                            />
+                            <div className="absolute top-3 left-3 bg-[#0f172a]/85 backdrop-blur-xs text-white text-[11px] font-semibold px-2.5 py-1 rounded-lg">
+                              {veh.category}
                             </div>
-                          </div>
-
-                          <div className="pt-3 border-t border-[#f0eae1] flex items-center justify-between gap-2">
                             <button
                               type="button"
-                              onClick={onExploreVehicles}
-                              className="w-full py-2 bg-[#00b7a8] hover:bg-[#009e91] text-white text-xs font-bold rounded-xl flex items-center justify-center gap-1.5 cursor-pointer transition-colors"
+                              onClick={() => handleRemoveVehicle(veh.id)}
+                              title="Remove from saved"
+                              className="absolute top-3 right-3 w-8 h-8 rounded-full bg-white/95 flex items-center justify-center text-rose-600 hover:scale-105 transition-transform cursor-pointer shadow-xs"
                             >
-                              <span>Reserve Vehicle</span>
-                              <ArrowRight className="w-3.5 h-3.5" />
+                              <Trash2 className="w-4 h-4" />
                             </button>
                           </div>
+
+                          <div className="p-4 space-y-3 flex-1 flex flex-col justify-between">
+                            <div className="space-y-1">
+                              <h5 className="font-heading font-bold text-base text-[#0f172a]">
+                                {veh.year} {veh.name}
+                              </h5>
+                              <p className="text-xs text-slate-600 line-clamp-2">
+                                {veh.tagline || veh.description}
+                              </p>
+                              <div className="flex items-center gap-2 pt-2 text-xs text-slate-500 tabular-nums">
+                                <span>Seats {veh.seating}</span>
+                                <span aria-hidden="true">·</span>
+                                <span>Luggage {veh.luggage}</span>
+                                <span aria-hidden="true">·</span>
+                                <span className="text-[#14616d] font-bold">${veh.dailyRate}/day</span>
+                              </div>
+                            </div>
+
+                            <div className="pt-3 border-t border-slate-100">
+                              <button
+                                type="button"
+                                onClick={onExploreVehicles}
+                                className="btn btn-primary btn-sm w-full"
+                              >
+                                <span>Reserve Vehicle</span>
+                                <ArrowRight className="w-3.5 h-3.5" />
+                              </button>
+                            </div>
+                          </div>
                         </div>
-                      </div>
-                    ))}
+                      );
+                    })}
                   </div>
                 )}
               </div>

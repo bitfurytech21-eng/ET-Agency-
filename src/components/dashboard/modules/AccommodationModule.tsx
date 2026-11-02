@@ -180,21 +180,20 @@ export const AccommodationModule: React.FC<AccommodationModuleProps> = ({
         }}
       />
 
-      <div className="px-4 sm:px-8 pb-6 space-y-6">
-        {/* Top Action Bar */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[#e6dfd5] pb-4">
+      <div className="space-y-6">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-200 pb-4">
           <div>
-            <h3 className="font-heading font-bold text-lg text-[#282828]">
+            <h3 className="font-heading font-bold text-lg text-[#0f172a]">
               Accommodation Reservations
             </h3>
-            <p className="text-xs text-[#6e5d50]">
+            <p className="text-xs text-slate-500">
               View active stays, previous booking history, digital entry instructions, and date changes
             </p>
           </div>
           <button
             type="button"
             onClick={onOpenBooking}
-            className="px-4 py-2.5 bg-[#00b7a8] hover:bg-[#009e91] text-white text-xs font-bold rounded-xl flex items-center gap-2 cursor-pointer whitespace-nowrap shrink-0 w-fit"
+            className="btn btn-primary btn-sm w-fit"
           >
             <PlusCircle className="w-4 h-4" />
             <span>Book New Residence</span>
@@ -218,7 +217,6 @@ export const AccommodationModule: React.FC<AccommodationModuleProps> = ({
           </div>
         )}
 
-        {/* All Stays */}
         {subView === 'index' &&
           (reservations.length === 0 ? (
             <EmptyState
@@ -242,7 +240,6 @@ export const AccommodationModule: React.FC<AccommodationModuleProps> = ({
             </div>
           ))}
 
-        {/* Active & Upcoming */}
         {subView === 'my-reservations' &&
           (activeList.length === 0 ? (
             <EmptyState
@@ -266,7 +263,6 @@ export const AccommodationModule: React.FC<AccommodationModuleProps> = ({
             </div>
           ))}
 
-        {/* Previous Booking History */}
         {subView === 'booking-history' &&
           (historyList.length === 0 ? (
             <EmptyState
@@ -286,7 +282,6 @@ export const AccommodationModule: React.FC<AccommodationModuleProps> = ({
             </div>
           ))}
 
-        {/* Stay Details */}
         {subView === 'reservation-details' &&
           (!selectedBooking ? (
             <EmptyState
@@ -297,19 +292,19 @@ export const AccommodationModule: React.FC<AccommodationModuleProps> = ({
               onAction={onOpenBooking}
             />
           ) : (
-            <div className="space-y-6">
+            <div className="space-y-5">
               {reservations.length > 1 && (
                 <div className="flex flex-wrap items-center gap-2">
-                  <span className="text-xs font-semibold text-[#6e5d50]">Select Reservation:</span>
+                  <span className="text-xs font-semibold text-slate-500">Select Reservation:</span>
                   {reservations.map((b) => (
                     <button
                       key={b.id}
                       type="button"
                       onClick={() => setSelectedBookingId(b.id)}
-                      className={`px-3 py-1.5 rounded-lg text-xs font-mono font-bold cursor-pointer whitespace-nowrap tabular-nums ${
+                      className={`px-3 py-1.5 rounded-lg text-xs font-mono font-semibold cursor-pointer whitespace-nowrap tabular-nums ${
                         b.id === selectedBooking.id
-                          ? 'bg-[#282828] text-white'
-                          : 'bg-[#faf8f5] border border-[#d8cfc3] text-[#5c5046] hover:text-[#282828]'
+                          ? 'bg-[#0f172a] text-white'
+                          : 'bg-white border border-slate-200 text-slate-600 hover:text-[#0f172a]'
                       }`}
                     >
                       {b.id} ({b.unitNumber})
@@ -318,102 +313,100 @@ export const AccommodationModule: React.FC<AccommodationModuleProps> = ({
                 </div>
               )}
 
-              <div className="bg-[#faf8f5] border border-[#e6dfd5] rounded-2xl p-6 space-y-6">
-                <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4 border-b border-[#e6dfd5] pb-4">
+              <div className="bg-white border border-slate-200 rounded-2xl p-6 space-y-6">
+                <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4 border-b border-slate-100 pb-4">
                   <div className="space-y-1">
                     <div className="flex flex-wrap items-center gap-2 text-xs tabular-nums">
-                      <span className="font-mono font-bold text-[#82634f]">{selectedBooking.id}</span>
+                      <span className="font-mono font-semibold text-slate-600">{selectedBooking.id}</span>
                       <span aria-hidden="true">·</span>
                       <StatusBadge status={selectedBooking.status} size="sm" />
                       <span aria-hidden="true">·</span>
-                      <span className="text-[#6e5d50]">Booked {selectedBooking.bookedAt}</span>
+                      <span className="text-slate-500">Booked {selectedBooking.bookedAt}</span>
                     </div>
-                    <h4 className="font-heading font-black text-xl text-[#282828]">
+                    <h4 className="font-heading font-bold text-xl text-[#0f172a]">
                       {selectedBooking.propertyTitle} ({selectedBooking.unitNumber})
                     </h4>
-                    <div className="flex items-center gap-1.5 text-xs text-[#5c5046]">
-                      <MapPin className="w-3.5 h-3.5 text-[#00897d]" />
+                    <div className="flex items-center gap-1.5 text-xs text-slate-600">
+                      <MapPin className="w-3.5 h-3.5 text-[#14616d]" />
                       <span>{selectedBooking.location}</span>
                     </div>
                   </div>
 
-                  <div className="flex items-center gap-2 shrink-0">
-                    <button
-                      type="button"
-                      onClick={() => window.print()}
-                      className="px-3.5 py-2 rounded-xl bg-white border border-[#d8cfc3] hover:border-[#00b7a8] text-xs font-bold text-[#282828] flex items-center gap-1.5 cursor-pointer whitespace-nowrap"
-                    >
-                      <Printer className="w-3.5 h-3.5 text-[#82634f]" />
-                      <span>Print Summary</span>
-                    </button>
-                  </div>
+                  <button
+                    type="button"
+                    onClick={() => window.print()}
+                    className="btn btn-outline btn-sm shrink-0"
+                  >
+                    <Printer className="w-3.5 h-3.5" />
+                    <span>Print Summary</span>
+                  </button>
                 </div>
 
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 text-xs tabular-nums">
-                  <div className="p-3.5 bg-white rounded-xl border border-[#efe9e0]">
-                    <span className="text-[#857568] block">Check-In Date</span>
-                    <strong className="text-sm text-[#282828] mt-0.5 block">
+                  <div className="p-3.5 bg-slate-50 rounded-xl border border-slate-200">
+                    <span className="text-slate-500 block">Check-In Date</span>
+                    <strong className="text-sm text-[#0f172a] mt-0.5 block">
                       {selectedBooking.checkIn}
                     </strong>
                   </div>
-                  <div className="p-3.5 bg-white rounded-xl border border-[#efe9e0]">
-                    <span className="text-[#857568] block">Check-Out Date</span>
-                    <strong className="text-sm text-[#282828] mt-0.5 block">
+                  <div className="p-3.5 bg-slate-50 rounded-xl border border-slate-200">
+                    <span className="text-slate-500 block">Check-Out Date</span>
+                    <strong className="text-sm text-[#0f172a] mt-0.5 block">
                       {selectedBooking.checkOut}
                     </strong>
                   </div>
-                  <div className="p-3.5 bg-white rounded-xl border border-[#efe9e0]">
-                    <span className="text-[#857568] block">Total Length</span>
-                    <strong className="text-sm text-[#282828] mt-0.5 block">
+                  <div className="p-3.5 bg-slate-50 rounded-xl border border-slate-200">
+                    <span className="text-slate-500 block">Total Length</span>
+                    <strong className="text-sm text-[#0f172a] mt-0.5 block">
                       {selectedBooking.totalNights} Nights ({selectedBooking.guestsCount} Guest
                       {selectedBooking.guestsCount > 1 ? 's' : ''})
                     </strong>
                   </div>
-                  <div className="p-3.5 bg-white rounded-xl border border-[#efe9e0]">
-                    <span className="text-[#857568] block">Estimated Total</span>
-                    <strong className="text-sm text-[#00897d] mt-0.5 block">
+                  <div className="p-3.5 bg-slate-50 rounded-xl border border-slate-200">
+                    <span className="text-slate-500 block">Estimated Total</span>
+                    <strong className="text-sm text-[#14616d] mt-0.5 block">
                       ${selectedBooking.totalUsd.toLocaleString()} USD
                     </strong>
                   </div>
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
-                  <div className="p-4 bg-white rounded-xl border border-[#efe9e0] space-y-1">
-                    <div className="flex items-center gap-1.5 font-bold text-[#282828]">
+                  <div className="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-1">
+                    <div className="flex items-center gap-1.5 font-bold text-[#0f172a]">
                       <Key className="w-4 h-4 text-amber-600" />
                       <span>Smart Lock Entry</span>
                     </div>
-                    <p className="font-mono text-xs text-[#5c5046] tabular-nums">
+                    <p className="font-mono text-xs text-slate-600 tabular-nums">
                       {selectedBooking.status === 'confirmed' || selectedBooking.status === 'active'
                         ? selectedBooking.accessCode
                         : 'Issued 24 hours prior to confirmed check-in'}
                     </p>
                   </div>
-                  <div className="p-4 bg-white rounded-xl border border-[#efe9e0] space-y-1">
-                    <div className="flex items-center gap-1.5 font-bold text-[#282828]">
-                      <Wifi className="w-4 h-4 text-[#00b7a8]" />
+                  <div className="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-1">
+                    <div className="flex items-center gap-1.5 font-bold text-[#0f172a]">
+                      <Wifi className="w-4 h-4 text-[#14616d]" />
                       <span>Dedicated Suite Wi-Fi</span>
                     </div>
-                    <p className="text-[#5c5046]">
-                      Network: <strong>{selectedBooking.wifiNetwork}</strong>
+                    <p className="text-slate-600">
+                      Network: <strong className="text-[#0f172a]">{selectedBooking.wifiNetwork}</strong>
                     </p>
-                    <p className="text-[#5c5046] font-mono">
+                    <p className="text-slate-600 font-mono">
                       Access: {selectedBooking.wifiPassword}
                     </p>
                   </div>
-                  <div className="p-4 bg-white rounded-xl border border-[#efe9e0] space-y-1">
-                    <div className="flex items-center gap-1.5 font-bold text-[#282828]">
-                      <MapPin className="w-4 h-4 text-[#82634f]" />
+                  <div className="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-1">
+                    <div className="flex items-center gap-1.5 font-bold text-[#0f172a]">
+                      <MapPin className="w-4 h-4 text-[#14616d]" />
                       <span>Assigned Parking</span>
                     </div>
-                    <p className="text-[#5c5046]">{selectedBooking.parkingSpace}</p>
+                    <p className="text-slate-600">{selectedBooking.parkingSpace}</p>
                   </div>
                 </div>
 
                 {selectedBooking.notes && (
-                  <div className="p-4 bg-white rounded-xl border border-[#efe9e0] text-xs space-y-1">
-                    <span className="font-bold text-[#282828] block">Reservation Notes</span>
-                    <p className="text-[#5c5046]">{selectedBooking.notes}</p>
+                  <div className="p-4 bg-slate-50 rounded-xl border border-slate-200 text-xs space-y-1">
+                    <span className="font-bold text-[#0f172a] block">Reservation Notes</span>
+                    <p className="text-slate-600">{selectedBooking.notes}</p>
                   </div>
                 )}
 
@@ -422,14 +415,14 @@ export const AccommodationModule: React.FC<AccommodationModuleProps> = ({
                     <button
                       type="button"
                       onClick={() => handleOpenModification(selectedBooking)}
-                      className="px-4 py-2 rounded-xl border border-[#d8cfc3] bg-white hover:bg-[#f4efe9] text-xs font-bold text-[#282828] cursor-pointer whitespace-nowrap"
+                      className="btn btn-outline btn-sm"
                     >
                       Modify Stay Dates
                     </button>
                     <button
                       type="button"
                       onClick={() => handleOpenCancellation(selectedBooking)}
-                      className="px-4 py-2 rounded-xl border border-rose-200 bg-white hover:bg-rose-50 text-xs font-bold text-rose-700 cursor-pointer whitespace-nowrap"
+                      className="btn btn-danger btn-sm"
                     >
                       Cancel Reservation
                     </button>
@@ -439,34 +432,33 @@ export const AccommodationModule: React.FC<AccommodationModuleProps> = ({
             </div>
           ))}
 
-        {/* Check-In & Check-Out Guide */}
         {subView === 'check-in-details' && (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-xs">
-            <div className="p-6 rounded-2xl border border-[#e6dfd5] bg-[#faf8f5] space-y-3">
-              <h4 className="font-heading font-bold text-base text-[#282828]">
+            <div className="p-6 rounded-2xl border border-slate-200 bg-white space-y-3">
+              <h4 className="font-heading font-bold text-base text-[#0f172a]">
                 Arrival &amp; Contactless Check-In (After 3:00 PM)
               </h4>
-              <p className="text-[#5c5046] leading-relaxed">
+              <p className="text-slate-600 leading-relaxed">
                 {selectedBooking?.checkInInstructions ||
                   'All Easy Travel Lodging residences feature contactless smart-keypad entry. Your personal keypad code activates at 3:00 PM on your scheduled arrival date.'}
               </p>
-              <ul className="space-y-2 text-[#5c5046] pt-1">
+              <ul className="space-y-2 text-slate-600 pt-1">
                 <li>1. Park in your assigned stall listed on your reservation details.</li>
                 <li>2. Enter your 4-digit keypad code followed by # on the residence door lock.</li>
                 <li>3. High-speed Wi-Fi credentials and welcome packet are on the kitchen counter.</li>
               </ul>
             </div>
 
-            <div className="p-6 rounded-2xl border border-[#e6dfd5] bg-[#faf8f5] space-y-3">
-              <h4 className="font-heading font-bold text-base text-[#282828]">
+            <div className="p-6 rounded-2xl border border-slate-200 bg-white space-y-3">
+              <h4 className="font-heading font-bold text-base text-[#0f172a]">
                 Departure &amp; Check-Out Procedure (By 11:00 AM)
               </h4>
-              <p className="text-[#5c5046] leading-relaxed">
+              <p className="text-slate-600 leading-relaxed">
                 {selectedBooking?.checkOutInstructions ||
                   'Before 11:00 AM on departure day, ensure personal belongings are packed, start the dishwasher if needed, and lock the smart deadbolt upon exit.'}
               </p>
-              <div className="pt-2 border-t border-[#e6dfd5] flex items-center gap-2 text-[#282828]">
-                <Phone className="w-4 h-4 text-[#00897d]" />
+              <div className="pt-3 border-t border-slate-100 flex items-center gap-2 text-[#0f172a]">
+                <Phone className="w-4 h-4 text-[#14616d]" />
                 <span>
                   Need late check-out or stay extension? Call{' '}
                   <strong className="tabular-nums">916-800-3295</strong> or email{' '}
@@ -477,7 +469,6 @@ export const AccommodationModule: React.FC<AccommodationModuleProps> = ({
           </div>
         )}
 
-        {/* Modify Stay Dates */}
         {subView === 'modification-request' &&
           (!selectedBooking || selectedBooking.status === 'cancelled' ? (
             <EmptyState
@@ -488,54 +479,48 @@ export const AccommodationModule: React.FC<AccommodationModuleProps> = ({
           ) : (
             <form
               onSubmit={submitModification}
-              className="max-w-xl p-6 rounded-2xl border border-[#e6dfd5] bg-[#faf8f5] space-y-4"
+              className="max-w-xl p-6 rounded-2xl border border-slate-200 bg-white space-y-4"
             >
               <div>
-                <h4 className="font-heading font-bold text-base text-[#282828]">
+                <h4 className="font-heading font-bold text-base text-[#0f172a]">
                   Modify Dates — {selectedBooking.propertyTitle} ({selectedBooking.id})
                 </h4>
-                <p className="text-xs text-[#6e5d50] mt-0.5">
+                <p className="text-xs text-slate-500 mt-0.5">
                   Updated stay dates recalculate nightly or monthly totals automatically on your account.
                 </p>
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-xs font-bold text-[#282828] mb-1">
-                    New Check-In Date *
-                  </label>
+                  <label className="form-label">New Check-In Date *</label>
                   <input
                     type="date"
                     required
                     value={modNewCheckIn}
                     onChange={(e) => setModNewCheckIn(e.target.value)}
-                    className="w-full h-10 px-3 bg-white border border-[#d8cfc3] rounded-xl text-xs text-[#282828] outline-none focus:border-[#00b7a8] tabular-nums"
+                    className="form-input tabular-nums"
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-bold text-[#282828] mb-1">
-                    New Check-Out Date *
-                  </label>
+                  <label className="form-label">New Check-Out Date *</label>
                   <input
                     type="date"
                     required
                     value={modNewCheckOut}
                     onChange={(e) => setModNewCheckOut(e.target.value)}
-                    className="w-full h-10 px-3 bg-white border border-[#d8cfc3] rounded-xl text-xs text-[#282828] outline-none focus:border-[#00b7a8] tabular-nums"
+                    className="form-input tabular-nums"
                   />
                 </div>
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-[#282828] mb-1">
-                  Special Requests / Schedule Notes
-                </label>
+                <label className="form-label">Special Requests / Schedule Notes</label>
                 <textarea
                   rows={3}
                   value={modReason}
                   onChange={(e) => setModReason(e.target.value)}
                   placeholder="Optional arrival time or stay extension note..."
-                  className="w-full p-3 bg-white border border-[#d8cfc3] rounded-xl text-xs text-[#282828] outline-none focus:border-[#00b7a8]"
+                  className="form-textarea"
                 />
               </div>
 
@@ -543,7 +528,7 @@ export const AccommodationModule: React.FC<AccommodationModuleProps> = ({
                 <button
                   type="submit"
                   disabled={isMutating}
-                  className="px-5 py-2.5 rounded-xl bg-[#00b7a8] hover:bg-[#009e91] disabled:opacity-50 text-white text-xs font-bold flex items-center gap-2 cursor-pointer whitespace-nowrap"
+                  className="btn btn-primary btn-sm disabled:opacity-50"
                 >
                   {isMutating && <Loader2 className="w-4 h-4 animate-spin" />}
                   <span>Save Updated Dates</span>
@@ -551,7 +536,7 @@ export const AccommodationModule: React.FC<AccommodationModuleProps> = ({
                 <button
                   type="button"
                   onClick={() => setSubView('index')}
-                  className="px-4 py-2.5 rounded-xl border border-[#d8cfc3] bg-white text-xs font-semibold text-[#5c5046] hover:text-[#282828] cursor-pointer whitespace-nowrap"
+                  className="btn btn-outline btn-sm"
                 >
                   Back
                 </button>
@@ -559,7 +544,6 @@ export const AccommodationModule: React.FC<AccommodationModuleProps> = ({
             </form>
           ))}
 
-        {/* Cancel Stay */}
         {subView === 'cancellation-request' &&
           (!selectedBooking || selectedBooking.status === 'cancelled' ? (
             <EmptyState
@@ -570,28 +554,26 @@ export const AccommodationModule: React.FC<AccommodationModuleProps> = ({
           ) : (
             <form
               onSubmit={submitCancellation}
-              className="max-w-xl p-6 rounded-2xl border border-rose-200 bg-rose-50/40 space-y-4"
+              className="max-w-xl p-6 rounded-2xl border border-rose-200 bg-white space-y-4"
             >
               <div>
-                <h4 className="font-heading font-bold text-base text-[#282828]">
+                <h4 className="font-heading font-bold text-base text-[#0f172a]">
                   Cancel Reservation — {selectedBooking.propertyTitle} ({selectedBooking.id})
                 </h4>
-                <p className="text-xs text-[#5c5046] mt-0.5">
-                  Cancelling will release {selectedBooking.unitNumber} for the dates {selectedBooking.checkIn} to{' '}
+                <p className="text-xs text-slate-600 mt-0.5">
+                  Cancelling releases {selectedBooking.unitNumber} for {selectedBooking.checkIn} to{' '}
                   {selectedBooking.checkOut}.
                 </p>
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-[#282828] mb-1">
-                  Reason for Cancellation (Optional)
-                </label>
+                <label className="form-label">Reason for Cancellation (Optional)</label>
                 <textarea
                   rows={3}
                   value={cancelReason}
                   onChange={(e) => setCancelReason(e.target.value)}
                   placeholder="Let our housing team know if your travel dates changed..."
-                  className="w-full p-3 bg-white border border-[#d8cfc3] rounded-xl text-xs text-[#282828] outline-none focus:border-rose-400"
+                  className="form-textarea"
                 />
               </div>
 
@@ -599,7 +581,7 @@ export const AccommodationModule: React.FC<AccommodationModuleProps> = ({
                 <button
                   type="submit"
                   disabled={isMutating}
-                  className="px-5 py-2.5 rounded-xl bg-rose-600 hover:bg-rose-700 disabled:opacity-50 text-white text-xs font-bold flex items-center gap-2 cursor-pointer whitespace-nowrap"
+                  className="px-5 py-2.5 rounded-lg bg-rose-600 hover:bg-rose-700 disabled:opacity-50 text-white text-xs font-semibold flex items-center gap-2 cursor-pointer whitespace-nowrap"
                 >
                   {isMutating && <Loader2 className="w-4 h-4 animate-spin" />}
                   <span>Confirm Cancellation</span>
@@ -607,7 +589,7 @@ export const AccommodationModule: React.FC<AccommodationModuleProps> = ({
                 <button
                   type="button"
                   onClick={() => setSubView('index')}
-                  className="px-4 py-2.5 rounded-xl border border-[#d8cfc3] bg-white text-xs font-semibold text-[#5c5046] hover:text-[#282828] cursor-pointer whitespace-nowrap"
+                  className="btn btn-outline btn-sm"
                 >
                   Keep Reservation
                 </button>

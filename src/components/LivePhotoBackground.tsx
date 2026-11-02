@@ -21,41 +21,41 @@ const SCENE_ASSETS: Record<
 > = {
   courtyard: {
     src: courtyardImg,
-    alt: 'Sunlit furnished executive residence courtyard with travertine walkways and olive trees at golden hour',
+    alt: 'Sunlit furnished executive residence courtyard with travertine walkways and olive trees',
   },
   interior: {
     src: interiorImg,
-    alt: 'Warm luxury furnished apartment living and dining room with white oak flooring and afternoon sunlight',
+    alt: 'Modern furnished apartment living and dining suite with white oak flooring and natural daylight',
   },
   twilight: {
     src: twilightImg,
-    alt: 'Boutique residential arrival drive illuminated by warm amber architectural sconces at dusk',
+    alt: 'Executive residential arrival drive illuminated by architectural sconces at dusk',
   },
   river: {
     src: riverImg,
-    alt: 'Tranquil morning sunrise reflecting across scenic waters near our executive residences',
+    alt: 'Tranquil morning sunrise reflecting across scenic California waterways',
   },
 };
 
 const OVERLAY_STYLES: Record<LivePhotoOverlay, string> = {
   espresso:
-    'bg-linear-to-br from-[#1f1915]/82 via-[#2b211b]/74 to-[#1a1512]/86',
+    'bg-linear-to-br from-[#0f172a]/86 via-[#1e293b]/78 to-[#0b1120]/88',
   dark:
-    'bg-linear-to-br from-[#191411]/90 via-[#241d18]/84 to-[#15110e]/92',
+    'bg-linear-to-br from-[#0b1120]/92 via-[#0f172a]/86 to-[#0b1120]/94',
   'warm-hero':
-    'bg-linear-to-r from-[#faf7f2]/90 via-[#f7f1e8]/80 to-[#faf7f2]/86',
+    'bg-linear-to-r from-[#ffffff]/94 via-[#f8fafc]/88 to-[#f1f5f9]/92',
   light:
-    'bg-linear-to-b from-[#fcfaf7]/92 via-[#f8f3eb]/88 to-[#fcfaf7]/94',
+    'bg-linear-to-b from-[#ffffff]/94 via-[#f8fafc]/90 to-[#ffffff]/95',
   subtle:
-    'bg-linear-to-r from-[#241c17]/62 via-[#2c221b]/44 to-[#1e1713]/68',
+    'bg-linear-to-r from-[#0f172a]/72 via-[#1e293b]/54 to-[#0f172a]/76',
 };
 
 const FALLBACK_BG: Record<LivePhotoOverlay, string> = {
-  espresso: 'bg-linear-to-br from-[#2a211b] via-[#3b2e25] to-[#1e1814]',
-  dark: 'bg-linear-to-br from-[#1f1915] via-[#2b221c] to-[#16120f]',
-  'warm-hero': 'bg-linear-to-br from-[#f7f2ea] via-[#efe7db] to-[#e6dbc9]',
-  light: 'bg-linear-to-br from-[#faf8f5] via-[#f4efe7] to-[#ebe3d7]',
-  subtle: 'bg-linear-to-br from-[#332820] via-[#45362c] to-[#261e18]',
+  espresso: 'bg-[#0f172a]',
+  dark: 'bg-[#0b1120]',
+  'warm-hero': 'bg-[#f8fafc]',
+  light: 'bg-[#ffffff]',
+  subtle: 'bg-[#1e293b]',
 };
 
 export const LivePhotoBackground: React.FC<LivePhotoBackgroundProps> = ({
@@ -79,7 +79,6 @@ export const LivePhotoBackground: React.FC<LivePhotoBackgroundProps> = ({
       aria-hidden="true"
       className={`pointer-events-none absolute inset-0 overflow-hidden select-none ${FALLBACK_BG[overlay]} ${children ? '' : className}`}
     >
-      {/* Primary live realistic photograph with gentle compositor pan/zoom */}
       <img
         src={primaryAsset.src}
         alt={primaryAsset.alt}
@@ -87,7 +86,6 @@ export const LivePhotoBackground: React.FC<LivePhotoBackgroundProps> = ({
         className="absolute inset-0 h-full w-full object-cover object-center etl-live-photo-primary"
       />
 
-      {/* Optional crossfading secondary realistic photograph for living multi-scene ambiance */}
       {secondaryAsset && (
         <img
           src={secondaryAsset.src}
@@ -97,10 +95,6 @@ export const LivePhotoBackground: React.FC<LivePhotoBackgroundProps> = ({
         />
       )}
 
-      {/* Subtle warm golden-hour sunlight drift layer */}
-      <div className="absolute inset-0 bg-radial from-[#f5d09c]/22 via-transparent to-transparent etl-warm-sunlight-drift" />
-
-      {/* Measured contrast scrim matching the website's warm hospitality palette */}
       <div className={`absolute inset-0 ${OVERLAY_STYLES[overlay]}`} />
     </div>
   );

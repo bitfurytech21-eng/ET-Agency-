@@ -490,7 +490,7 @@ export const BookingModal: React.FC<BookingModalProps> = ({
                       onChange={(e) => handleInputChange('name', e.target.value, setName)}
                       onBlur={() => handleBlur('name')}
                       placeholder="e.g. Amanda Clark"
-                      className={`w-full pl-10 pr-4 h-11 text-sm bg-white text-[#282828] rounded-xl border transition-all duration-200 outline-none ${
+                      className={`w-full pl-10 pr-4 h-11 text-base bg-white text-[#282828] rounded-xl border transition-all duration-200 outline-none ${
                         errors.name && touched.name
                           ? 'border-rose-300 focus:border-rose-500 focus:ring-3 focus:ring-rose-500/10'
                           : 'border-[#d8cfc3] hover:border-[#bcae9d] focus:border-[#00b7a8] focus:ring-3 focus:ring-[#00b7a8]/12'
@@ -520,7 +520,7 @@ export const BookingModal: React.FC<BookingModalProps> = ({
                         onChange={(e) => handleInputChange('email', e.target.value, setEmail)}
                         onBlur={() => handleBlur('email')}
                         placeholder="amanda@example.com"
-                        className={`w-full pl-10 pr-4 h-11 text-sm bg-white text-[#282828] rounded-xl border transition-all duration-200 outline-none ${
+                        className={`w-full pl-10 pr-4 h-11 text-base bg-white text-[#282828] rounded-xl border transition-all duration-200 outline-none ${
                           errors.email && touched.email
                             ? 'border-rose-300 focus:border-rose-500 focus:ring-3 focus:ring-rose-500/10'
                             : 'border-[#d8cfc3] hover:border-[#bcae9d] focus:border-[#00b7a8] focus:ring-3 focus:ring-[#00b7a8]/12'
@@ -549,7 +549,7 @@ export const BookingModal: React.FC<BookingModalProps> = ({
                         onChange={(e) => handleInputChange('phone', e.target.value, setPhone)}
                         onBlur={() => handleBlur('phone')}
                         placeholder="(916) 555-0182"
-                        className={`w-full pl-10 pr-4 h-11 text-sm bg-white text-[#282828] rounded-xl border transition-all duration-200 outline-none ${
+                        className={`w-full pl-10 pr-4 h-11 text-base bg-white text-[#282828] rounded-xl border transition-all duration-200 outline-none ${
                           errors.phone && touched.phone
                             ? 'border-rose-300 focus:border-rose-500 focus:ring-3 focus:ring-rose-500/10'
                             : 'border-[#d8cfc3] hover:border-[#bcae9d] focus:border-[#00b7a8] focus:ring-3 focus:ring-[#00b7a8]/12'
@@ -591,7 +591,7 @@ export const BookingModal: React.FC<BookingModalProps> = ({
                         value={company}
                         onChange={(e) => handleInputChange('company', e.target.value, setCompany)}
                         placeholder="Optional (e.g. Personal Stay, Relocation, Company)"
-                        className="w-full pl-10 pr-4 h-11 text-sm bg-white text-[#282828] rounded-xl border border-[#d8cfc3] hover:border-[#bcae9d] focus:border-[#00b7a8] focus:ring-3 focus:ring-[#00b7a8]/12 transition-all duration-200 outline-none"
+                        className="w-full pl-10 pr-4 h-11 text-base bg-white text-[#282828] rounded-xl border border-[#d8cfc3] hover:border-[#bcae9d] focus:border-[#00b7a8] focus:ring-3 focus:ring-[#00b7a8]/12 transition-all duration-200 outline-none"
                       />
                     </div>
                   </div>
@@ -610,7 +610,7 @@ export const BookingModal: React.FC<BookingModalProps> = ({
                         value={role}
                         onChange={(e) => handleInputChange('role', e.target.value, setRole)}
                         placeholder="Optional (e.g. Family Visit, Home Remodel, Project)"
-                        className="w-full pl-10 pr-4 h-11 text-sm bg-white text-[#282828] rounded-xl border border-[#d8cfc3] hover:border-[#bcae9d] focus:border-[#00b7a8] focus:ring-3 focus:ring-[#00b7a8]/12 transition-all duration-200 outline-none"
+                        className="w-full pl-10 pr-4 h-11 text-base bg-white text-[#282828] rounded-xl border border-[#d8cfc3] hover:border-[#bcae9d] focus:border-[#00b7a8] focus:ring-3 focus:ring-[#00b7a8]/12 transition-all duration-200 outline-none"
                       />
                     </div>
                   </div>
@@ -639,7 +639,7 @@ export const BookingModal: React.FC<BookingModalProps> = ({
                     <select
                       value={selectedPropertyId}
                       onChange={(e) => setSelectedPropertyId(e.target.value)}
-                      className="w-full pl-10 pr-10 h-11 text-sm bg-white text-[#282828] rounded-xl border border-[#d8cfc3] hover:border-[#bcae9d] focus:border-[#00b7a8] focus:ring-3 focus:ring-[#00b7a8]/12 transition-all duration-200 outline-none appearance-none cursor-pointer"
+                      className="w-full pl-10 pr-10 h-11 text-base bg-white text-[#282828] rounded-xl border border-[#d8cfc3] hover:border-[#bcae9d] focus:border-[#00b7a8] focus:ring-3 focus:ring-[#00b7a8]/12 transition-all duration-200 outline-none appearance-none cursor-pointer"
                     >
                       <option value="any">Any Available Residence (Best Match)</option>
                       {availableProps.map((p) => (
@@ -681,7 +681,7 @@ export const BookingModal: React.FC<BookingModalProps> = ({
                         value={moveInDate}
                         onChange={(e) => handleInputChange('moveInDate', e.target.value, setMoveInDate)}
                         onBlur={() => handleBlur('moveInDate')}
-                        className={`w-full pl-10 pr-4 h-11 text-sm bg-white text-[#282828] rounded-xl border transition-all duration-200 outline-none cursor-pointer tabular-nums ${
+                        className={`w-full pl-10 pr-4 h-11 text-base bg-white text-[#282828] rounded-xl border transition-all duration-200 outline-none cursor-pointer tabular-nums ${
                           errors.moveInDate && touched.moveInDate
                             ? 'border-rose-300 focus:border-rose-500 focus:ring-3 focus:ring-rose-500/10'
                             : 'border-[#d8cfc3] hover:border-[#bcae9d] focus:border-[#00b7a8] focus:ring-3 focus:ring-[#00b7a8]/12'
@@ -709,7 +709,7 @@ export const BookingModal: React.FC<BookingModalProps> = ({
                         value={moveOutDate}
                         onChange={(e) => handleInputChange('moveOutDate', e.target.value, setMoveOutDate)}
                         onBlur={() => handleBlur('moveOutDate')}
-                        className={`w-full pl-10 pr-4 h-11 text-sm bg-white text-[#282828] rounded-xl border transition-all duration-200 outline-none cursor-pointer tabular-nums ${
+                        className={`w-full pl-10 pr-4 h-11 text-base bg-white text-[#282828] rounded-xl border transition-all duration-200 outline-none cursor-pointer tabular-nums ${
                           errors.moveOutDate && touched.moveOutDate
                             ? 'border-rose-300 focus:border-rose-500 focus:ring-3 focus:ring-rose-500/10'
                             : 'border-[#d8cfc3] hover:border-[#bcae9d] focus:border-[#00b7a8] focus:ring-3 focus:ring-[#00b7a8]/12'
@@ -736,7 +736,7 @@ export const BookingModal: React.FC<BookingModalProps> = ({
                       <select
                         value={duration}
                         onChange={(e) => setDuration(e.target.value)}
-                        className="w-full pl-10 pr-8 h-11 text-sm bg-white text-[#282828] rounded-xl border border-[#d8cfc3] hover:border-[#bcae9d] focus:border-[#00b7a8] transition-all duration-200 outline-none appearance-none cursor-pointer"
+                        className="w-full pl-10 pr-8 h-11 text-base bg-white text-[#282828] rounded-xl border border-[#d8cfc3] hover:border-[#bcae9d] focus:border-[#00b7a8] transition-all duration-200 outline-none appearance-none cursor-pointer"
                       >
                         <option value="5-10">5 – 10 Days</option>
                         <option value="10-30">10 – 30 Days</option>
@@ -762,7 +762,7 @@ export const BookingModal: React.FC<BookingModalProps> = ({
                       <select
                         value={adults}
                         onChange={(e) => setAdults(Number(e.target.value))}
-                        className="w-full pl-10 pr-8 h-11 text-sm bg-white text-[#282828] rounded-xl border border-[#d8cfc3] hover:border-[#bcae9d] focus:border-[#00b7a8] transition-all duration-200 outline-none appearance-none cursor-pointer"
+                        className="w-full pl-10 pr-8 h-11 text-base bg-white text-[#282828] rounded-xl border border-[#d8cfc3] hover:border-[#bcae9d] focus:border-[#00b7a8] transition-all duration-200 outline-none appearance-none cursor-pointer"
                       >
                         <option value={1}>1 Adult</option>
                         <option value={2}>2 Adults</option>
@@ -786,7 +786,7 @@ export const BookingModal: React.FC<BookingModalProps> = ({
                       <select
                         value={children}
                         onChange={(e) => setChildren(Number(e.target.value))}
-                        className="w-full pl-10 pr-8 h-11 text-sm bg-white text-[#282828] rounded-xl border border-[#d8cfc3] hover:border-[#bcae9d] focus:border-[#00b7a8] transition-all duration-200 outline-none appearance-none cursor-pointer"
+                        className="w-full pl-10 pr-8 h-11 text-base bg-white text-[#282828] rounded-xl border border-[#d8cfc3] hover:border-[#bcae9d] focus:border-[#00b7a8] transition-all duration-200 outline-none appearance-none cursor-pointer"
                       >
                         <option value={0}>0 Children</option>
                         <option value={1}>1 Child</option>
@@ -843,7 +843,7 @@ export const BookingModal: React.FC<BookingModalProps> = ({
                     value={specialRequests}
                     onChange={(e) => setSpecialRequests(e.target.value)}
                     placeholder="e.g. Arriving on evening flight; ground-floor preference; quiet workspace needs; or vehicle rental pairing..."
-                    className="w-full p-3.5 text-sm bg-white text-[#282828] rounded-xl border border-[#d8cfc3] hover:border-[#bcae9d] focus:border-[#00b7a8] focus:ring-3 focus:ring-[#00b7a8]/12 transition-all duration-200 outline-none resize-none placeholder:text-[#9c8d80]"
+                    className="w-full p-3.5 text-base bg-white text-[#282828] rounded-xl border border-[#d8cfc3] hover:border-[#bcae9d] focus:border-[#00b7a8] focus:ring-3 focus:ring-[#00b7a8]/12 transition-all duration-200 outline-none resize-none placeholder:text-[#9c8d80]"
                   />
                 </div>
               </div>

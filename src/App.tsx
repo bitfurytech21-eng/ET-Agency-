@@ -6,6 +6,7 @@
 import React, { useState, useEffect, Suspense, startTransition } from 'react';
 import { Header } from './components/Header';
 import { Hero } from './components/Hero';
+import { HomeShowcaseSection } from './components/HomeShowcaseSection';
 import { AwardsSection } from './components/AwardsSection';
 import { PropertiesSection } from './components/PropertiesSection';
 import { AmenitiesSection } from './components/AmenitiesSection';
@@ -40,6 +41,54 @@ import { FloatingConcierge } from './components/FloatingConcierge';
 import { LoadingSkeleton } from './components/LoadingSkeleton';
 import { BrandedPageLoader } from './components/common/BrandedPageLoader';
 
+const ROUTE_MAP: Record<string, string> = {
+  corporate: 'corporate',
+  'extended-stays': 'corporate',
+  portfolio: 'portfolio',
+  residences: 'portfolio',
+  about: 'about',
+  'about-us': 'about',
+  beahost: 'beahost',
+  'want-to-be-a-host': 'beahost',
+  guide: 'guide',
+  'area-guide': 'guide',
+  faq: 'faq',
+  faqs: 'faq',
+  terms: 'terms',
+  'terms-and-conditions': 'terms',
+  blog: 'blog',
+  contact: 'contact',
+  'contact-us': 'contact',
+  privacy: 'privacy',
+  'privacy-policy': 'privacy',
+  vehicles: 'vehicles',
+  fleet: 'vehicles',
+  cars: 'vehicles',
+  'car-rentals': 'vehicles',
+  'vehicle-rentals': 'vehicles',
+  shop: 'shop',
+  services: 'shop',
+  packages: 'shop',
+  store: 'shop',
+  cart: 'cart',
+  checkout: 'checkout',
+  orders: 'cart',
+  'track-order': 'cart',
+  portal: 'dashboard',
+  'client-portal': 'dashboard',
+  dashboard: 'dashboard',
+  units: 'dashboard',
+  login: 'login',
+  signin: 'login',
+  'sign-in': 'login',
+  register: 'register',
+  signup: 'register',
+  'sign-up': 'register',
+  'create-account': 'register',
+  admin: 'admin',
+  'admin-portal': 'admin',
+};
+
 function AppShell() {
   const { liveProperties, isLoading: isDataLoading } = useCart();
   const activeProperties = liveProperties.length > 0 ? liveProperties : PROPERTIES;
@@ -61,10 +110,9 @@ function AppShell() {
   const [portfolioSearchQuery, setPortfolioSearchQuery] = useState<string>('');
 
   // Auth state & redirect notice
-  const [authToken, setAuthToken] = useState<string | null>(() => localStorage.getItem('etl_php_token'));
+  const [, setAuthToken] = useState<string | null>(() => localStorage.getItem('etl_php_token'));
   const [authNotice, setAuthNotice] = useState<string | null>(null);
 
-  // Sync token state on change
   useEffect(() => {
     const handleStorage = () => {
       setAuthToken(localStorage.getItem('etl_php_token'));
@@ -73,69 +121,27 @@ function AppShell() {
     return () => window.removeEventListener('storage', handleStorage);
   }, []);
 
-  // Handle URL hash if any
+  // Resolve both URL hash (#admin) and direct URL pathname (/admin)
   useEffect(() => {
-    const handleHash = () => {
-      const hash = window.location.hash.replace('#', '').replace(/^\//, '').replace(/\/$/, '');
-      if (!hash || hash === 'home') {
+    const resolveLocation = () => {
+      const hashToken = window.location.hash.replace('#', '').replace(/^\//, '').replace(/\/$/, '');
+      const pathToken = window.location.pathname.replace(/^\//, '').replace(/\/$/, '').toLowerCase();
+      const rawRoute = hashToken || pathToken;
+
+      if (!rawRoute || rawRoute === 'home' || rawRoute === 'index.html') {
         setCurrentTab('home');
         return;
       }
 
-      const tabMap: Record<string, string> = {
-        corporate: 'corporate',
-        'extended-stays': 'corporate',
-        portfolio: 'portfolio',
-        residences: 'portfolio',
-        about: 'about',
-        'about-us': 'about',
-        beahost: 'beahost',
-        'want-to-be-a-host': 'beahost',
-        guide: 'guide',
-        'area-guide': 'guide',
-        faq: 'faq',
-        faqs: 'faq',
-        terms: 'terms',
-        'terms-and-conditions': 'terms',
-        blog: 'blog',
-        contact: 'contact',
-        'contact-us': 'contact',
-        privacy: 'privacy',
-        'privacy-policy': 'privacy',
-        vehicles: 'vehicles',
-        fleet: 'vehicles',
-        cars: 'vehicles',
-        'car-rentals': 'vehicles',
-        'vehicle-rentals': 'vehicles',
-        shop: 'shop',
-        services: 'shop',
-        packages: 'shop',
-        store: 'shop',
-        cart: 'cart',
-        checkout: 'checkout',
-        orders: 'cart',
-        'track-order': 'cart',
-        portal: 'dashboard',
-        'client-portal': 'dashboard',
-        dashboard: 'dashboard',
-        units: 'dashboard',
-        login: 'login',
-        signin: 'login',
-        'sign-in': 'login',
-        register: 'register',
-        signup: 'register',
-        'sign-up': 'register',
-        'create-account': 'register',
-        admin: 'admin',
-        'admin-portal': 'admin',
-      };
-
-      const resolved = tabMap[hash] || (hash.startsWith('listing:') ? hash : null);
+      const normalized = rawRoute.toLowerCase();
+      const resolved =
+        ROUTE_MAP[normalized] ||
+        (rawRoute.startsWith('listing:') ? rawRoute : null);
 
       if (resolved === 'dashboard') {
         const token = localStorage.getItem('etl_php_token');
         if (!token) {
-          setAuthNotice('Sign in required to access your User Dashboard. Create an account below if you do not have one yet.');
+          setAuthNotice('Sign in required to access your Client Dashboard. Create an account below if you do not have one yet.');
           setCurrentTab('login');
           window.location.hash = 'login';
           return;
@@ -150,7 +156,7 @@ function AppShell() {
       }
 
       const matched = PROPERTIES.find(
-        (p) => p.slug === hash || p.id === hash || p.unitNumber === hash || p.code === hash,
+        (p) => p.slug === rawRoute || p.id === rawRoute || p.unitNumber === rawRoute || p.code === rawRoute,
       );
       if (matched) {
         startTransition(() => {
@@ -161,9 +167,14 @@ function AppShell() {
 
       setCurrentTab('home');
     };
-    handleHash();
-    window.addEventListener('hashchange', handleHash);
-    return () => window.removeEventListener('hashchange', handleHash);
+
+    resolveLocation();
+    window.addEventListener('hashchange', resolveLocation);
+    window.addEventListener('popstate', resolveLocation);
+    return () => {
+      window.removeEventListener('hashchange', resolveLocation);
+      window.removeEventListener('popstate', resolveLocation);
+    };
   }, []);
 
   const handleOpenBooking = (propertyId?: string, moveInDate?: string, duration?: string) => {
@@ -181,9 +192,13 @@ function AppShell() {
     if (tab === 'dashboard' || tab === 'portal') {
       const token = localStorage.getItem('etl_php_token');
       if (!token) {
-        setAuthNotice('Sign in required to access your User Dashboard. Create an account below if you do not have one yet.');
+        setAuthNotice('Sign in required to access your Client Dashboard. Create an account below if you do not have one yet.');
         setCurrentTab('login');
-        window.location.hash = 'login';
+        if (window.location.pathname !== '/') {
+          window.history.pushState(null, '', '/#login');
+        } else {
+          window.location.hash = 'login';
+        }
         window.scrollTo({ top: 0, behavior: 'smooth' });
         return;
       }
@@ -192,12 +207,18 @@ function AppShell() {
     setIsNavigating(true);
     startTransition(() => {
       setCurrentTab(tab);
-      window.location.hash = tab;
+      if (tab === 'admin') {
+        window.history.pushState(null, '', '/admin');
+      } else if (window.location.pathname !== '/') {
+        window.history.pushState(null, '', `/#${tab}`);
+      } else {
+        window.location.hash = tab;
+      }
       window.scrollTo({ top: 0, behavior: 'smooth' });
     });
     setTimeout(() => {
       setIsNavigating(false);
-    }, 200);
+    }, 160);
   };
 
   const knownViews = [
@@ -222,17 +243,21 @@ function AppShell() {
     'admin',
   ];
 
+  const isDedicatedAppShell = ['portal', 'dashboard', 'admin'].includes(currentTab);
+
   return (
-    <div className="min-h-screen bg-[#faf8f5] text-[#282828] flex flex-col font-sans">
-      <Header
-        currentTab={currentTab}
-        setCurrentTab={navigateToTab}
-        onOpenBooking={() => handleOpenBooking()}
-        onSearchListings={(q) => {
-          setPortfolioSearchQuery(q);
-          navigateToTab('portfolio');
-        }}
-      />
+    <div className="min-h-screen bg-[#f8fafc] text-[#0f172a] flex flex-col font-sans">
+      {!isDedicatedAppShell && (
+        <Header
+          currentTab={currentTab}
+          setCurrentTab={navigateToTab}
+          onOpenBooking={() => handleOpenBooking()}
+          onSearchListings={(q) => {
+            setPortfolioSearchQuery(q);
+            navigateToTab('portfolio');
+          }}
+        />
+      )}
 
       <main className="flex-1">
         <Suspense fallback={<LoadingSkeleton type={currentTab === 'portfolio' ? 'card' : 'hero'} count={3} />}>
@@ -245,9 +270,22 @@ function AppShell() {
                 <>
                   <Hero
                     onExploreListings={() => navigateToTab('portfolio')}
-                    onOpenBooking={() => handleOpenBooking()}
+                    onExploreVehicles={() => navigateToTab('vehicles')}
+                    onOpenBooking={(propId, date, dur) => handleOpenBooking(propId, date, dur)}
                     onOpenBrochure={() => setBrochureOpen(true)}
                     onLearnEthics={() => navigateToTab('about')}
+                  />
+                  <HomeShowcaseSection
+                    properties={activeProperties}
+                    onViewProperty={(property) => navigateToTab(`listing:${property.id}`)}
+                    onBookProperty={(id) => handleOpenBooking(id)}
+                    onExploreAllProperties={() => navigateToTab('portfolio')}
+                    onReserveVehicle={(vehicle) => {
+                      setSelectedVehicle(vehicle);
+                      setSelectedVehicleColor(vehicle.defaultColor);
+                      setVehicleModalOpen(true);
+                    }}
+                    onExploreAllVehicles={() => navigateToTab('vehicles')}
                   />
                   <AwardsSection
                     onOpenBrochure={() => setBrochureOpen(true)}
@@ -272,16 +310,16 @@ function AppShell() {
 
               {currentTab === 'portfolio' && (
                 <>
-                  <div className="relative overflow-hidden py-16 sm:py-20 px-4 text-center text-white border-b border-[#3a2f28]">
+                  <div className="relative overflow-hidden py-16 sm:py-20 px-4 text-center text-white border-b border-[#1e293b]">
                     <LivePhotoBackground scene="courtyard" secondaryScene="interior" overlay="espresso" />
-                    <div className="relative z-10 max-w-3xl mx-auto">
-                      <span className="text-xs uppercase font-extrabold text-[#4de0d2] tracking-widest">
-                        Furnished Residences · California Living
+                    <div className="relative z-10 max-w-3xl mx-auto space-y-3.5">
+                      <span className="type-support font-semibold text-[#5eead4] tracking-wide block">
+                        Furnished Residences · California Portfolio
                       </span>
-                      <h1 className="text-3xl sm:text-5xl font-heading font-black mt-2 text-white">
+                      <h1 className="type-h1 text-white">
                         1- &amp; 2-Bedroom Furnished Apartments &amp; Suites
                       </h1>
-                      <p className="text-[#ede5dc] text-sm sm:text-base max-w-2xl mx-auto mt-3 leading-relaxed">
+                      <p className="type-body-lg text-slate-200 max-w-2xl mx-auto">
                         Move-in-ready furnished residences and corporate housing across California for flexible stays (5+ nights), extended 30+ day corporate leases, family relocations, and organizational housing.
                       </p>
                     </div>
@@ -330,17 +368,17 @@ function AppShell() {
 
               {currentTab === 'guide' && (
                 <>
-                  <div className="relative overflow-hidden py-16 sm:py-20 px-4 text-center text-white border-b border-[#3a2f28]">
+                  <div className="relative overflow-hidden py-16 sm:py-20 px-4 text-center text-white border-b border-[#1e293b]">
                     <LivePhotoBackground scene="river" secondaryScene="courtyard" overlay="espresso" />
-                    <div className="relative z-10 max-w-3xl mx-auto">
-                      <span className="text-xs uppercase font-extrabold text-[#4de0d2] tracking-widest">
-                        California Statewide Corridor &amp; Regional Guide
+                    <div className="relative z-10 max-w-3xl mx-auto space-y-3.5">
+                      <span className="type-support font-semibold text-[#5eead4] tracking-wide block">
+                        California Regional Guide
                       </span>
-                      <h1 className="text-3xl sm:text-5xl font-heading font-black mt-2 text-white">
+                      <h1 className="type-h1 text-white">
                         California Destinations &amp; Experiences Guide
                       </h1>
-                      <p className="text-[#ede5dc] text-sm sm:text-base max-w-xl mx-auto mt-3 leading-relaxed">
-                        Explore corporate hubs, scenic outdoor trails, cultural landmarks, culinary districts, and seamless connectivity across premier California destinations.
+                      <p className="type-body-lg text-slate-200 max-w-xl mx-auto">
+                        Explore corporate hubs, scenic outdoor trails, cultural landmarks, culinary districts, and connectivity across premier California destinations.
                       </p>
                     </div>
                   </div>
@@ -358,7 +396,7 @@ function AppShell() {
               {currentTab === 'blog' && <BlogView onOpenBooking={() => handleOpenBooking()} />}
 
               {currentTab === 'contact' && (
-                <div className="pt-8">
+                <div className="pt-6">
                   <ContactSection preselectedPropertyId={selectedPropertyId} />
                 </div>
               )}
@@ -422,7 +460,7 @@ function AppShell() {
         </Suspense>
       </main>
 
-      {!['portal', 'dashboard', 'admin'].includes(currentTab) && (
+      {!isDedicatedAppShell && (
         <Footer
           onNavClick={navigateToTab}
           onOpenBooking={() => handleOpenBooking()}
@@ -457,7 +495,7 @@ function AppShell() {
 
       <FloatingConcierge />
 
-      <BrandedPageLoader minDuration={400} />
+      <BrandedPageLoader minDuration={350} />
     </div>
   );
 }

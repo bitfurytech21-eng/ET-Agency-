@@ -38,7 +38,7 @@ export const FAQView: React.FC<FAQViewProps> = ({ onOpenBooking }) => {
       <section className="relative overflow-hidden py-14 sm:py-20 px-4 text-center text-white border-b border-[#382b22]">
         <LivePhotoBackground scene="courtyard" secondaryScene="interior" overlay="espresso" />
         <div className="relative z-10 max-w-3xl mx-auto space-y-4">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-lg bg-white/10 border border-white/15 text-xs font-semibold uppercase tracking-wider text-[#4de0d2]">
+          <div className="inline-flex items-center gap-2 type-support font-semibold text-[#4de0d2]">
             <HelpCircle className="w-4 h-4 text-[#4de0d2]" />
             <span>Guest Help Center &amp; FAQs</span>
           </div>
@@ -63,7 +63,7 @@ export const FAQView: React.FC<FAQViewProps> = ({ onOpenBooking }) => {
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Search by keyword (e.g. checkout, utilities, pets, WiFi, minimum stay)..."
-              className="w-full h-12 pl-12 pr-4 rounded-xl border border-[#e2ded6] focus:border-[#14616d] bg-white text-xs sm:text-sm text-[#182024] outline-none shadow-2xs transition-all"
+              className="w-full h-12 pl-12 pr-4 rounded-xl border border-[#e2ded6] focus:border-[#14616d] bg-white text-base text-[#182024] outline-none shadow-2xs transition-all"
             />
           </div>
 
@@ -72,7 +72,7 @@ export const FAQView: React.FC<FAQViewProps> = ({ onOpenBooking }) => {
               <button
                 key={cat}
                 onClick={() => setSelectedCategory(cat)}
-                className={`type-btn px-4 py-2 text-xs font-semibold rounded-xl border transition-all cursor-pointer ${
+                className={`type-btn px-4 py-2 rounded-xl border transition-all cursor-pointer ${
                   selectedCategory === cat
                     ? 'bg-[#14616d] text-white border-[#14616d] shadow-2xs'
                     : 'bg-white border-[#e2ded6] text-[#4a545c] hover:border-[#14616d]/50 hover:text-[#182024]'
@@ -141,14 +141,14 @@ export const FAQView: React.FC<FAQViewProps> = ({ onOpenBooking }) => {
             <div className="flex flex-wrap items-center gap-3 shrink-0">
               <a
                 href="tel:9168003295"
-                className="btn btn-white text-xs tabular-nums"
+                className="btn btn-white tabular-nums"
               >
                 <Phone className="w-4 h-4 text-[#14616d]" />
                 <span>Call 916-800-3295</span>
               </a>
               <button
                 onClick={onOpenBooking}
-                className="btn btn-primary text-xs"
+                className="btn btn-primary"
               >
                 <MessageSquare className="w-4 h-4 text-white" />
                 <span>Send an Inquiry</span>

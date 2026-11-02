@@ -123,8 +123,8 @@ export const CaliforniaExperiencesAccordion: React.FC<CaliforniaExperiencesAccor
     <div className={`space-y-6 text-left ${className}`}>
       {showIntro && (
         <div className="space-y-2">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-lg bg-white border border-[#e2ded6] text-xs font-semibold uppercase tracking-wider text-[#14616d] shadow-2xs">
-            <Compass className="w-3.5 h-3.5 text-[#14616d]" />
+          <div className="inline-flex items-center gap-2 type-support font-semibold text-[#14616d]">
+            <Compass className="w-4 h-4 text-[#14616d]" />
             <span>{subtitle}</span>
           </div>
           <h3 className="type-h2 text-[#182024]">{title}</h3>
@@ -161,9 +161,9 @@ export const CaliforniaExperiencesAccordion: React.FC<CaliforniaExperiencesAccor
               <button
                 type="button"
                 onClick={() => toggleItem(item.id)}
-                className={`w-full flex items-center justify-between px-5 sm:px-6 py-4 sm:py-4.5 text-left font-heading font-bold text-base sm:text-lg cursor-pointer transition-all duration-200 ${btnClass}`}
+                className={`w-full flex items-center justify-between px-5 sm:px-6 py-4 sm:py-4.5 text-left type-h4 cursor-pointer transition-all duration-200 ${btnClass}`}
               >
-                <span className="tracking-tight">{item.title}</span>
+                <span>{item.title}</span>
                 <span className={`text-2xl font-light leading-none select-none ${plusColor}`}>
                   {isOpen ? '–' : '+'}
                 </span>
@@ -172,11 +172,11 @@ export const CaliforniaExperiencesAccordion: React.FC<CaliforniaExperiencesAccor
               {isOpen && (
                 <div className="p-5 sm:p-6 bg-white border-x border-b border-[#e2ded6] rounded-b-xl space-y-3.5 animate-in fade-in duration-200">
                   {item.subtitle && (
-                    <div className="type-support text-xs font-semibold uppercase tracking-wider text-[#14616d]">
+                    <div className="type-support font-semibold text-[#14616d]">
                       {item.subtitle}
                     </div>
                   )}
-                  <ul className="list-disc pl-5 space-y-2 text-xs sm:text-sm text-[#4a545c] leading-relaxed">
+                  <ul className="list-disc pl-5 space-y-2 type-body text-[#4a545c]">
                     {item.points.map((pt, pIdx) => (
                       <li key={pIdx}>{pt}</li>
                     ))}

@@ -66,14 +66,11 @@ export const PaymentsModule: React.FC<PaymentsModuleProps> = ({
   onOpenTopUpUnits = () => {},
   onSubmitManualPayment,
   onUploadProof,
-  onApprovePayment,
-  onRejectPayment,
 }) => {
   const [subView, setSubView] = useState<PaymentsSubView>('index');
   const [receiptPayment, setReceiptPayment] = useState<UserPaymentRecord | null>(null);
   const [copiedField, setCopiedField] = useState<string | null>(null);
 
-  // Submit Transfer Proof state
   const [selectedTargetKey, setSelectedTargetKey] = useState<string>('units:');
   const [amountUsd, setAmountUsd] = useState<string>('1000');
   const [paymentMethod, setPaymentMethod] = useState<
@@ -175,7 +172,12 @@ export const PaymentsModule: React.FC<PaymentsModuleProps> = ({
         notes: notes.trim() || undefined,
       });
     } else if (onUploadProof) {
-      const ok = await onUploadProof(wireReference.trim(), originatingBank.trim() || 'Client Bank', senderName.trim(), notes.trim());
+      const ok = await onUploadProof(
+        wireReference.trim(),
+        originatingBank.trim() || 'Client Bank',
+        senderName.trim(),
+        notes.trim(),
+      );
       res = { ok, message: ok ? 'Remittance notice registered.' : 'Unable to register proof.' };
     }
     setSubmitting(false);
@@ -214,18 +216,17 @@ export const PaymentsModule: React.FC<PaymentsModuleProps> = ({
         }}
       />
 
-      <div className="px-4 sm:px-8 pb-6 space-y-6">
-        {/* Summary Bar */}
-        <div className="bg-[#241d18] text-white rounded-2xl p-6 border border-[#3f332b] flex flex-col sm:flex-row sm:items-center justify-between gap-4 tabular-nums">
+      <div className="space-y-6">
+        <div className="bg-[#0f172a] text-white rounded-2xl p-6 border border-slate-800 flex flex-col sm:flex-row sm:items-center justify-between gap-4 tabular-nums">
           <div className="space-y-1">
-            <div className="flex items-center gap-2 text-xs text-[#d6c7b8]">
-              <Wallet className="w-4 h-4 text-[#4de0d2]" />
-              <span>Personal Account Balance</span>
+            <div className="flex items-center gap-2 text-xs text-slate-300">
+              <Wallet className="w-4 h-4 text-[#5eead4]" />
+              <span>Account Treasury Balance</span>
             </div>
-            <div className="text-2xl sm:text-3xl font-heading font-black text-white">
+            <div className="text-2xl sm:text-3xl font-heading font-bold text-white">
               ${balanceUsd.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} USD
             </div>
-            <div className="text-xs text-[#b8a99a]">
+            <div className="text-xs text-slate-400">
               {unitsBalance} Lodging Units · {settledPayments.length} settled · {pendingPayments.length} pending verification
             </div>
           </div>
@@ -234,7 +235,7 @@ export const PaymentsModule: React.FC<PaymentsModuleProps> = ({
             <button
               type="button"
               onClick={onOpenTopUpUnits}
-              className="px-4 py-2.5 rounded-xl bg-[#00b7a8] hover:bg-[#009e91] text-white text-xs font-bold flex items-center gap-2 cursor-pointer whitespace-nowrap"
+              className="btn btn-primary btn-sm"
             >
               <PlusCircle className="w-4 h-4" />
               <span>Add Account Funds</span>
@@ -242,9 +243,9 @@ export const PaymentsModule: React.FC<PaymentsModuleProps> = ({
             <button
               type="button"
               onClick={() => setSubView('upload-payment-proof')}
-              className="px-4 py-2.5 rounded-xl bg-[#322720] hover:bg-[#41332a] border border-[#4f3f34] text-[#ede5dc] text-xs font-bold flex items-center gap-2 cursor-pointer whitespace-nowrap"
+              className="px-4 py-2 rounded-lg bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-200 text-xs font-semibold flex items-center gap-2 cursor-pointer whitespace-nowrap"
             >
-              <Upload className="w-4 h-4 text-[#4de0d2]" />
+              <Upload className="w-4 h-4 text-[#5eead4]" />
               <span>Submit Transfer Proof</span>
             </button>
           </div>
@@ -267,7 +268,6 @@ export const PaymentsModule: React.FC<PaymentsModuleProps> = ({
           </div>
         )}
 
-        {/* Overview & Ledger */}
         {subView === 'index' &&
           (payments.length === 0 ? (
             <EmptyState
@@ -290,7 +290,6 @@ export const PaymentsModule: React.FC<PaymentsModuleProps> = ({
             </div>
           ))}
 
-        {/* Settled History */}
         {subView === 'payment-history' &&
           (settledPayments.length === 0 ? (
             <EmptyState
@@ -311,7 +310,6 @@ export const PaymentsModule: React.FC<PaymentsModuleProps> = ({
             </div>
           ))}
 
-        {/* Pending Verification */}
         {subView === 'pending-payments' &&
           (pendingPayments.length === 0 ? (
             <EmptyState
@@ -334,14 +332,13 @@ export const PaymentsModule: React.FC<PaymentsModuleProps> = ({
             </div>
           ))}
 
-        {/* Receiving Bank Details */}
         {subView === 'payment-details' && (
-          <div className="p-6 rounded-2xl border border-[#e6dfd5] bg-[#faf8f5] space-y-5">
+          <div className="p-6 rounded-2xl border border-slate-200 bg-white space-y-5">
             <div>
-              <h4 className="font-heading font-bold text-base text-[#282828]">
+              <h4 className="font-heading font-bold text-base text-[#0f172a]">
                 Official Receiving Bank &amp; Remittance Instructions
               </h4>
-              <p className="text-xs text-[#6e5d50] mt-0.5">{bank.paymentInstructions}</p>
+              <p className="text-xs text-slate-500 mt-0.5">{bank.paymentInstructions}</p>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs tabular-nums">
@@ -357,18 +354,18 @@ export const PaymentsModule: React.FC<PaymentsModuleProps> = ({
               ].map((item) => (
                 <div
                   key={item.label}
-                  className="p-3.5 bg-white rounded-xl border border-[#efe9e0] flex items-center justify-between gap-3"
+                  className="p-3.5 bg-slate-50 rounded-xl border border-slate-200 flex items-center justify-between gap-3"
                 >
                   <div className="min-w-0">
-                    <span className="text-[11px] text-[#857568] block">{item.label}</span>
-                    <strong className="font-mono text-xs text-[#282828] truncate block mt-0.5">
+                    <span className="text-[11px] text-slate-500 block">{item.label}</span>
+                    <strong className="font-mono text-xs text-[#0f172a] truncate block mt-0.5">
                       {item.value}
                     </strong>
                   </div>
                   <button
                     type="button"
                     onClick={() => handleCopy(item.label, item.value)}
-                    className="p-2 rounded-lg border border-[#e6dfd5] hover:border-[#00b7a8] text-[#5c5046] hover:text-[#00897d] cursor-pointer shrink-0"
+                    className="p-2 rounded-lg border border-slate-200 bg-white hover:border-[#14616d] text-slate-600 hover:text-[#14616d] cursor-pointer shrink-0"
                     title={`Copy ${item.label}`}
                   >
                     {copiedField === item.label ? (
@@ -381,37 +378,34 @@ export const PaymentsModule: React.FC<PaymentsModuleProps> = ({
               ))}
             </div>
 
-            <div className="text-xs text-[#5c5046] pt-2 border-t border-[#e6dfd5]">
-              Mailing Address: <strong>{bank.corporateMailingAddress}</strong> · Accounting Desk:{' '}
-              <strong>easytravelagency@trustagent.space</strong>
+            <div className="text-xs text-slate-600 pt-3 border-t border-slate-100">
+              Mailing Address: <strong className="text-[#0f172a]">{bank.corporateMailingAddress}</strong> · Accounting Desk:{' '}
+              <strong className="text-[#0f172a]">easytravelagency@trustagent.space</strong>
             </div>
           </div>
         )}
 
-        {/* Submit Transfer Proof */}
         {subView === 'upload-payment-proof' && (
           <form
             onSubmit={handleSubmitProof}
-            className="max-w-2xl p-6 rounded-2xl border border-[#e6dfd5] bg-[#faf8f5] space-y-4"
+            className="max-w-2xl p-6 rounded-2xl border border-slate-200 bg-white space-y-4"
           >
             <div>
-              <h4 className="font-heading font-bold text-base text-[#282828]">
+              <h4 className="font-heading font-bold text-base text-[#0f172a]">
                 Submit Wire, ACH, or Zelle Remittance Proof
               </h4>
-              <p className="text-xs text-[#6e5d50] mt-0.5">
-                Link your bank transfer confirmation to an active reservation or add funds to your personal balance.
+              <p className="text-xs text-slate-500 mt-0.5">
+                Link your bank transfer confirmation to an active reservation or add funds to your balance.
               </p>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <label className="block text-xs font-bold text-[#282828] mb-1">
-                  Apply Payment Toward *
-                </label>
+                <label className="form-label">Apply Payment Toward *</label>
                 <select
                   value={selectedTargetKey}
                   onChange={(e) => handleTargetSelection(e.target.value)}
-                  className="w-full h-10 px-3 bg-white border border-[#d8cfc3] rounded-xl text-xs text-[#282828] outline-none focus:border-[#00b7a8]"
+                  className="form-select"
                 >
                   <option value="units:">Add Account Funds / Lodging Units</option>
                   {availableTargets.map((t) => (
@@ -423,9 +417,7 @@ export const PaymentsModule: React.FC<PaymentsModuleProps> = ({
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-[#282828] mb-1">
-                  Transfer Amount (USD) *
-                </label>
+                <label className="form-label">Transfer Amount (USD) *</label>
                 <input
                   type="number"
                   min={1}
@@ -433,16 +425,14 @@ export const PaymentsModule: React.FC<PaymentsModuleProps> = ({
                   required
                   value={amountUsd}
                   onChange={(e) => setAmountUsd(e.target.value)}
-                  className="w-full h-10 px-3 bg-white border border-[#d8cfc3] rounded-xl text-xs text-[#282828] outline-none focus:border-[#00b7a8] tabular-nums"
+                  className="form-input tabular-nums"
                 />
               </div>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <label className="block text-xs font-bold text-[#282828] mb-1">
-                  Payment Channel *
-                </label>
+                <label className="form-label">Payment Channel *</label>
                 <select
                   value={paymentMethod}
                   onChange={(e) =>
@@ -450,7 +440,7 @@ export const PaymentsModule: React.FC<PaymentsModuleProps> = ({
                       e.target.value as 'Wire Transfer' | 'Direct ACH' | 'Zelle Corporate',
                     )
                   }
-                  className="w-full h-10 px-3 bg-white border border-[#d8cfc3] rounded-xl text-xs text-[#282828] outline-none focus:border-[#00b7a8]"
+                  className="form-select"
                 >
                   <option value="Wire Transfer">Wire Transfer</option>
                   <option value="Direct ACH">Direct ACH</option>
@@ -459,76 +449,66 @@ export const PaymentsModule: React.FC<PaymentsModuleProps> = ({
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-[#282828] mb-1">
-                  Transfer Date *
-                </label>
+                <label className="form-label">Transfer Date *</label>
                 <input
                   type="date"
                   required
                   value={transferDate}
                   onChange={(e) => setTransferDate(e.target.value)}
-                  className="w-full h-10 px-3 bg-white border border-[#d8cfc3] rounded-xl text-xs text-[#282828] outline-none focus:border-[#00b7a8] tabular-nums"
+                  className="form-input tabular-nums"
                 />
               </div>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <label className="block text-xs font-bold text-[#282828] mb-1">
-                  Sender Account Name *
-                </label>
+                <label className="form-label">Sender Account Name *</label>
                 <input
                   type="text"
                   required
                   value={senderName}
                   onChange={(e) => setSenderName(e.target.value)}
                   placeholder="Account holder or company name"
-                  className="w-full h-10 px-3 bg-white border border-[#d8cfc3] rounded-xl text-xs text-[#282828] outline-none focus:border-[#00b7a8]"
+                  className="form-input"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-[#282828] mb-1">
-                  Originating Bank Name *
-                </label>
+                <label className="form-label">Originating Bank Name *</label>
                 <input
                   type="text"
                   required
                   value={originatingBank}
                   onChange={(e) => setOriginatingBank(e.target.value)}
                   placeholder="e.g. Wells Fargo, Citibank, Chase"
-                  className="w-full h-10 px-3 bg-white border border-[#d8cfc3] rounded-xl text-xs text-[#282828] outline-none focus:border-[#00b7a8]"
+                  className="form-input"
                 />
               </div>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <label className="block text-xs font-bold text-[#282828] mb-1">
-                  Wire / ACH / Zelle Reference Code *
-                </label>
+                <label className="form-label">Wire / ACH / Zelle Reference Code *</label>
                 <input
                   type="text"
                   required
                   value={wireReference}
                   onChange={(e) => setWireReference(e.target.value)}
                   placeholder="IMAD / Trace / Confirmation #"
-                  className="w-full h-10 px-3 bg-white border border-[#d8cfc3] rounded-xl text-xs text-[#282828] outline-none focus:border-[#00b7a8] font-mono"
+                  className="form-input font-mono"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-[#282828] mb-1">
-                  Receipt Document (Optional, Max 4 MB)
-                </label>
+                <label className="form-label">Receipt Document (Optional, Max 4 MB)</label>
                 <input
                   type="file"
                   accept="image/*,.pdf"
                   onChange={handleFileChange}
-                  className="w-full h-10 px-2.5 py-1.5 bg-white border border-[#d8cfc3] rounded-xl text-xs text-[#5c5046]"
+                  className="w-full h-10 px-2.5 py-1.5 bg-white border border-slate-300 rounded-lg text-xs text-slate-600"
                 />
                 {receiptFileName && (
-                  <span className="text-[11px] text-[#00897d] font-semibold block mt-1">
+                  <span className="text-[11px] text-[#14616d] font-semibold block mt-1">
                     Attached: {receiptFileName}
                   </span>
                 )}
@@ -536,22 +516,20 @@ export const PaymentsModule: React.FC<PaymentsModuleProps> = ({
             </div>
 
             <div>
-              <label className="block text-xs font-bold text-[#282828] mb-1">
-                Accounting Memo (Optional)
-              </label>
+              <label className="form-label">Accounting Memo (Optional)</label>
               <textarea
                 rows={2}
                 value={notes}
                 onChange={(e) => setNotes(e.target.value)}
                 placeholder="Optional invoice or booking reference note..."
-                className="w-full p-3 bg-white border border-[#d8cfc3] rounded-xl text-xs text-[#282828] outline-none focus:border-[#00b7a8]"
+                className="form-textarea"
               />
             </div>
 
             <button
               type="submit"
               disabled={submitting}
-              className="px-5 py-2.5 rounded-xl bg-[#00b7a8] hover:bg-[#009e91] disabled:opacity-50 text-white text-xs font-bold flex items-center gap-2 cursor-pointer whitespace-nowrap"
+              className="btn btn-primary btn-sm disabled:opacity-50"
             >
               {submitting ? (
                 <>
@@ -568,7 +546,6 @@ export const PaymentsModule: React.FC<PaymentsModuleProps> = ({
           </form>
         )}
 
-        {/* Invoices & Receipts */}
         {subView === 'invoices' &&
           (payments.length === 0 ? (
             <EmptyState
@@ -577,35 +554,35 @@ export const PaymentsModule: React.FC<PaymentsModuleProps> = ({
               description="Invoices and printable payment statements are automatically generated when you submit a payment or complete a booking settlement."
             />
           ) : (
-            <div className="overflow-x-auto border border-[#e6dfd5] rounded-2xl bg-white">
-              <table className="w-full text-left text-xs tabular-nums">
-                <thead className="bg-[#faf8f5] border-b border-[#e6dfd5] text-[#6e5d50]">
+            <div className="overflow-x-auto border border-slate-200 rounded-2xl bg-white">
+              <table className="data-table">
+                <thead>
                   <tr>
-                    <th className="py-3 px-4 font-bold">Invoice #</th>
-                    <th className="py-3 px-4 font-bold">Date</th>
-                    <th className="py-3 px-4 font-bold">Description</th>
-                    <th className="py-3 px-4 font-bold">Method</th>
-                    <th className="py-3 px-4 font-bold text-right">Amount</th>
-                    <th className="py-3 px-4 font-bold text-right">Statement</th>
+                    <th>Invoice #</th>
+                    <th>Date</th>
+                    <th>Description</th>
+                    <th>Method</th>
+                    <th className="text-right">Amount</th>
+                    <th className="text-right">Statement</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-[#efe9e0]">
+                <tbody>
                   {payments.map((inv) => (
-                    <tr key={inv.id} className="hover:bg-[#faf8f5]">
-                      <td className="py-3 px-4 font-mono font-bold text-[#282828]">
+                    <tr key={inv.id}>
+                      <td className="font-mono font-semibold text-[#0f172a]">
                         {inv.invoiceNumber}
                       </td>
-                      <td className="py-3 px-4 text-[#5c5046]">{inv.date}</td>
-                      <td className="py-3 px-4 text-[#282828] font-medium">{inv.description}</td>
-                      <td className="py-3 px-4 text-[#5c5046]">{inv.paymentMethod}</td>
-                      <td className="py-3 px-4 text-right font-bold text-[#00897d]">
+                      <td className="text-slate-600">{inv.date}</td>
+                      <td className="text-[#0f172a] font-medium">{inv.description}</td>
+                      <td className="text-slate-600">{inv.paymentMethod}</td>
+                      <td className="text-right font-bold text-[#0f172a]">
                         ${inv.amountUsd.toLocaleString('en-US', { minimumFractionDigits: 2 })}
                       </td>
-                      <td className="py-3 px-4 text-right">
+                      <td className="text-right">
                         <button
                           type="button"
                           onClick={() => setReceiptPayment(inv)}
-                          className="px-3 py-1.5 rounded-lg border border-[#d8cfc3] hover:border-[#00b7a8] text-xs font-semibold text-[#282828] cursor-pointer whitespace-nowrap"
+                          className="btn btn-outline btn-sm"
                         >
                           Open Receipt
                         </button>

@@ -78,40 +78,40 @@ export const RegisterView: React.FC<RegisterViewProps> = ({
   };
 
   return (
-    <div className="min-h-[90vh] bg-[#f7f3ed] flex flex-col justify-center py-12 px-4 sm:px-6 lg:px-8 relative overflow-hidden text-left">
+    <div className="min-h-[90vh] bg-[#0f172a] flex flex-col justify-center py-12 px-4 sm:px-6 lg:px-8 relative overflow-hidden text-left">
       <LivePhotoBackground scene="courtyard" secondaryScene="interior" overlay="espresso" />
 
       <div className="relative z-10 max-w-xl w-full mx-auto space-y-6">
-        <div className="flex items-center justify-between gap-3 text-[#efe7dc]">
+        <div className="flex items-center justify-between gap-3 type-support text-slate-300">
           <button
             type="button"
             onClick={() => onNavigateTab('home')}
-            className="flex items-center gap-1.5 type-btn hover:text-white transition-colors cursor-pointer"
+            className="type-nav flex items-center gap-1.5 hover:text-white transition-colors cursor-pointer"
           >
-            <Home className="w-4 h-4 text-[#00b7a8]" />
+            <Home className="w-4 h-4 text-[#5eead4]" />
             <span>Back to Home</span>
           </button>
-          <span className="flex items-center gap-1.5 text-[#e5dbcc] type-support font-medium">
-            <ShieldCheck className="w-4 h-4 text-[#00b7a8]" />
-            Personal Account Registration
+          <span className="flex items-center gap-1.5 text-slate-300 font-medium">
+            <ShieldCheck className="w-4 h-4 text-[#5eead4]" />
+            <span>Client Account Registration</span>
           </span>
         </div>
 
-        <div className="bg-white/98 backdrop-blur-md rounded-2xl p-6 sm:p-9 shadow-xl border border-[#e6dfd5] space-y-6 text-[#282828]">
-          <div className="text-center space-y-2.5">
-            <div className="w-12 h-12 rounded-xl bg-[#00897d] text-white flex items-center justify-center mx-auto shadow-sm">
+        <div className="bg-white rounded-2xl p-6 sm:p-9 shadow-xl border border-[#e2e8f0] space-y-6 text-[#0f172a]">
+          <div className="text-center space-y-2">
+            <div className="w-12 h-12 rounded-xl bg-[#14616d] text-white flex items-center justify-center mx-auto">
               <UserPlus className="w-5 h-5" />
             </div>
-            <h1 className="type-h2 text-[#282828]">
+            <h1 className="type-h2 text-[#0f172a]">
               Create Your Account
             </h1>
-            <p className="type-body text-[#6e5d50] max-w-md mx-auto">
-              Register to automatically initialize your personal dashboard for accommodation stays, car rentals, and payment records.
+            <p className="type-body text-[#475569] max-w-md mx-auto">
+              Register to manage accommodation stays, executive car rentals, and payment records in your personal client workspace.
             </p>
           </div>
 
           {errorMsg && (
-            <div className="p-3.5 rounded-xl bg-rose-50 border border-rose-200 text-rose-900 type-support flex items-start gap-2.5 animate-in fade-in">
+            <div className="p-3.5 rounded-xl bg-rose-50 border border-rose-200 text-rose-900 type-support flex items-start gap-2.5 animate-fade-in">
               <AlertCircle className="w-4 h-4 text-rose-600 shrink-0 mt-0.5" />
               <div className="flex-1">{errorMsg}</div>
             </div>
@@ -120,9 +120,9 @@ export const RegisterView: React.FC<RegisterViewProps> = ({
           <form onSubmit={handleRegister} className="space-y-4">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <label className="block type-label text-[#282828] mb-1.5">Full Name *</label>
+                <label className="form-label">Full Name *</label>
                 <div className="relative">
-                  <User className="w-4 h-4 absolute left-3.5 top-3.5 text-[#857568] pointer-events-none" />
+                  <User className="w-4 h-4 absolute left-3.5 top-3.5 text-[#64748b] pointer-events-none" />
                   <input
                     type="text"
                     required
@@ -130,17 +130,17 @@ export const RegisterView: React.FC<RegisterViewProps> = ({
                     value={name}
                     onChange={(e) => setName(e.target.value)}
                     placeholder="Your full name"
-                    className="w-full pl-10 pr-3.5 h-11 bg-[#faf8f5] border border-[#dfd7cc] rounded-xl text-sm text-[#282828] placeholder:text-[#9a8d80] focus:border-[#00b7a8] focus:bg-white outline-none transition-colors"
+                    className="form-input pl-10"
                   />
                 </div>
               </div>
 
               <div>
-                <label className="block type-label text-[#282828] mb-1.5">
+                <label className="form-label">
                   Phone Number *
                 </label>
                 <div className="relative">
-                  <Phone className="w-4 h-4 absolute left-3.5 top-3.5 text-[#857568] pointer-events-none" />
+                  <Phone className="w-4 h-4 absolute left-3.5 top-3.5 text-[#64748b] pointer-events-none" />
                   <input
                     type="tel"
                     required
@@ -148,7 +148,7 @@ export const RegisterView: React.FC<RegisterViewProps> = ({
                     value={phone}
                     onChange={(e) => setPhone(e.target.value)}
                     placeholder="(916) 555-0100"
-                    className="w-full pl-10 pr-3.5 h-11 bg-[#faf8f5] border border-[#dfd7cc] rounded-xl text-sm text-[#282828] placeholder:text-[#9a8d80] focus:border-[#00b7a8] focus:bg-white outline-none transition-colors tabular-nums"
+                    className="form-input pl-10 tabular-nums"
                   />
                 </div>
               </div>
@@ -156,11 +156,11 @@ export const RegisterView: React.FC<RegisterViewProps> = ({
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <label className="block type-label text-[#282828] mb-1.5">
+                <label className="form-label">
                   Email Address *
                 </label>
                 <div className="relative">
-                  <Mail className="w-4 h-4 absolute left-3.5 top-3.5 text-[#857568] pointer-events-none" />
+                  <Mail className="w-4 h-4 absolute left-3.5 top-3.5 text-[#64748b] pointer-events-none" />
                   <input
                     type="email"
                     required
@@ -168,17 +168,17 @@ export const RegisterView: React.FC<RegisterViewProps> = ({
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder="you@example.com"
-                    className="w-full pl-10 pr-3.5 h-11 bg-[#faf8f5] border border-[#dfd7cc] rounded-xl text-sm text-[#282828] placeholder:text-[#9a8d80] focus:border-[#00b7a8] focus:bg-white outline-none transition-colors"
+                    className="form-input pl-10"
                   />
                 </div>
               </div>
 
               <div>
-                <label className="block type-label text-[#282828] mb-1.5">
+                <label className="form-label">
                   Password (Min. 6 Characters) *
                 </label>
                 <div className="relative">
-                  <Lock className="w-4 h-4 absolute left-3.5 top-3.5 text-[#857568] pointer-events-none" />
+                  <Lock className="w-4 h-4 absolute left-3.5 top-3.5 text-[#64748b] pointer-events-none" />
                   <input
                     type="password"
                     required
@@ -186,7 +186,7 @@ export const RegisterView: React.FC<RegisterViewProps> = ({
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     placeholder="Create a password"
-                    className="w-full pl-10 pr-3.5 h-11 bg-[#faf8f5] border border-[#dfd7cc] rounded-xl text-sm text-[#282828] placeholder:text-[#9a8d80] focus:border-[#00b7a8] focus:bg-white outline-none transition-colors"
+                    className="form-input pl-10"
                   />
                 </div>
               </div>
@@ -194,72 +194,72 @@ export const RegisterView: React.FC<RegisterViewProps> = ({
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <label className="block type-label text-[#282828] mb-1.5">
+                <label className="form-label">
                   Company / Organization (Optional)
                 </label>
                 <div className="relative">
-                  <Building2 className="w-4 h-4 absolute left-3.5 top-3.5 text-[#857568] pointer-events-none" />
+                  <Building2 className="w-4 h-4 absolute left-3.5 top-3.5 text-[#64748b] pointer-events-none" />
                   <input
                     type="text"
                     value={company}
                     onChange={(e) => setCompany(e.target.value)}
                     placeholder="Company or agency"
-                    className="w-full pl-10 pr-3.5 h-11 bg-[#faf8f5] border border-[#dfd7cc] rounded-xl text-sm text-[#282828] placeholder:text-[#9a8d80] focus:border-[#00b7a8] focus:bg-white outline-none transition-colors"
+                    className="form-input pl-10"
                   />
                 </div>
               </div>
 
               <div>
-                <label className="block type-label text-[#282828] mb-1.5">
+                <label className="form-label">
                   Role / Title (Optional)
                 </label>
                 <div className="relative">
-                  <Briefcase className="w-4 h-4 absolute left-3.5 top-3.5 text-[#857568] pointer-events-none" />
+                  <Briefcase className="w-4 h-4 absolute left-3.5 top-3.5 text-[#64748b] pointer-events-none" />
                   <input
                     type="text"
                     value={role}
                     onChange={(e) => setRole(e.target.value)}
                     placeholder="Title or travel purpose"
-                    className="w-full pl-10 pr-3.5 h-11 bg-[#faf8f5] border border-[#dfd7cc] rounded-xl text-sm text-[#282828] placeholder:text-[#9a8d80] focus:border-[#00b7a8] focus:bg-white outline-none transition-colors"
+                    className="form-input pl-10"
                   />
                 </div>
               </div>
             </div>
 
-            <div className="p-3.5 bg-[#e8f8f6] border border-[#b9ebe6] rounded-xl flex items-center gap-3 type-support text-[#006e65]">
-              <ShieldCheck className="w-5 h-5 text-[#00b7a8] shrink-0" />
+            <div className="p-3.5 bg-[#edf6f8] border border-[#14616d]/20 rounded-xl flex items-center gap-3 type-support text-[#0f4952]">
+              <ShieldCheck className="w-4 h-4 text-[#14616d] shrink-0" />
               <span>
-                Your personal dashboard and unique User ID are created automatically upon registration.
+                Your personal client portal and account profile are created immediately upon registration.
               </span>
             </div>
 
             <button
               type="submit"
               disabled={isLoading}
-              className="w-full py-3.5 bg-[#00b7a8] hover:bg-[#009e91] disabled:opacity-50 text-white type-btn rounded-xl flex items-center justify-center gap-2 shadow-md cursor-pointer transition-all mt-2"
+              className="btn btn-primary w-full mt-2"
             >
               {isLoading ? (
                 <>
                   <Loader2 className="w-4 h-4 animate-spin" />
-                  <span>Creating Account &amp; Dashboard...</span>
+                  <span>Creating Account...</span>
                 </>
               ) : (
                 <>
-                  <span>Create Account &amp; Open Dashboard</span>
+                  <span>Create Account &amp; Open Portal</span>
                   <ArrowRight className="w-4 h-4" />
                 </>
               )}
             </button>
           </form>
 
-          <div className="pt-4 border-t border-[#ede6dc] text-center space-y-3">
-            <p className="type-support text-[#5c5046]">Already have an Easy Travel account?</p>
+          <div className="pt-4 border-t border-[#e2e8f0] text-center space-y-3">
+            <p className="type-support text-[#64748b]">Already have an Easy Travel Lodging account?</p>
             <button
               type="button"
               onClick={() => onNavigateTab('login')}
-              className="w-full py-3 px-4 bg-[#faf8f5] hover:bg-[#f2ece3] border border-[#dfd7cc] hover:border-[#00b7a8] rounded-xl type-btn text-[#282828] transition-colors cursor-pointer flex items-center justify-center gap-2"
+              className="btn btn-outline w-full"
             >
-              <User className="w-4 h-4 text-[#00b7a8]" />
+              <User className="w-4 h-4 text-[#14616d]" />
               <span>Sign In to Your Account</span>
             </button>
           </div>

@@ -18,10 +18,10 @@ export const StatusBadge: React.FC<StatusBadgeProps> = ({ status, size = 'md' })
     colorClasses = 'text-rose-700';
   }
 
-  const textSize = size === 'sm' ? 'text-[11px]' : 'text-xs';
+  const textSize = size === 'sm' ? 'text-xs' : 'type-support';
 
   return (
-    <span className={`inline-flex items-center font-bold capitalize ${textSize} ${colorClasses}`}>
+    <span className={`inline-flex items-center font-semibold capitalize ${textSize} ${colorClasses}`}>
       {status.replace(/_/g, ' ')}
     </span>
   );

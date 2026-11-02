@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { PropertyListing } from '../../../data/lodgingData';
-import { MapPin, Users, Maximize, Heart, ArrowRight } from 'lucide-react';
+import { MapPin, Users, Maximize, Heart, ArrowRight, Building2 } from 'lucide-react';
 
 interface PropertyCardProps {
   property: PropertyListing;
@@ -15,15 +15,25 @@ export const PropertyCard: React.FC<PropertyCardProps> = ({
   onToggleSave,
   isSaved = false,
 }) => {
+  const [imgError, setImgError] = useState(false);
+
   return (
-    <div className="bg-white border border-[#e6dfd5] rounded-2xl overflow-hidden shadow-2xs hover:border-[#00b7a8] transition-all flex flex-col justify-between">
-      <div className="relative h-44 w-full bg-[#f4efe9] overflow-hidden">
-        <img
-          src={property.images[0]}
-          alt={property.title}
-          className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
-        />
-        <div className="absolute top-3 left-3 bg-[#1f1915]/85 backdrop-blur-xs text-white text-[11px] font-bold px-2.5 py-1 rounded-lg">
+    <div className="bg-white border border-slate-200 rounded-2xl overflow-hidden hover:border-slate-300 transition-colors flex flex-col justify-between">
+      <div className="relative aspect-[4/3] w-full bg-slate-100 overflow-hidden">
+        {property.images[0] && !imgError ? (
+          <img
+            src={property.images[0]}
+            alt={property.title}
+            referrerPolicy="no-referrer"
+            onError={() => setImgError(true)}
+            className="w-full h-full object-cover hover:scale-103 transition-transform duration-200"
+          />
+        ) : (
+          <div className="w-full h-full flex items-center justify-center text-slate-400">
+            <Building2 className="w-8 h-8" />
+          </div>
+        )}
+        <div className="absolute top-3 left-3 bg-[#0f172a]/85 backdrop-blur-xs text-white text-[11px] font-semibold px-2.5 py-1 rounded-lg">
           Unit {property.unitNumber}
         </div>
         {onToggleSave && (
@@ -31,7 +41,7 @@ export const PropertyCard: React.FC<PropertyCardProps> = ({
             type="button"
             onClick={() => onToggleSave(property.id)}
             title={isSaved ? 'Remove from saved' : 'Save property'}
-            className="absolute top-3 right-3 w-8 h-8 rounded-full bg-white/90 backdrop-blur-xs flex items-center justify-center text-rose-500 hover:scale-110 transition-transform cursor-pointer shadow-xs"
+            className="absolute top-3 right-3 w-8 h-8 rounded-full bg-white/95 flex items-center justify-center text-rose-500 hover:scale-105 transition-transform cursor-pointer shadow-xs"
           >
             <Heart className={`w-4 h-4 ${isSaved ? 'fill-rose-500' : ''}`} />
           </button>
@@ -40,28 +50,29 @@ export const PropertyCard: React.FC<PropertyCardProps> = ({
 
       <div className="p-4 space-y-3 flex-1 flex flex-col justify-between">
         <div className="space-y-1.5">
-          <h4 className="font-heading font-black text-base text-[#282828] leading-snug line-clamp-1">
+          <h4 className="font-heading font-bold text-base text-[#0f172a] leading-snug line-clamp-1">
             {property.title}
           </h4>
-          <div className="flex items-center gap-1.5 text-xs text-[#5c5046]">
-            <MapPin className="w-3.5 h-3.5 text-[#00897d] shrink-0" />
+          <div className="flex items-center gap-1.5 text-xs text-slate-600">
+            <MapPin className="w-3.5 h-3.5 text-[#14616d] shrink-0" />
             <span className="truncate">{property.location}</span>
           </div>
 
-          <div className="flex items-center gap-3 pt-1 text-[11px] text-[#857568] font-semibold">
+          <div className="flex items-center gap-2 pt-1 text-xs text-slate-500 tabular-nums">
             <span className="flex items-center gap-1">
               <Users className="w-3.5 h-3.5" /> {property.bedrooms} Bed · {property.bathrooms} Bath
             </span>
+            <span aria-hidden="true">·</span>
             <span className="flex items-center gap-1">
-              <Maximize className="w-3.5 h-3.5" /> {property.sqft || 'Fully Furnished'}
+              <Maximize className="w-3.5 h-3.5" /> {property.sqft || 'Furnished'}
             </span>
           </div>
         </div>
 
-        <div className="pt-3 border-t border-[#efe9e0] flex items-center justify-between gap-2">
+        <div className="pt-3 border-t border-slate-100 flex items-center justify-between gap-2">
           <div>
-            <span className="text-[10px] uppercase font-bold text-[#857568] block">Corporate Monthly</span>
-            <span className="text-sm font-black text-[#00897d] tabular-nums">
+            <span className="text-[11px] font-medium text-slate-500 block">Monthly Rate</span>
+            <span className="text-sm font-bold text-[#0f172a] tabular-nums">
               ${property.monthlyRate.toLocaleString()} / mo
             </span>
           </div>
@@ -69,7 +80,7 @@ export const PropertyCard: React.FC<PropertyCardProps> = ({
           <button
             type="button"
             onClick={() => onReserve(property.id)}
-            className="px-3.5 py-1.5 bg-[#00b7a8] hover:bg-[#009e91] text-white text-xs font-bold rounded-lg flex items-center gap-1 cursor-pointer transition-colors"
+            className="btn btn-primary btn-sm"
           >
             <span>Book Stay</span>
             <ArrowRight className="w-3.5 h-3.5" />

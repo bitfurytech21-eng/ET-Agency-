@@ -99,7 +99,7 @@ export const BrochureModal: React.FC<BrochureModalProps> = ({ isOpen, onClose })
                       value={downloadName}
                       onChange={(e) => setDownloadName(e.target.value)}
                       placeholder="e.g. Rachel Adams"
-                      className="w-full px-3.5 h-11 rounded-xl border border-[#d8cfc3] bg-white text-[#282828] text-sm sm:text-base focus:border-[#00b7a8] outline-none"
+                      className="w-full px-3.5 h-11 rounded-xl border border-[#d8cfc3] bg-white text-[#282828] text-base focus:border-[#00b7a8] outline-none"
                     />
                   </div>
                   <div>
@@ -110,7 +110,7 @@ export const BrochureModal: React.FC<BrochureModalProps> = ({ isOpen, onClose })
                       value={downloadEmail}
                       onChange={(e) => setDownloadEmail(e.target.value)}
                       placeholder="rachel@example.com"
-                      className="w-full px-3.5 h-11 rounded-xl border border-[#d8cfc3] bg-white text-[#282828] text-sm sm:text-base focus:border-[#00b7a8] outline-none"
+                      className="w-full px-3.5 h-11 rounded-xl border border-[#d8cfc3] bg-white text-[#282828] text-base focus:border-[#00b7a8] outline-none"
                     />
                   </div>
                 </div>
@@ -122,7 +122,7 @@ export const BrochureModal: React.FC<BrochureModalProps> = ({ isOpen, onClose })
                     value={downloadPhone}
                     onChange={(e) => setDownloadPhone(e.target.value)}
                     placeholder="(916) 555-0199"
-                    className="w-full px-3.5 h-11 rounded-xl border border-[#d8cfc3] bg-white text-[#282828] text-sm sm:text-base focus:border-[#00b7a8] outline-none tabular-nums"
+                    className="w-full px-3.5 h-11 rounded-xl border border-[#d8cfc3] bg-white text-[#282828] text-base focus:border-[#00b7a8] outline-none tabular-nums"
                   />
                 </div>
 

@@ -215,7 +215,7 @@ export const PropertyReviewsSection: React.FC<PropertyReviewsSectionProps> = ({
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
                 placeholder="e.g. Quiet, spotless apartment"
-                className="w-full h-11 px-3 bg-white border border-[#dfd7cc] rounded-lg text-sm text-[#1b1d20]"
+                className="w-full h-11 px-3 bg-white border border-[#dfd7cc] rounded-lg text-base text-[#1b1d20]"
               />
             </div>
 
@@ -226,7 +226,7 @@ export const PropertyReviewsSection: React.FC<PropertyReviewsSectionProps> = ({
                 value={stayContext}
                 onChange={(e) => setStayContext(e.target.value)}
                 placeholder="e.g. 45-Day Relocation Stay"
-                className="w-full h-11 px-3 bg-white border border-[#dfd7cc] rounded-lg text-sm text-[#1b1d20]"
+                className="w-full h-11 px-3 bg-white border border-[#dfd7cc] rounded-lg text-base text-[#1b1d20]"
               />
             </div>
           </div>
@@ -239,7 +239,7 @@ export const PropertyReviewsSection: React.FC<PropertyReviewsSectionProps> = ({
               value={content}
               onChange={(e) => setContent(e.target.value)}
               placeholder="Describe the residence condition, comfort, Wi-Fi reliability, and host communication..."
-              className="w-full p-3 bg-white border border-[#dfd7cc] rounded-lg text-sm text-[#1b1d20]"
+              className="w-full p-3 bg-white border border-[#dfd7cc] rounded-lg text-base text-[#1b1d20]"
             />
           </div>
 

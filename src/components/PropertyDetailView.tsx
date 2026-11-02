@@ -40,7 +40,6 @@ export const PropertyDetailView: React.FC<PropertyDetailViewProps> = ({
 }) => {
   const { catalogItems, refreshCatalog } = useCart();
 
-  // Booking & Guest Configuration State
   const [checkIn, setCheckIn] = useState('');
   const [checkOut, setCheckOut] = useState('');
   const [adults, setAdults] = useState(1);
@@ -49,16 +48,13 @@ export const PropertyDetailView: React.FC<PropertyDetailViewProps> = ({
   const [selectedAddonQuantities, setSelectedAddonQuantities] = useState<Record<string, number>>({});
   const [bookingModalOpen, setBookingModalOpen] = useState(false);
 
-  // Live database-driven blocked date ranges
   const [liveBlockedRanges, setLiveBlockedRanges] = useState<BlockedDateRange[] | undefined>(
     property.blockedDates,
   );
 
   const loadLiveAvailability = useCallback(async () => {
     try {
-      const res = await fetch(
-        `/api/properties/${encodeURIComponent(property.id)}/availability`,
-      );
+      const res = await fetch(`/api/properties/${encodeURIComponent(property.id)}/availability`);
       if (!res.ok) return;
       const data = await res.json();
       if (data?.success && Array.isArray(data.blockedRanges)) {
@@ -106,17 +102,17 @@ export const PropertyDetailView: React.FC<PropertyDetailViewProps> = ({
   const getAmenityIcon = (amenity: string) => {
     const a = amenity.toLowerCase();
     if (a.includes('wifi') || a.includes('internet'))
-      return <Wifi className="w-4 h-4 text-[#00897d] shrink-0" />;
-    if (a.includes('tv')) return <Tv className="w-4 h-4 text-[#00897d] shrink-0" />;
+      return <Wifi className="w-4 h-4 text-[#14616d] shrink-0" />;
+    if (a.includes('tv')) return <Tv className="w-4 h-4 text-[#14616d] shrink-0" />;
     if (a.includes('air') || a.includes('conditioning') || a.includes('heat') || a.includes('climate'))
-      return <Snowflake className="w-4 h-4 text-[#00897d] shrink-0" />;
+      return <Snowflake className="w-4 h-4 text-[#14616d] shrink-0" />;
     if (a.includes('bath') || a.includes('spa'))
-      return <Bath className="w-4 h-4 text-[#00897d] shrink-0" />;
+      return <Bath className="w-4 h-4 text-[#14616d] shrink-0" />;
     if (a.includes('disabled') || a.includes('wheelchair') || a.includes('step-free'))
-      return <Accessibility className="w-4 h-4 text-[#00897d] shrink-0" />;
-    if (a.includes('pet')) return <Dog className="w-4 h-4 text-[#00897d] shrink-0" />;
-    if (a.includes('fire')) return <Flame className="w-4 h-4 text-[#00897d] shrink-0" />;
-    return <Check className="w-4 h-4 text-[#00897d] shrink-0" />;
+      return <Accessibility className="w-4 h-4 text-[#14616d] shrink-0" />;
+    if (a.includes('pet')) return <Dog className="w-4 h-4 text-[#14616d] shrink-0" />;
+    if (a.includes('fire')) return <Flame className="w-4 h-4 text-[#14616d] shrink-0" />;
+    return <Check className="w-4 h-4 text-[#14616d] shrink-0" />;
   };
 
   const handleAddonQuantityChange = (serviceId: string, nextQty: number) => {
@@ -141,37 +137,35 @@ export const PropertyDetailView: React.FC<PropertyDetailViewProps> = ({
     : property.location;
 
   return (
-    <div className="w-full bg-white text-[#282828] pb-24 lg:pb-16">
+    <div className="w-full bg-white text-[#0f172a] pb-24 lg:pb-16">
       {/* Top Breadcrumb Bar */}
-      <div className="bg-[#faf8f5] border-b border-[#e6dfd5] py-3.5 px-4 sm:px-8">
-        <div className="type-nav max-w-6xl mx-auto flex items-center justify-between gap-4">
+      <div className="bg-[#f8fafc] border-b border-[#e2e8f0] py-3.5 px-4 sm:px-8">
+        <div className="max-w-6xl mx-auto flex items-center justify-between gap-4">
           <button
             type="button"
             onClick={onBack}
-            className="type-btn inline-flex items-center gap-1.5 text-[#5c5046] hover:text-[#1b1d20] cursor-pointer transition-colors whitespace-nowrap"
+            className="type-nav inline-flex items-center gap-1.5 font-semibold text-[#475569] hover:text-[#0f172a] cursor-pointer transition-colors whitespace-nowrap"
           >
             <ArrowLeft className="w-4 h-4" />
             <span>Back to All Residences</span>
           </button>
 
-          <div className="hidden sm:flex items-center gap-2 text-[#697076] truncate">
+          <div className="hidden sm:flex items-center gap-2 type-support text-[#64748b] truncate">
             <span>Residences</span>
             <span aria-hidden="true">/</span>
             <span>{displayLocationLabel}</span>
             <span aria-hidden="true">/</span>
-            <span className="text-[#1b1d20] font-medium truncate">{property.unitNumber}</span>
+            <span className="text-[#0f172a] font-medium truncate">{property.unitNumber}</span>
           </div>
         </div>
       </div>
 
       {/* Hero Header & Gallery Container */}
       <div className="max-w-6xl mx-auto px-4 sm:px-8 pt-7 pb-6 space-y-6">
-        {/* Title, Unboxed Metadata & Pricing Overview */}
         <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-5">
           <div className="max-w-3xl space-y-2">
-            {/* Clean Unboxed Metadata Row (Zero Pill Capsules) */}
-            <div className="type-support flex flex-wrap items-center gap-2 text-[#5c5046]">
-              <span className="font-semibold text-[#00897d]">
+            <div className="type-support flex flex-wrap items-center gap-2 text-[#475569]">
+              <span className="font-semibold text-[#14616d]">
                 {property.propertyType || property.category || 'Furnished Residence'}
               </span>
               <span aria-hidden="true">·</span>
@@ -189,18 +183,18 @@ export const PropertyDetailView: React.FC<PropertyDetailViewProps> = ({
               {property.verified === true && (
                 <>
                   <span aria-hidden="true">·</span>
-                  <span className="inline-flex items-center gap-1 font-semibold text-[#1b1d20]">
-                    <ShieldCheck className="w-3.5 h-3.5 text-[#00897d]" />
+                  <span className="inline-flex items-center gap-1 font-semibold text-[#0f172a]">
+                    <ShieldCheck className="w-3.5 h-3.5 text-[#14616d]" />
                     <span>Verified Residence</span>
                   </span>
                 </>
               )}
             </div>
 
-            <h1 className="type-h1 text-[#1b1d20]">{property.title}</h1>
+            <h1 className="type-h1 text-[#0f172a]">{property.title}</h1>
 
-            <p className="type-support text-[#5c5046] flex flex-wrap items-center gap-x-2 gap-y-1 tabular-nums">
-              <span className="font-medium text-[#1b1d20]">{property.unitNumber}</span>
+            <p className="type-support text-[#475569] flex flex-wrap items-center gap-x-2 gap-y-1 tabular-nums">
+              <span className="font-semibold text-[#0f172a]">{property.unitNumber}</span>
               {property.code && <span>({property.code})</span>}
               <span aria-hidden="true">·</span>
               <span>{displayLocationLabel}</span>
@@ -220,18 +214,17 @@ export const PropertyDetailView: React.FC<PropertyDetailViewProps> = ({
           </div>
 
           <div className="text-left lg:text-right tabular-nums shrink-0">
-            <span className="type-support text-[#697076] block">Extended Monthly Rate</span>
-            <div className="text-2xl sm:text-3xl font-bold text-[#1b1d20]">
+            <span className="type-support text-[#64748b] block">Extended Monthly Rate</span>
+            <div className="text-2xl sm:text-3xl font-bold font-mono text-[#0f172a]">
               ${property.monthlyRate.toLocaleString()}
-              <span className="type-support font-normal text-[#5c5046]"> / month</span>
+              <span className="type-support font-sans font-normal text-[#64748b]"> / month</span>
             </div>
-            <span className="type-support text-[#697076] block mt-0.5">
+            <span className="type-support text-[#64748b] font-mono block mt-0.5">
               {minStay}–29 night stays: ~${nightlyEstimate.toLocaleString()}/night
             </span>
           </div>
         </div>
 
-        {/* Interactive Property Image Gallery */}
         <PropertyGallery
           propertyId={property.id}
           title={property.title}
@@ -240,7 +233,6 @@ export const PropertyDetailView: React.FC<PropertyDetailViewProps> = ({
           onRequireAuth={() => onNavigate?.('login')}
         />
 
-        {/* Minimalist Specifications Grid */}
         <PropertySpecsGrid property={property} />
       </div>
 
@@ -254,25 +246,23 @@ export const PropertyDetailView: React.FC<PropertyDetailViewProps> = ({
       {/* Main 2-Column Content + Sticky Booking Module */}
       <div className="max-w-6xl mx-auto px-4 sm:px-8 pt-10">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
-          {/* Left Column: Detailed Residence Sections */}
           <div className="lg:col-span-8 space-y-12">
             {/* 1. ABOUT SECTION */}
             <section id="section-about" className="scroll-mt-28 space-y-6">
               <div className="space-y-3">
-                <h2 className="type-h2 text-[#1b1d20]">About This Residence</h2>
-                <div className="type-body text-[#434a4f] whitespace-pre-line leading-relaxed">
+                <h2 className="type-h2 text-[#0f172a]">About This Residence</h2>
+                <div className="type-body text-[#475569] whitespace-pre-line leading-relaxed">
                   {property.fullDesc}
                 </div>
               </div>
 
-              {/* Residence Highlights & Furnishings */}
               {property.features && property.features.length > 0 && (
-                <div className="pt-5 border-t border-[#efe9e0] space-y-3">
-                  <h3 className="type-h3 text-[#1b1d20]">Interior Features &amp; Appointments</h3>
+                <div className="pt-5 border-t border-[#e2e8f0] space-y-3">
+                  <h3 className="type-h3 text-[#0f172a]">Interior Features &amp; Appointments</h3>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     {property.features.map((feat, idx) => (
-                      <div key={idx} className="type-body text-[#434a4f] flex items-start gap-2.5">
-                        <Check className="w-4 h-4 text-[#00897d] shrink-0 mt-1.5" />
+                      <div key={idx} className="type-body text-[#475569] flex items-start gap-2.5">
+                        <Check className="w-4 h-4 text-[#14616d] shrink-0 mt-1.5" />
                         <span>{feat}</span>
                       </div>
                     ))}
@@ -280,45 +270,44 @@ export const PropertyDetailView: React.FC<PropertyDetailViewProps> = ({
                 </div>
               )}
 
-              {/* Pricing & Booking Conditions */}
-              <div className="p-5 sm:p-6 bg-[#faf8f5] border border-[#e6dfd5] rounded-xl space-y-4">
-                <h3 className="type-h4 text-[#1b1d20]">Pricing &amp; Booking Conditions</h3>
+              <div className="p-5 sm:p-6 bg-[#f8fafc] border border-[#e2e8f0] rounded-xl space-y-4">
+                <h3 className="type-h4 text-[#0f172a]">Pricing &amp; Booking Conditions</h3>
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 tabular-nums">
                   <div>
-                    <span className="type-support text-[#697076] block">Minimum / Maximum Stay</span>
-                    <span className="type-nav font-semibold text-[#1b1d20]">
+                    <span className="type-support text-[#64748b] block">Minimum / Maximum Stay</span>
+                    <span className="type-nav font-semibold text-[#0f172a]">
                       {minStay} to {maxStay} Nights
                     </span>
                   </div>
                   <div>
-                    <span className="type-support text-[#697076] block">30+ Day Extended Tax Rule</span>
-                    <span className="type-nav font-semibold text-[#00897d]">
+                    <span className="type-support text-[#64748b] block">30+ Day Extended Tax Rule</span>
+                    <span className="type-nav font-semibold text-[#14616d]">
                       0% CA Occupancy Tax
                     </span>
                   </div>
                   <div>
-                    <span className="type-support text-[#697076] block">Check-In / Check-Out</span>
-                    <span className="type-nav font-semibold text-[#1b1d20]">
+                    <span className="type-support text-[#64748b] block">Check-In / Check-Out</span>
+                    <span className="type-nav font-semibold text-[#0f172a]">
                       3:00 PM / 11:00 AM
                     </span>
                   </div>
                 </div>
 
-                <p className="type-support text-[#434a4f]">
+                <p className="type-body text-[#475569]">
                   {property.pricingNote ||
                     'Includes electricity, gas, water, trash, 400+ Mbps Wi-Fi, and dedicated parking. Stays under 30 nights incur standard 8% California occupancy tax and a one-time $95 residence preparation & inspection fee.'}
                 </p>
 
                 {property.seasonalPricing && property.seasonalPricing.length > 0 && (
-                  <div className="pt-3 border-t border-[#e6dfd5] space-y-1.5">
-                    <span className="type-label text-[#1b1d20] block">Seasonal Rate Schedule</span>
+                  <div className="pt-3 border-t border-[#e2e8f0] space-y-1.5">
+                    <span className="type-label text-[#0f172a] block">Seasonal Rate Schedule</span>
                     {property.seasonalPricing.map((rule) => (
                       <div
                         key={rule.id}
-                        className="type-support text-[#5c5046] flex flex-wrap items-center justify-between gap-2 tabular-nums"
+                        className="type-support text-[#475569] flex flex-wrap items-center justify-between gap-2 tabular-nums"
                       >
                         <span>
-                          <strong className="font-semibold text-[#1b1d20]">{rule.label}</strong> (
+                          <strong className="font-semibold text-[#0f172a]">{rule.label}</strong> (
                           {rule.startMonthDay} to {rule.endMonthDay})
                         </span>
                         <span>
@@ -335,8 +324,8 @@ export const PropertyDetailView: React.FC<PropertyDetailViewProps> = ({
               </div>
             </section>
 
-            {/* 2. INTERACTIVE BEDROOM EXPLORER & CONDITIONAL VIDEO TOUR */}
-            <section id="section-rooms" className="scroll-mt-28 pt-10 border-t border-[#e6dfd5] space-y-8">
+            {/* 2. ROOMS & VIDEO TOUR */}
+            <section id="section-rooms" className="scroll-mt-28 pt-10 border-t border-[#e2e8f0] space-y-8">
               <BedroomExplorer
                 propertyId={property.id}
                 bedrooms={property.bedroomsDetail || []}
@@ -351,11 +340,11 @@ export const PropertyDetailView: React.FC<PropertyDetailViewProps> = ({
               />
             </section>
 
-            {/* 3. AMENITIES & FACILITIES */}
-            <section id="section-amenities" className="scroll-mt-28 pt-10 border-t border-[#e6dfd5] space-y-6">
+            {/* 3. AMENITIES */}
+            <section id="section-amenities" className="scroll-mt-28 pt-10 border-t border-[#e2e8f0] space-y-6">
               <div>
-                <h2 className="type-h2 text-[#1b1d20]">Residence Amenities &amp; Facilities</h2>
-                <p className="type-body text-[#5c5046] mt-1">
+                <h2 className="type-h2 text-[#0f172a]">Residence Amenities &amp; Facilities</h2>
+                <p className="type-body text-[#475569] mt-1">
                   Every residence is prepared with turnkey kitchenware, high-speed connectivity, climate control, and community privileges.
                 </p>
               </div>
@@ -364,7 +353,7 @@ export const PropertyDetailView: React.FC<PropertyDetailViewProps> = ({
                 {property.amenities.map((amenity, idx) => (
                   <div
                     key={idx}
-                    className="p-3.5 bg-[#faf8f5] border border-[#e6dfd5] rounded-xl flex items-center gap-3 type-support font-medium text-[#1b1d20]"
+                    className="p-3.5 bg-[#f8fafc] border border-[#e2e8f0] rounded-xl flex items-center gap-3 type-support font-medium text-[#0f172a]"
                   >
                     {getAmenityIcon(amenity)}
                     <span>{amenity}</span>
@@ -374,11 +363,11 @@ export const PropertyDetailView: React.FC<PropertyDetailViewProps> = ({
 
               {property.facilities && property.facilities.length > 0 && (
                 <div className="pt-4 space-y-3">
-                  <h3 className="type-h4 text-[#1b1d20]">Property &amp; Community Facilities</h3>
+                  <h3 className="type-h4 text-[#0f172a]">Property &amp; Community Facilities</h3>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
                     {property.facilities.map((facility, idx) => (
-                      <div key={idx} className="type-support text-[#434a4f] flex items-center gap-2.5">
-                        <Check className="w-4 h-4 text-[#00897d] shrink-0" />
+                      <div key={idx} className="type-body text-[#475569] flex items-center gap-2.5">
+                        <Check className="w-4 h-4 text-[#14616d] shrink-0" />
                         <span>{facility}</span>
                       </div>
                     ))}
@@ -387,9 +376,9 @@ export const PropertyDetailView: React.FC<PropertyDetailViewProps> = ({
               )}
             </section>
 
-            {/* 4. CONCIERGE ADD-ONS & EXTRA SERVICES */}
+            {/* 4. CONCIERGE ADD-ONS */}
             {hasActiveConciergeServices && (
-              <section id="section-concierge" className="scroll-mt-28 pt-10 border-t border-[#e6dfd5]">
+              <section id="section-concierge" className="scroll-mt-28 pt-10 border-t border-[#e2e8f0]">
                 <ConciergeAddonsSection
                   services={catalogItems}
                   selectedQuantities={selectedAddonQuantities}
@@ -399,11 +388,11 @@ export const PropertyDetailView: React.FC<PropertyDetailViewProps> = ({
               </section>
             )}
 
-            {/* 5. LIVE AVAILABILITY CALENDAR */}
-            <section id="section-availability" className="scroll-mt-28 pt-10 border-t border-[#e6dfd5] space-y-4">
+            {/* 5. AVAILABILITY CALENDAR */}
+            <section id="section-availability" className="scroll-mt-28 pt-10 border-t border-[#e2e8f0] space-y-4">
               <div>
-                <h2 className="type-h2 text-[#1b1d20]">Availability &amp; Stay Dates</h2>
-                <p className="type-body text-[#5c5046] mt-1">
+                <h2 className="type-h2 text-[#0f172a]">Availability &amp; Stay Dates</h2>
+                <p className="type-body text-[#475569] mt-1">
                   Select your check-in and check-out dates below to update your live reservation quote automatically.
                 </p>
               </div>
@@ -425,7 +414,7 @@ export const PropertyDetailView: React.FC<PropertyDetailViewProps> = ({
             </section>
 
             {/* 6. GUEST REVIEWS */}
-            <section id="section-reviews" className="scroll-mt-28 pt-10 border-t border-[#e6dfd5]">
+            <section id="section-reviews" className="scroll-mt-28 pt-10 border-t border-[#e2e8f0]">
               <PropertyReviewsSection
                 propertyId={property.id}
                 unitNumber={property.unitNumber}
@@ -433,8 +422,8 @@ export const PropertyDetailView: React.FC<PropertyDetailViewProps> = ({
               />
             </section>
 
-            {/* 7. LOCATION & SURROUNDINGS */}
-            <section id="section-location" className="scroll-mt-28 pt-10 border-t border-[#e6dfd5]">
+            {/* 7. LOCATION */}
+            <section id="section-location" className="scroll-mt-28 pt-10 border-t border-[#e2e8f0]">
               <PropertyLocationSection
                 locationInfo={property.locationInfo}
                 fallbackLocation={property.location}

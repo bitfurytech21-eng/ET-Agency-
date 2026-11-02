@@ -12,7 +12,6 @@ import {
   Mail,
   Phone,
   Loader2,
-  ArrowLeft,
 } from 'lucide-react';
 
 interface MessagesModuleProps {
@@ -27,7 +26,6 @@ export const MessagesModule: React.FC<MessagesModuleProps> = ({
   const [activeSubTab, setActiveSubTab] = useState<'inbox' | 'compose' | 'sent'>('inbox');
   const [selectedMsgId, setSelectedMsgId] = useState<string | null>(messages[0]?.id || null);
 
-  // Compose State
   const [subject, setSubject] = useState('');
   const [body, setBody] = useState('');
   const [recipient, setRecipient] = useState('concierge');
@@ -37,7 +35,7 @@ export const MessagesModule: React.FC<MessagesModuleProps> = ({
   const unreadCount = messages.filter((m) => !m.isRead).length;
 
   const subTabOptions: SubTabOption[] = [
-    { id: 'inbox', label: 'Inbox & Notifications', badge: unreadCount },
+    { id: 'inbox', label: 'Inbox & Threads', badge: unreadCount },
     { id: 'compose', label: 'New Direct Inquiry' },
     { id: 'sent', label: 'Sent History' },
   ];
@@ -56,7 +54,7 @@ export const MessagesModule: React.FC<MessagesModuleProps> = ({
         setTimeout(() => {
           setSendSuccess(false);
           setActiveSubTab('inbox');
-        }, 1500);
+        }, 1400);
       }
     } finally {
       setIsSending(false);
@@ -73,87 +71,80 @@ export const MessagesModule: React.FC<MessagesModuleProps> = ({
         onSelectSubTab={(id) => setActiveSubTab(id as 'inbox' | 'compose' | 'sent')}
       />
 
-      <div className="px-4 sm:px-8 pb-8 space-y-6">
-        <div className="border-b border-[#e6dfd5] pb-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+      <div className="space-y-6">
+        <div className="border-b border-slate-200 pb-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           <div>
-            <h3 className="font-heading font-bold text-lg text-[#282828] flex items-center gap-2">
-              <MessageSquare className="w-5 h-5 text-[#00b7a8]" /> Executive Concierge &amp; Host Desk
+            <h3 className="font-heading font-bold text-lg text-[#0f172a] flex items-center gap-2">
+              <MessageSquare className="w-5 h-5 text-[#14616d]" /> Executive Concierge &amp; Host Desk
             </h3>
-            <p className="text-xs text-[#5c5046] mt-0.5">
-              Encrypted direct communications with your California property management principals and fleet coordinators.
+            <p className="text-xs text-slate-500 mt-0.5">
+              Direct communications with your California property management team and fleet coordinators.
             </p>
           </div>
           <button
             type="button"
             onClick={() => setActiveSubTab('compose')}
-            className="px-3.5 py-2 bg-[#00b7a8] hover:bg-[#009e91] text-white rounded-xl text-xs font-bold flex items-center gap-1.5 cursor-pointer transition-colors shrink-0 self-start sm:self-auto"
+            className="btn btn-primary btn-sm self-start sm:self-auto"
           >
             <Send className="w-3.5 h-3.5" />
             <span>Compose Message</span>
           </button>
         </div>
 
-        {/* 1. COMPOSE TAB */}
         {activeSubTab === 'compose' && (
-          <div className="bg-white border border-[#e6dfd5] rounded-2xl p-6 sm:p-8 max-w-2xl shadow-2xs space-y-6">
+          <div className="bg-white border border-slate-200 rounded-2xl p-6 sm:p-8 max-w-2xl space-y-6">
             <div>
-              <h4 className="font-heading font-bold text-base text-[#282828]">
-                Send In-App Communication
+              <h4 className="font-heading font-bold text-base text-[#0f172a]">
+                Send Direct Communication
               </h4>
-              <p className="text-xs text-[#5c5046] mt-0.5">
-                Our California operations team monitors this portal actively 7 days a week.
+              <p className="text-xs text-slate-500 mt-0.5">
+                Our California operations team monitors this workspace 7 days a week.
               </p>
             </div>
 
             {sendSuccess && (
-              <div className="p-4 bg-emerald-50 border border-emerald-200 text-emerald-800 rounded-xl text-xs flex items-center gap-2.5">
+              <div className="p-4 bg-emerald-50 border border-emerald-200 text-emerald-900 rounded-xl text-xs flex items-center gap-2.5">
                 <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
-                <span>Message dispatched successfully to the designated concierge desk.</span>
+                <span>Message dispatched to the designated concierge desk.</span>
               </div>
             )}
 
             <form onSubmit={handleSend} className="space-y-4">
               <div>
-                <label className="block text-xs font-bold text-[#282828] mb-1.5">
-                  Designated Department *
-                </label>
+                <label className="form-label">Designated Department *</label>
                 <select
                   value={recipient}
                   onChange={(e) => setRecipient(e.target.value)}
-                  className="w-full px-3.5 h-10 bg-[#faf8f5] border border-[#dcd4c8] rounded-xl text-xs text-[#282828] outline-none focus:border-[#00b7a8]"
+                  className="form-select"
                 >
-                  <option value="concierge">Executive Hospitality Concierge (General Inquiries &amp; Requests)</option>
+                  <option value="concierge">Hospitality Concierge (General Inquiries &amp; Requests)</option>
                   <option value="host">Property Hosts (Unit Access, Keys &amp; Maintenance)</option>
-                  <option value="fleet">3D Fleet Coordinator (Vehicle Delivery &amp; Airport Staging)</option>
+                  <option value="fleet">Fleet Coordinator (Vehicle Delivery &amp; Airport Staging)</option>
                   <option value="billing">Treasury &amp; Invoicing Division (Wire Confirmations)</option>
                 </select>
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-[#282828] mb-1.5">
-                  Subject Line *
-                </label>
+                <label className="form-label">Subject Line *</label>
                 <input
                   type="text"
                   required
                   value={subject}
                   onChange={(e) => setSubject(e.target.value)}
-                  placeholder="e.g., Early Check-In Coordination for Unit 91"
-                  className="w-full px-3.5 h-10 bg-[#faf8f5] border border-[#dcd4c8] rounded-xl text-xs text-[#282828] outline-none focus:border-[#00b7a8]"
+                  placeholder="e.g., Early Check-In Coordination for Suite 104"
+                  className="form-input"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-[#282828] mb-1.5">
-                  Message Details *
-                </label>
+                <label className="form-label">Message Details *</label>
                 <textarea
                   required
                   rows={5}
                   value={body}
                   onChange={(e) => setBody(e.target.value)}
-                  placeholder="Detail your inquiry, flight timeline, special stay accommodation, or housekeeping schedule..."
-                  className="w-full p-3.5 bg-[#faf8f5] border border-[#dcd4c8] rounded-xl text-xs text-[#282828] outline-none focus:border-[#00b7a8] resize-none"
+                  placeholder="Detail your inquiry, flight timeline, stay accommodation, or housekeeping schedule..."
+                  className="form-textarea resize-none"
                 />
               </div>
 
@@ -161,24 +152,24 @@ export const MessagesModule: React.FC<MessagesModuleProps> = ({
                 <button
                   type="button"
                   onClick={() => setActiveSubTab('inbox')}
-                  className="px-4 py-2 text-xs font-bold text-[#5c5046] hover:text-[#282828] cursor-pointer"
+                  className="btn btn-outline btn-sm"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={isSending}
-                  className="px-5 py-2.5 bg-[#00b7a8] hover:bg-[#009e91] text-white rounded-xl text-xs font-bold flex items-center gap-2 cursor-pointer transition-colors shadow-2xs disabled:opacity-50"
+                  className="btn btn-primary btn-sm disabled:opacity-50"
                 >
                   {isSending ? (
                     <>
                       <Loader2 className="w-4 h-4 animate-spin" />
-                      <span>Transmitting...</span>
+                      <span>Sending...</span>
                     </>
                   ) : (
                     <>
                       <Send className="w-4 h-4" />
-                      <span>Transmit Message</span>
+                      <span>Send Message</span>
                     </>
                   )}
                 </button>
@@ -187,23 +178,21 @@ export const MessagesModule: React.FC<MessagesModuleProps> = ({
           </div>
         )}
 
-        {/* 2. INBOX / THREADS TAB */}
         {activeSubTab !== 'compose' && (
           <>
             {messages.length === 0 ? (
               <EmptyState
                 icon={MessageSquare}
                 title="No Inquiries or Messages"
-                description="Your executive mailbox is currently empty. Direct messages and concierge updates will appear here."
+                description="Your mailbox is currently empty. Direct messages and concierge updates will appear here."
                 actionText="Compose New Message"
                 onAction={() => setActiveSubTab('compose')}
               />
             ) : (
               <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-                {/* Message List */}
                 <div className="lg:col-span-5 space-y-2">
-                  <div className="text-[11px] font-bold uppercase tracking-wider text-[#82634f] px-1">
-                    Inbox Communications ({messages.length})
+                  <div className="text-xs font-semibold text-slate-500 px-1">
+                    Communications ({messages.length})
                   </div>
                   {messages.map((msg) => {
                     const isSelected = selectedMsg?.id === msg.id;
@@ -211,24 +200,24 @@ export const MessagesModule: React.FC<MessagesModuleProps> = ({
                       <div
                         key={msg.id}
                         onClick={() => setSelectedMsgId(msg.id)}
-                        className={`p-4 rounded-2xl border transition-all cursor-pointer text-left ${
+                        className={`p-4 rounded-2xl border transition-colors cursor-pointer text-left ${
                           isSelected
-                            ? 'bg-white border-[#00b7a8] shadow-sm'
-                            : 'bg-white/80 hover:bg-white border-[#e6dfd5]'
+                            ? 'bg-[#edf6f8]/60 border-[#14616d]'
+                            : 'bg-white hover:bg-slate-50 border-slate-200'
                         }`}
                       >
-                        <div className="flex items-center justify-between gap-2 mb-1.5">
-                          <span className="text-xs font-bold text-[#282828] truncate">
+                        <div className="flex items-center justify-between gap-2 mb-1">
+                          <span className="text-xs font-bold text-[#0f172a] truncate">
                             {msg.senderName}
                           </span>
-                          <span className="text-[10px] text-[#857568] tabular-nums shrink-0">
+                          <span className="text-[11px] text-slate-400 tabular-nums shrink-0">
                             {msg.timestamp}
                           </span>
                         </div>
-                        <h5 className="text-xs font-semibold text-[#3a322c] truncate">
+                        <h5 className="text-xs font-semibold text-slate-800 truncate">
                           {msg.subject}
                         </h5>
-                        <p className="text-[11px] text-[#5c5046] line-clamp-2 mt-1 leading-relaxed">
+                        <p className="text-[11px] text-slate-500 line-clamp-2 mt-1 leading-relaxed">
                           {msg.body}
                         </p>
                       </div>
@@ -236,57 +225,56 @@ export const MessagesModule: React.FC<MessagesModuleProps> = ({
                   })}
                 </div>
 
-                {/* Message Detail View */}
                 <div className="lg:col-span-7">
                   {selectedMsg ? (
-                    <div className="bg-white border border-[#e6dfd5] rounded-2xl p-6 sm:p-7 space-y-6 shadow-2xs">
-                      <div className="border-b border-[#efe9e0] pb-4 space-y-2">
+                    <div className="bg-white border border-slate-200 rounded-2xl p-6 sm:p-7 space-y-6">
+                      <div className="border-b border-slate-100 pb-4 space-y-2">
                         <div className="flex flex-wrap items-center justify-between gap-2">
-                          <div className="flex items-center gap-2">
-                            <div className="w-8 h-8 rounded-lg bg-[#00b7a8]/10 text-[#00897d] flex items-center justify-center font-bold text-xs">
+                          <div className="flex items-center gap-2.5">
+                            <div className="w-8 h-8 rounded-lg bg-[#edf6f8] text-[#14616d] flex items-center justify-center font-bold text-xs">
                               <User className="w-4 h-4" />
                             </div>
                             <div>
-                              <h4 className="text-sm font-bold text-[#282828]">
+                              <h4 className="text-sm font-bold text-[#0f172a]">
                                 {selectedMsg.senderName}
                               </h4>
-                              <p className="text-[10px] text-[#857568] uppercase font-mono">
-                                Reference ID: {selectedMsg.id}
+                              <p className="text-[11px] text-slate-500 font-mono tabular-nums">
+                                Reference: {selectedMsg.id}
                               </p>
                             </div>
                           </div>
-                          <div className="text-xs text-[#857568] flex items-center gap-1 font-semibold">
+                          <div className="text-xs text-slate-500 flex items-center gap-1 tabular-nums">
                             <Clock className="w-3.5 h-3.5" />
                             <span>{selectedMsg.timestamp}</span>
                           </div>
                         </div>
 
-                        <h3 className="font-heading font-black text-base text-[#282828] pt-2">
+                        <h3 className="font-heading font-bold text-base text-[#0f172a] pt-2">
                           {selectedMsg.subject}
                         </h3>
                       </div>
 
-                      <div className="text-xs sm:text-sm text-[#4a3f35] leading-relaxed whitespace-pre-line">
+                      <div className="text-xs sm:text-sm text-slate-700 leading-relaxed whitespace-pre-line">
                         {selectedMsg.body}
                       </div>
 
-                      <div className="pt-4 border-t border-[#efe9e0] bg-[#faf8f5] rounded-xl p-4 space-y-2">
-                        <span className="text-xs font-bold text-[#282828] block flex items-center gap-1.5">
-                          <ShieldCheck className="w-4 h-4 text-[#00b7a8]" /> Direct Operations Assistance
+                      <div className="pt-4 border-t border-slate-100 bg-slate-50 rounded-xl p-4 space-y-2">
+                        <span className="text-xs font-bold text-[#0f172a] flex items-center gap-1.5">
+                          <ShieldCheck className="w-4 h-4 text-[#14616d]" /> Direct Operations Assistance
                         </span>
-                        <p className="text-xs text-[#5c5046]">
+                        <p className="text-xs text-slate-600">
                           Need urgent adjustments or on-site support? Reach our Sacramento regional dispatch directly:
                         </p>
                         <div className="flex flex-wrap gap-4 text-xs font-semibold pt-1">
                           <a
                             href="tel:9168003295"
-                            className="flex items-center gap-1 text-[#00897d] hover:underline"
+                            className="flex items-center gap-1 text-[#14616d] hover:underline tabular-nums"
                           >
                             <Phone className="w-3.5 h-3.5" /> 916-800-3295
                           </a>
                           <a
                             href="mailto:easytravelagency@trustagent.space"
-                            className="flex items-center gap-1 text-[#00897d] hover:underline"
+                            className="flex items-center gap-1 text-[#14616d] hover:underline"
                           >
                             <Mail className="w-3.5 h-3.5" /> easytravelagency@trustagent.space
                           </a>
@@ -294,7 +282,7 @@ export const MessagesModule: React.FC<MessagesModuleProps> = ({
                       </div>
                     </div>
                   ) : (
-                    <div className="p-8 bg-white border border-[#e6dfd5] rounded-2xl text-center text-xs text-[#857568]">
+                    <div className="p-8 bg-white border border-slate-200 rounded-2xl text-center text-xs text-slate-500">
                       Select a message to view details.
                     </div>
                   )}
