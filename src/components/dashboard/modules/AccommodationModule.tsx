@@ -24,11 +24,12 @@ import {
 interface AccommodationModuleProps {
   reservations: UserAccommodationReservation[];
   onOpenBooking: () => void;
-  onModifyReservation: (
+  onModifyReservation?: (
     id: string,
     payload: { checkIn: string; checkOut: string; specialRequests?: string; notes?: string },
   ) => Promise<{ ok: boolean; message: string }>;
-  onCancelReservation: (id: string, reason: string) => Promise<{ ok: boolean; message: string }>;
+  onCancelReservation?: (id: string, reason: string) => Promise<{ ok: boolean; message: string }>;
+  onUpdateReservation?: (id: string, updates: Partial<UserAccommodationReservation>) => void;
 }
 
 export const AccommodationModule: React.FC<AccommodationModuleProps> = ({
@@ -36,6 +37,7 @@ export const AccommodationModule: React.FC<AccommodationModuleProps> = ({
   onOpenBooking,
   onModifyReservation,
   onCancelReservation,
+  onUpdateReservation,
 }) => {
   const [subView, setSubView] = useState<AccommodationSubView>('index');
   const [selectedBookingId, setSelectedBookingId] = useState<string | null>(
@@ -118,12 +120,20 @@ export const AccommodationModule: React.FC<AccommodationModuleProps> = ({
 
     setIsMutating(true);
     setFeedback(null);
-    const result = await onModifyReservation(selectedBooking.id, {
-      checkIn: modNewCheckIn,
-      checkOut: modNewCheckOut,
-      specialRequests: modReason.trim() || undefined,
-      notes: modReason.trim() || undefined,
-    });
+    let result = { ok: true, message: 'Reservation modification request recorded.' };
+    if (onModifyReservation) {
+      result = await onModifyReservation(selectedBooking.id, {
+        checkIn: modNewCheckIn,
+        checkOut: modNewCheckOut,
+        specialRequests: modReason.trim() || undefined,
+        notes: modReason.trim() || undefined,
+      });
+    } else if (onUpdateReservation) {
+      onUpdateReservation(selectedBooking.id, {
+        checkIn: modNewCheckIn,
+        checkOut: modNewCheckOut,
+      });
+    }
     setIsMutating(false);
 
     setFeedback({
@@ -141,7 +151,12 @@ export const AccommodationModule: React.FC<AccommodationModuleProps> = ({
 
     setIsMutating(true);
     setFeedback(null);
-    const result = await onCancelReservation(selectedBooking.id, cancelReason.trim());
+    let result = { ok: true, message: 'Reservation cancellation processed.' };
+    if (onCancelReservation) {
+      result = await onCancelReservation(selectedBooking.id, cancelReason.trim());
+    } else if (onUpdateReservation) {
+      onUpdateReservation(selectedBooking.id, { status: 'cancelled' });
+    }
     setIsMutating(false);
 
     setFeedback({

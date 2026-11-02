@@ -9,6 +9,9 @@ import {
   ShoppingBag,
   LayoutDashboard,
   LogOut,
+  Building2,
+  Car,
+  Compass,
 } from 'lucide-react';
 
 interface HeaderProps {
@@ -35,6 +38,15 @@ export const Header: React.FC<HeaderProps> = ({
   const [searchOpen, setSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [logoFailed, setLogoFailed] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+
+  React.useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 15);
+    };
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   const handleNavClick = (tabId: string) => {
     setCurrentTab(tabId);
@@ -57,12 +69,14 @@ export const Header: React.FC<HeaderProps> = ({
   const firstName = authUser?.name ? authUser.name.trim().split(' ')[0] : '';
 
   return (
-    <header className="sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-[#e6dfd5] shadow-2xs">
+    <header className={`sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b transition-all duration-200 ${
+      scrolled ? 'border-[#d5cbbf] shadow-sm' : 'border-[#e6dfd5] shadow-xs'
+    }`}>
       <div
         id="main-header"
-        className="max-w-[1380px] mx-auto px-4 sm:px-8 flex items-center justify-between h-[86px]"
+        className="max-w-[1380px] mx-auto px-4 sm:px-8 flex items-center justify-between h-[76px] sm:h-[82px]"
       >
-        {/* Logo Container */}
+        {/* Zone 1: Logo & Brand */}
         <div className="logo_container flex items-center shrink-0">
           <a
             href="#home"
@@ -70,12 +84,15 @@ export const Header: React.FC<HeaderProps> = ({
               e.preventDefault();
               handleNavClick('home');
             }}
-            className="flex items-center"
+            className="flex items-center gap-3 group"
           >
             {logoFailed ? (
               <div className="flex flex-col leading-tight">
-                <span className="font-heading font-bold text-lg tracking-tight text-[#282828] whitespace-nowrap">
-                  Easy Travel <span className="text-[#00b7a8]">Lodging</span>
+                <span className="font-heading font-extrabold text-lg sm:text-xl tracking-tight text-[#182024] whitespace-nowrap">
+                  Easy Travel <span className="text-[#14616d]">Lodging</span>
+                </span>
+                <span className="text-[10px] uppercase tracking-widest text-[#738089] font-medium">
+                  Furnished Residences &amp; Fleet
                 </span>
               </div>
             ) : (
@@ -84,24 +101,24 @@ export const Header: React.FC<HeaderProps> = ({
                 alt="Easy Travel Lodging"
                 id="logo"
                 onError={() => setLogoFailed(true)}
-                className="max-h-[64px] w-auto object-contain cursor-pointer"
+                className="max-h-[52px] sm:max-h-[60px] w-auto object-contain cursor-pointer transition-transform group-hover:scale-[1.01]"
               />
             )}
           </a>
         </div>
 
-        {/* Desktop Navigation */}
-        <div id="et-top-navigation" className="hidden xl:flex items-center gap-4">
-          <nav id="top-menu-nav">
-            <ul
-              id="top-menu"
-              className="flex items-center gap-1.5 type-nav font-medium text-[#555555]"
-            >
-              <li className={currentTab === 'home' ? 'current-menu-item' : ''}>
+        {/* Zone 2: Desktop Navigation Links */}
+        <div id="et-top-navigation" className="hidden xl:flex items-center gap-6">
+          <nav id="top-menu-nav" aria-label="Main Navigation">
+            <ul id="top-menu" className="flex items-center gap-2 type-nav font-medium text-[#4a545c]">
+              <li>
                 <button
+                  type="button"
                   onClick={() => handleNavClick('home')}
-                  className={`type-nav hover:text-[#00b7a8] transition-colors cursor-pointer whitespace-nowrap shrink-0 ${
-                    currentTab === 'home' ? 'text-[#00b7a8] font-semibold' : ''
+                  className={`px-3 py-2 rounded-lg text-sm font-semibold transition-colors cursor-pointer whitespace-nowrap ${
+                    currentTab === 'home'
+                      ? 'text-[#14616d] bg-[#edf6f8]'
+                      : 'hover:text-[#14616d] hover:bg-[#faf7f2]'
                   }`}
                 >
                   Home
@@ -110,106 +127,114 @@ export const Header: React.FC<HeaderProps> = ({
 
               {/* Accommodation (Residences) Dropdown */}
               <li
-                className="relative menu-item-has-children"
+                className="relative"
                 onMouseEnter={() => setPortfolioDropdownOpen(true)}
                 onMouseLeave={() => setPortfolioDropdownOpen(false)}
               >
                 <button
+                  type="button"
                   onClick={() => handleNavClick('portfolio')}
-                  className={`type-nav flex items-center gap-1 hover:text-[#00b7a8] transition-colors cursor-pointer whitespace-nowrap shrink-0 ${
-                    ['portfolio', 'faq', 'terms'].includes(currentTab) ||
-                    currentTab.startsWith('listing:')
-                      ? 'text-[#00b7a8] font-semibold'
-                      : ''
+                  className={`px-3 py-2 rounded-lg text-sm font-semibold flex items-center gap-1.5 transition-colors cursor-pointer whitespace-nowrap ${
+                    ['portfolio', 'faq', 'terms'].includes(currentTab) || currentTab.startsWith('listing:')
+                      ? 'text-[#14616d] bg-[#edf6f8]'
+                      : 'hover:text-[#14616d] hover:bg-[#faf7f2]'
                   }`}
                 >
-                  <span>Accommodation</span>
-                  <ChevronDown className="w-3.5 h-3.5" />
+                  <Building2 className="w-3.5 h-3.5" />
+                  <span>Residences</span>
+                  <ChevronDown className="w-3 h-3 text-[#738089]" />
                 </button>
 
                 {portfolioDropdownOpen && (
-                  <ul className="absolute top-full left-0 mt-1 w-80 bg-white border-t-2 border-[#00b7a8] border-x border-b border-x-[#e6dfd5] border-b-[#e6dfd5] shadow-xl rounded-b-md py-2 z-50 type-nav animate-in fade-in">
-                    <li>
-                      <button
-                        onClick={() => handleNavClick('portfolio')}
-                        className="w-full text-left px-4 py-2 text-[#282828] hover:text-[#00b7a8] hover:bg-[#faf8f5] font-semibold cursor-pointer"
-                      >
-                        All Accommodation Listings
-                      </button>
-                    </li>
-                    <li className="border-t border-[#efe9e0] my-1"></li>
-                    {navProperties.slice(0, 8).map((prop) => (
-                      <li key={prop.id}>
+                  <div className="absolute top-full left-0 mt-1 w-80 bg-white border border-[#e6dfd5] shadow-xl rounded-xl p-2 z-50 animate-scale-in origin-top-left">
+                    <button
+                      type="button"
+                      onClick={() => handleNavClick('portfolio')}
+                      className="w-full text-left px-3.5 py-2.5 rounded-lg text-[#182024] hover:text-[#14616d] hover:bg-[#edf6f8] font-bold text-xs flex items-center justify-between cursor-pointer"
+                    >
+                      <span>All Furnished Residences</span>
+                      <span className="text-[11px] text-[#14616d] font-mono">View All →</span>
+                    </button>
+                    <div className="border-t border-[#f0eae1] my-1" />
+                    <div className="max-h-64 overflow-y-auto space-y-0.5">
+                      {navProperties.slice(0, 7).map((prop) => (
                         <button
+                          key={prop.id}
+                          type="button"
                           onClick={() => handleNavClick(`listing:${prop.id}`)}
-                          className="w-full text-left px-4 py-2 text-[#555555] hover:text-[#00b7a8] hover:bg-[#faf8f5] type-nav flex justify-between items-center gap-2 cursor-pointer"
+                          className="w-full text-left px-3.5 py-2 rounded-lg text-[#4a545c] hover:text-[#14616d] hover:bg-[#faf7f2] text-xs flex justify-between items-center gap-2 cursor-pointer transition-colors"
                         >
-                          <span className="truncate">
-                            {prop.unitNumber} ({prop.code})
-                          </span>
-                          <span className="type-support text-[#82634f] font-semibold tabular-nums shrink-0">
+                          <span className="truncate font-medium">Unit {prop.unitNumber}</span>
+                          <span className="text-[11px] font-mono text-[#966746] font-bold shrink-0">
                             ${prop.monthlyRate.toLocaleString()}/mo
                           </span>
                         </button>
-                      </li>
-                    ))}
-                    <li className="border-t border-[#efe9e0] my-1"></li>
-                    <li>
-                      <button
-                        onClick={() => handleNavClick('guide')}
-                        className="w-full text-left px-4 py-2 text-[#555555] hover:text-[#00b7a8] hover:bg-[#faf8f5] font-medium cursor-pointer"
-                      >
-                        Destination &amp; Area Guide
-                      </button>
-                    </li>
-                  </ul>
+                      ))}
+                    </div>
+                    <div className="border-t border-[#f0eae1] my-1" />
+                    <button
+                      type="button"
+                      onClick={() => handleNavClick('guide')}
+                      className="w-full text-left px-3.5 py-2 rounded-lg text-xs font-semibold text-[#68737a] hover:text-[#14616d] hover:bg-[#edf6f8] flex items-center gap-2 cursor-pointer"
+                    >
+                      <Compass className="w-3.5 h-3.5 text-[#14616d]" />
+                      <span>Destination &amp; Area Guide</span>
+                    </button>
+                  </div>
                 )}
               </li>
 
-              <li className={currentTab === 'vehicles' ? 'current-menu-item' : ''}>
+              <li>
                 <button
+                  type="button"
                   onClick={() => handleNavClick('vehicles')}
-                  className={`type-nav hover:text-[#00b7a8] transition-colors cursor-pointer whitespace-nowrap shrink-0 ${
-                    currentTab === 'vehicles' ? 'text-[#00b7a8] font-semibold' : ''
+                  className={`px-3 py-2 rounded-lg text-sm font-semibold flex items-center gap-1.5 transition-colors cursor-pointer whitespace-nowrap ${
+                    currentTab === 'vehicles'
+                      ? 'text-[#14616d] bg-[#edf6f8]'
+                      : 'hover:text-[#14616d] hover:bg-[#faf7f2]'
                   }`}
                 >
-                  Car Rentals
+                  <Car className="w-3.5 h-3.5" />
+                  <span>3D Fleet Rentals</span>
                 </button>
               </li>
 
-              <li className={currentTab === 'about' ? 'current-menu-item' : ''}>
+              <li>
                 <button
+                  type="button"
                   onClick={() => handleNavClick('about')}
-                  className={`type-nav hover:text-[#00b7a8] transition-colors cursor-pointer whitespace-nowrap shrink-0 ${
-                    currentTab === 'about' ? 'text-[#00b7a8] font-semibold' : ''
+                  className={`px-3 py-2 rounded-lg text-sm font-semibold transition-colors cursor-pointer whitespace-nowrap ${
+                    currentTab === 'about'
+                      ? 'text-[#14616d] bg-[#edf6f8]'
+                      : 'hover:text-[#14616d] hover:bg-[#faf7f2]'
                   }`}
                 >
                   About Us
                 </button>
               </li>
 
-              <li className={currentTab === 'contact' ? 'current-menu-item' : ''}>
+              <li>
                 <button
+                  type="button"
                   onClick={() => handleNavClick('contact')}
-                  className={`type-nav hover:text-[#00b7a8] transition-colors cursor-pointer whitespace-nowrap shrink-0 ${
-                    currentTab === 'contact' ? 'text-[#00b7a8] font-semibold' : ''
+                  className={`px-3 py-2 rounded-lg text-sm font-semibold transition-colors cursor-pointer whitespace-nowrap ${
+                    currentTab === 'contact'
+                      ? 'text-[#14616d] bg-[#edf6f8]'
+                      : 'hover:text-[#14616d] hover:bg-[#faf7f2]'
                   }`}
                 >
                   Contact
                 </button>
               </li>
 
-              <li
-                className={
-                  currentTab === 'dashboard' || currentTab === 'portal' ? 'current-menu-item' : ''
-                }
-              >
+              <li>
                 <button
+                  type="button"
                   onClick={() => handleNavClick('dashboard')}
-                  className={`type-nav hover:text-[#00b7a8] transition-colors cursor-pointer whitespace-nowrap shrink-0 ${
+                  className={`px-3 py-2 rounded-lg text-sm font-semibold transition-colors cursor-pointer whitespace-nowrap ${
                     currentTab === 'dashboard' || currentTab === 'portal'
-                      ? 'text-[#00b7a8] font-semibold'
-                      : ''
+                      ? 'text-[#14616d] bg-[#edf6f8]'
+                      : 'hover:text-[#14616d] hover:bg-[#faf7f2]'
                   }`}
                 >
                   Dashboard
@@ -217,38 +242,42 @@ export const Header: React.FC<HeaderProps> = ({
               </li>
             </ul>
           </nav>
+        </div>
 
-          <div className="flex items-center gap-2 pl-2 border-l border-[#e6dfd5]">
-            {/* Live Shopping Cart Drawer Trigger */}
-            <button
-              type="button"
-              onClick={openDrawer}
-              aria-label={`Shopping cart with ${cart.itemCount} items`}
-              className={`type-btn relative inline-flex items-center gap-2 px-3.5 py-2 rounded-lg transition-colors cursor-pointer border whitespace-nowrap shrink-0 ${
-                currentTab === 'cart' || currentTab === 'checkout'
-                  ? 'bg-[#282828] text-white border-[#282828]'
-                  : 'bg-white hover:bg-[#faf8f5] text-[#282828] border-[#dcd3c7] hover:border-[#00b7a8]'
-              }`}
-            >
-              <ShoppingBag className="w-4 h-4 text-[#00b7a8]" />
-              <span>Cart</span>
-              <span className="px-1.5 py-0.5 rounded bg-[#00b7a8] text-white text-xs font-semibold leading-none tabular-nums">
-                {cart.itemCount}
-              </span>
-            </button>
+        {/* Zone 3: Actions (Cart + Sign In / User Dashboard + Mobile Trigger) */}
+        <div className="flex items-center gap-3">
+          {/* Live Shopping Cart Trigger */}
+          <button
+            type="button"
+            onClick={openDrawer}
+            aria-label={`Shopping cart with ${cart.itemCount} items`}
+            className={`btn btn-sm inline-flex items-center gap-2 border cursor-pointer whitespace-nowrap shrink-0 ${
+              currentTab === 'cart' || currentTab === 'checkout'
+                ? 'bg-[#182024] text-white border-[#182024]'
+                : 'bg-white hover:bg-[#faf7f2] text-[#182024] border-[#d6cfc5] hover:border-[#14616d]'
+            }`}
+          >
+            <ShoppingBag className="w-4 h-4 text-[#14616d]" />
+            <span className="hidden sm:inline font-semibold text-xs">Cart</span>
+            <span className="px-1.5 py-0.5 rounded-md bg-[#14616d] text-white text-[11px] font-bold leading-none tabular-nums">
+              {cart.itemCount}
+            </span>
+          </button>
 
+          {/* Desktop Auth Controls */}
+          <div className="hidden xl:flex items-center gap-2 pl-2 border-l border-[#e6dfd5]">
             {authUser ? (
               <>
                 <button
                   type="button"
                   onClick={() => handleNavClick('dashboard')}
-                  className={`type-btn inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg transition-colors cursor-pointer border whitespace-nowrap shrink-0 ${
+                  className={`btn btn-sm inline-flex items-center gap-1.5 border whitespace-nowrap shrink-0 ${
                     currentTab === 'dashboard' || currentTab === 'portal'
-                      ? 'bg-[#00b7a8] text-white border-[#00b7a8]'
-                      : 'bg-[#e8f8f6] hover:bg-[#d5f3ef] text-[#00897d] border-[#00b7a8]/40'
+                      ? 'bg-[#14616d] text-white border-[#14616d]'
+                      : 'bg-[#edf6f8] hover:bg-[#e0f1f4] text-[#14616d] border-[#14616d]/30'
                   }`}
                 >
-                  <LayoutDashboard className="w-4 h-4" />
+                  <LayoutDashboard className="w-3.5 h-3.5" />
                   <span>{firstName ? `${firstName}'s Dashboard` : 'My Dashboard'}</span>
                 </button>
 
@@ -258,10 +287,11 @@ export const Header: React.FC<HeaderProps> = ({
                     setMobileMenuOpen(false);
                     if (onSignOut) onSignOut();
                   }}
-                  className="type-btn inline-flex items-center gap-1.5 px-3 py-2 rounded-lg text-[#555555] hover:text-rose-700 hover:bg-rose-50 transition-colors cursor-pointer whitespace-nowrap shrink-0"
+                  className="btn btn-sm btn-outline text-xs text-[#5c6770] hover:text-rose-700 hover:border-rose-300"
+                  title="Sign out of account"
                 >
-                  <LogOut className="w-4 h-4" />
-                  <span>Sign Out</span>
+                  <LogOut className="w-3.5 h-3.5" />
+                  <span className="hidden 2xl:inline">Sign Out</span>
                 </button>
               </>
             ) : (
@@ -269,11 +299,7 @@ export const Header: React.FC<HeaderProps> = ({
                 <button
                   type="button"
                   onClick={() => handleNavClick('login')}
-                  className={`type-btn px-3 py-2 rounded-lg transition-colors cursor-pointer whitespace-nowrap shrink-0 ${
-                    currentTab === 'login'
-                      ? 'text-[#00b7a8] font-bold'
-                      : 'text-[#555555] hover:text-[#00b7a8]'
-                  }`}
+                  className="btn btn-sm btn-outline text-xs text-[#354047] font-semibold"
                 >
                   Sign In
                 </button>
@@ -281,22 +307,19 @@ export const Header: React.FC<HeaderProps> = ({
                 <button
                   type="button"
                   onClick={() => handleNavClick('register')}
-                  className={`type-btn px-3.5 py-2 rounded-lg transition-colors cursor-pointer border whitespace-nowrap shrink-0 ${
-                    currentTab === 'register'
-                      ? 'bg-[#00b7a8] text-white border-[#00b7a8]'
-                      : 'bg-white hover:bg-[#e6f8f6] text-[#00897d] border-[#00b7a8]/40'
-                  }`}
+                  className="btn btn-sm btn-primary text-xs font-semibold"
                 >
                   Sign Up
                 </button>
               </>
             )}
 
-            {/* Search Icon */}
+            {/* Quick Search */}
             <div className="relative">
               <button
+                type="button"
                 onClick={() => setSearchOpen(!searchOpen)}
-                className="text-[#666666] hover:text-[#00b7a8] p-2 cursor-pointer transition-colors"
+                className="p-2 rounded-lg text-[#5c6770] hover:text-[#14616d] hover:bg-[#faf7f2] cursor-pointer transition-colors"
                 aria-label="Search residences"
               >
                 <Search className="w-4 h-4" />
@@ -305,149 +328,135 @@ export const Header: React.FC<HeaderProps> = ({
               {searchOpen && (
                 <form
                   onSubmit={handleSearchSubmit}
-                  className="absolute right-0 top-full mt-2 w-72 bg-white p-2 rounded-lg shadow-lg border border-[#e6dfd5] z-50 flex items-center"
+                  className="absolute right-0 top-full mt-2 w-72 bg-white p-2 rounded-xl shadow-xl border border-[#e6dfd5] z-50 flex items-center"
                 >
                   <input
                     type="text"
-                    placeholder="Search residences & amenities..."
+                    placeholder="Search residences &amp; amenities..."
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
-                    className="w-full px-3 py-1.5 text-sm outline-none text-[#282828]"
+                    className="w-full px-3 py-1.5 text-xs outline-none text-[#182024]"
                     autoFocus
                   />
                 </form>
               )}
             </div>
           </div>
-        </div>
 
-        {/* Controls (Cart + Search + Hamburger Menu) */}
-        <div className="flex items-center gap-2.5">
+          {/* Mobile Menu Button (Comfortable 44px Touch Target with proportional icon) */}
           <button
             type="button"
-            onClick={openDrawer}
-            aria-label={`Open cart (${cart.itemCount} items)`}
-            className="type-btn inline-flex xl:hidden items-center gap-1.5 px-3 py-2 rounded-lg border border-[#dcd3c7] bg-white text-[#282828] cursor-pointer"
-          >
-            <ShoppingBag className="w-4 h-4 text-[#00b7a8]" />
-            <span className="tabular-nums font-semibold">{cart.itemCount}</span>
-          </button>
-
-          <div className="relative xl:hidden">
-            <button
-              onClick={() => setSearchOpen(!searchOpen)}
-              className="text-[#282828] hover:text-[#00b7a8] p-2 cursor-pointer transition-colors"
-              aria-label="Search"
-            >
-              <Search className="w-5 h-5 stroke-[2.2]" />
-            </button>
-
-            {searchOpen && (
-              <form
-                onSubmit={handleSearchSubmit}
-                className="absolute right-0 top-full mt-2 w-64 bg-white p-2 rounded-xl shadow-xl border border-[#e6dfd5] z-50 flex items-center"
-              >
-                <input
-                  type="text"
-                  placeholder="Search residences..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full px-3 py-1.5 text-sm outline-none text-[#282828]"
-                  autoFocus
-                />
-              </form>
-            )}
-          </div>
-
-          <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="p-2 sm:p-2.5 cursor-pointer text-[#00897d] hover:text-[#00b7a8] transition-colors rounded-xl hover:bg-[#faf8f5]"
+            className="xl:hidden w-11 h-11 flex items-center justify-center cursor-pointer text-[#182024] hover:text-[#14616d] bg-[#faf7f2] hover:bg-[#f0ece4] border border-[#d6cfc5] rounded-xl transition-colors shrink-0"
             aria-label="Toggle Navigation Menu"
           >
             {mobileMenuOpen ? (
-              <X className="w-12 h-12 sm:w-14 sm:h-14 stroke-[3.2] transform scale-125" />
+              <X className="w-5 h-5 text-[#182024]" />
             ) : (
-              <Menu className="w-12 h-12 sm:w-14 sm:h-14 stroke-[3.2] transform scale-125" />
+              <Menu className="w-5 h-5 text-[#182024]" />
             )}
           </button>
         </div>
       </div>
 
-      {/* Navigation Drawer */}
+      {/* Mobile Drawer (Responsive, Clean, Structured) */}
       {mobileMenuOpen && (
-        <div className="bg-white border-t border-[#e6dfd5] px-6 py-4 space-y-1 shadow-md animate-in fade-in">
+        <div className="xl:hidden bg-white border-t border-[#e6dfd5] px-5 py-4 space-y-2 shadow-lg animate-fade-in-down">
           <button
+            type="button"
             onClick={() => handleNavClick('home')}
-            className={`block w-full text-left py-2.5 type-nav cursor-pointer text-base sm:text-lg ${
-              currentTab === 'home' ? 'text-[#00b7a8] font-bold' : 'text-[#282828] font-medium hover:text-[#00b7a8]'
+            className={`w-full text-left px-4 py-2.5 rounded-xl font-bold text-sm cursor-pointer transition-colors ${
+              currentTab === 'home' ? 'bg-[#edf6f8] text-[#14616d]' : 'text-[#182024] hover:bg-[#faf7f2]'
             }`}
           >
             Home
           </button>
 
           <button
+            type="button"
             onClick={() => handleNavClick('portfolio')}
-            className={`block w-full text-left py-2.5 type-nav cursor-pointer text-base sm:text-lg ${
-              ['portfolio', 'faq', 'terms'].includes(currentTab) ||
-              currentTab.startsWith('listing:')
-                ? 'text-[#00b7a8] font-bold'
-                : 'text-[#282828] font-medium hover:text-[#00b7a8]'
+            className={`w-full text-left px-4 py-2.5 rounded-xl font-bold text-sm cursor-pointer transition-colors ${
+              ['portfolio', 'faq', 'terms'].includes(currentTab) || currentTab.startsWith('listing:')
+                ? 'bg-[#edf6f8] text-[#14616d]'
+                : 'text-[#182024] hover:bg-[#faf7f2]'
             }`}
           >
-            Accommodation
+            Furnished Residences
           </button>
 
           <button
+            type="button"
             onClick={() => handleNavClick('vehicles')}
-            className={`block w-full text-left py-2.5 type-nav cursor-pointer text-base sm:text-lg ${
-              currentTab === 'vehicles' ? 'text-[#00b7a8] font-bold' : 'text-[#282828] font-medium hover:text-[#00b7a8]'
+            className={`w-full text-left px-4 py-2.5 rounded-xl font-bold text-sm cursor-pointer transition-colors ${
+              currentTab === 'vehicles' ? 'bg-[#edf6f8] text-[#14616d]' : 'text-[#182024] hover:bg-[#faf7f2]'
             }`}
           >
-            Car Rentals
+            Curated 3D Fleet Rentals
           </button>
 
           <button
+            type="button"
             onClick={() => handleNavClick('about')}
-            className={`block w-full text-left py-2.5 type-nav cursor-pointer text-base sm:text-lg ${
-              currentTab === 'about' ? 'text-[#00b7a8] font-bold' : 'text-[#282828] font-medium hover:text-[#00b7a8]'
+            className={`w-full text-left px-4 py-2.5 rounded-xl font-bold text-sm cursor-pointer transition-colors ${
+              currentTab === 'about' ? 'bg-[#edf6f8] text-[#14616d]' : 'text-[#182024] hover:bg-[#faf7f2]'
             }`}
           >
             About Us
           </button>
 
           <button
+            type="button"
             onClick={() => handleNavClick('contact')}
-            className={`block w-full text-left py-2.5 type-nav cursor-pointer text-base sm:text-lg ${
-              currentTab === 'contact' ? 'text-[#00b7a8] font-bold' : 'text-[#282828] font-medium hover:text-[#00b7a8]'
+            className={`w-full text-left px-4 py-2.5 rounded-xl font-bold text-sm cursor-pointer transition-colors ${
+              currentTab === 'contact' ? 'bg-[#edf6f8] text-[#14616d]' : 'text-[#182024] hover:bg-[#faf7f2]'
             }`}
           >
             Contact
           </button>
 
           <button
+            type="button"
             onClick={() => handleNavClick('dashboard')}
-            className={`block w-full text-left py-2.5 type-nav cursor-pointer text-base sm:text-lg ${
+            className={`w-full text-left px-4 py-2.5 rounded-xl font-bold text-sm cursor-pointer transition-colors ${
               currentTab === 'dashboard' || currentTab === 'portal'
-                ? 'text-[#00b7a8] font-bold'
-                : 'text-[#282828] font-medium hover:text-[#00b7a8]'
+                ? 'bg-[#edf6f8] text-[#14616d]'
+                : 'text-[#182024] hover:bg-[#faf7f2]'
             }`}
           >
-            {authUser ? `My Dashboard (${authUser.name})` : 'Dashboard'}
+            {authUser ? `My Dashboard (${authUser.name})` : 'Client Dashboard'}
           </button>
 
-          {authUser && (
-            <div className="pt-2 border-t border-[#efe9e0]">
+          <div className="pt-3 border-t border-[#f0eae1] flex items-center gap-2.5">
+            {authUser ? (
               <button
+                type="button"
                 onClick={() => {
                   setMobileMenuOpen(false);
                   if (onSignOut) onSignOut();
                 }}
-                className="block w-full text-left py-2.5 type-nav font-semibold text-rose-700 hover:text-rose-800 cursor-pointer text-base sm:text-lg"
+                className="btn btn-sm btn-outline w-full text-rose-700 border-rose-200 hover:bg-rose-50"
               >
                 Sign Out
               </button>
-            </div>
-          )}
+            ) : (
+              <>
+                <button
+                  type="button"
+                  onClick={() => handleNavClick('login')}
+                  className="btn btn-sm btn-outline flex-1"
+                >
+                  Sign In
+                </button>
+                <button
+                  type="button"
+                  onClick={() => handleNavClick('register')}
+                  className="btn btn-sm btn-primary flex-1"
+                >
+                  Sign Up
+                </button>
+              </>
+            )}
+          </div>
         </div>
       )}
     </header>

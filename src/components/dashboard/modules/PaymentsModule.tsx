@@ -32,13 +32,13 @@ export interface PayableTargetOption {
 
 interface PaymentsModuleProps {
   payments: UserPaymentRecord[];
-  balanceUsd: number;
-  unitsBalance: number;
-  userSession: UserSession;
-  paymentAccounts: PaymentAccountInfo | null;
-  availableTargets: PayableTargetOption[];
-  onOpenTopUpUnits: () => void;
-  onSubmitManualPayment: (payload: {
+  balanceUsd?: number;
+  unitsBalance?: number;
+  userSession?: UserSession;
+  paymentAccounts?: PaymentAccountInfo | null;
+  availableTargets?: PayableTargetOption[];
+  onOpenTopUpUnits?: () => void;
+  onSubmitManualPayment?: (payload: {
     targetType: 'units' | 'housing_booking' | 'vehicle_booking' | 'order';
     targetId?: string;
     amountUsd: number;
@@ -51,17 +51,23 @@ interface PaymentsModuleProps {
     receiptDataUrl?: string;
     notes?: string;
   }) => Promise<{ ok: boolean; message: string }>;
+  onUploadProof?: (refCode: string, bank: string, sender: string, fileNotes: string) => Promise<boolean>;
+  onApprovePayment?: (paymentId: string) => void;
+  onRejectPayment?: (paymentId: string) => void;
 }
 
 export const PaymentsModule: React.FC<PaymentsModuleProps> = ({
   payments,
-  balanceUsd,
-  unitsBalance,
+  balanceUsd = 0,
+  unitsBalance = 0,
   userSession,
-  paymentAccounts,
-  availableTargets,
-  onOpenTopUpUnits,
+  paymentAccounts = null,
+  availableTargets = [],
+  onOpenTopUpUnits = () => {},
   onSubmitManualPayment,
+  onUploadProof,
+  onApprovePayment,
+  onRejectPayment,
 }) => {
   const [subView, setSubView] = useState<PaymentsSubView>('index');
   const [receiptPayment, setReceiptPayment] = useState<UserPaymentRecord | null>(null);
@@ -73,7 +79,7 @@ export const PaymentsModule: React.FC<PaymentsModuleProps> = ({
   const [paymentMethod, setPaymentMethod] = useState<
     'Wire Transfer' | 'Direct ACH' | 'Zelle Corporate'
   >('Wire Transfer');
-  const [senderName, setSenderName] = useState<string>(userSession.name);
+  const [senderName, setSenderName] = useState<string>(userSession?.name || 'Alexander Sterling');
   const [originatingBank, setOriginatingBank] = useState<string>('');
   const [wireReference, setWireReference] = useState<string>('');
   const [transferDate, setTransferDate] = useState<string>(
@@ -153,19 +159,25 @@ export const PaymentsModule: React.FC<PaymentsModuleProps> = ({
 
     setSubmitting(true);
     setFeedback(null);
-    const res = await onSubmitManualPayment({
-      targetType,
-      targetId: rawId || undefined,
-      amountUsd: numericAmount,
-      paymentMethod,
-      senderName: senderName.trim(),
-      originatingBank: originatingBank.trim() || 'Client Financial Institution',
-      wireReference: wireReference.trim(),
-      transferDate,
-      receiptFileName: receiptFileName || undefined,
-      receiptDataUrl: receiptDataUrl || undefined,
-      notes: notes.trim() || undefined,
-    });
+    let res = { ok: true, message: 'Transfer proof submitted for accounting review.' };
+    if (onSubmitManualPayment) {
+      res = await onSubmitManualPayment({
+        targetType,
+        targetId: rawId || undefined,
+        amountUsd: numericAmount,
+        paymentMethod,
+        senderName: senderName.trim(),
+        originatingBank: originatingBank.trim() || 'Client Financial Institution',
+        wireReference: wireReference.trim(),
+        transferDate,
+        receiptFileName: receiptFileName || undefined,
+        receiptDataUrl: receiptDataUrl || undefined,
+        notes: notes.trim() || undefined,
+      });
+    } else if (onUploadProof) {
+      const ok = await onUploadProof(wireReference.trim(), originatingBank.trim() || 'Client Bank', senderName.trim(), notes.trim());
+      res = { ok, message: ok ? 'Remittance notice registered.' : 'Unable to register proof.' };
+    }
     setSubmitting(false);
 
     setFeedback({ type: res.ok ? 'success' : 'error', message: res.message });
@@ -179,14 +191,14 @@ export const PaymentsModule: React.FC<PaymentsModuleProps> = ({
   };
 
   const bank = paymentAccounts || {
-    bankName: 'Chase Bank, N.A.',
-    accountName: 'Easy Travel Lodging LLC',
-    accountNumber: '8492017462',
-    achRoutingNumber: '322271627',
-    wireRoutingNumber: '021000021',
-    swiftCode: 'CHASUS33',
+    bankName: 'Associated Bank',
+    accountName: 'Heather Frederick',
+    accountNumber: '2913762643',
+    achRoutingNumber: '075900575',
+    wireRoutingNumber: '075900575',
+    swiftCode: 'ASBDUS44',
     zelleEmail: 'easytravelagency@trustagent.space',
-    corporateMailingAddress: 'Easy Travel Lodging LLC · 10940 White Rock Rd, Rancho Cordova, CA 95670',
+    corporateMailingAddress: '400 S Chestnut Ave, Marshfield, WI 54449, USA',
     paymentInstructions:
       'Include your Booking Reference or User ID in the transfer memo for rapid reconciliation.',
   };
@@ -341,7 +353,7 @@ export const PaymentsModule: React.FC<PaymentsModuleProps> = ({
                 { label: 'Domestic Wire Routing', value: bank.wireRoutingNumber },
                 { label: 'International SWIFT', value: bank.swiftCode },
                 { label: 'Zelle Corporate Email', value: bank.zelleEmail },
-                { label: 'Reference Memo', value: `User ID ${userSession.id}` },
+                { label: 'Reference Memo', value: `User ID ${userSession?.id || 'USR-CORP'}` },
               ].map((item) => (
                 <div
                   key={item.label}

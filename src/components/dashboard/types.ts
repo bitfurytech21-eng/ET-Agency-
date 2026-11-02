@@ -3,9 +3,12 @@ export type DashboardTab =
   | 'accommodation'
   | 'car-rentals'
   | 'payments'
+  | 'saved-items'
   | 'notifications'
+  | 'messages'
   | 'profile'
   | 'security'
+  | 'settings'
   | 'support';
 
 export type OverviewSubView = 'index' | 'account-summary' | 'upcoming-bookings' | 'recent-activity';
@@ -123,9 +126,9 @@ export interface AccountActivityItem {
 
 export interface UserSession {
   id: string;
-  dashboardId: string;
-  dashboardCreatedAt: string;
-  lastAccessedAt: string;
+  dashboardId?: string;
+  dashboardCreatedAt?: string;
+  lastAccessedAt?: string;
   name: string;
   email: string;
   phone: string;
@@ -136,11 +139,13 @@ export interface UserSession {
   memberSince: string;
   passwordUpdatedAt?: string;
   twoFactorEnabled: boolean;
+  tier?: string;
+  idVerified?: boolean;
   preferredCurrency: string;
   timezone: string;
-  address: UserAddress;
-  preferences: UserPreferences;
-  driverInfo: UserDriverInfo;
+  address?: UserAddress;
+  preferences?: UserPreferences;
+  driverInfo?: UserDriverInfo;
 }
 
 export interface UserAccommodationReservation {
@@ -190,6 +195,7 @@ export interface UserCarRentalBooking {
   primaryDriver: string;
   driverLicenseNumber: string;
   driverLicenseState: string;
+  flightNumber?: string;
   notes?: string;
   handoverCode: string;
   createdAt?: string;
@@ -231,3 +237,14 @@ export interface UserSupportTicket {
   createdAt: string;
   updatedAt: string;
 }
+
+export interface UserMessageItem {
+  id: string;
+  sender: 'concierge' | 'host' | 'user' | 'system' | string;
+  senderName: string;
+  subject: string;
+  body: string;
+  timestamp: string;
+  isRead: boolean;
+}
+

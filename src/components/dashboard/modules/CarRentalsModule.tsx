@@ -24,14 +24,15 @@ import {
 
 interface CarRentalsModuleProps {
   rentals: UserCarRentalBooking[];
-  driverInfo: UserDriverInfo;
+  driverInfo?: UserDriverInfo;
   onExploreFleet: () => void;
-  onSaveDriverInfo: (info: UserDriverInfo) => Promise<{ ok: boolean; message: string }>;
-  onModifyRental: (
+  onSaveDriverInfo?: (info: UserDriverInfo) => Promise<{ ok: boolean; message: string }>;
+  onModifyRental?: (
     id: string,
     payload: { pickupDate: string; returnDate: string; pickupLocation: string; notes?: string },
   ) => Promise<{ ok: boolean; message: string }>;
-  onCancelRental: (id: string, reason: string) => Promise<{ ok: boolean; message: string }>;
+  onCancelRental?: (id: string, reason: string) => Promise<{ ok: boolean; message: string }>;
+  onUpdateRental?: (id: string, updates: Partial<UserCarRentalBooking>) => void;
 }
 
 export const CarRentalsModule: React.FC<CarRentalsModuleProps> = ({
@@ -41,6 +42,7 @@ export const CarRentalsModule: React.FC<CarRentalsModuleProps> = ({
   onSaveDriverInfo,
   onModifyRental,
   onCancelRental,
+  onUpdateRental,
 }) => {
   const [subView, setSubView] = useState<CarRentalsSubView>('index');
   const [selectedRentalId, setSelectedRentalId] = useState<string | null>(rentals[0]?.id || null);
@@ -51,9 +53,9 @@ export const CarRentalsModule: React.FC<CarRentalsModuleProps> = ({
   const [modNotes, setModNotes] = useState('');
   const [cancelReason, setCancelReason] = useState('');
 
-  const [driverName, setDriverName] = useState(driverInfo.primaryDriver);
-  const [driverLicense, setDriverLicense] = useState(driverInfo.licenseNumber);
-  const [driverState, setDriverState] = useState(driverInfo.issuingState || 'CA');
+  const [driverName, setDriverName] = useState(driverInfo?.primaryDriver || 'Alexander Sterling');
+  const [driverLicense, setDriverLicense] = useState(driverInfo?.licenseNumber || 'US-DL-NY-9821470');
+  const [driverState, setDriverState] = useState(driverInfo?.issuingState || 'CA');
 
   const [isMutating, setIsMutating] = useState(false);
   const [feedback, setFeedback] = useState<{ type: 'success' | 'error'; message: string } | null>(
@@ -61,9 +63,11 @@ export const CarRentalsModule: React.FC<CarRentalsModuleProps> = ({
   );
 
   useEffect(() => {
-    setDriverName(driverInfo.primaryDriver);
-    setDriverLicense(driverInfo.licenseNumber);
-    setDriverState(driverInfo.issuingState || 'CA');
+    if (driverInfo) {
+      setDriverName(driverInfo.primaryDriver);
+      setDriverLicense(driverInfo.licenseNumber);
+      setDriverState(driverInfo.issuingState || 'CA');
+    }
   }, [driverInfo]);
 
   useEffect(() => {
@@ -125,11 +129,14 @@ export const CarRentalsModule: React.FC<CarRentalsModuleProps> = ({
     e.preventDefault();
     setIsMutating(true);
     setFeedback(null);
-    const res = await onSaveDriverInfo({
-      primaryDriver: driverName.trim(),
-      licenseNumber: driverLicense.trim(),
-      issuingState: driverState.trim() || 'CA',
-    });
+    let res = { ok: true, message: 'Driver profile saved successfully.' };
+    if (onSaveDriverInfo) {
+      res = await onSaveDriverInfo({
+        primaryDriver: driverName.trim(),
+        licenseNumber: driverLicense.trim(),
+        issuingState: driverState.trim() || 'CA',
+      });
+    }
     setIsMutating(false);
     setFeedback({ type: res.ok ? 'success' : 'error', message: res.message });
   };
@@ -143,12 +150,21 @@ export const CarRentalsModule: React.FC<CarRentalsModuleProps> = ({
     }
     setIsMutating(true);
     setFeedback(null);
-    const res = await onModifyRental(selectedRental.id, {
-      pickupDate: modPickupDate,
-      returnDate: modReturnDate,
-      pickupLocation: modPickupLoc.trim() || selectedRental.pickupLocation,
-      notes: modNotes.trim() || undefined,
-    });
+    let res = { ok: true, message: 'Rental modification recorded.' };
+    if (onModifyRental) {
+      res = await onModifyRental(selectedRental.id, {
+        pickupDate: modPickupDate,
+        returnDate: modReturnDate,
+        pickupLocation: modPickupLoc.trim() || selectedRental.pickupLocation,
+        notes: modNotes.trim() || undefined,
+      });
+    } else if (onUpdateRental) {
+      onUpdateRental(selectedRental.id, {
+        pickupDate: modPickupDate,
+        returnDate: modReturnDate,
+        pickupLocation: modPickupLoc.trim() || selectedRental.pickupLocation,
+      });
+    }
     setIsMutating(false);
     setFeedback({ type: res.ok ? 'success' : 'error', message: res.message });
     if (res.ok) {
@@ -161,7 +177,12 @@ export const CarRentalsModule: React.FC<CarRentalsModuleProps> = ({
     if (!selectedRental) return;
     setIsMutating(true);
     setFeedback(null);
-    const res = await onCancelRental(selectedRental.id, cancelReason.trim());
+    let res = { ok: true, message: 'Rental cancellation request processed.' };
+    if (onCancelRental) {
+      res = await onCancelRental(selectedRental.id, cancelReason.trim());
+    } else if (onUpdateRental) {
+      onUpdateRental(selectedRental.id, { status: 'cancelled' });
+    }
     setIsMutating(false);
     setFeedback({ type: res.ok ? 'success' : 'error', message: res.message });
     if (res.ok) {

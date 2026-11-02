@@ -7,16 +7,16 @@ import { Bell, CheckCheck } from 'lucide-react';
 
 interface NotificationsModuleProps {
   notifications: UserNotificationItem[];
-  onMarkAsRead: (id: string) => Promise<void>;
-  onMarkAllAsRead: () => Promise<void>;
-  onNavigateTab: (tab: DashboardTab) => void;
+  onMarkAsRead: ((id: string) => Promise<void>) | ((id: string) => void);
+  onMarkAllAsRead: (() => Promise<void>) | (() => void);
+  onNavigateTab?: (tab: DashboardTab) => void;
 }
 
 export const NotificationsModule: React.FC<NotificationsModuleProps> = ({
   notifications,
   onMarkAsRead,
   onMarkAllAsRead,
-  onNavigateTab,
+  onNavigateTab = () => {},
 }) => {
   const [subView, setSubView] = useState<NotificationsSubView>('index');
   const [markingAll, setMarkingAll] = useState(false);

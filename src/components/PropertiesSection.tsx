@@ -24,6 +24,7 @@ import {
   Heart,
   ShieldCheck,
 } from 'lucide-react';
+import { ScrollReveal } from './common/ScrollReveal';
 
 import { YouTubeEmbed } from './YouTubeEmbed';
 
@@ -140,65 +141,68 @@ export const PropertiesSection: React.FC<PropertiesSectionProps> = ({
 
   const getAmenityIcon = (amenity: string) => {
     const a = amenity.toLowerCase();
-    if (a.includes('wifi') || a.includes('internet')) return <Wifi className="w-3.5 h-3.5 text-[#00b7a8]" />;
-    if (a.includes('tv')) return <Tv className="w-3.5 h-3.5 text-[#00b7a8]" />;
-    if (a.includes('air') || a.includes('conditioning') || a.includes('heat')) return <Snowflake className="w-3.5 h-3.5 text-[#00b7a8]" />;
-    if (a.includes('bath')) return <Bath className="w-3.5 h-3.5 text-[#00b7a8]" />;
-    if (a.includes('disabled') || a.includes('wheelchair')) return <Accessibility className="w-3.5 h-3.5 text-[#00b7a8]" />;
-    if (a.includes('pet')) return <Dog className="w-3.5 h-3.5 text-[#00b7a8]" />;
-    if (a.includes('fire')) return <Flame className="w-3.5 h-3.5 text-[#00b7a8]" />;
-    return <Check className="w-3.5 h-3.5 text-[#00b7a8]" />;
+    if (a.includes('wifi') || a.includes('internet')) return <Wifi className="w-3.5 h-3.5 text-[#14616d]" />;
+    if (a.includes('tv')) return <Tv className="w-3.5 h-3.5 text-[#14616d]" />;
+    if (a.includes('air') || a.includes('conditioning') || a.includes('heat')) return <Snowflake className="w-3.5 h-3.5 text-[#14616d]" />;
+    if (a.includes('bath')) return <Bath className="w-3.5 h-3.5 text-[#14616d]" />;
+    if (a.includes('disabled') || a.includes('wheelchair')) return <Accessibility className="w-3.5 h-3.5 text-[#14616d]" />;
+    if (a.includes('pet')) return <Dog className="w-3.5 h-3.5 text-[#14616d]" />;
+    if (a.includes('fire')) return <Flame className="w-3.5 h-3.5 text-[#14616d]" />;
+    return <Check className="w-3.5 h-3.5 text-[#14616d]" />;
   };
 
   return (
-    <section id="portfolio" className="bg-white py-12 sm:py-16 text-left border-b border-[#e5e5e5]">
-      <div className="max-w-[1250px] mx-auto px-4 sm:px-8 space-y-12">
+    <section id="portfolio" className="bg-[#faf7f2] py-14 sm:py-20 text-left border-b border-[#e2ded6]">
+      <div className="max-w-[1260px] mx-auto px-4 sm:px-8 space-y-10 sm:space-y-12">
         {/* Section Intro */}
-        <div className="text-center space-y-3 max-w-[850px] mx-auto">
-          <h6 className="et_section_h6 text-[#1d4f5d]">
-            Furnished Residences &amp; Flexible Stays
-          </h6>
-          <h2 className="type-h2 text-[#1b1d20]">
-            Comfortable, Move-In-Ready Apartments for Short Visits, Relocations, and Extended Stays
+        <div className="text-center space-y-3.5 max-w-[820px] mx-auto">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-lg bg-white border border-[#e2ded6] text-xs font-semibold uppercase tracking-wider text-[#14616d] shadow-2xs">
+            <span>Portfolio &amp; Residences</span>
+          </div>
+          <h2 className="type-h2 text-[#182024]">
+            Furnished Residences for Flexible &amp; Extended Stays
           </h2>
-          <p className="type-body text-[#434a4f]">
-            Explore our collection of fully furnished 1- and 2-bedroom apartments in Rancho Cordova. Designed for families, relocating homeowners, visiting guests on <strong className="font-semibold text-[#1b1d20]">5+ night stays</strong>, and organizations booking <strong className="font-semibold text-[#1b1d20]">30+ day extended stays</strong>, every residence includes utilities, high-speed Wi-Fi, and dedicated parking.
+          <p className="type-body text-[#4a545c]">
+            Explore our collection of fully furnished 1- and 2-bedroom apartments. Designed for relocating homeowners, visiting professionals on <strong className="font-semibold text-[#182024]">5+ night stays</strong>, and organizations booking <strong className="font-semibold text-[#182024]">30+ day corporate leases</strong>. Every suite includes high-speed Wi-Fi, utilities, and dedicated parking.
           </p>
         </div>
 
         {/* Interactive Portfolio Filter & Search Bar */}
-        <div className="bg-[#faf8f5] border border-[#e6dfd5] p-4 rounded-xl flex flex-col md:flex-row md:items-center justify-between gap-3">
-          <div className="flex flex-wrap items-center gap-2">
+        <div className="bg-white border border-[#e2ded6] p-4 sm:p-5 rounded-2xl shadow-xs flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
             {[
               { id: 'all', label: `All Collections (${sourceProperties.length})` },
               ...(wishlistIds.length > 0
                 ? [{ id: 'saved', label: `Saved (${wishlistIds.length})` }]
                 : []),
-              { id: 'sacramento', label: 'Corporate Stays' },
-              { id: 'los-angeles', label: 'Los Angeles Vacation Rentals' },
+              { id: 'sacramento', label: 'Sacramento & Cordova' },
+              { id: 'los-angeles', label: 'Los Angeles Suites' },
               { id: '1bed', label: '1 Bed / 1 Bath' },
               { id: '2bed', label: '2 Bed / 2 Bath' },
               { id: 'downstairs', label: 'Ground Floor' },
-              { id: 'upstairs', label: 'Upstairs' },
-            ].map((f) => (
-              <button
-                key={f.id}
-                type="button"
-                onClick={() => setUnitFilter(f.id as typeof unitFilter)}
-                className={`type-btn px-3.5 py-2 rounded-lg border transition-colors cursor-pointer whitespace-nowrap ${
-                  unitFilter === f.id
-                    ? 'bg-[#00b7a8] text-white border-[#00b7a8]'
-                    : 'bg-white text-[#5c5046] border-[#dfd7cc] hover:border-[#00b7a8]'
-                }`}
-              >
-                {f.label}
-              </button>
-            ))}
+              { id: 'upstairs', label: 'Upper Level' },
+            ].map((f) => {
+              const isActive = unitFilter === f.id;
+              return (
+                <button
+                  key={f.id}
+                  type="button"
+                  onClick={() => setUnitFilter(f.id as typeof unitFilter)}
+                  className={`type-btn px-3.5 py-2 text-xs font-semibold rounded-xl border transition-all cursor-pointer whitespace-nowrap ${
+                    isActive
+                      ? 'bg-[#14616d] text-white border-[#14616d] shadow-2xs'
+                      : 'bg-white text-[#4a545c] border-[#e2ded6] hover:border-[#14616d]/50 hover:text-[#182024]'
+                  }`}
+                >
+                  {f.label}
+                </button>
+              );
+            })}
           </div>
 
           <div className="flex items-center gap-2">
             <div className="relative flex-1 md:w-64">
-              <Search className="w-4 h-4 text-[#857568] absolute left-3 top-3 pointer-events-none" />
+              <Search className="w-4 h-4 text-[#727e86] absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
               <input
                 type="text"
                 value={localQuery || searchQuery}
@@ -206,8 +210,8 @@ export const PropertiesSection: React.FC<PropertiesSectionProps> = ({
                   setLocalQuery(e.target.value);
                   if (!e.target.value && onClearSearch) onClearSearch();
                 }}
-                placeholder="Search unit, layout, amenity..."
-                className="w-full h-10 pl-9 pr-3 bg-white border border-[#dfd7cc] text-sm rounded-lg outline-none focus:border-[#00b7a8]"
+                placeholder="Search unit, floor, amenity..."
+                className="w-full h-10 pl-9 pr-3 bg-[#faf7f2]/60 hover:bg-white focus:bg-white border border-[#e2ded6] text-xs sm:text-sm text-[#182024] rounded-xl outline-none focus:border-[#14616d] transition-colors"
               />
             </div>
             {(unitFilter !== 'all' || effectiveQuery) && (
@@ -218,7 +222,7 @@ export const PropertiesSection: React.FC<PropertiesSectionProps> = ({
                   setLocalQuery('');
                   onClearSearch?.();
                 }}
-                className="type-btn px-3 py-2 text-[#5c5046] hover:text-[#282828] cursor-pointer"
+                className="type-btn px-3 py-2 text-xs font-semibold text-[#727e86] hover:text-[#182024] cursor-pointer"
               >
                 Reset
               </button>
@@ -227,10 +231,10 @@ export const PropertiesSection: React.FC<PropertiesSectionProps> = ({
         </div>
 
         {/* Listings Container */}
-        <div className="space-y-16">
+        <div className="space-y-12 sm:space-y-16">
           {filteredProperties.length === 0 ? (
-            <div className="p-10 text-center bg-[#faf8f5] border border-[#e6dfd5] rounded-xl space-y-3">
-              <p className="type-body font-medium text-[#5c5046]">
+            <div className="p-12 text-center bg-white border border-[#e2ded6] rounded-2xl shadow-xs space-y-4">
+              <p className="type-body font-medium text-[#4a545c]">
                 No residences matched your current search or filter selection.
               </p>
               <button
@@ -240,7 +244,7 @@ export const PropertiesSection: React.FC<PropertiesSectionProps> = ({
                   setLocalQuery('');
                   onClearSearch?.();
                 }}
-                className="et_pb_button et_pb_button_teal type-btn py-2.5 px-5 cursor-pointer"
+                className="btn btn-primary px-6"
               >
                 Show All {sourceProperties.length} Residences
               </button>
@@ -262,15 +266,19 @@ export const PropertiesSection: React.FC<PropertiesSectionProps> = ({
                 : nightlyEstimate * activeTerm.qty;
 
             return (
-              <div
+              <ScrollReveal
                 key={prop.id}
-                id={prop.slug}
-                className="border-t border-[#e5e5e5] pt-12 first:border-t-0 first:pt-0"
+                delay={Math.min(propIdx * 50, 200)}
+                direction="up"
               >
+                <div
+                  id={prop.slug}
+                  className="card-surface card-hover p-6 sm:p-8"
+                >
                 <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
                   {/* Image Gallery Column */}
                   <div className="lg:col-span-6 space-y-3">
-                    <div className="relative aspect-4/3 overflow-hidden bg-[#f4efe9] border border-[#e6dfd5] rounded-lg shadow-xs group">
+                    <div className="relative aspect-4/3 overflow-hidden bg-[#faf7f2] border border-[#e2ded6] rounded-xl shadow-xs group">
                       <img
                         src={displayImage}
                         alt={prop.title}
@@ -300,10 +308,10 @@ export const PropertiesSection: React.FC<PropertiesSectionProps> = ({
                                 [prop.id]: currentImgIdx === 0 ? prop.images.length - 1 : currentImgIdx - 1,
                               }));
                             }}
-                            className="absolute left-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-black/60 hover:bg-black text-white flex items-center justify-center transition-all opacity-0 group-hover:opacity-100 cursor-pointer shadow-md"
+                            className="absolute left-2.5 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-black/60 hover:bg-black text-white flex items-center justify-center transition-all opacity-0 group-hover:opacity-100 cursor-pointer shadow-md"
                             aria-label="Previous photo"
                           >
-                            <ChevronLeft className="w-5 h-5" />
+                            <ChevronLeft className="w-4 h-4" />
                           </button>
                           <button
                             type="button"
@@ -314,23 +322,23 @@ export const PropertiesSection: React.FC<PropertiesSectionProps> = ({
                                 [prop.id]: currentImgIdx === prop.images.length - 1 ? 0 : currentImgIdx + 1,
                               }));
                             }}
-                            className="absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-black/60 hover:bg-black text-white flex items-center justify-center transition-all opacity-0 group-hover:opacity-100 cursor-pointer shadow-md"
+                            className="absolute right-2.5 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-black/60 hover:bg-black text-white flex items-center justify-center transition-all opacity-0 group-hover:opacity-100 cursor-pointer shadow-md"
                             aria-label="Next photo"
                           >
-                            <ChevronRight className="w-5 h-5" />
+                            <ChevronRight className="w-4 h-4" />
                           </button>
                         </>
                       )}
 
                       <button
                         onClick={() => handleOpenModal(prop, 'gallery')}
-                        className="type-btn absolute bottom-3 right-3 px-3 py-1.5 bg-white/95 hover:bg-white text-[#282828] rounded-lg shadow-md flex items-center gap-1.5 cursor-pointer"
+                        className="type-btn absolute bottom-3 right-3 px-3 py-1.5 bg-white/95 hover:bg-white text-[#182024] rounded-lg shadow-sm border border-[#e2ded6] flex items-center gap-1.5 cursor-pointer text-xs font-semibold"
                       >
-                        <Maximize2 className="w-4 h-4" />
+                        <Maximize2 className="w-3.5 h-3.5 text-[#14616d]" />
                         <span>All Photos ({prop.images.length})</span>
                       </button>
 
-                      <div className="type-support absolute top-3 left-3 bg-[#241d18]/80 text-white font-semibold px-3 py-1 rounded-md">
+                      <div className="type-support absolute top-3 left-3 bg-[#182024]/85 text-white font-semibold text-xs px-2.5 py-1 rounded-lg backdrop-blur-xs">
                         {prop.propertyType || prop.category || 'Furnished Residence'}
                       </div>
 
@@ -344,10 +352,10 @@ export const PropertiesSection: React.FC<PropertiesSectionProps> = ({
                           }
                         }}
                         aria-label={isWishlisted(prop.id) ? 'Remove from wishlist' : 'Save to wishlist'}
-                        className={`absolute top-3 right-3 w-9 h-9 rounded-full flex items-center justify-center transition-colors cursor-pointer ${
+                        className={`absolute top-3 right-3 w-8 h-8 rounded-full flex items-center justify-center transition-colors cursor-pointer ${
                           isWishlisted(prop.id)
                             ? 'bg-white text-rose-600 shadow-sm'
-                            : 'bg-black/65 hover:bg-black/85 text-white'
+                            : 'bg-black/60 hover:bg-black/80 text-white'
                         }`}
                       >
                         <Heart
@@ -357,7 +365,7 @@ export const PropertiesSection: React.FC<PropertiesSectionProps> = ({
                         />
                       </button>
 
-                      <div className="type-support absolute bottom-3 left-3 bg-black/75 text-white font-medium px-2.5 py-0.5 rounded-md tabular-nums">
+                      <div className="type-support absolute bottom-3 left-3 bg-black/70 text-white font-medium text-xs px-2 py-0.5 rounded-md tabular-nums">
                         {currentImgIdx + 1} / {prop.images.length}
                       </div>
                     </div>
@@ -370,10 +378,10 @@ export const PropertiesSection: React.FC<PropertiesSectionProps> = ({
                           onClick={() => {
                             setSelectedMainImages((prev) => ({ ...prev, [prop.id]: i }));
                           }}
-                          className={`w-18 sm:w-20 h-14 shrink-0 overflow-hidden rounded border transition-all cursor-pointer ${
+                          className={`w-18 sm:w-20 h-14 shrink-0 overflow-hidden rounded-lg border transition-all cursor-pointer ${
                             currentImgIdx === i
-                              ? 'border-[#00b7a8] opacity-100 shadow-xs'
-                              : 'border-[#d9d9d9] opacity-70 hover:opacity-100'
+                              ? 'border-[#14616d] ring-1 ring-[#14616d] opacity-100 shadow-2xs'
+                              : 'border-[#e2ded6] opacity-75 hover:opacity-100'
                           }`}
                         >
                           <img
@@ -392,10 +400,10 @@ export const PropertiesSection: React.FC<PropertiesSectionProps> = ({
 
                     {/* Video Walkthrough Embed if available */}
                     {videoTestimonials[prop.id] && (
-                      <div className="mt-4 border border-[#e5e5e5] rounded-lg overflow-hidden">
+                      <div className="mt-3 border border-[#e2ded6] rounded-xl overflow-hidden shadow-2xs">
                         <YouTubeEmbed
                           urlOrId={videoTestimonials[prop.id]}
-                          title={`Guest Video Walkthrough & Review - ${prop.unitNumber}`}
+                          title={`Guest Video Walkthrough - ${prop.unitNumber}`}
                           aspectRatio="aspect-16/9"
                         />
                       </div>
@@ -403,30 +411,30 @@ export const PropertiesSection: React.FC<PropertiesSectionProps> = ({
                   </div>
 
                   {/* Details Column */}
-                  <div className="lg:col-span-6 space-y-5">
+                  <div className="lg:col-span-6 space-y-4 sm:space-y-5">
                     {/* Header Row: Unit metadata + live status + rate */}
-                    <div className="flex flex-wrap items-center justify-between gap-2 border-b border-[#efe9e0] pb-3">
-                      <div className="type-support flex flex-wrap items-center gap-2 text-[#5c5046]">
-                        <span className="font-semibold text-[#00897d]">
+                    <div className="flex flex-wrap items-center justify-between gap-3 border-b border-[#e2ded6] pb-3.5">
+                      <div className="type-support flex flex-wrap items-center gap-2 text-[#4a545c]">
+                        <span className="font-semibold text-[#14616d]">
                           {prop.unitNumber} ({prop.code})
                         </span>
-                        <span aria-hidden="true">·</span>
+                        <span aria-hidden="true" className="text-[#a5b0b6]">·</span>
                         <span>{prop.floor}</span>
-                        <span aria-hidden="true">·</span>
+                        <span aria-hidden="true" className="text-[#a5b0b6]">·</span>
                         <span>
                           {prop.bedrooms} Bed / {prop.bathrooms} Bath · Up to{' '}
                           {prop.maxGuests || Math.max(2, prop.bedrooms * 2)} Guests
                         </span>
                         {prop.verified === true && (
                           <>
-                            <span aria-hidden="true">·</span>
-                            <span className="inline-flex items-center gap-1 font-semibold text-[#1b1d20]">
-                              <ShieldCheck className="w-3.5 h-3.5 text-[#00897d]" />
+                            <span aria-hidden="true" className="text-[#a5b0b6]">·</span>
+                            <span className="inline-flex items-center gap-1 font-semibold text-[#182024]">
+                              <ShieldCheck className="w-3.5 h-3.5 text-[#14616d]" />
                               <span>Verified</span>
                             </span>
                           </>
                         )}
-                        <span aria-hidden="true">·</span>
+                        <span aria-hidden="true" className="text-[#a5b0b6]">·</span>
                         <span
                           className={`font-semibold ${
                             isReserved
@@ -445,11 +453,11 @@ export const PropertiesSection: React.FC<PropertiesSectionProps> = ({
                       </div>
 
                       <div className="text-right tabular-nums">
-                        <span className="text-xl font-bold text-[#282828] block">
+                        <span className="text-2xl font-bold font-mono tracking-tight text-[#182024] block">
                           ${prop.monthlyRate.toLocaleString()}{' '}
-                          <span className="type-support font-normal text-[#857568]">/ month</span>
+                          <span className="text-xs font-normal font-sans text-[#727e86]">/ month</span>
                         </span>
-                        <span className="type-support text-[#857568]">
+                        <span className="type-support text-xs text-[#727e86]">
                           or ~${nightlyEstimate}/night (5–29 nights)
                         </span>
                       </div>
@@ -465,22 +473,22 @@ export const PropertiesSection: React.FC<PropertiesSectionProps> = ({
                             handleOpenModal(prop, 'gallery');
                           }
                         }}
-                        className="type-h3 text-[#282828] hover:text-[#00b7a8] cursor-pointer transition-colors"
+                        className="type-h3 text-[#182024] hover:text-[#14616d] cursor-pointer transition-colors"
                       >
                         {prop.title}
                       </h3>
-                      <p className="type-support text-[#697076] mt-1.5">
+                      <p className="type-support text-[#4a545c] mt-1.5">
                         {prop.pricingNote ||
                           'Includes utilities, 400+ Mbps Wi-Fi, and dedicated parking. Flexible 5+ night short stays and tax-exempt 30+ day stays.'}
                       </p>
                     </div>
 
                     {/* Amenities Strip */}
-                    <div className="flex flex-wrap gap-2 pt-1 pb-1">
+                    <div className="flex flex-wrap gap-2 pt-0.5">
                       {prop.amenities.map((amenity, idx) => (
                         <div
                           key={idx}
-                          className="type-support inline-flex items-center gap-1.5 px-3 py-1.5 bg-[#faf8f5] border border-[#e6dfd5] rounded-md font-medium text-[#5c5046]"
+                          className="type-support inline-flex items-center gap-1.5 px-3 py-1.5 bg-[#faf7f2] border border-[#e2ded6] rounded-lg font-medium text-[#4a545c] text-xs"
                         >
                           {getAmenityIcon(amenity)}
                           <span>{amenity}</span>
@@ -490,33 +498,33 @@ export const PropertiesSection: React.FC<PropertiesSectionProps> = ({
 
                     {/* Availability Status Callout */}
                     {avail && (
-                      <div className="type-support p-3.5 bg-[#faf8f5] border border-[#e6dfd5] rounded-lg text-[#5c5046] flex items-center justify-between gap-3">
-                        <div className="flex items-center gap-2">
-                          <Clock className="w-4 h-4 text-[#00b7a8] shrink-0" />
+                      <div className="type-support p-3.5 bg-[#faf7f2] border border-[#e2ded6] rounded-xl text-[#4a545c] flex items-center justify-between gap-3">
+                        <div className="flex items-center gap-2 text-xs">
+                          <Clock className="w-4 h-4 text-[#14616d] shrink-0" />
                           <span>{avail.statusMessage}</span>
                         </div>
                         <button
                           onClick={() => toggleInlineCalendar(prop.id)}
-                          className="type-btn text-[#00897d] hover:underline cursor-pointer shrink-0"
+                          className="type-btn text-xs font-semibold text-[#14616d] hover:underline cursor-pointer shrink-0"
                         >
-                          {isCalendarOpen ? 'Close Calendar ↑' : 'View Calendar ↓'}
+                          {isCalendarOpen ? 'Hide Calendar ↑' : 'View Calendar ↓'}
                         </button>
                       </div>
                     )}
 
                     {/* Narrative Description */}
-                    <div className="type-body text-[#434a4f] whitespace-pre-line space-y-2">
+                    <div className="type-body text-[#4a545c] whitespace-pre-line space-y-2">
                       <p>{prop.fullDesc}</p>
                     </div>
 
                     <div className="pt-1">
-                      <h4 className="type-h4 text-[#1b1d20] mb-2.5">
+                      <h4 className="type-h4 text-[#182024] mb-2.5">
                         Residence Highlights &amp; Inclusions
                       </h4>
-                      <ul className="type-support grid grid-cols-1 sm:grid-cols-2 gap-2 text-[#434a4f]">
+                      <ul className="type-support grid grid-cols-1 sm:grid-cols-2 gap-2 text-[#4a545c]">
                         {prop.features.slice(0, 6).map((f, i) => (
-                          <li key={i} className="flex items-start gap-2">
-                            <Check className="w-4 h-4 text-[#00b7a8] shrink-0 mt-0.5" />
+                          <li key={i} className="flex items-start gap-2 text-xs">
+                            <Check className="w-4 h-4 text-[#14616d] shrink-0 mt-0.5" />
                             <span>{f}</span>
                           </li>
                         ))}
@@ -524,17 +532,19 @@ export const PropertiesSection: React.FC<PropertiesSectionProps> = ({
                     </div>
 
                     {/* Instant Cart Configuration Bar */}
-                    <div className="p-4 sm:p-5 bg-[#faf8f5] border border-[#e6dfd5] rounded-xl space-y-3.5">
+                    <div className="p-4 sm:p-5 bg-[#faf7f2] border border-[#e2ded6] rounded-2xl space-y-3.5">
                       <div className="flex items-center justify-between">
-                        <span className="type-label text-[#282828]">Configure Stay &amp; Add to Cart</span>
-                        <span className="text-base font-bold text-[#282828] tabular-nums">
+                        <span className="type-label text-xs uppercase tracking-wider font-bold text-[#182024]">
+                          Configure Stay
+                        </span>
+                        <span className="text-base font-bold font-mono tracking-tight text-[#182024] tabular-nums">
                           Est. ${estimatedStaySubtotal.toLocaleString()}
                         </span>
                       </div>
 
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                         <div>
-                          <label className="block type-label text-[#282828] mb-1.5">
+                          <label className="block text-xs font-semibold text-[#4a545c] mb-1.5">
                             Stay Length
                           </label>
                           <select
@@ -543,7 +553,7 @@ export const PropertiesSection: React.FC<PropertiesSectionProps> = ({
                               setStayTerms((prev) => ({ ...prev, [prop.id]: e.target.value }))
                             }
                             disabled={isReserved}
-                            className="w-full h-11 px-3 bg-white border border-[#dfd7cc] rounded-lg text-sm font-medium text-[#282828] outline-none focus:border-[#00b7a8]"
+                            className="w-full h-11 px-3 bg-white border border-[#e2ded6] rounded-xl text-xs sm:text-sm font-medium text-[#182024] outline-none focus:border-[#14616d]"
                           >
                             {STAY_OPTIONS.map((opt) => (
                               <option key={opt.value} value={opt.value}>
@@ -554,7 +564,7 @@ export const PropertiesSection: React.FC<PropertiesSectionProps> = ({
                         </div>
 
                         <div>
-                          <label className="block type-label text-[#282828] mb-1.5">
+                          <label className="block text-xs font-semibold text-[#4a545c] mb-1.5">
                             Preferred Check-In
                           </label>
                           <input
@@ -565,7 +575,7 @@ export const PropertiesSection: React.FC<PropertiesSectionProps> = ({
                               setCheckInDates((prev) => ({ ...prev, [prop.id]: e.target.value }))
                             }
                             disabled={isReserved}
-                            className="w-full h-11 px-3 bg-white border border-[#dfd7cc] rounded-lg text-sm font-medium text-[#282828] outline-none focus:border-[#00b7a8]"
+                            className="w-full h-11 px-3 bg-white border border-[#e2ded6] rounded-xl text-xs sm:text-sm font-medium text-[#182024] outline-none focus:border-[#14616d]"
                           />
                         </div>
                       </div>
@@ -575,12 +585,12 @@ export const PropertiesSection: React.FC<PropertiesSectionProps> = ({
                           type="button"
                           disabled={isReserved || isMutating}
                           onClick={() => handleAddPropertyToCart(prop)}
-                          className={`type-btn flex-1 min-w-[180px] py-2.5 px-4 rounded-lg inline-flex items-center justify-center gap-2 transition-colors cursor-pointer disabled:cursor-not-allowed ${
+                          className={`btn flex-1 min-w-[180px] ${
                             isReserved
-                              ? 'bg-[#ebe4da] text-[#857568]'
+                              ? 'bg-[#e2ded6] text-[#727e86] cursor-not-allowed border-[#e2ded6]'
                               : justAddedUnit === prop.id
-                              ? 'bg-emerald-600 text-white'
-                              : 'bg-[#00b7a8] hover:bg-[#009b8e] text-white'
+                              ? 'bg-emerald-700 text-white border-emerald-700'
+                              : 'btn-primary'
                           }`}
                         >
                           {isReserved ? (
@@ -607,7 +617,7 @@ export const PropertiesSection: React.FC<PropertiesSectionProps> = ({
                               activeTerm.billingUnit === 'month' ? '30-60' : '5-10',
                             )
                           }
-                          className="type-btn py-2.5 px-4 rounded-lg border border-[#dfd7cc] bg-white hover:bg-[#f4efe9] text-[#282828] cursor-pointer transition-colors"
+                          className="btn btn-outline"
                         >
                           Custom Inquiry
                         </button>
@@ -624,18 +634,18 @@ export const PropertiesSection: React.FC<PropertiesSectionProps> = ({
                             handleOpenModal(prop, 'gallery');
                           }
                         }}
-                        className="et_pb_button et_pb_button_white type-btn py-2.5 px-4 flex items-center gap-1.5 cursor-pointer shadow-xs"
+                        className="btn btn-white text-xs group"
                       >
                         <span>Full Suite Details</span>
-                        <ArrowRight className="w-4 h-4 text-[#00b7a8]" />
+                        <ArrowRight className="w-4 h-4 text-[#14616d] btn-arrow" />
                       </button>
 
                       <button
                         onClick={() => toggleInlineCalendar(prop.id)}
-                        className={`et_pb_button type-btn py-2.5 px-4 flex items-center gap-1.5 cursor-pointer ${
+                        className={`btn text-xs ${
                           isCalendarOpen
-                            ? 'bg-[#82634f] text-white'
-                            : 'bg-[#e6f8f6] text-[#00897d] border border-[#00b7a8]/40 hover:bg-[#d0f3ef]'
+                            ? 'bg-[#966746] text-white border-[#966746]'
+                            : 'bg-[#e8f2f4] text-[#14616d] border-[#14616d]/30 hover:bg-[#d8eaed]'
                         }`}
                       >
                         <Calendar className="w-4 h-4" />
@@ -647,10 +657,10 @@ export const PropertiesSection: React.FC<PropertiesSectionProps> = ({
 
                 {/* Inline Visual Availability Calendar Accordion */}
                 {isCalendarOpen && (
-                  <div className="mt-8 pt-6 border-t border-[#e6dfd5] animate-in fade-in">
+                  <div className="mt-8 pt-6 border-t border-[#e2ded6] animate-in fade-in">
                     <div className="mb-3 flex items-center justify-between">
-                      <h4 className="type-h4 text-[#282828] flex items-center gap-2">
-                        <Calendar className="w-4 h-4 text-[#00b7a8]" />
+                      <h4 className="type-h4 text-[#182024] flex items-center gap-2">
+                        <Calendar className="w-4 h-4 text-[#14616d]" />
                         <span>Availability Calendar for {prop.unitNumber} ({prop.code})</span>
                       </h4>
                       <button
@@ -672,70 +682,75 @@ export const PropertiesSection: React.FC<PropertiesSectionProps> = ({
                     />
                   </div>
                 )}
-              </div>
+                </div>
+              </ScrollReveal>
             );
           })}
         </div>
 
         {/* Community & Residence Inclusions Summary */}
-        <div className="type-body bg-[#faf8f5] border border-[#e6dfd5] rounded-xl p-6 sm:p-10 space-y-4 text-left text-[#434a4f]">
-          <h3 className="type-h3 text-[#282828]">
+        <div className="type-body bg-white border border-[#e2ded6] rounded-2xl p-6 sm:p-10 space-y-4 text-left text-[#4a545c] shadow-xs">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-lg bg-[#faf7f2] border border-[#e2ded6] text-xs font-semibold uppercase tracking-wider text-[#14616d]">
+            <span>Included Standards</span>
+          </div>
+          <h3 className="type-h3 text-[#182024]">
             Standard Residence &amp; Community Inclusions
           </h3>
           <p>
-            Every Easy Travel Lodging apartment is prepared for immediate, comfortable living—whether you are booking a 5-night family visit, managing a home renovation or relocation, or settling in for a multi-month stay across California’s homes.
+            Every Easy Travel Lodging residence is curated for immediate, comfortable living—whether you are booking a 5-night executive visit, managing a home renovation or relocation, or settling in for an extended multi-month lease.
           </p>
           <p>
-            Guests enjoy access to a 24-hour fitness center, swimming pools, heated spas, and outdoor volleyball and tennis courts. Inside each apartment you will find central air and heating, a full-size refrigerator, range and oven, microwave, dishwasher, updated kitchen counters, and an in-unit stackable washer and dryer.
+            Guests enjoy access to community fitness facilities, swimming pools, heated spas, and outdoor sports courts. Inside each residence you will find central air and heating, full-size refrigeration, microwave, dishwasher, cookware, and private in-unit laundry.
           </p>
           <p>
-            Living spaces include a built-in dining credenza, an indoor fireplace, an updated bathroom, and a private patio or balcony. Kitchens and utility closets come stocked with a Keurig coffee maker, Instant Pot, cookware, dishes, vacuum cleaner, iron and ironing board, and starter laundry and cleaning supplies.
+            Living spaces feature dedicated dining credenzas, comfortable work areas, private patios or balconies, and starter coffee and tea bars.
           </p>
-          <p className="font-semibold text-[#1b1d20]">
-            Utilities include electricity, gas, water, sewer, trash, dedicated parking, and 400+ Mbps Wi-Fi, plus a 55&quot; Smart TV in the living room and a 43&quot; Smart TV in every bedroom. Approved pets and service animals are welcome in designated suites with advance notice.
+          <p className="font-semibold text-[#182024] pt-1">
+            Utilities include electricity, gas, water, dedicated parking, and 400+ Mbps Wi-Fi, plus 4K Smart TVs in the living room and bedrooms. Approved pets and service animals are welcome in designated suites.
           </p>
         </div>
       </div>
 
       {/* Modal Lightbox with Gallery and Availability Calendar Tabs */}
       {activeModalProperty && (
-        <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-xs flex items-center justify-center p-4">
-          <div className="bg-white max-w-4xl w-full max-h-[92vh] overflow-y-auto rounded-xl p-6 sm:p-8 space-y-6 relative border border-[#d9d9d9] shadow-2xl">
-            <div className="flex items-center justify-between border-b border-[#e5e5e5] pb-4">
+        <div className="fixed inset-0 z-50 bg-[#182024]/80 backdrop-blur-xs flex items-center justify-center p-4">
+          <div className="bg-white max-w-4xl w-full max-h-[92vh] overflow-y-auto rounded-2xl p-6 sm:p-8 space-y-6 relative border border-[#e2ded6] shadow-2xl">
+            <div className="flex items-center justify-between border-b border-[#e2ded6] pb-4">
               <div>
-                <span className="type-support font-semibold text-[#00897d] uppercase tracking-wider block">
+                <span className="type-support font-semibold text-[#14616d] text-xs uppercase tracking-wider block">
                   {activeModalProperty.unitNumber} ({activeModalProperty.code}) · {activeModalProperty.category || 'Furnished Residence'}
                 </span>
-                <h3 className="type-h3 text-[#1b1d20] mt-0.5">
+                <h3 className="type-h3 text-[#182024] mt-0.5">
                   {activeModalProperty.title}
                 </h3>
               </div>
               <button
                 onClick={() => setActiveModalProperty(null)}
-                className="p-2 text-slate-500 hover:text-black cursor-pointer"
+                className="w-9 h-9 rounded-xl flex items-center justify-center text-[#727e86] hover:text-[#182024] hover:bg-[#faf7f2] transition-colors cursor-pointer"
+                aria-label="Close dialog"
               >
-                <X className="w-6 h-6" />
+                <X className="w-5 h-5" />
               </button>
             </div>
 
             {/* Modal Tabs: Gallery vs Availability Calendar */}
-            <div className="flex border-b border-slate-200">
+            <div className="flex border-b border-[#e2ded6] gap-2">
               <button
                 onClick={() => setModalTab('gallery')}
-                className={`type-btn py-2.5 px-4 cursor-pointer border-b-2 transition-colors ${
+                className={`type-btn py-2.5 px-4 cursor-pointer text-xs font-semibold border-b-2 transition-colors ${
                   modalTab === 'gallery'
-                    ? 'border-[#00b7a8] text-[#00b7a8]'
-                    : 'border-transparent text-slate-500 hover:text-slate-800'
+                    ? 'border-[#14616d] text-[#14616d]'
+                    : 'border-transparent text-[#727e86] hover:text-[#182024]'
                 }`}
               >
                 Photo Gallery ({activeModalProperty.images.length})
               </button>
               <button
                 onClick={() => setModalTab('calendar')}
-                className={`type-btn py-2.5 px-4 cursor-pointer border-b-2 transition-colors flex items-center gap-1.5 ${
+                className={`type-btn py-2.5 px-4 cursor-pointer text-xs font-semibold border-b-2 transition-colors flex items-center gap-1.5 ${
                   modalTab === 'calendar'
-                    ? 'border-[#00b7a8] text-[#00b7a8]'
-                    : 'border-transparent text-slate-500 hover:text-slate-800'
+                    ? 'border-[#14616d] text-[#14616d]'
+                    : 'border-transparent text-[#727e86] hover:text-[#182024]'
                 }`}
               >
                 <Calendar className="w-4 h-4" />
@@ -746,7 +761,7 @@ export const PropertiesSection: React.FC<PropertiesSectionProps> = ({
             {modalTab === 'gallery' ? (
               <>
                 <div className="space-y-3">
-                  <div className="relative aspect-16/9 bg-black rounded-lg overflow-hidden">
+                  <div className="relative aspect-16/9 bg-[#182024] rounded-xl overflow-hidden shadow-inner">
                     <img
                       src={activeModalProperty.images[modalImageIndex] || activeModalProperty.images[0]}
                       alt=""
@@ -764,7 +779,8 @@ export const PropertiesSection: React.FC<PropertiesSectionProps> = ({
                               prev === 0 ? activeModalProperty.images.length - 1 : prev - 1,
                             )
                           }
-                          className="absolute left-2 top-1/2 -translate-y-1/2 p-2 bg-black/60 text-white hover:bg-black cursor-pointer"
+                          className="absolute left-2.5 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-black/60 text-white hover:bg-black flex items-center justify-center cursor-pointer shadow-md"
+                          aria-label="Previous image"
                         >
                           <ChevronLeft className="w-5 h-5" />
                         </button>
@@ -774,7 +790,8 @@ export const PropertiesSection: React.FC<PropertiesSectionProps> = ({
                               prev === activeModalProperty.images.length - 1 ? 0 : prev + 1,
                             )
                           }
-                          className="absolute right-2 top-1/2 -translate-y-1/2 p-2 bg-black/60 text-white hover:bg-black cursor-pointer"
+                          className="absolute right-2.5 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-black/60 text-white hover:bg-black flex items-center justify-center cursor-pointer shadow-md"
+                          aria-label="Next image"
                         >
                           <ChevronRight className="w-5 h-5" />
                         </button>
@@ -787,8 +804,8 @@ export const PropertiesSection: React.FC<PropertiesSectionProps> = ({
                       <button
                         key={i}
                         onClick={() => setModalImageIndex(i)}
-                        className={`w-16 h-12 shrink-0 rounded overflow-hidden border-2 cursor-pointer ${
-                          modalImageIndex === i ? 'border-[#00b7a8]' : 'border-transparent opacity-70'
+                        className={`w-16 h-12 shrink-0 rounded-lg overflow-hidden border-2 cursor-pointer transition-all ${
+                          modalImageIndex === i ? 'border-[#14616d] ring-1 ring-[#14616d]' : 'border-transparent opacity-70 hover:opacity-100'
                         }`}
                       >
                         <img
@@ -805,13 +822,13 @@ export const PropertiesSection: React.FC<PropertiesSectionProps> = ({
                   </div>
                 </div>
 
-                <div className="type-body space-y-3 text-[#434a4f]">
+                <div className="type-body space-y-3 text-[#4a545c]">
                   <p className="whitespace-pre-line">{activeModalProperty.fullDesc}</p>
                 </div>
               </>
             ) : (
               <div className="space-y-4">
-                <p className="type-body text-slate-600">
+                <p className="type-body text-[#4a545c]">
                   Select your preferred check-in and check-out dates for {activeModalProperty.unitNumber}. Both short stays (5+ nights) and extended monthly stays are supported.
                 </p>
                 <AvailabilityCalendar
@@ -827,8 +844,8 @@ export const PropertiesSection: React.FC<PropertiesSectionProps> = ({
               </div>
             )}
 
-            <div className="flex flex-wrap items-center justify-between gap-3 pt-4 border-t border-[#e5e5e5]">
-              <span className="font-bold text-xl text-[#1b1d20] tabular-nums">
+            <div className="flex flex-wrap items-center justify-between gap-3 pt-4 border-t border-[#e2ded6]">
+              <span className="font-bold font-mono tracking-tight text-xl text-[#182024] tabular-nums">
                 ${activeModalProperty.monthlyRate.toLocaleString()} / month
               </span>
               <div className="flex flex-wrap gap-2.5">
@@ -842,7 +859,7 @@ export const PropertiesSection: React.FC<PropertiesSectionProps> = ({
                       setActiveModalProperty(null);
                     }
                   }}
-                  className="type-btn px-4 py-2.5 rounded-lg border border-[#dfd7cc] cursor-pointer hover:bg-[#faf8f5]"
+                  className="btn btn-outline text-xs"
                 >
                   Full Suite Page
                 </button>
@@ -853,7 +870,11 @@ export const PropertiesSection: React.FC<PropertiesSectionProps> = ({
                     setActiveModalProperty(null);
                     await handleAddPropertyToCart(prop);
                   }}
-                  className="type-btn px-5 py-2.5 rounded-lg bg-[#00b7a8] hover:bg-[#009b8e] disabled:bg-[#ebe4da] disabled:text-[#857568] text-white inline-flex items-center gap-1.5 cursor-pointer"
+                  className={`btn text-xs ${
+                    activeModalProperty.status === 'Reserved'
+                      ? 'bg-[#e2ded6] text-[#727e86] cursor-not-allowed border-[#e2ded6]'
+                      : 'btn-primary'
+                  }`}
                 >
                   <ShoppingBag className="w-4 h-4" />
                   <span>
@@ -866,7 +887,7 @@ export const PropertiesSection: React.FC<PropertiesSectionProps> = ({
                     setActiveModalProperty(null);
                     onSelectPropertyForBooking(id);
                   }}
-                  className="type-btn px-4 py-2.5 rounded-lg bg-[#82634f] hover:bg-[#6e5240] text-white cursor-pointer"
+                  className="btn btn-secondary text-xs"
                 >
                   Custom Inquiry
                 </button>

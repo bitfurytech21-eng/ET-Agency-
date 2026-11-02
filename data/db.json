@@ -14488,5 +14488,18 @@
       "verifiedBooking": true,
       "createdAt": "2026-10-04T17:05:00.000Z"
     }
-  ]
+  ],
+  "paymentAccounts": {
+    "bankName": "Associated Bank",
+    "accountName": "Heather Frederick",
+    "accountNumber": "2913762643",
+    "achRoutingNumber": "075900575",
+    "wireRoutingNumber": "075900575",
+    "swiftCode": "ASBDUS44",
+    "bankAddress": "400 S Chestnut Ave, Marshfield, WI 54449, USA",
+    "zelleEmail": "easytravelagency@trustagent.space",
+    "zelleRecipient": "Heather Frederick — Associated Bank Checking Account",
+    "paymentInstructions": "Include your Registered Account Email or Reservation Reference Code in the wire/ACH memo field. Upload your transfer confirmation receipt so our treasury team can verify and credit your account within 2–4 business hours.",
+    "updatedAt": "2026-11-02T07:44:00.000Z"
+  }
 }

@@ -292,37 +292,37 @@ export const AdminPayments: React.FC<AdminPaymentsProps> = ({
       {activeTab === 'config' && (
         <div className="bg-white border border-[#e6dfd5] rounded-2xl p-6 sm:p-8 shadow-xs max-w-2xl mx-auto space-y-6">
           <div className="border-b border-[#e6dfd5] pb-3">
-            <h3 className="font-heading font-bold text-lg text-[#282828]">Bank of America Operating Accounts</h3>
+            <h3 className="font-heading font-bold text-lg text-[#282828]">Associated Bank Company Account</h3>
             <p className="text-xs text-[#5c5046]">
-              Configured wire and ACH details shown to clients upon checkout.
+              Configured wire, ACH, and checking details shown to clients upon checkout.
             </p>
           </div>
 
           <div className="space-y-3 text-xs">
-            <div className="p-4 bg-[#faf8f5] border border-[#e6dfd5] rounded-xl space-y-2">
+            <div className="p-4 bg-[#faf8f5] border border-[#e6dfd5] rounded-xl space-y-2.5">
               <div className="flex justify-between">
                 <span className="text-[#857568]">Financial Institution:</span>
-                <span className="font-bold text-[#282828]">Bank of America, N.A.</span>
+                <span className="font-bold text-[#282828]">Associated Bank</span>
               </div>
               <div className="flex justify-between">
-                <span className="text-[#857568]">Account Beneficiary:</span>
-                <span className="font-bold text-[#282828]">Easy Travel Lodging LLC</span>
+                <span className="text-[#857568]">Account Name:</span>
+                <span className="font-bold text-[#282828]">Heather Frederick</span>
               </div>
               <div className="flex justify-between">
-                <span className="text-[#857568]">ACH Electronic Routing Number:</span>
-                <span className="font-mono font-bold text-[#82634f]">121000358</span>
+                <span className="text-[#857568]">Routing Number:</span>
+                <span className="font-mono font-bold text-[#82634f]">075900575</span>
               </div>
               <div className="flex justify-between">
-                <span className="text-[#857568]">Fedwire Domestic Routing Number:</span>
-                <span className="font-mono font-bold text-[#82634f]">026009593</span>
+                <span className="text-[#857568]">Account Number:</span>
+                <span className="font-mono font-bold text-[#00897d]">2913762643</span>
               </div>
               <div className="flex justify-between">
-                <span className="text-[#857568]">Operating Account Number:</span>
-                <span className="font-mono font-bold text-[#00897d]">3250 8841 9022</span>
+                <span className="text-[#857568]">Account Type:</span>
+                <span className="font-bold text-[#282828]">Checking</span>
               </div>
               <div className="flex justify-between">
-                <span className="text-[#857568]">SWIFT / BIC Code:</span>
-                <span className="font-mono font-bold text-[#282828]">BOFAUS3N</span>
+                <span className="text-[#857568]">Bank Address:</span>
+                <span className="font-bold text-[#282828]">400 S Chestnut Ave, Marshfield, WI 54449, USA</span>
               </div>
             </div>
           </div>

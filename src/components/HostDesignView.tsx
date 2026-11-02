@@ -59,10 +59,10 @@ export const HostDesignView: React.FC = () => {
           <div className="pt-6">
             <button
               onClick={() => setDownloadModalOpen(true)}
-              className="et_pb_button et_pb_button_white type-btn group cursor-pointer shadow-md inline-flex items-center gap-2"
+              className="btn btn-white inline-flex items-center gap-2 shadow-sm"
             >
-              <Download className="w-4 h-4 text-[#00b7a8]" />
-              <span>Download the Complimentary Host Design Guide</span>
+              <Download className="w-4 h-4 text-[#14616d]" />
+              <span>Download Complimentary Host Design Guide</span>
             </button>
             <p className="type-support text-[#dfd3c5] mt-2.5">
               Five practical interior design strategies that elevate nightly and monthly occupancy
@@ -108,7 +108,7 @@ export const HostDesignView: React.FC = () => {
       <section className="py-14 sm:py-20 px-4 sm:px-8 bg-[#faf8f5] border-b border-[#e6dfd5] text-left">
         <div className="max-w-5xl mx-auto space-y-8">
           <div>
-            <span className="type-support font-semibold uppercase tracking-[0.12em] text-[#00897d] block">
+            <span className="type-support font-semibold uppercase tracking-[0.12em] text-[#14616d] block">
               Turnkey Execution &amp; Return on Investment
             </span>
             <h2 className="type-h2 text-[#282828] mt-1.5">
@@ -127,13 +127,13 @@ export const HostDesignView: React.FC = () => {
           </div>
 
           <div className="p-8 bg-white rounded-2xl border border-[#e6dfd5] shadow-2xs space-y-4">
-            <h3 className="type-h3 text-[#00897d]">
+            <h3 className="type-h3 text-[#14616d]">
               Launching or Refreshing a Furnished Rental?
             </h3>
             <p className="type-body text-[#5c5046]">
               Explore what thoughtful positioning can do for your short-stay, vacation, or extended-stay property. Schedule a complimentary discovery call to discuss your floor plan, target guest profile, and revenue goals.
             </p>
-            <div className="type-support p-4 bg-[#e8f8f6] rounded-xl border border-[#b8ebe5] text-[#005951]">
+            <div className="type-support p-4 bg-[#f0f7f8] rounded-xl border border-[#cbe3e6] text-[#0f4952]">
               <strong className="font-semibold">Property Owner Support:</strong> Our comprehensive design and staging packages deliver room-by-room mood boards, clickable procurement lists, floor-plan placement guides, and video walk-through coaching anywhere in California’s homes.
             </div>
           </div>
@@ -156,7 +156,7 @@ export const HostDesignView: React.FC = () => {
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <div className="p-8 bg-[#faf8f5] rounded-2xl border border-[#e6dfd5] space-y-3">
-              <div className="type-support font-semibold text-[#00897d] tabular-nums">
+              <div className="type-support font-semibold text-[#14616d] tabular-nums">
                 01. Tailored Scope
               </div>
               <h3 className="type-h3 text-[#282828]">
@@ -168,7 +168,7 @@ export const HostDesignView: React.FC = () => {
             </div>
 
             <div className="p-8 bg-[#faf8f5] rounded-2xl border border-[#e6dfd5] space-y-3">
-              <div className="type-support font-semibold text-[#00897d] tabular-nums">
+              <div className="type-support font-semibold text-[#14616d] tabular-nums">
                 02. Commercial Performance
               </div>
               <h3 className="type-h3 text-[#282828]">
@@ -180,7 +180,7 @@ export const HostDesignView: React.FC = () => {
             </div>
 
             <div className="p-8 bg-[#faf8f5] rounded-2xl border border-[#e6dfd5] space-y-3">
-              <div className="type-support font-semibold text-[#00897d] tabular-nums">
+              <div className="type-support font-semibold text-[#14616d] tabular-nums">
                 03. Streamlined Delivery
               </div>
               <h3 className="type-h3 text-[#282828]">
@@ -201,11 +201,11 @@ export const HostDesignView: React.FC = () => {
               href="https://app.acuityscheduling.com/schedule.php?owner=19330770&appointmentType=13695494"
               target="_blank"
               rel="noopener noreferrer"
-              className="et_pb_button et_pb_button_teal type-btn inline-flex items-center gap-2 cursor-pointer shadow-lg py-3.5 px-7"
+              className="btn btn-primary inline-flex items-center gap-2 shadow-sm"
             >
-              <Calendar className="w-5 h-5" />
+              <Calendar className="w-4 h-4" />
               <span>Schedule Your Complimentary Design Discovery Call</span>
-              <ExternalLink className="w-4 h-4 ml-1" />
+              <ExternalLink className="w-3.5 h-3.5 ml-1 opacity-80" />
             </a>
           </div>
         </div>
@@ -219,7 +219,7 @@ export const HostDesignView: React.FC = () => {
         <div className="relative z-10 max-w-5xl mx-auto">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
             <div className="lg:col-span-4 flex justify-center">
-              <div className="rounded-2xl overflow-hidden border-2 border-[#00b7a8] shadow-2xl max-w-xs w-full bg-[#241d18]">
+              <div className="rounded-2xl overflow-hidden border-2 border-[#14616d] shadow-2xl max-w-xs w-full bg-[#241d18]">
                 <img
                   src="https://easytravellodging.com/wp-content/uploads/2023/04/Al.png"
                   alt="Al Williamson - Leading Landlord & Business Owner"
@@ -286,13 +286,13 @@ export const HostDesignView: React.FC = () => {
 
             {downloadSubmitted ? (
               <div className="space-y-4">
-                <div className="p-4 rounded-2xl bg-[#e8f8f6] border border-[#b8ebe5] flex items-center gap-3">
-                  <CheckCircle2 className="w-7 h-7 text-[#00897d] shrink-0" />
+                <div className="p-4 rounded-2xl bg-[#f0f7f8] border border-[#cbe3e6] flex items-center gap-3">
+                  <CheckCircle2 className="w-7 h-7 text-[#14616d] shrink-0" />
                   <div>
-                    <h4 className="type-h4 text-[#005951]">
+                    <h4 className="type-h4 text-[#0f4952]">
                       Guide Unlocked for {downloadName}
                     </h4>
-                    <p className="type-support text-[#007a70]">
+                    <p className="type-support text-[#14616d]">
                       Copy also logged for <strong className="font-semibold">{downloadEmail}</strong>. Review or print the 5 secrets below:
                     </p>
                   </div>
@@ -301,7 +301,7 @@ export const HostDesignView: React.FC = () => {
                 <div className="space-y-3 bg-[#faf8f5] border border-[#e6dfd5] rounded-2xl p-4">
                   {HOST_DESIGN_SECRETS.map((sec) => (
                     <div key={sec.number} className="p-3.5 bg-white rounded-xl border border-[#e6dfd5] space-y-1">
-                      <div className="type-label text-[#00897d] tabular-nums">
+                      <div className="type-label text-[#14616d] tabular-nums">
                         0{sec.number}. <span className="text-[#282828]">{sec.title}</span>
                       </div>
                       <p className="type-support text-[#5c5046]">{sec.description}</p>
@@ -313,7 +313,7 @@ export const HostDesignView: React.FC = () => {
                   <button
                     type="button"
                     onClick={() => window.print()}
-                    className="type-btn px-4 py-2.5 bg-[#00b7a8] hover:bg-[#009e91] text-white rounded-xl flex items-center gap-1.5 cursor-pointer"
+                    className="btn btn-primary flex items-center gap-1.5"
                   >
                     <Printer className="w-4 h-4" />
                     <span>Print / Save PDF</span>
@@ -324,7 +324,7 @@ export const HostDesignView: React.FC = () => {
                       setDownloadModalOpen(false);
                       setDownloadSubmitted(false);
                     }}
-                    className="type-btn px-5 py-2.5 bg-[#82634f] hover:bg-[#6e5240] text-white rounded-xl cursor-pointer"
+                    className="btn btn-secondary"
                   >
                     Done
                   </button>
@@ -340,7 +340,7 @@ export const HostDesignView: React.FC = () => {
                     value={downloadName}
                     onChange={(e) => setDownloadName(e.target.value)}
                     placeholder="e.g. Sarah Jenkins"
-                    className="w-full h-11 px-3.5 rounded-xl border border-[#d8cfc3] text-sm sm:text-base focus:border-[#00b7a8] outline-none"
+                    className="w-full h-11 px-3.5 rounded-xl border border-[#d8cfc3] text-sm sm:text-base focus:border-[#14616d] focus:ring-1 focus:ring-[#14616d] outline-none"
                   />
                 </div>
 
@@ -352,7 +352,7 @@ export const HostDesignView: React.FC = () => {
                     value={downloadEmail}
                     onChange={(e) => setDownloadEmail(e.target.value)}
                     placeholder="sarah@example.com"
-                    className="w-full h-11 px-3.5 rounded-xl border border-[#d8cfc3] text-sm sm:text-base focus:border-[#00b7a8] outline-none"
+                    className="w-full h-11 px-3.5 rounded-xl border border-[#d8cfc3] text-sm sm:text-base focus:border-[#14616d] focus:ring-1 focus:ring-[#14616d] outline-none"
                   />
                 </div>
 
@@ -360,13 +360,13 @@ export const HostDesignView: React.FC = () => {
                   <button
                     type="button"
                     onClick={() => setDownloadModalOpen(false)}
-                    className="type-btn w-1/2 py-3 border border-[#d8cfc3] text-[#5c5046] rounded-xl hover:bg-[#faf8f5] cursor-pointer"
+                    className="btn btn-outline w-1/2"
                   >
                     Cancel
                   </button>
                   <button
                     type="submit"
-                    className="type-btn w-1/2 py-3 bg-[#00b7a8] hover:bg-[#009e91] text-white rounded-xl shadow-xs cursor-pointer transition-colors"
+                    className="btn btn-primary w-1/2 shadow-xs"
                   >
                     Access Download
                   </button>

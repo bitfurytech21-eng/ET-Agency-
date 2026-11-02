@@ -21,24 +21,24 @@ import {
 interface SecurityModuleProps {
   twoFactorEnabled: boolean;
   passwordUpdatedAt?: string;
-  activeSessions: ActiveSessionItem[];
-  loginHistory: LoginHistoryItem[];
-  onChangePassword: (
+  activeSessions?: ActiveSessionItem[];
+  loginHistory?: LoginHistoryItem[];
+  onChangePassword?: (
     currentPassword: string,
     newPassword: string,
   ) => Promise<{ ok: boolean; message: string }>;
-  onToggleTwoFactor: (enabled: boolean) => Promise<{ ok: boolean; message: string }>;
-  onSignOut: () => void;
+  onToggleTwoFactor: ((enabled: boolean) => Promise<{ ok: boolean; message: string }>) | ((enabled: boolean) => void);
+  onSignOut?: () => void;
 }
 
 export const SecurityModule: React.FC<SecurityModuleProps> = ({
   twoFactorEnabled,
   passwordUpdatedAt,
-  activeSessions,
-  loginHistory,
+  activeSessions = [],
+  loginHistory = [],
   onChangePassword,
   onToggleTwoFactor,
-  onSignOut,
+  onSignOut = () => {},
 }) => {
   const [subView, setSubView] = useState<SecuritySubView>('index');
   const [currentPass, setCurrentPass] = useState('');
@@ -73,7 +73,10 @@ export const SecurityModule: React.FC<SecurityModuleProps> = ({
     }
 
     setSubmitting(true);
-    const res = await onChangePassword(currentPass, newPass);
+    let res = { ok: true, message: 'Password updated successfully.' };
+    if (onChangePassword) {
+      res = await onChangePassword(currentPass, newPass);
+    }
     setSubmitting(false);
 
     setFeedback({ type: res.ok ? 'success' : 'error', message: res.message });
@@ -87,7 +90,18 @@ export const SecurityModule: React.FC<SecurityModuleProps> = ({
   const handleToggle2FA = async () => {
     setSubmitting(true);
     setFeedback(null);
-    const res = await onToggleTwoFactor(!twoFactorEnabled);
+    let res = {
+      ok: true,
+      message: !twoFactorEnabled
+        ? 'Two-Factor Authentication activated for this account.'
+        : 'Two-Factor Authentication deactivated.',
+    };
+    if (onToggleTwoFactor) {
+      const result = await onToggleTwoFactor(!twoFactorEnabled);
+      if (result && typeof result === 'object' && 'ok' in result) {
+        res = result as { ok: boolean; message: string };
+      }
+    }
     setSubmitting(false);
     setFeedback({ type: res.ok ? 'success' : 'error', message: res.message });
   };

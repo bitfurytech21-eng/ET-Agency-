@@ -317,7 +317,7 @@ export const BookingModal: React.FC<BookingModalProps> = ({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 overflow-y-auto bg-[#1c1613]/70 backdrop-blur-xs flex items-center justify-center p-3 sm:p-6 lg:p-8">
+    <div className="fixed inset-0 z-50 overflow-y-auto bg-[#1c1613]/70 backdrop-blur-xs flex items-center justify-center p-3 sm:p-6 lg:p-8 animate-fade-in">
       <motion.div
         initial={{ opacity: 0, y: 16, scale: 0.98 }}
         animate={{ opacity: 1, y: 0, scale: 1 }}

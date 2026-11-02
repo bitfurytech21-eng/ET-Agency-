@@ -29,9 +29,9 @@ interface OverviewModuleProps {
   accommodations: UserAccommodationReservation[];
   carRentals: UserCarRentalBooking[];
   payments: UserPaymentRecord[];
-  activities: AccountActivityItem[];
+  activities?: AccountActivityItem[];
   onOpenBooking: () => void;
-  onExploreFleet: () => void;
+  onExploreFleet?: () => void;
   onOpenTopUpUnits: () => void;
   onNavigateTab: (tab: DashboardTab) => void;
   onViewBookingDetails: (booking: UserAccommodationReservation) => void;
@@ -43,9 +43,9 @@ export const OverviewModule: React.FC<OverviewModuleProps> = ({
   accommodations,
   carRentals,
   payments,
-  activities,
+  activities = [],
   onOpenBooking,
-  onExploreFleet,
+  onExploreFleet = () => {},
   onOpenTopUpUnits,
   onNavigateTab,
   onViewBookingDetails,

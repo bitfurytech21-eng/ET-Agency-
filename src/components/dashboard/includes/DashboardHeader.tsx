@@ -25,6 +25,10 @@ interface DashboardHeaderProps {
   onNavigateTab: (tab: DashboardTab) => void;
   onSignOut: () => void;
   onReturnToSite: () => void;
+  onOpenTopUpUnits?: () => void;
+  currentPhpPath?: string;
+  unreadMessagesCount?: number;
+  savedItemsCount?: number;
 }
 
 const SECTION_LABELS: Record<DashboardTab, string> = {
@@ -32,9 +36,12 @@ const SECTION_LABELS: Record<DashboardTab, string> = {
   accommodation: 'Accommodation',
   'car-rentals': 'Car Rentals',
   payments: 'Payments & Invoices',
+  'saved-items': 'Saved Items',
   notifications: 'Notifications',
+  messages: 'Concierge Messages',
   profile: 'Profile & Settings',
   security: 'Security & Password',
+  settings: 'System & Preferences',
   support: 'Support & Assistance',
 };
 
@@ -112,7 +119,7 @@ export const DashboardHeader: React.FC<DashboardHeaderProps> = ({
               className="lg:hidden p-2 rounded-xl bg-[#29201a] hover:bg-[#382b23] border border-[#4a3b31] text-white cursor-pointer transition-colors flex items-center gap-2 shrink-0"
               aria-label="Open Dashboard Menu"
             >
-              <Menu className="w-5 h-5 text-[#00b7a8]" />
+              <Menu className="w-5 h-5 text-[#4de0d2]" />
               <span className="text-xs font-bold hidden sm:inline text-[#ede5dc] whitespace-nowrap">Menu</span>
             </button>
 
@@ -121,7 +128,7 @@ export const DashboardHeader: React.FC<DashboardHeaderProps> = ({
                 Easy Travel Lodging
               </span>
               <span className="text-[#857568] shrink-0" aria-hidden="true">/</span>
-              <span className="text-[#d6c7b8] truncate hidden sm:inline">My Dashboard</span>
+              <span className="text-[#d6c7b8] truncate hidden sm:inline">Client Portal</span>
               <span className="text-[#857568] shrink-0 hidden sm:inline" aria-hidden="true">/</span>
               <span className="text-[#4de0d2] font-semibold truncate">
                 {SECTION_LABELS[activeTab]}
@@ -140,7 +147,7 @@ export const DashboardHeader: React.FC<DashboardHeaderProps> = ({
             >
               <Bell className="w-4 h-4" />
               {unreadNotificationsCount > 0 && (
-                <span className="absolute -top-1 -right-1 px-1.5 py-0.5 rounded-md bg-[#00b7a8] text-white text-[10px] font-extrabold leading-none tabular-nums">
+                <span className="absolute -top-1 -right-1 px-1.5 py-0.5 rounded-md bg-[#14616d] text-white text-[10px] font-extrabold leading-none tabular-nums">
                   {unreadNotificationsCount}
                 </span>
               )}
@@ -151,7 +158,7 @@ export const DashboardHeader: React.FC<DashboardHeaderProps> = ({
               onClick={onReturnToSite}
               className="px-3 py-2 rounded-xl bg-[#29201a] hover:bg-[#382b23] border border-[#4a3b31] text-[#ede5dc] text-xs font-semibold transition-colors cursor-pointer flex items-center gap-1.5 whitespace-nowrap shrink-0"
             >
-              <Home className="w-3.5 h-3.5 text-[#00b7a8]" />
+              <Home className="w-3.5 h-3.5 text-[#4de0d2]" />
               <span className="hidden sm:inline">Browse Website</span>
             </button>
 
@@ -208,7 +215,7 @@ export const DashboardHeader: React.FC<DashboardHeaderProps> = ({
                     }}
                     className={`w-full p-3 rounded-xl text-left flex items-center justify-between gap-3 transition-colors cursor-pointer ${
                       isActive
-                        ? 'bg-[#00b7a8] text-white font-bold'
+                        ? 'bg-[#14616d] text-white font-bold'
                         : 'bg-[#261d17] hover:bg-[#342820] text-[#ede5dc] border border-[#3f332b]'
                     }`}
                   >

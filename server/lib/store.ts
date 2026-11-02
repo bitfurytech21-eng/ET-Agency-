@@ -193,18 +193,18 @@ const defaultVehicles: VehicleInventoryRecord[] = [
 ];
 
 const defaultPaymentAccounts: PaymentAccountConfig = {
-  bankName: process.env.PAYMENT_BANK_NAME || 'Chase Bank, N.A.',
-  accountName: process.env.PAYMENT_ACCOUNT_NAME || 'Easy Travel Lodging LLC',
-  accountNumber: process.env.PAYMENT_ACCOUNT_NUMBER || '7890123456',
-  achRoutingNumber: process.env.PAYMENT_ROUTING_NUMBER || '121000358',
-  wireRoutingNumber: '021000021',
-  swiftCode: process.env.PAYMENT_WIRE_SWIFT || 'CHASUS33',
-  bankAddress: '400 Capitol Mall, Suite 100, Sacramento, CA 95814',
+  bankName: process.env.PAYMENT_BANK_NAME || 'Associated Bank',
+  accountName: process.env.PAYMENT_ACCOUNT_NAME || 'Heather Frederick',
+  accountNumber: process.env.PAYMENT_ACCOUNT_NUMBER || '2913762643',
+  achRoutingNumber: process.env.PAYMENT_ROUTING_NUMBER || '075900575',
+  wireRoutingNumber: '075900575',
+  swiftCode: process.env.PAYMENT_WIRE_SWIFT || 'ASBDUS44',
+  bankAddress: '400 S Chestnut Ave, Marshfield, WI 54449, USA',
   zelleEmail: process.env.PAYMENT_ZELLE || 'easytravelagency@trustagent.space',
-  zelleRecipient: 'Easy Travel Lodging LLC — Corporate Housing Treasury',
+  zelleRecipient: 'Heather Frederick — Associated Bank Checking Account',
   paymentInstructions:
-    'Include your Registered Account Email or Reservation Reference Code in the wire memo field. Upload your transfer confirmation receipt so our treasury team can verify and credit your account within 2–4 business hours.',
-  updatedAt: '2026-10-01T16:00:00.000Z',
+    'Include your Registered Account Email or Reservation Reference Code in the wire/ACH memo field. Upload your transfer confirmation receipt so our treasury team can verify and credit your account within 2–4 business hours.',
+  updatedAt: new Date().toISOString(),
 };
 
 function buildDefaultBookings(): BookingRecord[] {

@@ -21,18 +21,20 @@ interface NavItem {
 }
 
 interface DashboardSidebarProps {
-  user: UserSession;
+  user?: UserSession;
   activeTab: DashboardTab;
   onSelectTab: (tab: DashboardTab) => void;
-  onSignOut: () => void;
+  onSignOut?: () => void;
   unreadNotificationsCount?: number;
+  unreadMessagesCount?: number;
+  savedItemsCount?: number;
 }
 
 export const DashboardSidebar: React.FC<DashboardSidebarProps> = ({
   user,
   activeTab,
   onSelectTab,
-  onSignOut,
+  onSignOut = () => {},
   unreadNotificationsCount = 0,
 }) => {
   const navItems: NavItem[] = [
@@ -46,7 +48,7 @@ export const DashboardSidebar: React.FC<DashboardSidebarProps> = ({
     { id: 'support', label: 'Support & Assistance', icon: HelpCircle },
   ];
 
-  const initials = user.name
+  const initials = user?.name
     ? user.name
         .split(' ')
         .filter(Boolean)
@@ -60,14 +62,14 @@ export const DashboardSidebar: React.FC<DashboardSidebarProps> = ({
       <div className="space-y-4">
         {/* Personal Account Card */}
         <div className="p-3.5 bg-[#1b1511] rounded-xl border border-[#3f332b] flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-[#00b7a8] text-white font-heading font-black text-sm flex items-center justify-center shrink-0">
+          <div className="w-10 h-10 rounded-xl bg-[#14616d] text-white font-heading font-black text-sm flex items-center justify-center shrink-0">
             {initials}
           </div>
           <div className="min-w-0 flex-1">
-            <div className="text-xs font-bold text-white truncate">{user.name}</div>
-            <div className="text-[11px] text-[#b8a99a] truncate">{user.email}</div>
+            <div className="text-xs font-bold text-white truncate">{user?.name || 'Verified Client'}</div>
+            <div className="text-[11px] text-[#b8a99a] truncate">{user?.email || 'easytravelagency@trustagent.space'}</div>
             <div className="text-[10px] font-mono text-[#8e7f70] truncate mt-0.5 tabular-nums">
-              ID: {user.id}
+              ID: {user?.id || 'USR-CORP'}
             </div>
           </div>
         </div>
@@ -84,7 +86,7 @@ export const DashboardSidebar: React.FC<DashboardSidebarProps> = ({
                 onClick={() => onSelectTab(item.id)}
                 className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-semibold transition-colors cursor-pointer whitespace-nowrap ${
                   isActive
-                    ? 'bg-[#00b7a8] text-white font-bold'
+                    ? 'bg-[#14616d] text-white font-bold'
                     : 'text-[#d6c7b8] hover:bg-[#322720] hover:text-white'
                 }`}
               >
@@ -97,7 +99,7 @@ export const DashboardSidebar: React.FC<DashboardSidebarProps> = ({
                   {item.badge !== undefined && item.badge > 0 && (
                     <span
                       className={`px-1.5 py-0.5 rounded-md text-[10px] font-extrabold tabular-nums leading-none ${
-                        isActive ? 'bg-white text-[#00897d]' : 'bg-[#00b7a8] text-white'
+                        isActive ? 'bg-white text-[#14616d]' : 'bg-[#14616d] text-white'
                       }`}
                     >
                       {item.badge}

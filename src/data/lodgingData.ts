@@ -116,11 +116,13 @@ export const COMPANY_INFO = {
   shortName: 'Easy Travel Lodging',
   tagline: 'Furnished Residences, Fleet Mobility & Concierge Care',
   subtagline:
-    'Thoughtfully equipped 1- and 2-bedroom residences, flexible stays from 5 nights to 12+ months, and attentive executive hospitality across California’s homes.',
-  phone: '916-800-3295',
-  phoneClean: '9168003295',
+    'Thoughtfully equipped 1- and 2-bedroom residences, flexible stays from 5 nights to 12+ months, and attentive executive hospitality across the entire state of California.',
+  phone: '+1 (646) 415-0211',
+  phoneClean: '16464150211',
+  whatsapp: '+1 (646) 415-0211',
+  whatsappUrl: 'https://wa.me/16464150211',
   email: 'easytravelagency@trustagent.space',
-  location: 'California’s homes · Regional Agency Network',
+  location: 'Statewide California Operations & Hospitality Network',
   hours: 'Available 7 Days a Week for Guest Support & Inquiries',
   checkInTime: '2:00 PM',
   checkOutTime: '11:00 AM',
@@ -130,7 +132,7 @@ export const COMPANY_INFO = {
     {
       name: 'Bill Wheelock',
       title: 'Co-Founder & Host',
-      bio: "Bill’s career in Information Systems Management had him busy traveling around California’s homes heading up teams installing enterprise computer systems across diverse industries. A Private Pilot for over 40 years, Radio Voiceover artist, and Navy Veteran who served in Vietnam, Bill holds an undergraduate degree from the University of San Francisco and an MBA from the University of Phoenix.",
+      bio: "Bill’s career in Information Systems Management had him busy traveling throughout California heading up teams installing enterprise computer systems across diverse industries. A Private Pilot for over 40 years, Radio Voiceover artist, and Navy Veteran who served in Vietnam, Bill holds an undergraduate degree from the University of San Francisco and an MBA from the University of Phoenix.",
       image: 'https://easytravellodging.com/wp-content/uploads/2023/01/Bill-Marlena-casual.jpg',
     },
     {

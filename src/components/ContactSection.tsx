@@ -12,6 +12,7 @@ import {
   AlertCircle
 } from 'lucide-react';
 import { LivePhotoBackground } from './LivePhotoBackground';
+import { CaliforniaExperiencesAccordion } from './CaliforniaExperiencesAccordion';
 
 interface ContactSectionProps {
   preselectedPropertyId?: string;
@@ -101,37 +102,41 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ preselectedPrope
           {/* Contact Details & Host Card */}
           <div className="lg:col-span-5 space-y-8">
             <div className="space-y-4">
-              <span className="type-support font-semibold text-[#00897d] block">
-                Direct Host Support &amp; Inquiries
+              <span className="type-support font-semibold text-[#14616d] block">
+                California Host Concierge &amp; Inquiries
               </span>
               <h2 className="type-h2 text-[#282828]">
                 Get in Touch With Bill &amp; Marlena
               </h2>
               <p className="type-body text-[#5c5046]">
-                Have questions about residence availability, vehicle rentals, arrival add-ons, family relocations, or multi-unit organizational stays? Reach out below and our local team will respond promptly.
+                Have questions about furnished residence availability across California, private vehicle fleet rentals, arrival add-ons, family relocations, or statewide organizational housing? Connect with Bill &amp; Marlena&apos;s California concierge team below.
               </p>
             </div>
 
             {/* Quick Contact Cards */}
             <div className="space-y-4">
               <a
-                href={`tel:${COMPANY_INFO.phoneClean}`}
-                className="flex items-center gap-4 p-4 rounded-2xl bg-[#faf8f5] border border-[#e6dfd5] hover:border-[#00b7a8] hover:bg-[#e8f8f6]/50 transition-all group"
+                href={COMPANY_INFO.whatsappUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-4 p-4 rounded-2xl bg-[#faf8f5] border border-[#e6dfd5] hover:border-[#25D366] hover:bg-[#f0fdf4]/70 transition-all group cursor-pointer"
               >
-                <div className="w-12 h-12 rounded-xl bg-white border border-[#e6dfd5] flex items-center justify-center text-[#00b7a8] group-hover:bg-[#00b7a8] group-hover:text-white transition-colors shrink-0 shadow-2xs">
-                  <Phone className="w-5 h-5" />
+                <div className="w-12 h-12 rounded-xl bg-[#25D366] text-white flex items-center justify-center shrink-0 shadow-2xs group-hover:scale-105 transition-transform">
+                  <svg className="w-6 h-6 fill-current" viewBox="0 0 24 24">
+                    <path d="M12.012 2c-5.506 0-9.989 4.478-9.99 9.984a9.964 9.964 0 001.333 4.993L2 22l5.233-1.237a9.92 9.92 0 004.779 1.217h.004c5.505 0 9.988-4.478 9.989-9.985 0-2.669-1.038-5.176-2.925-7.062A9.914 9.914 0 0012.012 2zm5.836 14.288c-.244.686-1.42 1.309-1.959 1.385-.506.071-1.168.102-1.884-.127-.433-.139-1.002-.326-1.728-.639-3.04-1.31-5.018-4.385-5.17-4.588-.152-.203-1.233-1.639-1.233-3.125 0-1.486.777-2.217 1.053-2.52.276-.303.602-.379.803-.379.201 0 .401.002.576.01.185.008.434-.07.679.519.245.589.833 2.034.906 2.181.073.148.122.322.024.518-.098.196-.148.318-.293.489-.146.171-.307.382-.439.514-.146.146-.298.305-.128.597.17.292.756 1.248 1.621 2.018 1.112.99 2.051 1.298 2.343 1.444.292.146.463.122.634-.073.171-.195.732-.854.927-1.147.195-.293.39-.244.659-.146.268.098 1.708.805 2.001.952.293.146.488.22.561.342.073.122.073.708-.171 1.394z" />
+                  </svg>
                 </div>
                 <div>
-                  <span className="type-support text-[#857568] font-medium block">Phone</span>
-                  <span className="text-base font-semibold text-[#282828] tabular-nums">{COMPANY_INFO.phone}</span>
+                  <span className="type-support text-[#857568] font-medium block">WhatsApp &amp; Official Line</span>
+                  <span className="text-base font-bold text-[#282828] tabular-nums">{COMPANY_INFO.phone}</span>
                 </div>
               </a>
 
               <a
                 href={`mailto:${COMPANY_INFO.email}`}
-                className="flex items-center gap-4 p-4 rounded-2xl bg-[#faf8f5] border border-[#e6dfd5] hover:border-[#00b7a8] hover:bg-[#e8f8f6]/50 transition-all group"
+                className="flex items-center gap-4 p-4 rounded-2xl bg-[#faf8f5] border border-[#e6dfd5] hover:border-[#14616d] hover:bg-[#f0f7f8]/50 transition-all group"
               >
-                <div className="w-12 h-12 rounded-xl bg-white border border-[#e6dfd5] flex items-center justify-center text-[#00b7a8] group-hover:bg-[#00b7a8] group-hover:text-white transition-colors shrink-0 shadow-2xs">
+                <div className="w-12 h-12 rounded-xl bg-white border border-[#e6dfd5] flex items-center justify-center text-[#14616d] group-hover:bg-[#14616d] group-hover:text-white transition-colors shrink-0 shadow-2xs">
                   <Mail className="w-5 h-5" />
                 </div>
                 <div>
@@ -146,7 +151,7 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ preselectedPrope
                 </div>
                 <div>
                   <span className="type-support text-[#857568] font-medium block">Coverage</span>
-                  <span className="text-base font-semibold text-[#282828]">California’s Homes · Regional Operations</span>
+                  <span className="text-base font-semibold text-[#282828]">Statewide California Experiences &amp; Premier Residences</span>
                 </div>
               </div>
             </div>
@@ -249,7 +254,7 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ preselectedPrope
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
                         placeholder="john.doe@example.com"
-                        className="w-full px-3.5 h-11 rounded-xl border border-[#d8cfc3] text-sm sm:text-base bg-white focus:border-[#00b7a8] focus:ring-1 focus:ring-[#00b7a8] outline-none"
+                        className="w-full px-3.5 h-11 rounded-xl border border-[#d8cfc3] text-sm sm:text-base bg-white focus:border-[#14616d] focus:ring-1 focus:ring-[#14616d] outline-none"
                       />
                     </div>
                     <div>
@@ -262,7 +267,7 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ preselectedPrope
                         value={phone}
                         onChange={(e) => setPhone(e.target.value)}
                         placeholder="(916) 555-0123"
-                        className="w-full px-3.5 h-11 rounded-xl border border-[#d8cfc3] text-sm sm:text-base bg-white focus:border-[#00b7a8] focus:ring-1 focus:ring-[#00b7a8] outline-none tabular-nums"
+                        className="w-full px-3.5 h-11 rounded-xl border border-[#d8cfc3] text-sm sm:text-base bg-white focus:border-[#14616d] focus:ring-1 focus:ring-[#14616d] outline-none tabular-nums"
                       />
                     </div>
                   </div>
@@ -278,7 +283,7 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ preselectedPrope
                         value={company}
                         onChange={(e) => setCompany(e.target.value)}
                         placeholder="e.g. Family Relocation, Home Remodel, Company"
-                        className="w-full px-3.5 h-11 rounded-xl border border-[#d8cfc3] text-sm sm:text-base bg-white focus:border-[#00b7a8] focus:ring-1 focus:ring-[#00b7a8] outline-none"
+                        className="w-full px-3.5 h-11 rounded-xl border border-[#d8cfc3] text-sm sm:text-base bg-white focus:border-[#14616d] focus:ring-1 focus:ring-[#14616d] outline-none"
                       />
                     </div>
                     <div>
@@ -290,7 +295,7 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ preselectedPrope
                         value={jobTitle}
                         onChange={(e) => setJobTitle(e.target.value)}
                         placeholder="e.g. Short Visit, Extended Stay, Fleet Rental"
-                        className="w-full px-3.5 h-11 rounded-xl border border-[#d8cfc3] text-sm sm:text-base bg-white focus:border-[#00b7a8] focus:ring-1 focus:ring-[#00b7a8] outline-none"
+                        className="w-full px-3.5 h-11 rounded-xl border border-[#d8cfc3] text-sm sm:text-base bg-white focus:border-[#14616d] focus:ring-1 focus:ring-[#14616d] outline-none"
                       />
                     </div>
                   </div>
@@ -304,7 +309,7 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ preselectedPrope
                       <select
                         value={propertyChoice}
                         onChange={(e) => setPropertyChoice(e.target.value)}
-                        className="w-full px-3 h-11 rounded-xl border border-[#d8cfc3] text-sm bg-white text-[#282828]"
+                        className="w-full px-3 h-11 rounded-xl border border-[#d8cfc3] text-sm bg-white text-[#282828] focus:border-[#14616d] focus:ring-1 focus:ring-[#14616d] outline-none"
                       >
                         <option value="any">Any Available Unit</option>
                         {PROPERTIES.map((p) => (
@@ -324,7 +329,7 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ preselectedPrope
                         required
                         value={moveInDate}
                         onChange={(e) => setMoveInDate(e.target.value)}
-                        className="w-full px-3 h-11 rounded-xl border border-[#d8cfc3] text-sm bg-white text-[#282828] tabular-nums"
+                        className="w-full px-3 h-11 rounded-xl border border-[#d8cfc3] text-sm bg-white text-[#282828] tabular-nums focus:border-[#14616d] focus:ring-1 focus:ring-[#14616d] outline-none"
                       />
                     </div>
 
@@ -335,7 +340,7 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ preselectedPrope
                       <select
                         value={stayDuration}
                         onChange={(e) => setStayDuration(e.target.value)}
-                        className="w-full px-3 h-11 rounded-xl border border-[#d8cfc3] text-sm bg-white text-[#282828]"
+                        className="w-full px-3 h-11 rounded-xl border border-[#d8cfc3] text-sm bg-white text-[#282828] focus:border-[#14616d] focus:ring-1 focus:ring-[#14616d] outline-none"
                       >
                         <option value="5-10">5 – 10 Days (Short Stay)</option>
                         <option value="10-30">10 – 30 Days</option>
@@ -358,7 +363,7 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ preselectedPrope
                       value={message}
                       onChange={(e) => setMessage(e.target.value)}
                       placeholder="Please share details about your stay, desired destination, number of occupants, or any questions about our residences and fleet..."
-                      className="w-full px-3.5 py-2.5 rounded-xl border border-[#d8cfc3] text-sm sm:text-base bg-white focus:border-[#00b7a8] focus:ring-1 focus:ring-[#00b7a8] outline-none"
+                      className="w-full px-3.5 py-2.5 rounded-xl border border-[#d8cfc3] text-sm sm:text-base bg-white focus:border-[#14616d] focus:ring-1 focus:ring-[#14616d] outline-none"
                     />
                   </div>
 
@@ -373,7 +378,7 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ preselectedPrope
                     <button
                       type="submit"
                       disabled={submitting}
-                      className="w-full py-3.5 px-6 bg-[#00b7a8] hover:bg-[#009e91] active:bg-[#00897d] disabled:opacity-60 text-white type-btn rounded-xl shadow-md hover:shadow-lg transition-all flex items-center justify-center gap-2 cursor-pointer"
+                      className="btn btn-primary w-full py-3.5 text-center flex items-center justify-center gap-2 shadow-sm disabled:opacity-60"
                     >
                       {submitting ? (
                         <>
@@ -397,6 +402,15 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ preselectedPrope
               )}
             </div>
           </div>
+        </div>
+
+        {/* California Experiences & Regional Concierge Accordion */}
+        <div className="mt-16 pt-12 border-t border-[#e6dfd5]">
+          <CaliforniaExperiencesAccordion
+            title="California Experiences & Regional Concierge"
+            subtitle="Statewide Destinations &amp; Regional Corridors"
+            description="Planning your California journey? Whether staying for corporate projects, healthcare assignments, or extended retreats, explore our curated regional experiences across dining, vineyards, culture, and outdoor escapes."
+          />
         </div>
       </div>
     </section>

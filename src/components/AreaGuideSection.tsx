@@ -1,6 +1,9 @@
-import React, { useState } from 'react';
-import { Compass } from 'lucide-react';
+import React from 'react';
+import { Mail, Phone, Compass } from 'lucide-react';
+import { COMPANY_INFO } from '../data/lodgingData';
 import { LivePhotoBackground } from './LivePhotoBackground';
+import { ScrollReveal } from './common/ScrollReveal';
+import { CaliforniaExperiencesAccordion } from './CaliforniaExperiencesAccordion';
 
 interface AreaGuideSectionProps {
   onOpenBooking: () => void;
@@ -8,233 +11,125 @@ interface AreaGuideSectionProps {
 }
 
 export const AreaGuideSection: React.FC<AreaGuideSectionProps> = ({
-  onOpenBooking
+  onOpenBooking,
+  onOpenDiscoveryCall
 }) => {
-  // State for Divi accordion toggles
-  const [openToggles, setOpenToggles] = useState<Record<number, boolean>>({
-    0: false,
-    1: false,
-    2: false,
-    3: false,
-    4: false,
-    5: false,
-    6: false
-  });
-
-  const toggleItem = (index: number) => {
-    setOpenToggles((prev) => ({ ...prev, [index]: !prev[index] }));
-  };
-
   return (
     <>
-      {/* Area Attractions Accordions Section */}
-      <section className="bg-white py-14 sm:py-20 border-b border-[#e6dfd5]">
-        <div className="max-w-[1200px] mx-auto px-4 sm:px-8 text-left space-y-8">
-          <div className="max-w-3xl space-y-3">
+      {/* California Experiences Section */}
+      <section className="bg-[#faf7f2] py-14 sm:py-20 border-b border-[#e2ded6]">
+        <div className="max-w-[1250px] mx-auto px-4 sm:px-8 text-left space-y-10">
+          <ScrollReveal direction="up" className="max-w-3xl space-y-3">
             <div className="space-y-1.5">
-              <span className="type-support font-semibold uppercase tracking-[0.08em] text-[#82634f] flex items-center gap-2">
-                <Compass className="w-4 h-4 text-[#00897d]" />
-                Nationwide Destination &amp; Logistics Guide
+              <span className="text-xs font-semibold uppercase tracking-wider text-[#966746] flex items-center gap-2">
+                <Compass className="w-4 h-4 text-[#14616d]" />
+                California Experiences &amp; Destination Guide
               </span>
-              <h2 className="type-h2 text-[#282828]">
-                Explore Premier Destinations &amp; <span className="text-[#00897d]">Coast-to-Coast Corridors</span>
+              <h2 className="type-h2 text-[#182024]">
+                Explore Premier Destinations &amp; <span className="text-[#14616d]">California Corridors</span>
               </h2>
             </div>
-            <p className="type-body text-[#5c5046] pt-1">
-              Whether you are traveling for healthcare assignments, corporate consulting, government relocations, or family transitions, Easy Travel Lodging coordinates move-in-ready furnished residences, airport fleet delivery, and attentive concierge support across California’s homes.
+            <p className="type-body text-[#4a545c] leading-relaxed pt-1">
+              Whether you are traveling for healthcare assignments, corporate consulting, government relocations, or family transitions, Easy Travel Lodging coordinates move-in-ready furnished residences, airport fleet delivery, and attentive concierge support across California&apos;s premier destinations.
             </p>
-          </div>
+          </ScrollReveal>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-start pt-4">
-            {/* Column 1 */}
-            <div className="space-y-4">
-              {/* Toggle 0: Restaurants */}
-              <div className="et_pb_toggle border border-[#dfd7cc]">
-                <button
-                  onClick={() => toggleItem(0)}
-                  className={`w-full flex items-center justify-between p-4 sm:p-5 type-h4 text-left transition-colors cursor-pointer ${
-                    openToggles[0] ? 'bg-white text-[#282828]' : 'bg-[#faf8f5] text-[#282828]'
-                  }`}
-                >
-                  <span>Local Dining &amp; Cafes</span>
-                  <span className="text-xl font-mono text-[#00b7a8]">{openToggles[0] ? '–' : '+'}</span>
-                </button>
-                {openToggles[0] && (
-                  <div className="p-5 type-body text-[#3d352e] space-y-3 bg-white border-t border-[#ebe4da]">
-                    <ul className="list-disc pl-5 space-y-2 leading-relaxed">
-                      <li>Explore diverse international and farm-to-fork kitchens nearby, including Organic Delights Cafe and Restaurant.</li>
-                      <li>Neighborhood favorites include Famous Burgers &amp; Brew, Rudy’s Hideaway Lobster House, Samurai Sushi, El Forno Classico, Formaggio Taverna &amp; Patio, Brookfields, Old Spaghetti Factory, Oz Korean BBQ, Casa Ramos, and Mimosa House.</li>
-                    </ul>
-                  </div>
-                )}
-              </div>
-
-              {/* Toggle 1: Bars & Lounges */}
-              <div className="et_pb_toggle border border-[#dfd7cc]">
-                <button
-                  onClick={() => toggleItem(1)}
-                  className={`w-full flex items-center justify-between p-4 sm:p-5 type-h4 text-left transition-colors cursor-pointer ${
-                    openToggles[1] ? 'bg-white text-[#282828]' : 'bg-[#82634f] text-[#ffffff]'
-                  }`}
-                >
-                  <span>Tasting Rooms &amp; Craft Breweries</span>
-                  <span className="text-xl font-mono">{openToggles[1] ? '–' : '+'}</span>
-                </button>
-                {openToggles[1] && (
-                  <div className="p-5 type-body text-[#3d352e] space-y-3 bg-white border-t border-[#ebe4da]">
-                    <ul className="list-disc pl-5 space-y-2 leading-relaxed">
-                      <li>Visit the Rancho Cordova Barrel District—home to six independent craft breweries, local taprooms, and artisan beverage makers.</li>
-                    </ul>
-                  </div>
-                )}
-              </div>
-
-              {/* Toggle 2: Arts & Culture */}
-              <div className="et_pb_toggle border border-[#dfd7cc]">
-                <button
-                  onClick={() => toggleItem(2)}
-                  className={`w-full flex items-center justify-between p-4 sm:p-5 type-h4 text-left transition-colors cursor-pointer ${
-                    openToggles[2] ? 'bg-white text-[#282828]' : 'bg-[#faf8f5] text-[#282828]'
-                  }`}
-                >
-                  <span>Arts &amp; Culture</span>
-                  <span className="text-xl font-mono text-[#00b7a8]">{openToggles[2] ? '–' : '+'}</span>
-                </button>
-                {openToggles[2] && (
-                  <div className="p-5 type-body text-[#3d352e] space-y-3 bg-white border-t border-[#ebe4da]">
-                    <ul className="list-disc pl-5 space-y-2 leading-relaxed">
-                      <li>Tour classic and vintage collections at the California Automobile Museum in Sacramento.</li>
-                      <li>Experience rotating exhibitions and concerts at the Mills Station Arts &amp; Culture Center (The MACC).</li>
-                      <li>Spend an afternoon at the renowned Crocker Art Museum in downtown Sacramento.</li>
-                      <li>View regional fine art displayed year-round at Rancho Cordova City Hall.</li>
-                    </ul>
-                  </div>
-                )}
-              </div>
-
-              {/* Toggle 3: Historical Sites */}
-              <div className="et_pb_toggle border border-[#dfd7cc]">
-                <button
-                  onClick={() => toggleItem(3)}
-                  className={`w-full flex items-center justify-between p-4 sm:p-5 type-h4 text-left transition-colors cursor-pointer ${
-                    openToggles[3] ? 'bg-white text-[#282828]' : 'bg-[#00b7a8] text-[#ffffff]'
-                  }`}
-                >
-                  <span>Historical Landmarks</span>
-                  <span className="text-xl font-mono">{openToggles[3] ? '–' : '+'}</span>
-                </button>
-                {openToggles[3] && (
-                  <div className="p-5 type-body text-[#3d352e] space-y-3 bg-white border-t border-[#ebe4da]">
-                    <ul className="list-disc pl-5 space-y-2 leading-relaxed">
-                      <li>Stroll the California State Capitol Museum and surrounding Capitol Park—about 20 minutes west.</li>
-                      <li>Explore Gold Rush history, riverboats, and the California State Railroad Museum in Old Sacramento State Historic Park.</li>
-                      <li>Visit historic Sutter’s Fort in Midtown Sacramento.</li>
-                    </ul>
-                  </div>
-                )}
-              </div>
-            </div>
-
-            {/* Column 2 */}
-            <div className="space-y-4">
-              {/* Toggle 4: Shows & Entertainment */}
-              <div className="et_pb_toggle border border-[#dfd7cc]">
-                <button
-                  onClick={() => toggleItem(4)}
-                  className={`w-full flex items-center justify-between p-4 sm:p-5 type-h4 text-left transition-colors cursor-pointer ${
-                    openToggles[4] ? 'bg-white text-[#282828]' : 'bg-[#00b7a8] text-[#ffffff]'
-                  }`}
-                >
-                  <span>Events, Science &amp; Live Music</span>
-                  <span className="text-xl font-mono">{openToggles[4] ? '–' : '+'}</span>
-                </button>
-                {openToggles[4] && (
-                  <div className="p-5 type-body text-[#3d352e] space-y-3 bg-white border-t border-[#ebe4da]">
-                    <ul className="list-disc pl-5 space-y-2 leading-relaxed">
-                      <li>Enjoy live music, dining, and boutique shopping in Historic Folsom—just a 20-minute drive east.</li>
-                      <li>Bring the whole family to the SMUD Museum of Science and Curiosity (MOSAC) along the Sacramento riverfront.</li>
-                      <li>Attend seasonal Rancho Cordova community traditions including the July 3–4 Independence Celebration, Friday Moonlight Movies in June, and the August Summer Concert Series.</li>
-                      <li>Experience the annual California Capital Airshow at Mather Airport each autumn.</li>
-                    </ul>
-                  </div>
-                )}
-              </div>
-
-              {/* Toggle 5: Outdoor & Adventure */}
-              <div className="et_pb_toggle border border-[#dfd7cc]">
-                <button
-                  onClick={() => toggleItem(5)}
-                  className={`w-full flex items-center justify-between p-4 sm:p-5 type-h4 text-left transition-colors cursor-pointer ${
-                    openToggles[5] ? 'bg-white text-[#282828]' : 'bg-[#faf8f5] text-[#282828]'
-                  }`}
-                >
-                  <span>Parks, Trails &amp; Outdoor Recreation</span>
-                  <span className="text-xl font-mono text-[#00b7a8]">{openToggles[5] ? '–' : '+'}</span>
-                </button>
-                {openToggles[5] && (
-                  <div className="p-5 type-body text-[#3d352e] space-y-3 bg-white border-t border-[#ebe4da]">
-                    <ul className="list-disc pl-5 space-y-2 leading-relaxed">
-                      <li>Walk or cycle the 32-mile American River Parkway trail system and visit Hagan Community Park.</li>
-                      <li>Paddleboard, kayak, row, or hike around scenic Lake Natoma in the Folsom Lake State Recreation Area.</li>
-                      <li>Play a year-round round at the Jack Fleming-designed Mather Golf Course.</li>
-                      <li>Enjoy family afternoons at the Sacramento Zoo in Land Park, Monster Mini Golf, or the 20,000-square-foot Granite Arch Climbing Center.</li>
-                    </ul>
-                  </div>
-                )}
-              </div>
-
-              {/* Toggle 6: Day Trips */}
-              <div className="et_pb_toggle border border-[#dfd7cc]">
-                <button
-                  onClick={() => toggleItem(6)}
-                  className={`w-full flex items-center justify-between p-4 sm:p-5 type-h4 text-left transition-colors cursor-pointer ${
-                    openToggles[6] ? 'bg-white text-[#282828]' : 'bg-[#82634f] text-[#ffffff]'
-                  }`}
-                >
-                  <span>Weekend &amp; Day Trips</span>
-                  <span className="text-xl font-mono">{openToggles[6] ? '–' : '+'}</span>
-                </button>
-                {openToggles[6] && (
-                  <div className="p-5 type-body text-[#3d352e] space-y-3 bg-white border-t border-[#ebe4da]">
-                    <ul className="list-disc pl-5 space-y-2 leading-relaxed">
-                      <li><strong className="font-semibold">Lake Tahoe (approx. 2 hours east):</strong> Alpine beaches, mountain trails, and winter ski resorts.</li>
-                      <li><strong className="font-semibold">Napa &amp; Sonoma Valleys (approx. 2 hours west):</strong> World-renowned vineyards, culinary tours, and scenic drives.</li>
-                      <li><strong className="font-semibold">San Francisco, Sausalito &amp; the Coast (approx. 2 hours west):</strong> Bayfront landmarks, museums, and Pacific beaches.</li>
-                      <li><strong className="font-semibold">Yosemite National Park (approx. 4 hours south):</strong> Iconic granite cliffs, waterfalls, and giant sequoia groves.</li>
-                      <li className="italic type-support text-[#857568] list-none pt-2">Curated regional destination highlights across our California founding corridor and nationwide network.</li>
-                    </ul>
-                  </div>
-                )}
-              </div>
-            </div>
-          </div>
+          <ScrollReveal direction="up" delay={150}>
+            <CaliforniaExperiencesAccordion showIntro={false} />
+          </ScrollReveal>
         </div>
       </section>
 
       {/* Live American River Sunrise Banner */}
-      <section className="et_section_attractions relative overflow-hidden py-24 sm:py-32 text-white text-left border-b border-[#3a2f28]">
+      <section className="et_section_attractions relative overflow-hidden py-20 sm:py-28 text-white text-left border-b border-[#382b22]">
         <LivePhotoBackground scene="river" secondaryScene="courtyard" overlay="espresso" />
         <div className="relative z-10 max-w-[1250px] mx-auto px-4 sm:px-8">
           <div className="flex flex-col md:flex-row items-center justify-between gap-8">
             <div className="space-y-2">
-              <h6 className="et_section_h6 text-[#4de0d2]">
-                Experience Turnkey Living Across California’s homes
-              </h6>
+              <span className="text-xs font-semibold uppercase tracking-wider text-[#4de0d2] block">
+                Turnkey Living Across California
+              </span>
               <h2 className="type-h2 text-white">
                 Check open dates or build your stay online.
               </h2>
             </div>
 
-            <div className="shrink-0">
+            <div>
               <button
                 onClick={onOpenBooking}
-                className="et_pb_button et_pb_button_white group cursor-pointer shadow-md whitespace-nowrap"
+                className="btn btn-white shadow-md text-sm"
               >
                 <span>Check Availability</span>
-                <span className="ml-2 text-[#282828] group-hover:translate-x-1 transition-transform duration-200">
-                  →
-                </span>
+                <span className="text-[#14616d]">→</span>
               </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Dark Pre-Footer Strip */}
+      <section className="bg-[#1e1713] py-8 text-white border-b border-[#2e231c]">
+        <div className="max-w-[1250px] mx-auto px-4 sm:px-8">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-6 items-center">
+            {/* Column 1: Contact info */}
+            <div className="space-y-2 text-xs sm:text-sm font-medium text-[#d6cdc2]">
+              <a
+                href="mailto:easytravelagency@trustagent.space"
+                className="flex items-center gap-2 hover:text-[#4de0d2] transition-colors"
+              >
+                <Mail className="w-4 h-4 text-[#4de0d2] shrink-0" />
+                <span className="break-all">easytravelagency@trustagent.space</span>
+              </a>
+              <a
+                href={COMPANY_INFO.whatsappUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-2 hover:text-[#25D366] transition-colors tabular-nums"
+              >
+                <svg className="w-4 h-4 fill-[#25D366] shrink-0" viewBox="0 0 24 24">
+                  <path d="M12.012 2c-5.506 0-9.989 4.478-9.99 9.984a9.964 9.964 0 001.333 4.993L2 22l5.233-1.237a9.92 9.92 0 004.779 1.217h.004c5.505 0 9.988-4.478 9.989-9.985 0-2.669-1.038-5.176-2.925-7.062A9.914 9.914 0 0012.012 2zm5.836 14.288c-.244.686-1.42 1.309-1.959 1.385-.506.071-1.168.102-1.884-.127-.433-.139-1.002-.326-1.728-.639-3.04-1.31-5.018-4.385-5.17-4.588-.152-.203-1.233-1.639-1.233-3.125 0-1.486.777-2.217 1.053-2.52.276-.303.602-.379.803-.379.201 0 .401.002.576.01.185.008.434-.07.679.519.245.589.833 2.034.906 2.181.073.148.122.322.024.518-.098.196-.148.318-.293.489-.146.171-.307.382-.439.514-.146.146-.298.305-.128.597.17.292.756 1.248 1.621 2.018 1.112.99 2.051 1.298 2.343 1.444.292.146.463.122.634-.073.171-.195.732-.854.927-1.147.195-.293.39-.244.659-.146.268.098 1.708.805 2.001.952.293.146.488.22.561.342.073.122.073.708-.171 1.394z" />
+                </svg>
+                <span>WhatsApp: {COMPANY_INFO.phone}</span>
+              </a>
+            </div>
+
+            {/* Column 2: BBB Seal & Accredited Hospitality Badge */}
+            <div className="flex items-center gap-4">
+              <a
+                href="https://www.bbb.org/us/ca/sacramento/profile/boarding-house/easy-travel-lodging-1156-90076707/#sealclick"
+                target="_blank"
+                rel="nofollow noopener noreferrer"
+                className="inline-block bg-white p-1 rounded-lg"
+              >
+                <img
+                  src="https://seal-necal.bbb.org/seals/blue-seal-120-61-bbb-90076707.png"
+                  alt="Easy Travel Lodging BBB Business Review"
+                  className="h-12 w-auto object-contain"
+                />
+              </a>
+              <div className="px-3.5 py-2 rounded-lg bg-[#2b211a] border border-[#44362b] text-left shadow-2xs">
+                <span className="text-[10px] uppercase font-bold text-[#4de0d2] tracking-wider block">California</span>
+                <span className="text-xs font-semibold text-white">Premier Hospitality</span>
+              </div>
+            </div>
+
+            {/* Column 3: Discovery Call Button */}
+            <div>
+              <button
+                onClick={onOpenDiscoveryCall || onOpenBooking}
+                className="btn btn-primary w-full text-xs"
+              >
+                Schedule Rental Design Call
+              </button>
+            </div>
+
+            {/* Column 4: Badge 19 */}
+            <div className="flex justify-center md:justify-end">
+              <img
+                src="https://easytravellodging.com/wp-content/uploads/2023/04/19.png"
+                alt="Badge 19"
+                className="h-16 w-auto object-contain"
+              />
             </div>
           </div>
         </div>

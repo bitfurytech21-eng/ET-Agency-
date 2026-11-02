@@ -65,20 +65,20 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({ onNavigate }) => {
       {/* Warm Espresso Backdrop */}
       <div
         onClick={closeDrawer}
-        className="fixed inset-0 bg-[#1c1613]/60 backdrop-blur-xs transition-opacity"
+        className="fixed inset-0 bg-[#1c1613]/60 backdrop-blur-xs transition-opacity animate-fade-in"
         aria-hidden="true"
       />
 
       {/* Drawer Panel */}
       <aside
         aria-label="Shopping Cart"
-        className="relative z-10 w-full max-w-lg bg-[#faf8f5] h-full shadow-2xl flex flex-col border-l border-[#e6dfd5]"
+        className="relative z-10 w-full max-w-lg bg-[#faf8f5] h-full shadow-2xl flex flex-col border-l border-[#e6dfd5] animate-slide-in-right"
       >
         {/* Live Realistic Photo Header */}
         <div className="relative overflow-hidden px-6 py-5 border-b border-[#3a2f28] flex items-center justify-between text-white">
           <LivePhotoBackground scene="courtyard" overlay="espresso" />
           <div className="relative z-10 flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-[#00b7a8]/20 border border-[#00b7a8]/50 flex items-center justify-center text-[#7ce8df] shrink-0">
+            <div className="w-10 h-10 rounded-xl bg-[#14616d]/20 border border-[#14616d]/50 flex items-center justify-center text-[#4de0d2] shrink-0">
               <ShoppingBag className="w-5 h-5" />
             </div>
             <div>
@@ -86,7 +86,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({ onNavigate }) => {
                 <h2 className="type-h4 text-white">
                   Your Reservation &amp; Service Cart
                 </h2>
-                <span className="px-2 py-0.5 type-support font-semibold bg-[#00b7a8] text-white rounded-md tabular-nums">
+                <span className="px-2 py-0.5 type-support font-semibold bg-[#14616d] text-white rounded-md tabular-nums">
                   {cart.itemCount}
                 </span>
               </div>

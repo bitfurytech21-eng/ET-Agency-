@@ -45,8 +45,8 @@ export const BrochureModal: React.FC<BrochureModalProps> = ({ isOpen, onClose })
   };
 
   return (
-    <div className="fixed inset-0 z-50 overflow-y-auto bg-[#1c1613]/75 backdrop-blur-sm flex items-center justify-center p-4 sm:p-6 animate-in fade-in">
-      <div className="bg-white rounded-3xl max-w-2xl w-full max-h-[92vh] overflow-y-auto shadow-2xl border border-[#e6dfd5] text-left relative flex flex-col">
+    <div className="fixed inset-0 z-50 overflow-y-auto bg-[#1c1613]/75 backdrop-blur-sm flex items-center justify-center p-4 sm:p-6 animate-fade-in">
+      <div className="bg-white rounded-3xl max-w-2xl w-full max-h-[92vh] overflow-y-auto shadow-2xl border border-[#e6dfd5] text-left relative flex flex-col animate-scale-in">
         {/* Header with Live Realistic Courtyard Photo */}
         <div className="relative overflow-hidden px-6 py-5 border-b border-[#3a2f28] text-white shrink-0">
           <LivePhotoBackground scene="courtyard" overlay="espresso" />

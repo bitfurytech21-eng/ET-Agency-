@@ -20,7 +20,7 @@ import {
 
 interface ProfileModuleProps {
   user: UserSession;
-  onSaveProfile: (updates: {
+  onSaveProfile?: (updates: {
     name?: string;
     company?: string;
     role?: string;
@@ -28,9 +28,10 @@ interface ProfileModuleProps {
     address?: Partial<UserAddress>;
     preferences?: Partial<UserPreferences>;
   }) => Promise<{ ok: boolean; message: string }>;
+  onUpdateUser?: (updates: Partial<UserSession>) => void;
 }
 
-export const ProfileModule: React.FC<ProfileModuleProps> = ({ user, onSaveProfile }) => {
+export const ProfileModule: React.FC<ProfileModuleProps> = ({ user, onSaveProfile, onUpdateUser }) => {
   const [subView, setSubView] = useState<ProfileSubView>('index');
 
   const [name, setName] = useState(user.name);
@@ -38,19 +39,19 @@ export const ProfileModule: React.FC<ProfileModuleProps> = ({ user, onSaveProfil
   const [role, setRole] = useState(user.role);
   const [phone, setPhone] = useState(user.phone);
 
-  const [street, setStreet] = useState(user.address.street);
-  const [city, setCity] = useState(user.address.city);
-  const [stateCode, setStateCode] = useState(user.address.state);
-  const [zip, setZip] = useState(user.address.zip);
-  const [country, setCountry] = useState(user.address.country || 'United States');
+  const [street, setStreet] = useState(user.address?.street || '');
+  const [city, setCity] = useState(user.address?.city || '');
+  const [stateCode, setStateCode] = useState(user.address?.state || '');
+  const [zip, setZip] = useState(user.address?.zip || '');
+  const [country, setCountry] = useState(user.address?.country || 'United States');
 
-  const [thermostat, setThermostat] = useState(user.preferences.thermostat);
-  const [pillows, setPillows] = useState(user.preferences.pillows);
-  const [quietHours, setQuietHours] = useState(user.preferences.quietHours);
-  const [emailNotifications, setEmailNotifications] = useState(user.preferences.emailNotifications);
-  const [smsNotifications, setSmsNotifications] = useState(user.preferences.smsNotifications);
-  const [preferredCurrency, setPreferredCurrency] = useState(user.preferences.preferredCurrency);
-  const [timezone, setTimezone] = useState(user.preferences.timezone);
+  const [thermostat, setThermostat] = useState(user.preferences?.thermostat || '70°F (Optimal Comfort)');
+  const [pillows, setPillows] = useState(user.preferences?.pillows || 'Firm Feather & Memory Foam');
+  const [quietHours, setQuietHours] = useState(user.preferences?.quietHours || '10:00 PM – 8:00 AM');
+  const [emailNotifications, setEmailNotifications] = useState(user.preferences?.emailNotifications ?? true);
+  const [smsNotifications, setSmsNotifications] = useState(user.preferences?.smsNotifications ?? true);
+  const [preferredCurrency, setPreferredCurrency] = useState(user.preferences?.preferredCurrency || 'USD');
+  const [timezone, setTimezone] = useState(user.preferences?.timezone || 'America/Los_Angeles (Pacific Time)');
 
   const [saving, setSaving] = useState(false);
   const [feedback, setFeedback] = useState<{ type: 'success' | 'error'; message: string } | null>(
@@ -62,18 +63,18 @@ export const ProfileModule: React.FC<ProfileModuleProps> = ({ user, onSaveProfil
     setCompany(user.company);
     setRole(user.role);
     setPhone(user.phone);
-    setStreet(user.address.street);
-    setCity(user.address.city);
-    setStateCode(user.address.state);
-    setZip(user.address.zip);
-    setCountry(user.address.country || 'United States');
-    setThermostat(user.preferences.thermostat);
-    setPillows(user.preferences.pillows);
-    setQuietHours(user.preferences.quietHours);
-    setEmailNotifications(user.preferences.emailNotifications);
-    setSmsNotifications(user.preferences.smsNotifications);
-    setPreferredCurrency(user.preferences.preferredCurrency);
-    setTimezone(user.preferences.timezone);
+    setStreet(user.address?.street || '');
+    setCity(user.address?.city || '');
+    setStateCode(user.address?.state || '');
+    setZip(user.address?.zip || '');
+    setCountry(user.address?.country || 'United States');
+    setThermostat(user.preferences?.thermostat || '70°F (Optimal Comfort)');
+    setPillows(user.preferences?.pillows || 'Firm Feather & Memory Foam');
+    setQuietHours(user.preferences?.quietHours || '10:00 PM – 8:00 AM');
+    setEmailNotifications(user.preferences?.emailNotifications ?? true);
+    setSmsNotifications(user.preferences?.smsNotifications ?? true);
+    setPreferredCurrency(user.preferences?.preferredCurrency || 'USD');
+    setTimezone(user.preferences?.timezone || 'America/Los_Angeles (Pacific Time)');
   }, [user]);
 
   const subTabOptions: SubTabOption[] = [
@@ -90,19 +91,29 @@ export const ProfileModule: React.FC<ProfileModuleProps> = ({ user, onSaveProfil
     }
     setSaving(true);
     setFeedback(null);
-    const res = await onSaveProfile({
-      name: name.trim(),
-      company: company.trim(),
-      role: role.trim(),
-      phone: phone.trim(),
-      address: {
-        street: street.trim(),
-        city: city.trim(),
-        state: stateCode.trim(),
-        zip: zip.trim(),
-        country: country.trim() || 'United States',
-      },
-    });
+    let res = { ok: true, message: 'Profile details saved.' };
+    if (onSaveProfile) {
+      res = await onSaveProfile({
+        name: name.trim(),
+        company: company.trim(),
+        role: role.trim(),
+        phone: phone.trim(),
+        address: {
+          street: street.trim(),
+          city: city.trim(),
+          state: stateCode.trim(),
+          zip: zip.trim(),
+          country: country.trim() || 'United States',
+        },
+      });
+    } else if (onUpdateUser) {
+      onUpdateUser({
+        name: name.trim(),
+        company: company.trim(),
+        role: role.trim(),
+        phone: phone.trim(),
+      });
+    }
     setSaving(false);
     setFeedback({ type: res.ok ? 'success' : 'error', message: res.message });
   };
@@ -111,17 +122,25 @@ export const ProfileModule: React.FC<ProfileModuleProps> = ({ user, onSaveProfil
     e.preventDefault();
     setSaving(true);
     setFeedback(null);
-    const res = await onSaveProfile({
-      preferences: {
-        thermostat,
-        pillows,
-        quietHours,
-        emailNotifications,
-        smsNotifications,
+    let res = { ok: true, message: 'Stay preferences updated.' };
+    if (onSaveProfile) {
+      res = await onSaveProfile({
+        preferences: {
+          thermostat,
+          pillows,
+          quietHours,
+          emailNotifications,
+          smsNotifications,
+          preferredCurrency,
+          timezone,
+        },
+      });
+    } else if (onUpdateUser) {
+      onUpdateUser({
         preferredCurrency,
         timezone,
-      },
-    });
+      });
+    }
     setSaving(false);
     setFeedback({ type: res.ok ? 'success' : 'error', message: res.message });
   };
@@ -232,7 +251,7 @@ export const ProfileModule: React.FC<ProfileModuleProps> = ({ user, onSaveProfil
                 <div className="flex justify-between gap-4 border-b border-[#efe9e0] pb-2.5">
                   <dt className="text-[#6e5d50]">Billing Address</dt>
                   <dd className="font-semibold text-[#282828] text-right">
-                    {user.address.street
+                    {user.address?.street
                       ? `${user.address.street}, ${user.address.city}, ${user.address.state} ${user.address.zip}`
                       : 'No billing street saved yet'}
                   </dd>
@@ -240,25 +259,25 @@ export const ProfileModule: React.FC<ProfileModuleProps> = ({ user, onSaveProfil
                 <div className="flex justify-between gap-4 border-b border-[#efe9e0] pb-2.5">
                   <dt className="text-[#6e5d50]">Arrival Thermostat</dt>
                   <dd className="font-semibold text-[#282828] text-right">
-                    {user.preferences.thermostat}
+                    {user.preferences?.thermostat || '70°F'}
                   </dd>
                 </div>
                 <div className="flex justify-between gap-4 border-b border-[#efe9e0] pb-2.5">
                   <dt className="text-[#6e5d50]">Bedding / Pillows</dt>
                   <dd className="font-semibold text-[#282828] text-right">
-                    {user.preferences.pillows}
+                    {user.preferences?.pillows || 'Standard Luxury'}
                   </dd>
                 </div>
                 <div className="flex justify-between gap-4 border-b border-[#efe9e0] pb-2.5">
                   <dt className="text-[#6e5d50]">Email Alerts</dt>
                   <dd className="font-semibold text-[#282828] text-right">
-                    {user.preferences.emailNotifications ? 'Enabled' : 'Paused'}
+                    {user.preferences?.emailNotifications ? 'Enabled' : 'Paused'}
                   </dd>
                 </div>
                 <div className="flex justify-between gap-4">
                   <dt className="text-[#6e5d50]">Timezone</dt>
                   <dd className="font-semibold text-[#282828] text-right">
-                    {user.preferences.timezone}
+                    {user.preferences?.timezone || user.timezone || 'Pacific (PST)'}
                   </dd>
                 </div>
               </dl>

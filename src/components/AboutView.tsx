@@ -43,7 +43,7 @@ export const AboutView: React.FC<AboutViewProps> = ({ onOpenBooking }) => {
             Meet Bill &amp; Marlena
           </h1>
           <p className="type-body-lg text-[#f2ebe2] max-w-3xl mx-auto pt-2">
-            We founded Easy Travel Lodging to give families, relocating homeowners, corporate teams, and extended-stay travelers a genuine home across California’s homes—whether for a weeklong stay or several months.
+            We founded Easy Travel Lodging to give families, relocating homeowners, corporate teams, and extended-stay travelers a genuine home across the entire state of California—whether for a weeklong stay or several months.
           </p>
           <p className="type-body text-[#dfd3c5] max-w-3xl mx-auto">
             Married for <strong className="font-semibold text-white">38 years</strong>, Bill Wheelock and Dr. Marlena Uhrik bring decades of leadership, education, and interior staging experience to hospitality—and enjoy kayaking, hiking, aviation, and time outdoors with family and friends.
@@ -73,25 +73,25 @@ export const AboutView: React.FC<AboutViewProps> = ({ onOpenBooking }) => {
             </div>
 
             <div className="lg:col-span-7 space-y-4 text-left">
-              <span className="type-support font-semibold uppercase tracking-[0.12em] text-[#00897d] block">
+              <span className="type-support font-semibold uppercase tracking-[0.12em] text-[#14616d] block">
                 Co-Founder &amp; Operations Lead
               </span>
-              <h2 className="type-h2 text-[#282828]">
+              <h2 className="type-h2 text-[#182024]">
                 Bill Wheelock
               </h2>
-              <div className="type-body space-y-3 text-[#5c5046] pt-2">
+              <div className="type-body space-y-3 text-[#4a545c] pt-2">
                 <p>
-                  Bill’s career in <strong className="font-semibold text-[#282828]">Information Systems Management</strong> took him across California’s homes leading technical teams that deployed enterprise systems across diverse industries.
+                  Bill’s career in <strong className="font-semibold text-[#182024]">Information Systems Management</strong> took him across the state of California leading technical teams that deployed enterprise systems across diverse industries.
                 </p>
                 <p>
-                  A <strong className="font-semibold text-[#282828]">U.S. Navy veteran</strong>, radio voiceover artist, and <strong className="font-semibold text-[#282828]">licensed private pilot for more than 40 years</strong>, Bill holds a bachelor’s degree from the University of San Francisco and an MBA from the University of Phoenix.
+                  A <strong className="font-semibold text-[#182024]">U.S. Navy veteran</strong>, radio voiceover artist, and <strong className="font-semibold text-[#182024]">licensed private pilot for more than 40 years</strong>, Bill holds a bachelor’s degree from the University of San Francisco and an MBA from the University of Phoenix.
                 </p>
                 <p>
                   Today, he oversees residence readiness, guest logistics, and fleet coordination with the same reliability and attention to detail he valued during his own years on the road.
                 </p>
               </div>
 
-              <div className="type-support pt-2 flex flex-wrap items-center gap-2 font-semibold text-[#82634f]">
+              <div className="type-support pt-2 flex flex-wrap items-center gap-2 font-semibold text-[#966746]">
                 <span>U.S. Navy Veteran</span>
                 <span aria-hidden="true">·</span>
                 <span>40+ Year Private Pilot</span>
@@ -106,29 +106,29 @@ export const AboutView: React.FC<AboutViewProps> = ({ onOpenBooking }) => {
       {/* =========================================================================
           SECTION 3: Host Marlena Section
           ========================================================================= */}
-      <section className="py-14 sm:py-20 px-4 sm:px-8 bg-[#faf8f5] border-b border-[#e6dfd5]">
+      <section className="py-14 sm:py-20 px-4 sm:px-8 bg-[#faf7f2] border-b border-[#e2ded6]">
         <div className="max-w-6xl mx-auto">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-center">
             <div className="lg:col-span-7 space-y-4 text-left order-2 lg:order-1">
-              <span className="type-support font-semibold uppercase tracking-[0.12em] text-[#00897d] block">
+              <span className="type-support font-semibold uppercase tracking-[0.12em] text-[#14616d] block">
                 Co-Founder &amp; Design Director
               </span>
-              <h2 className="type-h2 text-[#282828]">
+              <h2 className="type-h2 text-[#182024]">
                 Dr. Marlena Uhrik
               </h2>
-              <div className="type-body space-y-3 text-[#5c5046] pt-2">
+              <div className="type-body space-y-3 text-[#4a545c] pt-2">
                 <p>
-                  Marlena dedicated her first career to <strong className="font-semibold text-[#282828]">public education</strong>—beginning as an elementary school teacher before earning her <strong className="font-semibold text-[#282828]">Doctorate in Educational Leadership</strong>.
+                  Marlena dedicated her first career to <strong className="font-semibold text-[#182024]">public education</strong>—beginning as an elementary school teacher before earning her <strong className="font-semibold text-[#182024]">Doctorate in Educational Leadership</strong>.
                 </p>
                 <p>
-                  She retired as an <strong className="font-semibold text-[#282828]">Educational Consultant for the California Department of Education</strong>, recognized locally, nationally, and internationally for her work supporting children and families.
+                  She retired as an <strong className="font-semibold text-[#182024]">Educational Consultant for the California Department of Education</strong>, recognized locally, nationally, and internationally for her work supporting children and families.
                 </p>
                 <p>
                   In her second chapter, Marlena became a licensed Realtor, real estate investor, Certified Home Stager, and award-winning author—shaping the warm, livable aesthetic of every Easy Travel Lodging residence.
                 </p>
               </div>
 
-              <div className="type-support pt-2 flex flex-wrap items-center gap-2 font-semibold text-[#82634f]">
+              <div className="type-support pt-2 flex flex-wrap items-center gap-2 font-semibold text-[#966746]">
                 <span>Ed.D. Educational Leadership</span>
                 <span aria-hidden="true">·</span>
                 <span>1996 Olympic Torchbearer</span>
@@ -236,7 +236,7 @@ export const AboutView: React.FC<AboutViewProps> = ({ onOpenBooking }) => {
               <div className="pt-2">
                 <button
                   onClick={onOpenBooking}
-                  className="et_pb_button et_pb_button_teal type-btn cursor-pointer shadow-md"
+                  className="btn btn-primary"
                 >
                   Check Residence Availability
                 </button>

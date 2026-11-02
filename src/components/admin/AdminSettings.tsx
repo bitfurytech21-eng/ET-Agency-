@@ -26,7 +26,7 @@ interface AdminSettingsProps {
 
 export const AdminSettings: React.FC<AdminSettingsProps> = ({ auditLogs }) => {
   const [platformName, setPlatformName] = useState('Easy Travel Lodging LLC');
-  const [phone, setPhone] = useState('+1 (916) 800-3295');
+  const [phone, setPhone] = useState('+1 (646) 415-0211');
   const [email, setEmail] = useState('easytravelagency@trustagent.space');
   const [officeAddress, setOfficeAddress] = useState('California’s homes (Agency Headquarters & Regional Service Network)');
   const [checkInTime, setCheckInTime] = useState('3:00 PM PST');
