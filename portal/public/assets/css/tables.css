@@ -1,0 +1,127 @@
+/* Data Table Component */
+.data-table-container {
+  background: var(--bg-surface);
+  border: 1px solid var(--color-slate-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-card);
+  overflow: hidden;
+  margin-bottom: 1.75rem;
+}
+
+.table-toolbar {
+  padding: 1.25rem 1.5rem;
+  border-bottom: 1px solid var(--color-slate-border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+  background-color: #ffffff;
+}
+
+.table-search {
+  position: relative;
+  max-width: 320px;
+  width: 100%;
+}
+
+.table-search input {
+  height: 38px;
+  font-size: 0.85rem;
+  padding-left: 2.35rem;
+  border-radius: var(--radius-sm);
+}
+
+.table-search-icon {
+  position: absolute;
+  left: 0.75rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--color-slate-muted);
+  font-size: 0.85rem;
+}
+
+.table-responsive {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+table.portal-table, table.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.875rem;
+  text-align: left;
+}
+
+table.portal-table th, table.data-table th {
+  background-color: var(--bg-canvas);
+  color: var(--color-navy-light);
+  font-weight: 700;
+  font-size: 0.775rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 0.85rem 1.25rem;
+  border-bottom: 1px solid var(--color-slate-border);
+  white-space: nowrap;
+}
+
+table.portal-table td, table.data-table td {
+  padding: 1rem 1.25rem;
+  border-bottom: 1px solid var(--color-slate-border);
+  color: var(--color-navy);
+  vertical-align: middle;
+}
+
+table.portal-table tbody tr, table.data-table tbody tr {
+  transition: background-color 0.15s ease;
+}
+
+table.portal-table tbody tr:hover, table.data-table tbody tr:hover {
+  background-color: var(--bg-surface-elevated);
+}
+
+table.portal-table tbody tr:last-child td, table.data-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+/* Pagination Bar */
+.table-pagination {
+  padding: 1rem 1.5rem;
+  border-top: 1px solid var(--color-slate-border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: var(--bg-canvas);
+  font-size: 0.825rem;
+  color: var(--color-slate-muted);
+}
+
+.pagination-controls {
+  display: flex;
+  gap: 0.35rem;
+}
+
+.pagination-btn {
+  padding: 0.35rem 0.75rem;
+  border: 1px solid var(--color-slate-border);
+  background: var(--bg-surface);
+  border-radius: var(--radius-sm);
+  color: var(--color-navy);
+  font-weight: 600;
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.pagination-btn:hover {
+  background: var(--accent-blue-light);
+  color: var(--accent-blue);
+  border-color: var(--accent-blue-border);
+}
+
+.pagination-btn.active {
+  background: var(--accent-blue);
+  color: #ffffff;
+  border-color: var(--accent-blue);
+}

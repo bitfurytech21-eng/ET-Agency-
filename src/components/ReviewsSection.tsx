@@ -6,18 +6,18 @@ export const ReviewsSection: React.FC = () => {
   return (
     <>
       {/* Hospitality Promise Banner */}
-      <section className="et_section_brown py-12 sm:py-16 text-left">
+      <section className="bg-[#332922] py-12 sm:py-16 text-left border-b border-[#473930]">
         <div className="max-w-[1200px] mx-auto px-4 sm:px-8 space-y-3.5">
-          <span className="text-[11px] font-bold uppercase tracking-[0.22em] text-[#7ce8df] block">
+          <span className="type-support font-semibold uppercase tracking-[0.1em] text-[#7ce8df] block">
             Nationwide Hospitality Promise
           </span>
-          <h2 className="font-heading font-black text-2xl sm:text-4xl text-white tracking-tight leading-tight">
+          <h2 className="type-h2 text-white">
             Hospitality That Feels Like Home
           </h2>
-          <p className="font-heading font-semibold text-base sm:text-lg text-[#f3ede6] leading-snug max-w-3xl">
+          <p className="type-body-lg font-medium text-[#f3ede6] max-w-3xl">
             Whether you are in town for a week, bridging a home closing, visiting family, or settling in for several months, every detail is ready before you arrive.
           </p>
-          <p className="text-xs sm:text-sm text-[#ddd1c4] leading-relaxed max-w-4xl">
+          <p className="type-body text-[#dfd4c8] max-w-4xl">
             Co-founders Bill Wheelock and Dr. Marlena Uhrik personally oversee each residence—pairing full kitchens, in-unit laundry, reserved parking, and responsive concierge support so every guest enjoys a calm, reliable stay across our nationwide residences.
           </p>
         </div>
@@ -32,12 +32,12 @@ export const ReviewsSection: React.FC = () => {
         }}
       >
         <div className="max-w-[1200px] mx-auto px-4 sm:px-8 space-y-6">
-          <div className="bg-[rgba(255,255,255,0.88)] rounded-t-[15px] p-6 sm:p-10 text-left space-y-6">
+          <div className="bg-[rgba(255,255,255,0.92)] rounded-t-[15px] p-6 sm:p-10 text-left space-y-6">
             <div>
-              <h6 className="et_section_h6 text-[#000000]">
+              <h6 className="et_section_h6 text-[#282828]">
                 Verified Experiences
               </h6>
-              <h2 className="font-heading font-bold text-3xl sm:text-5xl text-[#000000] leading-tight mt-1">
+              <h2 className="type-h2 text-[#1b1d20] mt-1">
                 What Guests Say About Staying With Us
               </h2>
             </div>

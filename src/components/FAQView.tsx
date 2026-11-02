@@ -38,16 +38,16 @@ export const FAQView: React.FC<FAQViewProps> = ({ onOpenBooking }) => {
       <section className="relative overflow-hidden py-14 sm:py-20 px-4 text-center text-white border-b border-[#3a2f28]">
         <LivePhotoBackground scene="courtyard" secondaryScene="interior" overlay="espresso" />
         <div className="relative z-10 max-w-3xl mx-auto space-y-4">
-          <div className="inline-flex items-center gap-2 text-[#4de0d2] text-xs font-bold uppercase tracking-widest">
+          <div className="type-support inline-flex items-center gap-2 text-[#4de0d2] font-semibold uppercase tracking-[0.12em]">
             <HelpCircle className="w-4 h-4 text-[#4de0d2]" />
             <span>Guest Help Center &amp; FAQs</span>
           </div>
 
-          <h1 className="text-3xl sm:text-5xl font-heading font-black text-white tracking-tight text-balance">
+          <h1 className="type-h1 text-white">
             Frequently Asked Questions
           </h1>
 
-          <p className="text-[#ede5dc] text-base sm:text-lg leading-relaxed">
+          <p className="type-body-lg text-[#ede5dc]">
             Clear answers about furnished short and extended stays, online cart checkout, 3D fleet rentals, arrival essentials, and community guidelines.
           </p>
         </div>
@@ -63,7 +63,7 @@ export const FAQView: React.FC<FAQViewProps> = ({ onOpenBooking }) => {
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Search by keyword (e.g. checkout, utilities, pets, WiFi, minimum stay)..."
-              className="w-full pl-12 pr-4 py-3.5 rounded-2xl border border-[#d8cfc3] focus:border-[#00b7a8] focus:ring-2 focus:ring-[#00b7a8]/15 bg-white text-sm text-[#282828] outline-none shadow-2xs transition-all"
+              className="w-full h-12 pl-12 pr-4 rounded-2xl border border-[#d8cfc3] focus:border-[#00b7a8] focus:ring-2 focus:ring-[#00b7a8]/15 bg-white text-sm sm:text-base text-[#282828] outline-none shadow-2xs transition-all"
             />
           </div>
 
@@ -72,7 +72,7 @@ export const FAQView: React.FC<FAQViewProps> = ({ onOpenBooking }) => {
               <button
                 key={cat}
                 onClick={() => setSelectedCategory(cat)}
-                className={`px-4 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+                className={`type-btn px-4 py-2.5 rounded-xl transition-all cursor-pointer ${
                   selectedCategory === cat
                     ? 'bg-[#00b7a8] text-white shadow-2xs'
                     : 'bg-white border border-[#e6dfd5] text-[#5c5046] hover:bg-[#f4efe9]'
@@ -88,7 +88,7 @@ export const FAQView: React.FC<FAQViewProps> = ({ onOpenBooking }) => {
         <div className="space-y-3">
           {filteredFAQs.length === 0 ? (
             <div className="text-center p-12 bg-white rounded-2xl border border-[#e6dfd5]">
-              <p className="text-[#6e5f53] text-sm">No questions matched your search query. Try another term!</p>
+              <p className="type-body text-[#6e5f53]">No questions matched your search query. Try another term.</p>
             </div>
           ) : (
             filteredFAQs.map((faq) => {
@@ -102,7 +102,7 @@ export const FAQView: React.FC<FAQViewProps> = ({ onOpenBooking }) => {
                     onClick={() => toggleFAQ(faq.id)}
                     className="w-full px-6 py-4 sm:py-5 text-left flex items-center justify-between gap-4 cursor-pointer hover:bg-[#faf8f5] transition-colors"
                   >
-                    <span className="font-heading font-bold text-base sm:text-lg text-[#282828]">
+                    <span className="type-h4 text-[#282828]">
                       {faq.question}
                     </span>
                     <div
@@ -115,7 +115,7 @@ export const FAQView: React.FC<FAQViewProps> = ({ onOpenBooking }) => {
                   </button>
 
                   {isOpen && (
-                    <div className="px-6 pb-6 pt-1 text-[#5c5046] text-sm leading-relaxed border-t border-[#efe9e0] animate-in fade-in duration-200">
+                    <div className="type-body px-6 pb-6 pt-2 text-[#5c5046] border-t border-[#efe9e0] animate-in fade-in duration-200">
                       <p className="whitespace-pre-line">{faq.answer}</p>
                     </div>
                   )}
@@ -130,28 +130,28 @@ export const FAQView: React.FC<FAQViewProps> = ({ onOpenBooking }) => {
           <LivePhotoBackground scene="twilight" overlay="espresso" />
           <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-6">
             <div className="space-y-2 text-center md:text-left">
-              <h3 className="font-heading font-black text-xl sm:text-2xl text-white">
+              <h3 className="type-h3 text-white">
                 Have a Specific Question About Your Travel Dates?
               </h3>
-              <p className="text-xs sm:text-sm text-[#ede5dc] max-w-lg leading-relaxed">
+              <p className="type-body text-[#ede5dc] max-w-lg">
                 Bill and Marlena are always ready to answer any questions to verify if Easy Travel Lodging is the ideal fit for your stay.
               </p>
             </div>
 
-            <div className="flex flex-wrap items-center gap-3">
+            <div className="flex flex-wrap items-center gap-3 shrink-0">
               <a
                 href="tel:9168003295"
-                className="px-5 py-3 rounded-xl bg-white/15 hover:bg-white/25 text-white font-semibold text-xs flex items-center gap-2 border border-white/25 transition-all"
+                className="type-btn px-5 py-3 rounded-xl bg-white/15 hover:bg-white/25 text-white flex items-center gap-2 border border-white/25 transition-all tabular-nums"
               >
                 <Phone className="w-4 h-4 text-[#4de0d2]" />
                 <span>Call 916-800-3295</span>
               </a>
               <button
                 onClick={onOpenBooking}
-                className="px-6 py-3 rounded-xl bg-[#00b7a8] hover:bg-[#009e91] text-white font-bold text-xs flex items-center gap-2 transition-all shadow-md cursor-pointer"
+                className="type-btn px-6 py-3 rounded-xl bg-[#00b7a8] hover:bg-[#009e91] text-white flex items-center gap-2 transition-all shadow-md cursor-pointer"
               >
                 <MessageSquare className="w-4 h-4 text-white" />
-                <span>Send An Inquiry</span>
+                <span>Send an Inquiry</span>
               </button>
             </div>
           </div>

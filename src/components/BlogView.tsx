@@ -22,7 +22,7 @@ export const BlogView: React.FC<BlogViewProps> = ({ onOpenBooking }) => {
         <div className="max-w-4xl mx-auto px-4 sm:px-6 space-y-8">
           <button
             onClick={() => setSelectedPost(null)}
-            className="inline-flex items-center gap-2 text-sm font-bold text-[#00897d] hover:text-[#00b7a8] transition-colors cursor-pointer"
+            className="inline-flex items-center gap-2 type-btn text-[#00897d] hover:text-[#00b7a8] transition-colors cursor-pointer"
           >
             <ChevronLeft className="w-4 h-4" />
             <span>Back to All Articles</span>
@@ -30,8 +30,8 @@ export const BlogView: React.FC<BlogViewProps> = ({ onOpenBooking }) => {
 
           <article className="bg-white rounded-3xl p-6 sm:p-12 border border-[#e6dfd5] shadow-2xs space-y-6">
             <div className="space-y-3">
-              <div className="flex flex-wrap items-center gap-2 text-xs font-semibold text-[#6e5f53]">
-                <span className="text-[#82634f] font-bold">{selectedPost.category}</span>
+              <div className="flex flex-wrap items-center gap-2 type-support font-medium text-[#6e5f53]">
+                <span className="text-[#82634f] font-semibold">{selectedPost.category}</span>
                 <span aria-hidden="true">·</span>
                 <span className="flex items-center gap-1">
                   <Calendar className="w-3.5 h-3.5 text-[#00b7a8]" />
@@ -44,7 +44,7 @@ export const BlogView: React.FC<BlogViewProps> = ({ onOpenBooking }) => {
                 </span>
               </div>
 
-              <h1 className="text-2xl sm:text-4xl font-heading font-black text-[#282828] leading-tight text-balance">
+              <h1 className="type-h1 text-[#282828]">
                 {selectedPost.title}
               </h1>
             </div>
@@ -63,22 +63,22 @@ export const BlogView: React.FC<BlogViewProps> = ({ onOpenBooking }) => {
               </div>
             )}
 
-            <div className="space-y-4 text-[#4a3e35] text-base leading-relaxed pt-2">
+            <div className="space-y-5 text-[#4a3e35] type-body pt-2">
               {selectedPost.content.map((paragraph, idx) => (
-                <p key={idx} className="leading-relaxed">
+                <p key={idx} className="type-body text-[#4a3e35]">
                   {paragraph}
                 </p>
               ))}
             </div>
 
             <div className="pt-8 border-t border-[#efe9e0] flex flex-col sm:flex-row items-center justify-between gap-4">
-              <span className="text-xs text-[#6e5f53]">
-                Published by <strong className="text-[#282828]">Easy Travel Lodging Editorial Team</strong>
+              <span className="type-support text-[#6e5f53]">
+                Published by <strong className="font-semibold text-[#282828]">Easy Travel Lodging Editorial Team</strong>
               </span>
 
               <button
                 onClick={onOpenBooking}
-                className="px-6 py-2.5 bg-[#00b7a8] hover:bg-[#009e91] text-white font-bold text-xs rounded-xl shadow-2xs transition-colors cursor-pointer"
+                className="px-6 py-2.5 bg-[#00b7a8] hover:bg-[#009e91] text-white type-btn rounded-xl shadow-2xs transition-colors cursor-pointer"
               >
                 Check Residence Availability
               </button>
@@ -95,16 +95,16 @@ export const BlogView: React.FC<BlogViewProps> = ({ onOpenBooking }) => {
       <section className="relative overflow-hidden py-14 sm:py-20 px-4 text-center text-white border-b border-[#3a2f28]">
         <LivePhotoBackground scene="river" secondaryScene="courtyard" overlay="espresso" />
         <div className="relative z-10 max-w-3xl mx-auto space-y-4">
-          <div className="inline-flex items-center gap-2 text-[#4de0d2] text-xs font-bold uppercase tracking-widest">
+          <div className="inline-flex items-center gap-2 text-[#4de0d2] type-support font-semibold">
             <BookOpen className="w-4 h-4 text-[#4de0d2]" />
             <span>Journal &amp; Regional Guides</span>
           </div>
 
-          <h1 className="text-3xl sm:text-5xl font-heading font-black text-white tracking-tight text-balance">
+          <h1 className="type-h1 text-white">
             Local Guides, Relocation Tips &amp; Extended-Stay Insights
           </h1>
 
-          <p className="text-[#ede5dc] text-base sm:text-lg leading-relaxed">
+          <p className="type-body-lg text-[#ede5dc]">
             Practical advice for smooth home transitions, nationwide travel and destination guides, and tips for feeling at home away from home.
           </p>
         </div>
@@ -134,19 +134,19 @@ export const BlogView: React.FC<BlogViewProps> = ({ onOpenBooking }) => {
                 )}
 
                 <div className="p-6 sm:p-8 space-y-3">
-                  <div className="flex items-center gap-2 text-xs font-semibold text-[#6e5f53]">
-                    <span className="text-[#82634f] font-bold">{post.category}</span>
+                  <div className="flex items-center gap-2 type-support font-medium text-[#6e5f53]">
+                    <span className="text-[#82634f] font-semibold">{post.category}</span>
                     <span aria-hidden="true">·</span>
                     <span>{post.date}</span>
                     <span aria-hidden="true">·</span>
                     <span>{post.readTime}</span>
                   </div>
 
-                  <h3 className="font-heading font-black text-xl text-[#282828] group-hover:text-[#00b7a8] transition-colors leading-tight">
+                  <h3 className="type-h3 text-[#282828] group-hover:text-[#00b7a8] transition-colors">
                     {post.title}
                   </h3>
 
-                  <p className="text-[#5c5046] text-xs sm:text-sm leading-relaxed line-clamp-3">
+                  <p className="type-body text-[#5c5046] line-clamp-3">
                     {post.excerpt}
                   </p>
                 </div>
@@ -155,10 +155,10 @@ export const BlogView: React.FC<BlogViewProps> = ({ onOpenBooking }) => {
               <div className="px-6 sm:px-8 pb-6 sm:pb-8 pt-2">
                 <button
                   onClick={() => setSelectedPost(post)}
-                  className="inline-flex items-center gap-2 text-xs font-bold text-[#00897d] hover:text-[#00b7a8] group-hover:translate-x-1 transition-all cursor-pointer"
+                  className="inline-flex items-center gap-2 type-btn text-[#00897d] hover:text-[#00b7a8] group-hover:translate-x-1 transition-all cursor-pointer"
                 >
                   <span>Read Full Article</span>
-                  <ArrowRight className="w-3.5 h-3.5" />
+                  <ArrowRight className="w-4 h-4" />
                 </button>
               </div>
             </div>

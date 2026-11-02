@@ -3,14 +3,24 @@ import path from 'node:path';
 import crypto from 'node:crypto';
 import bcrypt from 'bcryptjs';
 import { fileURLToPath } from 'node:url';
-import { recomputeCart, readPlatformDb, writePlatformDb } from './store.js';
+import {
+  VEHICLE_THUMBNAILS,
+  calculatePropertyStayQuote,
+  calculateVehiclePricing,
+  findOverlappingPropertyRange,
+  recomputeCart,
+  readPlatformDb,
+  writePlatformDb,
+} from './store.js';
 import type {
   BookingRecord,
+  DatabaseState,
   ManualPaymentRecord,
   OrderPaymentMethod,
   OrderPaymentStatus,
   OrderRecord,
   OrderStatus,
+  SupportTicketRecord,
   VehicleBookingRecord,
 } from '../types.js';
 
@@ -42,6 +52,45 @@ export interface CustomerTransaction {
   status?: string;
 }
 
+export interface CustomerDashboardConfig {
+  id: string;
+  user_id: string;
+  created_at: string;
+  last_accessed_at: string;
+  initialized: boolean;
+}
+
+export interface CustomerAddress {
+  street: string;
+  city: string;
+  state: string;
+  zip: string;
+  country: string;
+}
+
+export interface CustomerPreferences {
+  thermostat: string;
+  pillows: string;
+  quietHours: string;
+  emailNotifications: boolean;
+  smsNotifications: boolean;
+  preferredCurrency: string;
+  timezone: string;
+}
+
+export interface CustomerDriverInfo {
+  primaryDriver: string;
+  licenseNumber: string;
+  issuingState: string;
+}
+
+export interface CustomerLoginEvent {
+  id: string;
+  timestamp: string;
+  device: string;
+  ip: string;
+}
+
 export interface CustomerRecord {
   id: string;
   name: string;
@@ -53,6 +102,14 @@ export interface CustomerRecord {
   balance_usd: number;
   units_balance: number;
   created_at: string;
+  password_updated_at?: string;
+  two_factor_enabled?: boolean;
+  dashboard: CustomerDashboardConfig;
+  address?: CustomerAddress;
+  preferences?: CustomerPreferences;
+  driver_info?: CustomerDriverInfo;
+  login_history?: CustomerLoginEvent[];
+  wishlist?: string[];
   purchases: CustomerPurchase[];
   transactions: CustomerTransaction[];
 }
@@ -60,7 +117,10 @@ export interface CustomerRecord {
 export interface CustomerSession {
   customer_id: string;
   created_at: string;
+  last_active_at?: string;
   expires_at: string;
+  user_agent?: string;
+  ip?: string;
 }
 
 export interface CustomerDbState {
@@ -68,90 +128,192 @@ export interface CustomerDbState {
   sessions: Record<string, CustomerSession>;
 }
 
+function buildDefaultPreferences(): CustomerPreferences {
+  return {
+    thermostat: '70°F (21°C)',
+    pillows: 'Hypoallergenic Medium-Firm',
+    quietHours: 'Standard (10:00 PM – 7:00 AM)',
+    emailNotifications: true,
+    smsNotifications: true,
+    preferredCurrency: 'USD ($)',
+    timezone: 'America/Los_Angeles (PT)',
+  };
+}
+
+function ensureIndividualDashboard(customer: CustomerRecord, touchAccess = false): boolean {
+  const nowIso = new Date().toISOString();
+  let mutated = false;
+
+  if (!customer.dashboard || !customer.dashboard.id) {
+    customer.dashboard = {
+      id: `dash_${Date.now()}_${Math.floor(Math.random() * 900 + 100)}`,
+      user_id: customer.id,
+      created_at: customer.created_at || nowIso,
+      last_accessed_at: nowIso,
+      initialized: true,
+    };
+    mutated = true;
+  } else if (touchAccess) {
+    customer.dashboard.last_accessed_at = nowIso;
+    mutated = true;
+  }
+
+  if (!customer.preferences) {
+    customer.preferences = buildDefaultPreferences();
+    mutated = true;
+  }
+
+  if (!customer.address) {
+    customer.address = {
+      street: '',
+      city: '',
+      state: 'CA',
+      zip: '',
+      country: 'United States',
+    };
+    mutated = true;
+  }
+
+  if (!customer.driver_info) {
+    customer.driver_info = {
+      primaryDriver: customer.name,
+      licenseNumber: '',
+      issuingState: 'CA',
+    };
+    mutated = true;
+  }
+
+  if (!Array.isArray(customer.purchases)) {
+    customer.purchases = [];
+    mutated = true;
+  }
+  if (!Array.isArray(customer.transactions)) {
+    customer.transactions = [];
+    mutated = true;
+  }
+  if (!Array.isArray(customer.login_history)) {
+    customer.login_history = [];
+    mutated = true;
+  }
+  if (!Array.isArray(customer.wishlist)) {
+    customer.wishlist = [];
+    mutated = true;
+  }
+
+  return mutated;
+}
+
 async function ensureCustomerDb(): Promise<CustomerDbState> {
   await fs.mkdir(dataDir, { recursive: true });
   try {
     const raw = await fs.readFile(customersFile, 'utf8');
     const data = JSON.parse(raw);
-    return {
-      customers: Array.isArray(data.customers) ? data.customers : [],
-      sessions: data.sessions && typeof data.sessions === 'object' ? data.sessions : {},
-    };
+    const customers: CustomerRecord[] = Array.isArray(data.customers) ? data.customers : [];
+    const sessions: Record<string, CustomerSession> =
+      data.sessions && typeof data.sessions === 'object' ? data.sessions : {};
+
+    let dirty = false;
+    const now = Date.now();
+    for (const [tok, sess] of Object.entries(sessions)) {
+      if (!sess || !sess.customer_id || (sess.expires_at && new Date(sess.expires_at).getTime() <= now)) {
+        delete sessions[tok];
+        dirty = true;
+      }
+    }
+    for (const cust of customers) {
+      if (ensureIndividualDashboard(cust, false)) {
+        dirty = true;
+      }
+    }
+
+    const state: CustomerDbState = { customers, sessions };
+    if (dirty) {
+      await saveCustomerDb(state);
+    }
+    return state;
   } catch {
-    const demoPasswordHash = bcrypt.hashSync('welcome123', 10);
-    const defaultState: CustomerDbState = {
-      customers: [
-        {
-          id: 'cust_demo_01',
-          name: 'Dr. Marcus Vance',
-          email: 'client@easytravellodging.com',
-          password_hash: demoPasswordHash,
-          company: 'UC Davis Health Medical Center',
-          role: 'Visiting Surgery Fellow',
-          phone: '(916) 426-3655',
-          balance_usd: 8400,
-          units_balance: 84,
-          created_at: new Date().toISOString(),
-          purchases: [
-            {
-              id: 'pch_101',
-              description: 'Corporate Lodging Package - Unit 173 (Q4)',
-              unit_number: 'Unit 173',
-              units_purchased: 50,
-              amount_usd: 5000,
-              status: 'active',
-              purchased_at: new Date(Date.now() - 14 * 86400000).toISOString(),
-              payment_method: 'Corporate Wire',
-            },
-            {
-              id: 'pch_102',
-              description: 'Prepaid Executive Stays Credit (34 Units)',
-              unit_number: 'Flex Units',
-              units_purchased: 34,
-              amount_usd: 3400,
-              status: 'active',
-              purchased_at: new Date(Date.now() - 5 * 86400000).toISOString(),
-              payment_method: 'Direct ACH',
-            },
-          ],
-          transactions: [
-            {
-              id: 'tx_901',
-              type: 'credit_purchase',
-              units: 50,
-              amount_usd: 5000,
-              description: 'Initial Unit Purchase - 50 Units',
-              date: new Date(Date.now() - 14 * 86400000).toISOString(),
-            },
-            {
-              id: 'tx_902',
-              type: 'credit_purchase',
-              units: 34,
-              amount_usd: 3400,
-              description: 'Tier 2 Credit Recharge - 34 Units',
-              date: new Date(Date.now() - 5 * 86400000).toISOString(),
-            },
-          ],
-        },
-      ],
+    const emptyState: CustomerDbState = {
+      customers: [],
       sessions: {},
     };
-    await fs.writeFile(customersFile, JSON.stringify(defaultState, null, 4), 'utf8');
-    return defaultState;
+    await fs.writeFile(customersFile, JSON.stringify(emptyState, null, 2), 'utf8');
+    return emptyState;
   }
 }
 
 async function saveCustomerDb(state: CustomerDbState) {
-  await fs.writeFile(customersFile, JSON.stringify(state, null, 4), 'utf8');
+  await fs.mkdir(dataDir, { recursive: true });
+  await fs.writeFile(customersFile, JSON.stringify(state, null, 2), 'utf8');
+}
+
+function resolveAuthenticatedCustomer(
+  db: CustomerDbState,
+  token?: string,
+): { customer: CustomerRecord; session: CustomerSession } | null {
+  if (!token || typeof token !== 'string') return null;
+  const trimmed = token.trim();
+  if (!trimmed) return null;
+  const session = db.sessions[trimmed];
+  if (!session) return null;
+  if (session.expires_at && new Date(session.expires_at).getTime() <= Date.now()) {
+    delete db.sessions[trimmed];
+    return null;
+  }
+  const customer = db.customers.find((c) => c.id === session.customer_id);
+  if (!customer) return null;
+  return { customer, session };
+}
+
+function claimUnownedRecordsForCustomer(platformDb: DatabaseState, customer: CustomerRecord): boolean {
+  const emailLower = customer.email.toLowerCase().trim();
+  let changed = false;
+
+  for (const bk of platformDb.bookings) {
+    if (!bk.customerId && bk.guestEmail && bk.guestEmail.toLowerCase().trim() === emailLower) {
+      bk.customerId = customer.id;
+      changed = true;
+    }
+  }
+  for (const vbk of platformDb.vehicleBookings) {
+    if (!vbk.customerId && vbk.customerEmail && vbk.customerEmail.toLowerCase().trim() === emailLower) {
+      vbk.customerId = customer.id;
+      changed = true;
+    }
+  }
+  for (const mp of platformDb.manualPayments) {
+    if (!mp.customerId && mp.customerEmail && mp.customerEmail.toLowerCase().trim() === emailLower) {
+      mp.customerId = customer.id;
+      changed = true;
+    }
+  }
+  for (const ord of platformDb.orders || []) {
+    if (!ord.customerId && ord.customerEmail && ord.customerEmail.toLowerCase().trim() === emailLower) {
+      ord.customerId = customer.id;
+      changed = true;
+    }
+  }
+  for (const ntf of platformDb.notifications) {
+    if (!ntf.customerId && ntf.recipientEmail && ntf.recipientEmail.toLowerCase().trim() === emailLower) {
+      ntf.customerId = customer.id;
+      changed = true;
+    }
+  }
+  for (const inq of platformDb.inquiries) {
+    if (!inq.customerId && inq.email && inq.email.toLowerCase().trim() === emailLower) {
+      inq.customerId = customer.id;
+      changed = true;
+    }
+  }
+
+  return changed;
 }
 
 export async function getCustomerByToken(token?: string): Promise<CustomerRecord | null> {
   if (!token) return null;
   const db = await ensureCustomerDb();
-  const session = db.sessions[token];
-  if (!session) return null;
-  if (session.expires_at && new Date(session.expires_at) < new Date()) return null;
-  return db.customers.find((c) => c.id === session.customer_id) || null;
+  const resolved = resolveAuthenticatedCustomer(db, token);
+  if (!resolved) return null;
+  return resolved.customer;
 }
 
 export async function listAllCustomersSafe() {
@@ -159,19 +321,22 @@ export async function listAllCustomersSafe() {
   return db.customers.map(({ password_hash, ...safe }) => safe);
 }
 
-export async function phpAuthLogin(payload: { email?: string; password?: string }) {
+export async function phpAuthLogin(
+  payload: { email?: string; password?: string },
+  meta?: { userAgent?: string; ip?: string },
+) {
   const email = (payload.email || '').toLowerCase().trim();
   const password = payload.password || '';
 
   if (!email || !password) {
-    return { success: false, message: 'Email and password are required', status: 400 };
+    return { success: false, message: 'Email address and password are required.', status: 400 };
   }
 
   const db = await ensureCustomerDb();
   const customer = db.customers.find((c) => c.email.toLowerCase() === email);
 
   if (!customer) {
-    return { success: false, message: 'Invalid email or password', status: 401 };
+    return { success: false, message: 'Invalid email address or password.', status: 401 };
   }
 
   let isValid = false;
@@ -182,55 +347,82 @@ export async function phpAuthLogin(payload: { email?: string; password?: string 
   ) {
     const normalizedHash = customer.password_hash.replace(/^\$2y\$/, '$2a$');
     isValid = bcrypt.compareSync(password, normalizedHash);
-  } else if (password === 'welcome123') {
-    isValid = true;
   }
 
   if (!isValid) {
-    return { success: false, message: 'Invalid email or password', status: 401 };
+    return { success: false, message: 'Invalid email address or password.', status: 401 };
   }
 
-  const token = crypto.randomBytes(24).toString('hex');
+  // Ensure existing personal dashboard is linked and never duplicated
+  ensureIndividualDashboard(customer, true);
+
   const now = new Date();
+  const nowIso = now.toISOString();
   const expiresAt = new Date(now.getTime() + 7 * 86400000);
+  const token = crypto.randomBytes(24).toString('hex');
+
+  const deviceLabel = summarizeUserAgent(meta?.userAgent);
+  const ipLabel = meta?.ip || 'Verified Client Network';
 
   db.sessions[token] = {
     customer_id: customer.id,
-    created_at: now.toISOString(),
+    created_at: nowIso,
+    last_active_at: nowIso,
     expires_at: expiresAt.toISOString(),
+    user_agent: deviceLabel,
+    ip: ipLabel,
   };
 
+  customer.login_history = [
+    {
+      id: `lgn_${Date.now()}_${Math.floor(Math.random() * 90 + 10)}`,
+      timestamp: nowIso,
+      device: deviceLabel,
+      ip: ipLabel,
+    },
+    ...(customer.login_history || []),
+  ].slice(0, 15);
+
   await saveCustomerDb(db);
+
+  const platformDb = await readPlatformDb();
+  if (claimUnownedRecordsForCustomer(platformDb, customer)) {
+    await writePlatformDb(platformDb);
+  }
 
   const { password_hash, ...safeCustomer } = customer;
   return {
     success: true,
     token,
     customer: safeCustomer,
-    message: 'Signed in successfully via Customer Portal Engine',
+    dashboard: customer.dashboard,
+    message: 'Signed in successfully.',
     status: 200,
   };
 }
 
-export async function phpAuthRegister(payload: {
-  name?: string;
-  email?: string;
-  password?: string;
-  company?: string;
-  role?: string;
-  phone?: string;
-}) {
+export async function phpAuthRegister(
+  payload: {
+    name?: string;
+    email?: string;
+    password?: string;
+    company?: string;
+    role?: string;
+    phone?: string;
+  },
+  meta?: { userAgent?: string; ip?: string },
+) {
   const name = (payload.name || '').trim();
   const email = (payload.email || '').toLowerCase().trim();
   const password = payload.password || '';
-  const company = (payload.company || 'Independent Professional').trim();
-  const role = (payload.role || 'Traveling Professional').trim();
-  const phone = (payload.phone || '(916) 426-3655').trim();
+  const company = (payload.company || '').trim();
+  const role = (payload.role || '').trim();
+  const phone = (payload.phone || '').trim();
 
-  if (!name || !email || password.length < 6) {
+  if (!name || !email || !email.includes('@') || password.length < 6) {
     return {
       success: false,
-      message: 'Please provide valid name, email, and at least 6-character password.',
+      message: 'Please provide your full name, a valid email address, and a password of at least 6 characters.',
       status: 400,
     };
   }
@@ -239,16 +431,18 @@ export async function phpAuthRegister(payload: {
   if (db.customers.some((c) => c.email.toLowerCase() === email)) {
     return {
       success: false,
-      message: 'An account with this email address already exists.',
+      message: 'An account with this email address already exists. Please sign in to access your dashboard.',
       status: 409,
     };
   }
 
+  const now = new Date();
+  const nowIso = now.toISOString();
   const customerId = `cust_${Date.now()}_${Math.floor(Math.random() * 900 + 100)}`;
-  const initialUnits = 0;
-  const initialBalance = 0.0;
+  const dashboardId = `dash_${Date.now()}_${Math.floor(Math.random() * 900 + 100)}`;
   const passwordHash = bcrypt.hashSync(password, 10);
-  const nowIso = new Date().toISOString();
+  const deviceLabel = summarizeUserAgent(meta?.userAgent);
+  const ipLabel = meta?.ip || 'Verified Client Network';
 
   const newCustomer: CustomerRecord = {
     id: customerId,
@@ -258,11 +452,42 @@ export async function phpAuthRegister(payload: {
     company,
     role,
     phone,
-    balance_usd: initialBalance,
-    units_balance: initialUnits,
+    balance_usd: 0,
+    units_balance: 0,
     created_at: nowIso,
+    password_updated_at: nowIso,
+    two_factor_enabled: false,
+    dashboard: {
+      id: dashboardId,
+      user_id: customerId,
+      created_at: nowIso,
+      last_accessed_at: nowIso,
+      initialized: true,
+    },
+    address: {
+      street: '',
+      city: '',
+      state: 'CA',
+      zip: '',
+      country: 'United States',
+    },
+    preferences: buildDefaultPreferences(),
+    driver_info: {
+      primaryDriver: name,
+      licenseNumber: '',
+      issuingState: 'CA',
+    },
+    login_history: [
+      {
+        id: `lgn_${Date.now()}_${Math.floor(Math.random() * 90 + 10)}`,
+        timestamp: nowIso,
+        device: deviceLabel,
+        ip: ipLabel,
+      },
+    ],
     purchases: [],
     transactions: [],
+    wishlist: [],
   };
 
   db.customers.push(newCustomer);
@@ -271,27 +496,33 @@ export async function phpAuthRegister(payload: {
   db.sessions[token] = {
     customer_id: customerId,
     created_at: nowIso,
-    expires_at: new Date(Date.now() + 7 * 86400000).toISOString(),
+    last_active_at: nowIso,
+    expires_at: new Date(now.getTime() + 7 * 86400000).toISOString(),
+    user_agent: deviceLabel,
+    ip: ipLabel,
   };
 
   await saveCustomerDb(db);
 
   const platformDb = await readPlatformDb();
+  claimUnownedRecordsForCustomer(platformDb, newCustomer);
+
   platformDb.notifications.unshift({
-    id: `ntf_${Date.now()}`,
+    id: `ntf_${Date.now()}_${Math.floor(Math.random() * 90 + 10)}`,
+    customerId,
     recipientEmail: email,
-    title: 'Welcome to Easy Travel Lodging Client Portal',
-    message: 'Your account has been credited with 25 Welcome Units ($2,500 accommodation value).',
-    category: 'units',
+    title: 'Welcome to Your Personal Dashboard',
+    message: `Hello ${name}, your personal Easy Travel Lodging account (${customerId}) is active. You can book residences, reserve fleet vehicles, and manage invoices directly from your dashboard.`,
+    category: 'system',
     read: false,
     createdAt: nowIso,
   });
   platformDb.auditLogs.unshift({
-    id: `aud_${Date.now()}`,
+    id: `aud_${Date.now()}_${Math.floor(Math.random() * 90 + 10)}`,
     actorEmail: email,
     action: 'CLIENT_ACCOUNT_REGISTERED',
     targetId: customerId,
-    details: `Registered new client ${name} (${company}) with 25 welcome units.`,
+    details: `Registered new user ${name} (${email}) and initialised personal dashboard ${dashboardId}.`,
     createdAt: nowIso,
   });
   await writePlatformDb(platformDb);
@@ -301,72 +532,226 @@ export async function phpAuthRegister(payload: {
     success: true,
     token,
     customer: safeCustomer,
-    message: 'Account created and authenticated successfully',
+    dashboard: newCustomer.dashboard,
+    message: 'Account registered and personal dashboard created.',
+    status: 201,
+  };
+}
+
+export async function phpAuthLogout(token: string) {
+  if (!token) {
+    return { success: true, message: 'Signed out.', status: 200 };
+  }
+  const db = await ensureCustomerDb();
+  if (db.sessions[token]) {
+    delete db.sessions[token];
+    await saveCustomerDb(db);
+  }
+  return { success: true, message: 'Session terminated successfully.', status: 200 };
+}
+
+export async function phpAuthVerify(token: string) {
+  if (!token) return { success: false, message: 'Session token required.', status: 401 };
+  const db = await ensureCustomerDb();
+  const resolved = resolveAuthenticatedCustomer(db, token);
+  if (!resolved) {
+    await saveCustomerDb(db);
+    return { success: false, message: 'Session expired or invalid.', status: 401 };
+  }
+
+  ensureIndividualDashboard(resolved.customer, false);
+  const { password_hash, ...safeCustomer } = resolved.customer;
+  return {
+    success: true,
+    customer: safeCustomer,
+    dashboard: resolved.customer.dashboard,
     status: 200,
   };
 }
 
-export async function phpAuthVerify(token: string) {
-  if (!token) return { success: false, message: 'Token required', status: 401 };
-  const db = await ensureCustomerDb();
-  const session = db.sessions[token];
-  if (!session) return { success: false, message: 'Session expired or invalid', status: 401 };
-
-  const customer = db.customers.find((c) => c.id === session.customer_id);
-  if (!customer) return { success: false, message: 'Customer profile not found', status: 404 };
-
-  const { password_hash, ...safeCustomer } = customer;
-  return { success: true, customer: safeCustomer, status: 200 };
-}
-
 export async function phpDashboardGet(token: string) {
-  if (!token) return { success: false, message: 'Unauthorized - Session token required', status: 401 };
+  if (!token) {
+    return { success: false, message: 'Unauthorized - Valid session token required.', status: 401 };
+  }
 
   const db = await ensureCustomerDb();
-  const session = db.sessions[token];
-  if (!session) return { success: false, message: 'Unauthorized - Session token required', status: 401 };
+  const resolved = resolveAuthenticatedCustomer(db, token);
+  if (!resolved) {
+    await saveCustomerDb(db);
+    return { success: false, message: 'Unauthorized - Session expired or invalid.', status: 401 };
+  }
 
-  const customer = db.customers.find((c) => c.id === session.customer_id);
-  if (!customer) return { success: false, message: 'Customer profile not found', status: 404 };
+  const { customer, session } = resolved;
+  const nowIso = new Date().toISOString();
+  ensureIndividualDashboard(customer, true);
+  session.last_active_at = nowIso;
+  await saveCustomerDb(db);
 
   const platformDb = await readPlatformDb();
-  const customerEmail = customer.email.toLowerCase();
+  if (claimUnownedRecordsForCustomer(platformDb, customer)) {
+    await writePlatformDb(platformDb);
+  }
 
-  const customerBookings = platformDb.bookings.filter(
-    (b) => b.guestEmail && b.guestEmail.toLowerCase() === customerEmail,
-  );
-  const customerVehicleBookings = platformDb.vehicleBookings.filter(
-    (vb) => vb.customerEmail && vb.customerEmail.toLowerCase() === customerEmail,
-  );
+  // Strictly isolate records by customerId ownership
+  const customerBookings = platformDb.bookings
+    .filter((b) => b.customerId === customer.id)
+    .map((b) => {
+      const prop = platformDb.properties.find((p) => p.id === b.propertyId);
+      return {
+        ...b,
+        propertyTitle: prop?.title || `Residence ${b.propertyId}`,
+        unitNumber: prop?.unitNumber || b.propertyId.toUpperCase(),
+        location: prop?.location || 'Rancho Cordova, CA',
+        image: prop?.images?.[0] || 'https://easytravellodging.com/wp-content/plugins/vikbooking/site/resources/uploads/big_cc-91-1.jpg',
+        floor: prop?.floor || 'Downstairs',
+        bedrooms: prop?.bedrooms ?? 1,
+        bathrooms: prop?.bathrooms ?? 1,
+      };
+    });
+
+  const customerVehicleBookings = platformDb.vehicleBookings
+    .filter((vb) => vb.customerId === customer.id)
+    .map((vb) => {
+      const veh = platformDb.vehicles.find((v) => v.id === vb.vehicleId);
+      return {
+        ...vb,
+        year: veh?.year || 2021,
+        category: veh?.category || 'Executive Fleet Vehicle',
+        image:
+          VEHICLE_THUMBNAILS[vb.vehicleId] ||
+          'https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?auto=format&fit=crop&w=900&q=80',
+      };
+    });
+
   const customerManualPayments = platformDb.manualPayments.filter(
-    (mp) =>
-      (mp.customerEmail && mp.customerEmail.toLowerCase() === customerEmail) ||
-      mp.customerId === customer.id,
+    (mp) => mp.customerId === customer.id,
   );
-  const customerNotifications = platformDb.notifications.filter(
-    (n) => n.recipientEmail.toLowerCase() === customerEmail,
-  );
+
   const customerOrders = (platformDb.orders || []).filter(
-    (o) =>
-      (o.customerEmail && o.customerEmail.toLowerCase() === customerEmail) ||
-      o.customerId === customer.id,
+    (o) => o.customerId === customer.id,
   );
+
+  const ownedBookingIds = new Set(customerBookings.map((b) => b.id));
+  const ownedVehicleIds = new Set(customerVehicleBookings.map((v) => v.id));
+  const ownedOrderRefs = new Set(customerOrders.map((o) => o.orderReference));
+  const ownedPurchaseIds = new Set((customer.purchases || []).map((p) => p.id));
+
+  const customerPayments = platformDb.payments.filter(
+    (p) =>
+      p.customerId === customer.id ||
+      ownedBookingIds.has(p.bookingId) ||
+      ownedVehicleIds.has(p.bookingId) ||
+      ownedOrderRefs.has(p.bookingId) ||
+      ownedPurchaseIds.has(p.bookingId),
+  );
+
+  const customerNotifications = platformDb.notifications.filter(
+    (n) => n.customerId === customer.id,
+  );
+
+  const customerSupportTickets = (platformDb.supportTickets || []).filter(
+    (t) => t.customerId === customer.id,
+  );
+
+  const activeSessions = Object.entries(db.sessions)
+    .filter(([, s]) => s.customer_id === customer.id)
+    .map(([tokKey, s]) => ({
+      id: `sess_${tokKey.slice(0, 8)}`,
+      isCurrent: tokKey === token.trim(),
+      device: s.user_agent || 'Web Browser',
+      ip: s.ip || 'Verified Client Network',
+      createdAt: s.created_at,
+      lastActiveAt: s.last_active_at || s.created_at,
+      expiresAt: s.expires_at,
+    }));
 
   const { password_hash, ...safeCustomer } = customer;
   return {
     success: true,
     customer: safeCustomer,
+    dashboard: customer.dashboard,
     bookings: customerBookings,
     vehicleBookings: customerVehicleBookings,
     manualPayments: customerManualPayments,
+    payments: customerPayments,
     orders: customerOrders,
-    paymentAccounts: platformDb.paymentAccounts,
     notifications: customerNotifications,
+    supportTickets: customerSupportTickets,
+    paymentAccounts: platformDb.paymentAccounts,
+    activeSessions,
+    loginHistory: customer.login_history || [],
     purchases: [...(customer.purchases || [])].reverse(),
     transactions: [...(customer.transactions || [])].reverse(),
+    wishlist: customer.wishlist || [],
     units_balance: customer.units_balance || 0,
-    balance_usd: customer.balance_usd || 0.0,
-    engine: 'Easy Travel Customer Portal Engine',
+    balance_usd: customer.balance_usd || 0,
+    status: 200,
+  };
+}
+
+export async function getCustomerWishlist(token: string) {
+  if (!token) {
+    return { success: false, message: 'Sign in required to access your wishlist.', status: 401 };
+  }
+  const db = await ensureCustomerDb();
+  const resolved = resolveAuthenticatedCustomer(db, token);
+  if (!resolved) {
+    await saveCustomerDb(db);
+    return { success: false, message: 'Session expired. Please sign in again.', status: 401 };
+  }
+  ensureIndividualDashboard(resolved.customer, false);
+  return {
+    success: true,
+    wishlist: resolved.customer.wishlist || [],
+    status: 200,
+  };
+}
+
+export async function toggleCustomerWishlist(token: string, propertyId: string) {
+  if (!token) {
+    return { success: false, message: 'Please sign in to save properties to your wishlist.', status: 401 };
+  }
+  const propId = (propertyId || '').trim();
+  if (!propId) {
+    return { success: false, message: 'Property ID is required.', status: 400 };
+  }
+
+  const db = await ensureCustomerDb();
+  const resolved = resolveAuthenticatedCustomer(db, token);
+  if (!resolved) {
+    await saveCustomerDb(db);
+    return { success: false, message: 'Session expired. Please sign in again.', status: 401 };
+  }
+
+  const { customer } = resolved;
+  ensureIndividualDashboard(customer, false);
+
+  const platformDb = await readPlatformDb();
+  const prop = platformDb.properties.find((p) => p.id === propId);
+  if (!prop) {
+    return { success: false, message: 'Property not found.', status: 404 };
+  }
+
+  const current = new Set(customer.wishlist || []);
+  let saved = false;
+  if (current.has(propId)) {
+    current.delete(propId);
+    saved = false;
+  } else {
+    current.add(propId);
+    saved = true;
+  }
+  customer.wishlist = Array.from(current);
+  await saveCustomerDb(db);
+
+  return {
+    success: true,
+    saved,
+    propertyId: propId,
+    wishlist: customer.wishlist,
+    message: saved
+      ? `${prop.unitNumber} saved to your personal wishlist.`
+      : `${prop.unitNumber} removed from your wishlist.`,
     status: 200,
   };
 }
@@ -377,16 +762,12 @@ export async function phpDashboardBuyUnits(
   packageType = 'Standard Unit Credit Pack',
   paymentMethod = 'Corporate Credit Facility',
 ) {
-  if (!token) return { success: false, message: 'Unauthorized', status: 401 };
+  const db = await ensureCustomerDb();
+  const resolved = resolveAuthenticatedCustomer(db, token);
+  if (!resolved) return { success: false, message: 'Unauthorized', status: 401 };
   if (units <= 0) return { success: false, message: 'Units must be greater than 0', status: 400 };
 
-  const db = await ensureCustomerDb();
-  const session = db.sessions[token];
-  if (!session) return { success: false, message: 'Unauthorized', status: 401 };
-
-  const customer = db.customers.find((c) => c.id === session.customer_id);
-  if (!customer) return { success: false, message: 'Customer profile not found', status: 404 };
-
+  const { customer } = resolved;
   const costPerUnit = Number(process.env.UNIT_PRICE_USD || 100.0);
   const totalCost = units * costPerUnit;
   const nowIso = new Date().toISOString();
@@ -422,6 +803,7 @@ export async function phpDashboardBuyUnits(
   const platformDb = await readPlatformDb();
   platformDb.payments.push({
     id: `pay_${Date.now()}`,
+    customerId: customer.id,
     bookingId: purchaseRecord.id,
     amount: totalCost,
     currency: 'USD',
@@ -442,7 +824,7 @@ export async function phpDashboardBuyUnits(
 
   return {
     success: true,
-    message: `Successfully purchased ${units} units! Balance updated to ${customer.units_balance} Units.`,
+    message: `Purchased ${units} units. Balance updated to ${customer.units_balance} Units.`,
     purchase: purchaseRecord,
     new_units_balance: customer.units_balance,
     new_balance_usd: customer.balance_usd,
@@ -456,17 +838,9 @@ export async function phpCheckoutPayFromBalance(
   unitsRequired: number,
   commandCode = 'INTERNAL_EXEC_PAY_FROM_BALANCE',
 ) {
-  if (!token) {
-    return {
-      success: false,
-      message: 'Unauthorized: Valid session token required for command execution.',
-      status: 401,
-    };
-  }
-
   const db = await ensureCustomerDb();
-  const session = db.sessions[token];
-  if (!session) {
+  const resolved = resolveAuthenticatedCustomer(db, token);
+  if (!resolved) {
     return {
       success: false,
       message: 'Unauthorized: Valid session token required.',
@@ -474,12 +848,24 @@ export async function phpCheckoutPayFromBalance(
     };
   }
 
-  const customer = db.customers.find((c) => c.id === session.customer_id);
-  if (!customer) return { success: false, message: 'Customer profile not found', status: 404 };
-
+  const { customer } = resolved;
   const platformDb = await readPlatformDb();
-  const housingBooking = platformDb.bookings.find((b) => b.id === bookingId || b.propertyId === bookingId);
-  const vehicleBooking = platformDb.vehicleBookings.find((vb) => vb.id === bookingId);
+  claimUnownedRecordsForCustomer(platformDb, customer);
+
+  const housingBooking = platformDb.bookings.find(
+    (b) => (b.id === bookingId || b.propertyId === bookingId) && b.customerId === customer.id,
+  );
+  const vehicleBooking = platformDb.vehicleBookings.find(
+    (vb) => vb.id === bookingId && vb.customerId === customer.id,
+  );
+
+  if (bookingId && !housingBooking && !vehicleBooking) {
+    return {
+      success: false,
+      message: 'Reservation not found on your account.',
+      status: 404,
+    };
+  }
 
   let computedUnits = unitsRequired;
   if (computedUnits <= 0) {
@@ -510,9 +896,9 @@ export async function phpCheckoutPayFromBalance(
   const nowIso = new Date().toISOString();
 
   const targetLabel = vehicleBooking
-    ? `Fleet Rental ${vehicleBooking.id} (${vehicleBooking.vehicleName})`
+    ? `Car Rental ${vehicleBooking.id} (${vehicleBooking.vehicleName})`
     : housingBooking
-    ? `Housing Stay ${housingBooking.id} (${housingBooking.propertyId.toUpperCase()})`
+    ? `Stay ${housingBooking.id} (${housingBooking.propertyId.toUpperCase()})`
     : `Booking ${bookingId || 'Direct'}`;
 
   const settlementTx: CustomerTransaction = {
@@ -521,7 +907,7 @@ export async function phpCheckoutPayFromBalance(
     units: -computedUnits,
     amount_usd: -amountUsdDeducted,
     booking_id: bookingId || 'Direct_Unit_Settlement',
-    description: `Settled ${targetLabel} using ${computedUnits} dashboard units`,
+    description: `Settled ${targetLabel} using ${computedUnits} account units`,
     command_code: commandCode,
     date: nowIso,
     status: 'settled',
@@ -546,6 +932,7 @@ export async function phpCheckoutPayFromBalance(
 
   platformDb.payments.push({
     id: `pay_${Date.now()}`,
+    customerId: customer.id,
     bookingId: bookingId || txId,
     amount: amountUsdDeducted,
     currency: 'USD',
@@ -556,7 +943,8 @@ export async function phpCheckoutPayFromBalance(
   });
 
   platformDb.notifications.unshift({
-    id: `ntf_${Date.now()}`,
+    id: `ntf_${Date.now()}_${Math.floor(Math.random() * 90 + 10)}`,
+    customerId: customer.id,
     recipientEmail: customer.email.toLowerCase(),
     title: `Balance Settlement Confirmed (${txId})`,
     message: `${computedUnits} Units ($${amountUsdDeducted.toLocaleString()}) applied to ${targetLabel}. Remaining balance: ${newUnits} Units.`,
@@ -611,7 +999,7 @@ export async function phpSubmitManualPayment(
 ) {
   const customer = await getCustomerByToken(token);
   if (!customer) {
-    return { success: false, message: 'Unauthorized session token', status: 401 };
+    return { success: false, message: 'Unauthorized session token.', status: 401 };
   }
 
   const amountUsd = Number(payload.amountUsd || 0);
@@ -624,6 +1012,31 @@ export async function phpSubmitManualPayment(
       message: 'Sender account name and wire/ACH reference number are required.',
       status: 400,
     };
+  }
+
+  const platformDb = await readPlatformDb();
+  claimUnownedRecordsForCustomer(platformDb, customer);
+
+  // Enforce ownership if targeting a specific reservation or order
+  if (payload.targetId) {
+    if (payload.targetType === 'housing_booking') {
+      const bk = platformDb.bookings.find((b) => b.id === payload.targetId);
+      if (!bk || bk.customerId !== customer.id) {
+        return { success: false, message: 'Target accommodation booking not found on your account.', status: 403 };
+      }
+    } else if (payload.targetType === 'vehicle_booking') {
+      const vbk = platformDb.vehicleBookings.find((v) => v.id === payload.targetId);
+      if (!vbk || vbk.customerId !== customer.id) {
+        return { success: false, message: 'Target vehicle reservation not found on your account.', status: 403 };
+      }
+    } else if (payload.targetType === 'order') {
+      const ord = (platformDb.orders || []).find(
+        (o) => o.id === payload.targetId || o.orderReference === payload.targetId,
+      );
+      if (!ord || ord.customerId !== customer.id) {
+        return { success: false, message: 'Target order not found on your account.', status: 403 };
+      }
+    }
   }
 
   const unitsRequested =
@@ -646,7 +1059,7 @@ export async function phpSubmitManualPayment(
     amountUsd,
     paymentMethod: payload.paymentMethod || 'Wire Transfer',
     senderName: payload.senderName.trim(),
-    originatingBank: (payload.originatingBank || 'Corporate Bank').trim(),
+    originatingBank: (payload.originatingBank || 'Client Financial Institution').trim(),
     wireReference: payload.wireReference.trim(),
     transferDate: payload.transferDate || nowIso.split('T')[0],
     receiptFileName: payload.receiptFileName || undefined,
@@ -656,13 +1069,13 @@ export async function phpSubmitManualPayment(
     createdAt: nowIso,
   };
 
-  const platformDb = await readPlatformDb();
   platformDb.manualPayments.unshift(record);
   platformDb.notifications.unshift({
-    id: `ntf_${Date.now()}`,
+    id: `ntf_${Date.now()}_${Math.floor(Math.random() * 90 + 10)}`,
+    customerId: customer.id,
     recipientEmail: customer.email.toLowerCase(),
-    title: `Wire Notice Submitted (${refCode})`,
-    message: `Your $${amountUsd.toLocaleString()} ${record.paymentMethod} notice is queued for treasury verification.`,
+    title: `Transfer Notice Submitted (${refCode})`,
+    message: `Your $${amountUsd.toLocaleString()} ${record.paymentMethod} notice (${record.wireReference}) is queued for treasury verification.`,
     category: 'payment',
     read: false,
     createdAt: nowIso,
@@ -679,7 +1092,7 @@ export async function phpSubmitManualPayment(
 
   return {
     success: true,
-    message: `Transfer notice ${refCode} submitted for verification. Units or booking confirmation will post upon bank clearance.`,
+    message: `Transfer notice ${refCode} submitted for verification. Balance or booking confirmation will post upon bank clearance.`,
     manualPayment: record,
     status: 201,
   };
@@ -687,36 +1100,468 @@ export async function phpSubmitManualPayment(
 
 export async function phpUpdateCustomerProfile(
   token: string,
-  updates: { name?: string; company?: string; role?: string; phone?: string },
+  updates: {
+    name?: string;
+    company?: string;
+    role?: string;
+    phone?: string;
+    address?: Partial<CustomerAddress>;
+    preferences?: Partial<CustomerPreferences>;
+    driver_info?: Partial<CustomerDriverInfo>;
+  },
 ) {
   const db = await ensureCustomerDb();
-  const session = db.sessions[token];
-  if (!session) return { success: false, message: 'Unauthorized', status: 401 };
+  const resolved = resolveAuthenticatedCustomer(db, token);
+  if (!resolved) return { success: false, message: 'Unauthorized', status: 401 };
 
-  const customer = db.customers.find((c) => c.id === session.customer_id);
-  if (!customer) return { success: false, message: 'Customer not found', status: 404 };
+  const { customer } = resolved;
+  ensureIndividualDashboard(customer, false);
 
-  if (updates.name?.trim()) customer.name = updates.name.trim();
-  if (updates.company?.trim()) customer.company = updates.company.trim();
-  if (updates.role?.trim()) customer.role = updates.role.trim();
-  if (updates.phone?.trim()) customer.phone = updates.phone.trim();
+  if (typeof updates.name === 'string' && updates.name.trim()) {
+    customer.name = updates.name.trim();
+  }
+  if (typeof updates.company === 'string') {
+    customer.company = updates.company.trim();
+  }
+  if (typeof updates.role === 'string') {
+    customer.role = updates.role.trim();
+  }
+  if (typeof updates.phone === 'string') {
+    customer.phone = updates.phone.trim();
+  }
+  if (updates.address && typeof updates.address === 'object') {
+    customer.address = {
+      street: updates.address.street ?? customer.address?.street ?? '',
+      city: updates.address.city ?? customer.address?.city ?? '',
+      state: updates.address.state ?? customer.address?.state ?? 'CA',
+      zip: updates.address.zip ?? customer.address?.zip ?? '',
+      country: updates.address.country ?? customer.address?.country ?? 'United States',
+    };
+  }
+  if (updates.preferences && typeof updates.preferences === 'object') {
+    const currentPrefs = customer.preferences || buildDefaultPreferences();
+    customer.preferences = {
+      ...currentPrefs,
+      ...updates.preferences,
+    };
+  }
+  if (updates.driver_info && typeof updates.driver_info === 'object') {
+    customer.driver_info = {
+      primaryDriver: updates.driver_info.primaryDriver ?? customer.driver_info?.primaryDriver ?? customer.name,
+      licenseNumber: updates.driver_info.licenseNumber ?? customer.driver_info?.licenseNumber ?? '',
+      issuingState: updates.driver_info.issuingState ?? customer.driver_info?.issuingState ?? 'CA',
+    };
+  }
 
   await saveCustomerDb(db);
   const { password_hash, ...safe } = customer;
-  return { success: true, customer: safe, message: 'Client profile updated.', status: 200 };
+  return { success: true, customer: safe, message: 'Account profile saved.', status: 200 };
 }
 
-export async function phpMarkNotificationsRead(token: string) {
+export async function customerChangePassword(
+  token: string,
+  currentPassword?: string,
+  newPassword?: string,
+) {
+  const db = await ensureCustomerDb();
+  const resolved = resolveAuthenticatedCustomer(db, token);
+  if (!resolved) return { success: false, message: 'Unauthorized', status: 401 };
+
+  if (!currentPassword || !newPassword) {
+    return { success: false, message: 'Current password and new password are required.', status: 400 };
+  }
+  if (newPassword.length < 6) {
+    return { success: false, message: 'New password must be at least 6 characters long.', status: 400 };
+  }
+
+  const { customer } = resolved;
+  const normalizedHash = customer.password_hash.replace(/^\$2y\$/, '$2a$');
+  const isCurrentValid = bcrypt.compareSync(currentPassword, normalizedHash);
+  if (!isCurrentValid) {
+    return { success: false, message: 'Your current password is incorrect.', status: 400 };
+  }
+
+  const nowIso = new Date().toISOString();
+  customer.password_hash = bcrypt.hashSync(newPassword, 10);
+  customer.password_updated_at = nowIso;
+  await saveCustomerDb(db);
+
+  const platformDb = await readPlatformDb();
+  platformDb.notifications.unshift({
+    id: `ntf_${Date.now()}_${Math.floor(Math.random() * 90 + 10)}`,
+    customerId: customer.id,
+    recipientEmail: customer.email.toLowerCase(),
+    title: 'Account Password Updated',
+    message: 'Your account password was changed from your personal security settings.',
+    category: 'system',
+    read: false,
+    createdAt: nowIso,
+  });
+  await writePlatformDb(platformDb);
+
+  return {
+    success: true,
+    password_updated_at: nowIso,
+    message: 'Password updated successfully.',
+    status: 200,
+  };
+}
+
+export async function customerToggleTwoFactor(token: string, enabled: boolean) {
+  const db = await ensureCustomerDb();
+  const resolved = resolveAuthenticatedCustomer(db, token);
+  if (!resolved) return { success: false, message: 'Unauthorized', status: 401 };
+
+  const { customer } = resolved;
+  customer.two_factor_enabled = Boolean(enabled);
+  await saveCustomerDb(db);
+
+  const { password_hash, ...safe } = customer;
+  return {
+    success: true,
+    two_factor_enabled: customer.two_factor_enabled,
+    customer: safe,
+    message: customer.two_factor_enabled
+      ? 'Two-factor authentication enabled for your account.'
+      : 'Two-factor authentication disabled.',
+    status: 200,
+  };
+}
+
+export async function customerUpdateHousingBooking(
+  token: string,
+  bookingId: string,
+  updates: {
+    action?: 'modify' | 'cancel';
+    checkIn?: string;
+    checkOut?: string;
+    specialRequests?: string;
+    notes?: string;
+  },
+) {
   const customer = await getCustomerByToken(token);
   if (!customer) return { success: false, message: 'Unauthorized', status: 401 };
 
   const platformDb = await readPlatformDb();
-  const email = customer.email.toLowerCase();
+  claimUnownedRecordsForCustomer(platformDb, customer);
+
+  const booking = platformDb.bookings.find((b) => b.id === bookingId);
+  if (!booking) {
+    return { success: false, message: 'Accommodation booking not found.', status: 404 };
+  }
+  if (booking.customerId !== customer.id) {
+    return {
+      success: false,
+      message: 'Forbidden: You do not have permission to modify another user’s booking.',
+      status: 403,
+    };
+  }
+
+  const nowIso = new Date().toISOString();
+
+  if (updates.action === 'cancel') {
+    if (booking.status === 'cancelled') {
+      return { success: false, message: 'This booking is already cancelled.', status: 400 };
+    }
+    booking.status = 'cancelled';
+    platformDb.notifications.unshift({
+      id: `ntf_${Date.now()}_${Math.floor(Math.random() * 90 + 10)}`,
+      customerId: customer.id,
+      recipientEmail: customer.email.toLowerCase(),
+      title: `Stay Cancelled (${booking.id})`,
+      message: `Your reservation ${booking.id} (${booking.checkIn} to ${booking.checkOut}) has been cancelled.`,
+      category: 'booking',
+      read: false,
+      createdAt: nowIso,
+    });
+    platformDb.auditLogs.unshift({
+      id: `aud_${Date.now()}`,
+      actorEmail: customer.email.toLowerCase(),
+      action: 'CUSTOMER_BOOKING_CANCELLED',
+      targetId: booking.id,
+      details: `${customer.name} cancelled accommodation booking ${booking.id}.`,
+      createdAt: nowIso,
+    });
+    await writePlatformDb(platformDb);
+    return { success: true, booking, message: `Reservation ${booking.id} cancelled.`, status: 200 };
+  }
+
+  const nextCheckIn = updates.checkIn || booking.checkIn;
+  const nextCheckOut = updates.checkOut || booking.checkOut;
+  const start = new Date(nextCheckIn);
+  const end = new Date(nextCheckOut);
+  if (Number.isNaN(start.getTime()) || Number.isNaN(end.getTime()) || end <= start) {
+    return { success: false, message: 'Check-out date must be after check-in date.', status: 400 };
+  }
+
+  const prop = platformDb.properties.find((p) => p.id === booking.propertyId);
+  const overlap = findOverlappingPropertyRange(
+    platformDb,
+    booking.propertyId,
+    nextCheckIn,
+    nextCheckOut,
+    booking.id,
+  );
+  if (overlap) {
+    return {
+      success: false,
+      message: `Requested dates conflict with unavailable dates (${overlap.start} through ${overlap.end}).`,
+      status: 400,
+    };
+  }
+
+  const quote = calculatePropertyStayQuote(platformDb, {
+    propertyId: booking.propertyId,
+    checkIn: nextCheckIn,
+    checkOut: nextCheckOut,
+    adults: booking.adults,
+    children: booking.children,
+    infants: booking.infants,
+    selectedAddons: booking.selectedAddons?.map((a) => ({ serviceId: a.serviceId, quantity: a.quantity })),
+    excludeBookingId: booking.id,
+  });
+
+  if (!quote.available) {
+    return {
+      success: false,
+      message: quote.reason || 'Unable to update reservation to those dates.',
+      status: 400,
+    };
+  }
+
+  const nights = quote.nights;
+  const estimatedUsd = quote.totalUsd;
+  const estimatedUnits = quote.unitsRequired;
+
+  booking.checkIn = nextCheckIn;
+  booking.checkOut = nextCheckOut;
+  booking.totalNights = nights;
+  booking.accommodationSubtotalUsd = quote.accommodationSubtotalUsd;
+  booking.taxUsd = quote.taxUsd;
+  booking.totalUsd = estimatedUsd;
+  booking.unitCostUsd = estimatedUsd;
+  booking.unitCostUnits = estimatedUnits;
+  if (updates.specialRequests !== undefined) booking.specialRequests = updates.specialRequests.trim();
+  if (updates.notes !== undefined) booking.notes = updates.notes.trim();
+
+  platformDb.notifications.unshift({
+    id: `ntf_${Date.now()}_${Math.floor(Math.random() * 90 + 10)}`,
+    customerId: customer.id,
+    recipientEmail: customer.email.toLowerCase(),
+    title: `Stay Dates Updated (${booking.id})`,
+    message: `Your reservation ${booking.id} is updated to ${booking.checkIn} → ${booking.checkOut} (${nights} nights).`,
+    category: 'booking',
+    read: false,
+    createdAt: nowIso,
+  });
+  platformDb.auditLogs.unshift({
+    id: `aud_${Date.now()}`,
+    actorEmail: customer.email.toLowerCase(),
+    action: 'CUSTOMER_BOOKING_MODIFIED',
+    targetId: booking.id,
+    details: `${customer.name} updated booking ${booking.id} dates to ${booking.checkIn} -> ${booking.checkOut}.`,
+    createdAt: nowIso,
+  });
+  await writePlatformDb(platformDb);
+
+  return { success: true, booking, message: `Reservation ${booking.id} updated.`, status: 200 };
+}
+
+export async function customerUpdateVehicleBooking(
+  token: string,
+  rentalId: string,
+  updates: {
+    action?: 'modify' | 'cancel';
+    pickupDate?: string;
+    returnDate?: string;
+    pickupLocation?: string;
+    notes?: string;
+  },
+) {
+  const customer = await getCustomerByToken(token);
+  if (!customer) return { success: false, message: 'Unauthorized', status: 401 };
+
+  const platformDb = await readPlatformDb();
+  claimUnownedRecordsForCustomer(platformDb, customer);
+
+  const rental = platformDb.vehicleBookings.find((vb) => vb.id === rentalId);
+  if (!rental) {
+    return { success: false, message: 'Vehicle reservation not found.', status: 404 };
+  }
+  if (rental.customerId !== customer.id) {
+    return {
+      success: false,
+      message: 'Forbidden: You do not have permission to modify another user’s vehicle reservation.',
+      status: 403,
+    };
+  }
+
+  const nowIso = new Date().toISOString();
+
+  if (updates.action === 'cancel') {
+    if (rental.status === 'cancelled') {
+      return { success: false, message: 'This vehicle reservation is already cancelled.', status: 400 };
+    }
+    rental.status = 'cancelled';
+    const veh = platformDb.vehicles.find((v) => v.id === rental.vehicleId);
+    if (veh && veh.inventoryStatus === 'rented') {
+      veh.inventoryStatus = 'available';
+    }
+    platformDb.notifications.unshift({
+      id: `ntf_${Date.now()}_${Math.floor(Math.random() * 90 + 10)}`,
+      customerId: customer.id,
+      recipientEmail: customer.email.toLowerCase(),
+      title: `Car Rental Cancelled (${rental.id})`,
+      message: `Your reservation for ${rental.vehicleName} (${rental.pickupDate} → ${rental.returnDate}) has been cancelled.`,
+      category: 'fleet',
+      read: false,
+      createdAt: nowIso,
+    });
+    platformDb.auditLogs.unshift({
+      id: `aud_${Date.now()}`,
+      actorEmail: customer.email.toLowerCase(),
+      action: 'CUSTOMER_VEHICLE_BOOKING_CANCELLED',
+      targetId: rental.id,
+      details: `${customer.name} cancelled vehicle reservation ${rental.id}.`,
+      createdAt: nowIso,
+    });
+    await writePlatformDb(platformDb);
+    return { success: true, vehicleBooking: rental, message: `Vehicle reservation ${rental.id} cancelled.`, status: 200 };
+  }
+
+  const nextPickup = updates.pickupDate || rental.pickupDate;
+  const nextReturn = updates.returnDate || rental.returnDate;
+  const start = new Date(nextPickup);
+  const end = new Date(nextReturn);
+  if (Number.isNaN(start.getTime()) || Number.isNaN(end.getTime()) || end <= start) {
+    return { success: false, message: 'Return date must be after pickup date.', status: 400 };
+  }
+
+  const veh = platformDb.vehicles.find((v) => v.id === rental.vehicleId) || {
+    dailyRate: 115,
+    weeklyRate: 680,
+    monthlyRate: 2250,
+  };
+  const totalDays = Math.max(1, Math.round((end.getTime() - start.getTime()) / 86400000));
+  const pricing = calculateVehiclePricing(veh, totalDays, rental.protectionPlan);
+
+  rental.pickupDate = nextPickup;
+  rental.returnDate = nextReturn;
+  rental.totalDays = totalDays;
+  rental.rateTier = pricing.rateTier;
+  rental.totalUsd = pricing.totalUsd;
+  rental.unitsRequired = pricing.unitsRequired;
+  if (updates.pickupLocation?.trim()) rental.pickupLocation = updates.pickupLocation.trim();
+  if (updates.notes !== undefined) rental.notes = updates.notes.trim();
+
+  platformDb.notifications.unshift({
+    id: `ntf_${Date.now()}_${Math.floor(Math.random() * 90 + 10)}`,
+    customerId: customer.id,
+    recipientEmail: customer.email.toLowerCase(),
+    title: `Car Rental Updated (${rental.id})`,
+    message: `Your ${rental.vehicleName} reservation is updated to ${rental.pickupDate} → ${rental.returnDate} (${totalDays} days).`,
+    category: 'fleet',
+    read: false,
+    createdAt: nowIso,
+  });
+  await writePlatformDb(platformDb);
+
+  return { success: true, vehicleBooking: rental, message: `Vehicle reservation ${rental.id} updated.`, status: 200 };
+}
+
+export async function phpMarkNotificationsRead(token: string, notificationId?: string) {
+  const customer = await getCustomerByToken(token);
+  if (!customer) return { success: false, message: 'Unauthorized', status: 401 };
+
+  const platformDb = await readPlatformDb();
+  claimUnownedRecordsForCustomer(platformDb, customer);
+
   for (const n of platformDb.notifications) {
-    if (n.recipientEmail.toLowerCase() === email) n.read = true;
+    if (n.customerId === customer.id) {
+      if (!notificationId || n.id === notificationId) {
+        n.read = true;
+      }
+    }
   }
   await writePlatformDb(platformDb);
-  return { success: true, message: 'Notifications marked as read.', status: 200 };
+  return { success: true, message: 'Notifications updated.', status: 200 };
+}
+
+export async function customerCreateSupportTicket(
+  token: string,
+  payload: {
+    category?: string;
+    priority?: 'normal' | 'urgent';
+    subject?: string;
+    message?: string;
+  },
+) {
+  const customer = await getCustomerByToken(token);
+  if (!customer) return { success: false, message: 'Unauthorized', status: 401 };
+
+  const subject = (payload.subject || '').trim();
+  const message = (payload.message || '').trim();
+  if (!subject || !message) {
+    return { success: false, message: 'Subject and message details are required.', status: 400 };
+  }
+
+  const nowIso = new Date().toISOString();
+  const ticketNumber = `TKT-${Math.floor(100000 + Math.random() * 900000)}`;
+  const ticket: SupportTicketRecord = {
+    id: `tkt_${Date.now().toString().slice(-6)}`,
+    ticketNumber,
+    customerId: customer.id,
+    customerName: customer.name,
+    customerEmail: customer.email,
+    category: (payload.category || 'Stay & Concierge Support').trim(),
+    priority: payload.priority === 'urgent' ? 'urgent' : 'normal',
+    subject,
+    message,
+    status: 'open',
+    createdAt: nowIso,
+    updatedAt: nowIso,
+  };
+
+  const platformDb = await readPlatformDb();
+  if (!Array.isArray(platformDb.supportTickets)) {
+    platformDb.supportTickets = [];
+  }
+  platformDb.supportTickets.unshift(ticket);
+
+  platformDb.inquiries.unshift({
+    id: `inq_${Date.now().toString().slice(-6)}`,
+    customerId: customer.id,
+    referenceCode: ticketNumber,
+    type: 'contact',
+    name: customer.name,
+    email: customer.email,
+    phone: customer.phone || undefined,
+    company: customer.company || undefined,
+    role: customer.role || undefined,
+    message: `[${ticket.category} — ${ticket.priority.toUpperCase()}] ${subject}: ${message}`,
+    status: 'new',
+    createdAt: nowIso,
+  });
+
+  platformDb.notifications.unshift({
+    id: `ntf_${Date.now()}_${Math.floor(Math.random() * 90 + 10)}`,
+    customerId: customer.id,
+    recipientEmail: customer.email.toLowerCase(),
+    title: `Support Ticket Logged (${ticketNumber})`,
+    message: `We received "${subject}". Our Rancho Cordova concierge team will respond via ${customer.email}.`,
+    category: 'system',
+    read: false,
+    createdAt: nowIso,
+  });
+
+  await writePlatformDb(platformDb);
+
+  return {
+    success: true,
+    ticket,
+    message: `Support request ${ticketNumber} submitted.`,
+    status: 201,
+  };
 }
 
 export async function adminVerifyManualPayment(
@@ -734,14 +1579,25 @@ export async function adminVerifyManualPayment(
 
   const nowIso = new Date().toISOString();
   mpay.status = decision;
-  mpay.adminNotes = adminNotes || (decision === 'verified' ? 'Verified against bank wire ledger.' : 'Unable to match wire reference.');
+  mpay.adminNotes =
+    adminNotes ||
+    (decision === 'verified' ? 'Verified against bank wire ledger.' : 'Unable to match wire reference.');
   mpay.verifiedBy = actorEmail;
   mpay.verifiedAt = nowIso;
 
+  const custDb = await ensureCustomerDb();
+  const matchedCustomer = custDb.customers.find(
+    (c) => c.id === mpay.customerId || c.email.toLowerCase() === mpay.customerEmail.toLowerCase(),
+  );
+  const resolvedCustomerId = mpay.customerId || matchedCustomer?.id;
+  if (resolvedCustomerId && !mpay.customerId) {
+    mpay.customerId = resolvedCustomerId;
+  }
+
   if (decision === 'verified') {
-    // 1. Record succeeded payment in platform ledger
     platformDb.payments.push({
       id: `pay_${Date.now()}`,
+      customerId: resolvedCustomerId,
       bookingId: mpay.targetId || mpay.id,
       amount: mpay.amountUsd,
       currency: 'USD',
@@ -751,36 +1607,29 @@ export async function adminVerifyManualPayment(
       createdAt: nowIso,
     });
 
-    // 2. Credit customer units or confirm target booking
-    if (mpay.targetType === 'units') {
-      const custDb = await ensureCustomerDb();
-      const customer = custDb.customers.find(
-        (c) => c.id === mpay.customerId || c.email.toLowerCase() === mpay.customerEmail.toLowerCase(),
-      );
-      if (customer) {
-        customer.units_balance = (customer.units_balance || 0) + mpay.unitsRequested;
-        customer.balance_usd = (customer.balance_usd || 0) + mpay.amountUsd;
-        customer.purchases.push({
-          id: `pch_wire_${Date.now()}`,
-          description: `Verified ${mpay.paymentMethod} (${mpay.referenceCode})`,
-          unit_number: 'Verified Wire Credit',
-          units_purchased: mpay.unitsRequested,
-          amount_usd: mpay.amountUsd,
-          status: 'active',
-          purchased_at: nowIso,
-          payment_method: mpay.paymentMethod,
-        });
-        customer.transactions.push({
-          id: `tx_wire_${Date.now()}`,
-          type: 'wire_verified_credit',
-          units: mpay.unitsRequested,
-          amount_usd: mpay.amountUsd,
-          description: `Treasury Verified ${mpay.paymentMethod} (${mpay.wireReference})`,
-          date: nowIso,
-          status: 'verified',
-        });
-        await saveCustomerDb(custDb);
-      }
+    if (mpay.targetType === 'units' && matchedCustomer) {
+      matchedCustomer.units_balance = (matchedCustomer.units_balance || 0) + mpay.unitsRequested;
+      matchedCustomer.balance_usd = (matchedCustomer.balance_usd || 0) + mpay.amountUsd;
+      matchedCustomer.purchases.push({
+        id: `pch_wire_${Date.now()}`,
+        description: `Verified ${mpay.paymentMethod} (${mpay.referenceCode})`,
+        unit_number: 'Verified Wire Credit',
+        units_purchased: mpay.unitsRequested,
+        amount_usd: mpay.amountUsd,
+        status: 'active',
+        purchased_at: nowIso,
+        payment_method: mpay.paymentMethod,
+      });
+      matchedCustomer.transactions.push({
+        id: `tx_wire_${Date.now()}`,
+        type: 'wire_verified_credit',
+        units: mpay.unitsRequested,
+        amount_usd: mpay.amountUsd,
+        description: `Treasury Verified ${mpay.paymentMethod} (${mpay.wireReference})`,
+        date: nowIso,
+        status: 'verified',
+      });
+      await saveCustomerDb(custDb);
     } else if (mpay.targetType === 'housing_booking' && mpay.targetId) {
       const bk = platformDb.bookings.find((b) => b.id === mpay.targetId);
       if (bk) {
@@ -795,24 +1644,29 @@ export async function adminVerifyManualPayment(
         vbk.paymentReference = mpay.wireReference;
       }
     } else if (mpay.targetType === 'order' && mpay.targetId) {
-      const ord = platformDb.orders.find((o) => o.id === mpay.targetId || o.orderReference === mpay.targetId);
+      const ord = (platformDb.orders || []).find(
+        (o) => o.id === mpay.targetId || o.orderReference === mpay.targetId,
+      );
       if (ord) {
         await fulfillVerifiedOrder(platformDb, ord, mpay.wireReference, actorEmail, mpay.paymentMethod);
       }
     }
 
     platformDb.notifications.unshift({
-      id: `ntf_${Date.now()}`,
+      id: `ntf_${Date.now()}_${Math.floor(Math.random() * 90 + 10)}`,
+      customerId: resolvedCustomerId,
       recipientEmail: mpay.customerEmail.toLowerCase(),
       title: `Payment Verified (${mpay.referenceCode})`,
-      message: `Your $${mpay.amountUsd.toLocaleString()} ${mpay.paymentMethod} has been verified and applied to your account or reservation.`,
+      message: `Your $${mpay.amountUsd.toLocaleString()} ${mpay.paymentMethod} has been verified and applied to your account.`,
       category: 'payment',
       read: false,
       createdAt: nowIso,
     });
   } else {
     if (mpay.targetType === 'order' && mpay.targetId) {
-      const ord = platformDb.orders.find((o) => o.id === mpay.targetId || o.orderReference === mpay.targetId);
+      const ord = (platformDb.orders || []).find(
+        (o) => o.id === mpay.targetId || o.orderReference === mpay.targetId,
+      );
       if (ord && ord.paymentStatus !== 'paid') {
         ord.paymentStatus = 'failed';
         ord.adminNotes = mpay.adminNotes;
@@ -820,7 +1674,8 @@ export async function adminVerifyManualPayment(
       }
     }
     platformDb.notifications.unshift({
-      id: `ntf_${Date.now()}`,
+      id: `ntf_${Date.now()}_${Math.floor(Math.random() * 90 + 10)}`,
+      customerId: resolvedCustomerId,
       recipientEmail: mpay.customerEmail.toLowerCase(),
       title: `Transfer Verification Update (${mpay.referenceCode})`,
       message: `Your ${mpay.paymentMethod} notice could not be verified: ${mpay.adminNotes}`,
@@ -892,7 +1747,8 @@ export async function adminAllocateCustomerUnits(
 
   const platformDb = await readPlatformDb();
   platformDb.notifications.unshift({
-    id: `ntf_${Date.now()}`,
+    id: `ntf_${Date.now()}_${Math.floor(Math.random() * 90 + 10)}`,
+    customerId: customer.id,
     recipientEmail: customer.email.toLowerCase(),
     title: unitsDelta > 0 ? `+${unitsDelta} Lodging Units Credited` : `${unitsDelta} Lodging Units Adjusted`,
     message: `${reason} • Updated Balance: ${nextUnits} Units ($${nextUsd.toLocaleString()}).`,
@@ -915,7 +1771,7 @@ export async function adminAllocateCustomerUnits(
 }
 
 async function fulfillVerifiedOrder(
-  platformDb: Awaited<ReturnType<typeof readPlatformDb>>,
+  platformDb: DatabaseState,
   order: OrderRecord,
   paymentRef: string,
   actorEmail: string,
@@ -947,7 +1803,6 @@ async function fulfillVerifiedOrder(
     }
   }
 
-  // Credit any purchased unit_package items if not previously fulfilled
   if (!wasAlreadyPaid) {
     const unitPackageItems = order.items.filter((i) => i.itemType === 'unit_package');
     const totalPurchasedUnits = unitPackageItems.reduce(
@@ -963,6 +1818,7 @@ async function fulfillVerifiedOrder(
           c.email.toLowerCase() === order.customerEmail.toLowerCase(),
       );
       if (customer) {
+        if (!order.customerId) order.customerId = customer.id;
         const creditUsd = totalPurchasedUnits * 100;
         customer.units_balance = (customer.units_balance || 0) + totalPurchasedUnits;
         customer.balance_usd = (customer.balance_usd || 0) + creditUsd;
@@ -1000,6 +1856,24 @@ function mapPaymentMethodToManualLabel(
   return 'Wire Transfer';
 }
 
+function summarizeUserAgent(ua?: string): string {
+  if (!ua) return 'Web Browser Session';
+  if (ua.includes('iPhone') || ua.includes('iPad')) return 'Safari on iOS';
+  if (ua.includes('Android')) return 'Chrome on Android';
+  if (ua.includes('Mac OS X')) {
+    if (ua.includes('Chrome')) return 'Chrome on macOS';
+    if (ua.includes('Safari')) return 'Safari on macOS';
+    return 'macOS Browser';
+  }
+  if (ua.includes('Windows')) {
+    if (ua.includes('Edg')) return 'Edge on Windows';
+    if (ua.includes('Chrome')) return 'Chrome on Windows';
+    return 'Windows Browser';
+  }
+  if (ua.includes('Linux')) return 'Browser on Linux';
+  return 'Web Browser Session';
+}
+
 export async function createCheckoutOrder(input: {
   cartId: string;
   customerToken?: string;
@@ -1012,6 +1886,7 @@ export async function createCheckoutOrder(input: {
     line1: string;
     city: string;
     state: string;
+    zip?: string;
     postalCode: string;
     country?: string;
   };
@@ -1048,7 +1923,6 @@ export async function createCheckoutOrder(input: {
     throw new Error('Your cart is empty. Add at least one residence, vehicle, or service before checking out.');
   }
 
-  // Always recalculate all financial totals on the server — never trust browser-submitted amounts
   const verifiedCart = recomputeCart(platformDb, rawCart);
   if (verifiedCart.items.some((i) => !i.available)) {
     throw new Error(
@@ -1081,17 +1955,15 @@ export async function createCheckoutOrder(input: {
 
   if (input.paymentMethod === 'unit_balance') {
     if (!input.customerToken) {
-      throw new Error('Sign in to your Client Portal account to pay with your Lodging Unit balance.');
+      throw new Error('Sign in to your account to pay with your Lodging Unit balance.');
     }
     const custDb = await ensureCustomerDb();
-    const session = custDb.sessions[input.customerToken];
-    if (!session || (session.expires_at && new Date(session.expires_at) < new Date())) {
-      throw new Error('Your Client Portal session has expired. Please sign in again to settle with Units.');
+    const resolved = resolveAuthenticatedCustomer(custDb, input.customerToken);
+    if (!resolved) {
+      await saveCustomerDb(custDb);
+      throw new Error('Your session has expired. Please sign in again to settle with Units.');
     }
-    const customer = custDb.customers.find((c) => c.id === session.customer_id);
-    if (!customer) {
-      throw new Error('Client Portal account not found.');
-    }
+    const { customer } = resolved;
     const currentUnits = customer.units_balance || 0;
     if (currentUnits < verifiedCart.totalUnitsRequired) {
       throw new Error(
@@ -1121,7 +1993,6 @@ export async function createCheckoutOrder(input: {
     });
     await saveCustomerDb(custDb);
 
-    // Backend has verified atomic unit deduction -> mark paid & confirmed
     paymentStatus = 'paid';
     orderStatus = 'confirmed';
     paymentReference = txId;
@@ -1130,6 +2001,7 @@ export async function createCheckoutOrder(input: {
 
     platformDb.payments.push({
       id: `pay_${Date.now()}`,
+      customerId: matchedCustomerId,
       bookingId: orderReference,
       amount: verifiedCart.totalUsd,
       currency: 'USD',
@@ -1139,7 +2011,6 @@ export async function createCheckoutOrder(input: {
       createdAt: nowIso,
     });
   } else {
-    // Bank Wire, Direct ACH, or Corporate Zelle — NEVER mark paid until verified by backend/admin
     const custFromToken = await getCustomerByToken(input.customerToken);
     if (custFromToken) {
       matchedCustomerId = custFromToken.id;
@@ -1179,7 +2050,6 @@ export async function createCheckoutOrder(input: {
     }
   }
 
-  // Create linked Housing & Vehicle bookings so Operations & Portals stay synchronized
   const linkedBookingIds: string[] = [];
   const linkedVehicleBookingIds: string[] = [];
 
@@ -1187,10 +2057,17 @@ export async function createCheckoutOrder(input: {
     if (item.itemType === 'accommodation') {
       const checkIn = item.metadata?.checkIn || nowIso.split('T')[0];
       const checkOut = item.metadata?.checkOut || checkIn;
+      const overlap = findOverlappingPropertyRange(platformDb, item.referenceId, checkIn, checkOut);
+      if (overlap) {
+        throw new Error(
+          `Residence dates (${checkIn} to ${checkOut}) are no longer available due to a conflicting reservation (${overlap.start}–${overlap.end}).`,
+        );
+      }
       const stayNights =
         item.metadata?.billingUnit === 'night' ? item.quantity : item.quantity * 30;
       const bk: BookingRecord = {
         id: `bk_${Date.now().toString().slice(-5)}${Math.floor(Math.random() * 90 + 10)}`,
+        customerId: matchedCustomerId,
         propertyId: item.referenceId,
         guestName: input.customerName.trim(),
         guestEmail: input.customerEmail.trim(),
@@ -1199,8 +2076,9 @@ export async function createCheckoutOrder(input: {
         role: input.role?.trim() || undefined,
         checkIn,
         checkOut,
-        adults: item.metadata?.guests || 1,
-        children: 0,
+        adults: item.metadata?.adults || item.metadata?.guests || 1,
+        children: item.metadata?.children || 0,
+        infants: item.metadata?.infants || 0,
         status: paymentStatus === 'paid' ? 'confirmed' : 'awaiting_payment',
         notes: `Created via Order ${orderReference}${input.guestNotes ? ` • ${input.guestNotes.trim()}` : ''}`,
         totalNights: stayNights,
@@ -1218,6 +2096,7 @@ export async function createCheckoutOrder(input: {
       const returnDate = item.metadata?.returnDate || pickupDate;
       const vbk: VehicleBookingRecord = {
         id: `vbk_${Date.now().toString().slice(-5)}${Math.floor(Math.random() * 90 + 10)}`,
+        customerId: matchedCustomerId,
         vehicleId: item.referenceId,
         vehicleName: veh ? veh.name : item.title,
         exteriorColorName: item.metadata?.exteriorColorName || 'Signature Finish',
@@ -1296,11 +2175,14 @@ export async function createCheckoutOrder(input: {
     updatedAt: nowIso,
   };
 
+  if (!Array.isArray(platformDb.orders)) {
+    platformDb.orders = [];
+  }
   platformDb.orders.unshift(order);
 
-  // Dispatch transactional notification / confirmation message
   platformDb.notifications.unshift({
-    id: `ntf_${Date.now()}`,
+    id: `ntf_${Date.now()}_${Math.floor(Math.random() * 90 + 10)}`,
+    customerId: matchedCustomerId,
     recipientEmail: order.customerEmail,
     title:
       paymentStatus === 'paid'
@@ -1310,10 +2192,10 @@ export async function createCheckoutOrder(input: {
         : `Order Invoice Created — Awaiting Transfer (${order.orderReference})`,
     message:
       paymentStatus === 'paid'
-        ? `Thank you, ${order.customerName}. Your order of $${order.totalUsd.toLocaleString()} was verified via Client Unit Balance (${order.totalUnitsRequired} Units). Your receipt is ready.`
+        ? `Thank you, ${order.customerName}. Your order of $${order.totalUsd.toLocaleString()} was verified via Unit Balance (${order.totalUnitsRequired} Units).`
         : paymentStatus === 'pending_verification'
         ? `We logged your order ($${order.totalUsd.toLocaleString()}) and transfer reference ${order.paymentReference}. Confirmation will issue once bank settlement is verified.`
-        : `Your order ${order.orderReference} ($${order.totalUsd.toLocaleString()}) has been reserved pending Wire/ACH/Zelle remittance. Submit your transfer reference anytime to complete verification.`,
+        : `Your order ${order.orderReference} ($${order.totalUsd.toLocaleString()}) has been reserved pending Wire/ACH/Zelle remittance.`,
     category: 'payment',
     read: false,
     createdAt: nowIso,
@@ -1328,7 +2210,6 @@ export async function createCheckoutOrder(input: {
     createdAt: nowIso,
   });
 
-  // Reset cart after successful order creation
   platformDb.carts[verifiedCart.cartId] = {
     cartId: verifiedCart.cartId,
     items: [],
@@ -1370,7 +2251,7 @@ export async function submitOrderPaymentProof(
 
   const platformDb = await readPlatformDb();
   const normalized = (orderRef || '').trim().toUpperCase();
-  const order = platformDb.orders.find(
+  const order = (platformDb.orders || []).find(
     (o) => o.orderReference.toUpperCase() === normalized || o.id.toUpperCase() === normalized,
   );
   if (!order) throw new Error('Order not found.');
@@ -1409,7 +2290,8 @@ export async function submitOrderPaymentProof(
   order.updatedAt = nowIso;
 
   platformDb.notifications.unshift({
-    id: `ntf_${Date.now()}`,
+    id: `ntf_${Date.now()}_${Math.floor(Math.random() * 90 + 10)}`,
+    customerId: order.customerId,
     recipientEmail: order.customerEmail,
     title: `Transfer Proof Received (${order.orderReference})`,
     message: `Reference ${mpay.wireReference} ($${order.totalUsd.toLocaleString()}) is queued for treasury verification.`,
@@ -1442,7 +2324,7 @@ export async function adminUpdateOrder(
   actorEmail: string,
 ) {
   const platformDb = await readPlatformDb();
-  const order = platformDb.orders.find((o) => o.id === orderId || o.orderReference === orderId);
+  const order = (platformDb.orders || []).find((o) => o.id === orderId || o.orderReference === orderId);
   if (!order) throw new Error('Order not found');
 
   const nowIso = new Date().toISOString();
@@ -1478,6 +2360,7 @@ export async function adminUpdateOrder(
       }
       platformDb.payments.push({
         id: `pay_${Date.now()}`,
+        customerId: order.customerId,
         bookingId: order.orderReference,
         amount: order.totalUsd,
         currency: 'USD',
@@ -1487,7 +2370,8 @@ export async function adminUpdateOrder(
         createdAt: nowIso,
       });
       platformDb.notifications.unshift({
-        id: `ntf_${Date.now()}`,
+        id: `ntf_${Date.now()}_${Math.floor(Math.random() * 90 + 10)}`,
+        customerId: order.customerId,
         recipientEmail: order.customerEmail,
         title: `Payment Verified & Order Confirmed (${order.orderReference})`,
         message: `Your payment of $${order.totalUsd.toLocaleString()} for Order ${order.orderReference} has been verified. Your reservations and services are confirmed.`,
@@ -1501,7 +2385,8 @@ export async function adminUpdateOrder(
         order.orderStatus = 'cancelled';
       }
       platformDb.notifications.unshift({
-        id: `ntf_${Date.now()}`,
+        id: `ntf_${Date.now()}_${Math.floor(Math.random() * 90 + 10)}`,
+        customerId: order.customerId,
         recipientEmail: order.customerEmail,
         title: `Order Payment Status Updated (${order.orderReference})`,
         message: `Order ${order.orderReference} payment status is now "${order.paymentStatus.replace(/_/g, ' ')}"${

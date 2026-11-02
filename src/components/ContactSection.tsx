@@ -101,13 +101,13 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ preselectedPrope
           {/* Contact Details & Host Card */}
           <div className="lg:col-span-5 space-y-8">
             <div className="space-y-4">
-              <span className="text-xs font-bold text-[#00897d] uppercase tracking-wider">
+              <span className="type-support font-semibold text-[#00897d] block">
                 Direct Host Support &amp; Inquiries
               </span>
-              <h2 className="text-3xl sm:text-4xl font-heading font-black text-[#282828] tracking-tight">
+              <h2 className="type-h2 text-[#282828]">
                 Get in Touch With Bill &amp; Marlena
               </h2>
-              <p className="text-[#5c5046] text-sm sm:text-base leading-relaxed">
+              <p className="type-body text-[#5c5046]">
                 Have questions about residence availability, vehicle rentals, arrival add-ons, family relocations, or multi-unit organizational stays? Reach out below and our local team will respond promptly.
               </p>
             </div>
@@ -122,8 +122,8 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ preselectedPrope
                   <Phone className="w-5 h-5" />
                 </div>
                 <div>
-                  <span className="text-xs text-[#857568] font-bold block uppercase tracking-wider">Phone</span>
-                  <span className="text-base font-extrabold text-[#282828] tabular-nums">{COMPANY_INFO.phone}</span>
+                  <span className="type-support text-[#857568] font-medium block">Phone</span>
+                  <span className="text-base font-semibold text-[#282828] tabular-nums">{COMPANY_INFO.phone}</span>
                 </div>
               </a>
 
@@ -135,8 +135,8 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ preselectedPrope
                   <Mail className="w-5 h-5" />
                 </div>
                 <div>
-                  <span className="text-xs text-[#857568] font-bold block uppercase tracking-wider">Email</span>
-                  <span className="text-base font-extrabold text-[#282828] break-all">{COMPANY_INFO.email}</span>
+                  <span className="type-support text-[#857568] font-medium block">Email</span>
+                  <span className="text-base font-semibold text-[#282828] break-all">{COMPANY_INFO.email}</span>
                 </div>
               </a>
 
@@ -145,8 +145,8 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ preselectedPrope
                   <MapPin className="w-5 h-5" />
                 </div>
                 <div>
-                  <span className="text-xs text-[#857568] font-bold block uppercase tracking-wider">Coverage</span>
-                  <span className="text-base font-extrabold text-[#282828]">California’s homes · Regional Operations</span>
+                  <span className="type-support text-[#857568] font-medium block">Coverage</span>
+                  <span className="text-base font-semibold text-[#282828]">California’s Homes · Regional Operations</span>
                 </div>
               </div>
             </div>
@@ -155,15 +155,15 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ preselectedPrope
             <div className="relative overflow-hidden p-5 sm:p-6 rounded-2xl text-white border border-[#3a2f28] shadow-md">
               <LivePhotoBackground scene="twilight" overlay="espresso" />
               <div className="relative z-10 space-y-2">
-                <div className="flex items-center gap-2 text-[#4de0d2] text-xs font-bold uppercase tracking-wider">
+                <div className="flex items-center gap-2 text-[#4de0d2] type-support font-semibold">
                   <Clock className="w-4 h-4" />
                   <span>Move-In &amp; Departure Schedule</span>
                 </div>
-                <p className="text-xs text-[#f2ebe2] leading-relaxed">
-                  <strong>Check-in time:</strong> 2:00 PM on your mutually approved move-in day. <br />
-                  <strong>Check-out time:</strong> 11:00 AM on move-out day.
+                <p className="type-support text-[#f2ebe2] tabular-nums">
+                  <strong className="font-semibold text-white">Check-in time:</strong> 2:00 PM on your mutually approved move-in day. <br />
+                  <strong className="font-semibold text-white">Check-out time:</strong> 11:00 AM on move-out day.
                 </p>
-                <p className="text-[11px] text-[#dfd3c5]">
+                <p className="type-support text-[#dfd3c5]">
                   Early check-in or late check-out accommodated upon schedule availability.
                 </p>
               </div>
@@ -178,19 +178,19 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ preselectedPrope
                   <div className="w-16 h-16 rounded-full bg-[#e8f8f6] text-[#00897d] flex items-center justify-center mx-auto">
                     <CheckCircle2 className="w-10 h-10" />
                   </div>
-                  <h3 className="font-heading font-black text-2xl text-[#282828]">
+                  <h3 className="type-h3 text-[#282828]">
                     Inquiry Received, {firstName}!
                   </h3>
-                  <p className="text-[#5c5046] text-sm max-w-md mx-auto leading-relaxed">
+                  <p className="type-body text-[#5c5046] max-w-md mx-auto">
                     Thank you for reaching out to Easy Travel Lodging. Hosts Bill and Marlena have received your reservation request and will reply within 24 hours.
                   </p>
-                  <div className="p-3 bg-[#faf8f5] rounded-xl border border-[#e6dfd5] inline-block text-xs font-mono font-bold text-[#282828]">
+                  <div className="p-3 bg-[#faf8f5] rounded-xl border border-[#e6dfd5] inline-block type-support font-mono font-semibold text-[#282828]">
                     Inquiry Reference: <span className="text-[#00897d]">{refCode}</span>
                   </div>
                   <div className="pt-2">
                     <button
                       onClick={() => setSubmitted(false)}
-                      className="px-6 py-2.5 bg-[#82634f] text-white text-xs font-bold rounded-xl hover:bg-[#6e5240] transition-colors cursor-pointer"
+                      className="px-6 py-2.5 bg-[#82634f] text-white type-btn rounded-xl hover:bg-[#6e5240] transition-colors cursor-pointer"
                     >
                       Submit Another Inquiry
                     </button>
@@ -198,19 +198,19 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ preselectedPrope
                 </div>
               ) : (
                 <form onSubmit={handleSubmit} className="space-y-4 text-left">
-                  <div className="border-b border-[#e6dfd5] pb-3 mb-4">
-                    <h3 className="font-heading font-black text-xl text-[#282828]">
+                  <div className="border-b border-[#e6dfd5] pb-3.5 mb-4 space-y-1">
+                    <h3 className="type-h3 text-[#282828]">
                       Book Your Stay &amp; Check Vacancies
                     </h3>
-                    <p className="text-xs text-[#6e5f53]">
-                      Fields marked with an asterisk (<span className="text-rose-500 font-bold">*</span>) are required.
+                    <p className="type-support text-[#6e5f53]">
+                      Fields marked with an asterisk (<span className="text-rose-500 font-semibold">*</span>) are required.
                     </p>
                   </div>
 
                   {/* Name fields */}
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
-                      <label className="block text-xs font-bold text-[#282828] uppercase tracking-wider mb-1">
+                      <label className="block type-label text-[#282828] mb-1.5">
                         First Name <span className="text-rose-500">*</span>
                       </label>
                       <input
@@ -219,11 +219,11 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ preselectedPrope
                         value={firstName}
                         onChange={(e) => setFirstName(e.target.value)}
                         placeholder="John"
-                        className="w-full px-3.5 py-2.5 rounded-xl border border-[#d8cfc3] text-sm bg-white focus:border-[#00b7a8] focus:ring-1 focus:ring-[#00b7a8] outline-none"
+                        className="w-full px-3.5 h-11 rounded-xl border border-[#d8cfc3] text-sm sm:text-base bg-white focus:border-[#00b7a8] focus:ring-1 focus:ring-[#00b7a8] outline-none"
                       />
                     </div>
                     <div>
-                      <label className="block text-xs font-bold text-[#282828] uppercase tracking-wider mb-1">
+                      <label className="block type-label text-[#282828] mb-1.5">
                         Last Name <span className="text-rose-500">*</span>
                       </label>
                       <input
@@ -232,7 +232,7 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ preselectedPrope
                         value={lastName}
                         onChange={(e) => setLastName(e.target.value)}
                         placeholder="Doe"
-                        className="w-full px-3.5 py-2.5 rounded-xl border border-[#d8cfc3] text-sm bg-white focus:border-[#00b7a8] focus:ring-1 focus:ring-[#00b7a8] outline-none"
+                        className="w-full px-3.5 h-11 rounded-xl border border-[#d8cfc3] text-sm sm:text-base bg-white focus:border-[#00b7a8] focus:ring-1 focus:ring-[#00b7a8] outline-none"
                       />
                     </div>
                   </div>
@@ -240,7 +240,7 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ preselectedPrope
                   {/* Contact fields */}
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
-                      <label className="block text-xs font-bold text-[#282828] uppercase tracking-wider mb-1">
+                      <label className="block type-label text-[#282828] mb-1.5">
                         Email Address <span className="text-rose-500">*</span>
                       </label>
                       <input
@@ -249,11 +249,11 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ preselectedPrope
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
                         placeholder="john.doe@example.com"
-                        className="w-full px-3.5 py-2.5 rounded-xl border border-[#d8cfc3] text-sm bg-white focus:border-[#00b7a8] focus:ring-1 focus:ring-[#00b7a8] outline-none"
+                        className="w-full px-3.5 h-11 rounded-xl border border-[#d8cfc3] text-sm sm:text-base bg-white focus:border-[#00b7a8] focus:ring-1 focus:ring-[#00b7a8] outline-none"
                       />
                     </div>
                     <div>
-                      <label className="block text-xs font-bold text-[#282828] uppercase tracking-wider mb-1">
+                      <label className="block type-label text-[#282828] mb-1.5">
                         Phone Number <span className="text-rose-500">*</span>
                       </label>
                       <input
@@ -262,7 +262,7 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ preselectedPrope
                         value={phone}
                         onChange={(e) => setPhone(e.target.value)}
                         placeholder="(916) 555-0123"
-                        className="w-full px-3.5 py-2.5 rounded-xl border border-[#d8cfc3] text-sm bg-white focus:border-[#00b7a8] focus:ring-1 focus:ring-[#00b7a8] outline-none"
+                        className="w-full px-3.5 h-11 rounded-xl border border-[#d8cfc3] text-sm sm:text-base bg-white focus:border-[#00b7a8] focus:ring-1 focus:ring-[#00b7a8] outline-none tabular-nums"
                       />
                     </div>
                   </div>
@@ -270,7 +270,7 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ preselectedPrope
                   {/* Optional Organization & Purpose */}
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
-                      <label className="block text-xs font-bold text-[#282828] uppercase tracking-wider mb-1">
+                      <label className="block type-label text-[#282828] mb-1.5">
                         Organization or Household (Optional)
                       </label>
                       <input
@@ -278,11 +278,11 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ preselectedPrope
                         value={company}
                         onChange={(e) => setCompany(e.target.value)}
                         placeholder="e.g. Family Relocation, Home Remodel, Company"
-                        className="w-full px-3.5 py-2.5 rounded-xl border border-[#d8cfc3] text-sm bg-white focus:border-[#00b7a8] focus:ring-1 focus:ring-[#00b7a8] outline-none"
+                        className="w-full px-3.5 h-11 rounded-xl border border-[#d8cfc3] text-sm sm:text-base bg-white focus:border-[#00b7a8] focus:ring-1 focus:ring-[#00b7a8] outline-none"
                       />
                     </div>
                     <div>
-                      <label className="block text-xs font-bold text-[#282828] uppercase tracking-wider mb-1">
+                      <label className="block type-label text-[#282828] mb-1.5">
                         Purpose of Stay (Optional)
                       </label>
                       <input
@@ -290,7 +290,7 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ preselectedPrope
                         value={jobTitle}
                         onChange={(e) => setJobTitle(e.target.value)}
                         placeholder="e.g. Short Visit, Extended Stay, Fleet Rental"
-                        className="w-full px-3.5 py-2.5 rounded-xl border border-[#d8cfc3] text-sm bg-white focus:border-[#00b7a8] focus:ring-1 focus:ring-[#00b7a8] outline-none"
+                        className="w-full px-3.5 h-11 rounded-xl border border-[#d8cfc3] text-sm sm:text-base bg-white focus:border-[#00b7a8] focus:ring-1 focus:ring-[#00b7a8] outline-none"
                       />
                     </div>
                   </div>
@@ -298,13 +298,13 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ preselectedPrope
                   {/* Property selection & dates */}
                   <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                     <div>
-                      <label className="block text-xs font-bold text-[#282828] uppercase tracking-wider mb-1">
+                      <label className="block type-label text-[#282828] mb-1.5">
                         Preferred Unit
                       </label>
                       <select
                         value={propertyChoice}
                         onChange={(e) => setPropertyChoice(e.target.value)}
-                        className="w-full px-3 py-2.5 rounded-xl border border-[#d8cfc3] text-sm bg-white text-[#282828]"
+                        className="w-full px-3 h-11 rounded-xl border border-[#d8cfc3] text-sm bg-white text-[#282828]"
                       >
                         <option value="any">Any Available Unit</option>
                         {PROPERTIES.map((p) => (
@@ -316,7 +316,7 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ preselectedPrope
                     </div>
 
                     <div>
-                      <label className="block text-xs font-bold text-[#282828] uppercase tracking-wider mb-1">
+                      <label className="block type-label text-[#282828] mb-1.5">
                         Move-In Date <span className="text-rose-500">*</span>
                       </label>
                       <input
@@ -324,18 +324,18 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ preselectedPrope
                         required
                         value={moveInDate}
                         onChange={(e) => setMoveInDate(e.target.value)}
-                        className="w-full px-3 py-2.5 rounded-xl border border-[#d8cfc3] text-sm bg-white text-[#282828]"
+                        className="w-full px-3 h-11 rounded-xl border border-[#d8cfc3] text-sm bg-white text-[#282828] tabular-nums"
                       />
                     </div>
 
                     <div>
-                      <label className="block text-xs font-bold text-[#282828] uppercase tracking-wider mb-1">
+                      <label className="block type-label text-[#282828] mb-1.5">
                         Expected Duration
                       </label>
                       <select
                         value={stayDuration}
                         onChange={(e) => setStayDuration(e.target.value)}
-                        className="w-full px-3 py-2.5 rounded-xl border border-[#d8cfc3] text-sm bg-white text-[#282828]"
+                        className="w-full px-3 h-11 rounded-xl border border-[#d8cfc3] text-sm bg-white text-[#282828]"
                       >
                         <option value="5-10">5 – 10 Days (Short Stay)</option>
                         <option value="10-30">10 – 30 Days</option>
@@ -349,7 +349,7 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ preselectedPrope
 
                   {/* Message */}
                   <div>
-                    <label className="block text-xs font-bold text-[#282828] uppercase tracking-wider mb-1">
+                    <label className="block type-label text-[#282828] mb-1.5">
                       Message / Special Requests <span className="text-rose-500">*</span>
                     </label>
                     <textarea
@@ -358,12 +358,12 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ preselectedPrope
                       value={message}
                       onChange={(e) => setMessage(e.target.value)}
                       placeholder="Please share details about your stay, desired destination, number of occupants, or any questions about our residences and fleet..."
-                      className="w-full px-3.5 py-2.5 rounded-xl border border-[#d8cfc3] text-sm bg-white focus:border-[#00b7a8] focus:ring-1 focus:ring-[#00b7a8] outline-none"
+                      className="w-full px-3.5 py-2.5 rounded-xl border border-[#d8cfc3] text-sm sm:text-base bg-white focus:border-[#00b7a8] focus:ring-1 focus:ring-[#00b7a8] outline-none"
                     />
                   </div>
 
                   {errorMsg && (
-                    <div className="p-3 rounded-xl bg-rose-50 border border-rose-200 text-rose-700 text-xs flex items-center gap-2">
+                    <div className="p-3.5 rounded-xl bg-rose-50 border border-rose-200 text-rose-700 type-support flex items-center gap-2">
                       <AlertCircle className="w-4 h-4 shrink-0" />
                       <span>{errorMsg}</span>
                     </div>
@@ -373,7 +373,7 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ preselectedPrope
                     <button
                       type="submit"
                       disabled={submitting}
-                      className="w-full py-4 bg-[#00b7a8] hover:bg-[#009e91] active:bg-[#00897d] disabled:opacity-60 text-white font-bold text-sm rounded-xl shadow-md hover:shadow-lg transition-all flex items-center justify-center gap-2 cursor-pointer"
+                      className="w-full py-3.5 px-6 bg-[#00b7a8] hover:bg-[#009e91] active:bg-[#00897d] disabled:opacity-60 text-white type-btn rounded-xl shadow-md hover:shadow-lg transition-all flex items-center justify-center gap-2 cursor-pointer"
                     >
                       {submitting ? (
                         <>
@@ -389,8 +389,8 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ preselectedPrope
                     </button>
                   </div>
 
-                  <div className="flex items-center justify-center gap-2 text-xs text-[#6e5f53] pt-1">
-                    <ShieldCheck className="w-4 h-4 text-emerald-600" />
+                  <div className="flex items-center justify-center gap-2 type-support text-[#6e5f53] pt-1">
+                    <ShieldCheck className="w-4 h-4 text-emerald-600 shrink-0" />
                     <span>We respect your email privacy. Zero spam or third-party marketing.</span>
                   </div>
                 </form>

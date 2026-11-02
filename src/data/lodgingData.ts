@@ -1,4 +1,18 @@
 import { LA_PROPERTIES } from './laLodgingData';
+import {
+  BedroomDetail,
+  BlockedDateRange,
+  PropertyLocationInfo,
+  SeasonalPricingRule,
+  enrichPropertyRecord,
+} from './propertyEnrichment';
+
+export type {
+  BedroomDetail,
+  BlockedDateRange,
+  PropertyLocationInfo,
+  SeasonalPricingRule,
+} from './propertyEnrichment';
 
 export interface PropertyListing {
   id: string;
@@ -23,6 +37,17 @@ export interface PropertyListing {
   sqft?: string;
   liveUrl?: string;
   minimumStayDays?: number;
+  maximumStayDays?: number;
+  maxGuests?: number;
+  propertyType?: string;
+  verified?: boolean;
+  facilities?: string[];
+  videoTourUrl?: string;
+  videoPosterUrl?: string;
+  bedroomsDetail?: BedroomDetail[];
+  seasonalPricing?: SeasonalPricingRule[];
+  blockedDates?: BlockedDateRange[];
+  locationInfo?: PropertyLocationInfo;
 }
 
 export type Property = PropertyListing;
@@ -94,7 +119,7 @@ export const COMPANY_INFO = {
     'Thoughtfully equipped 1- and 2-bedroom residences, flexible stays from 5 nights to 12+ months, and attentive executive hospitality across California’s homes.',
   phone: '916-800-3295',
   phoneClean: '9168003295',
-  email: 'Contact@EasyTravelLodging.com',
+  email: 'easytravelagency@trustagent.space',
   location: 'California’s homes · Regional Agency Network',
   hours: 'Available 7 Days a Week for Guest Support & Inquiries',
   checkInTime: '2:00 PM',
@@ -149,7 +174,7 @@ export const COMPANY_INFO = {
 };
 
 // Authentic scraped property listings from easytravellodging.com
-export const PROPERTIES: PropertyListing[] = [
+const RAW_PROPERTIES: PropertyListing[] = [
   {
     id: 'unit-91',
     code: '#A',
@@ -651,6 +676,8 @@ export const PROPERTIES: PropertyListing[] = [
   ...LA_PROPERTIES,
 ];
 
+export const PROPERTIES: PropertyListing[] = RAW_PROPERTIES.map((p) => enrichPropertyRecord(p));
+
 export const REVIEWS: ReviewItem[] = [
   {
     id: 'rev-1',
@@ -1046,7 +1073,7 @@ export const PRIVACY_POLICY_TEXT = {
     },
     {
       title: 'Contact Us Regarding Privacy',
-      content: 'If you have questions about this Privacy Policy or how your information is handled, please contact us directly by phone at 916-800-3295 or by email at Contact@EasyTravelLodging.com.'
+      content: 'If you have questions about this Privacy Policy or how your information is handled, please contact us directly by phone at 916-800-3295 or by email at easytravelagency@trustagent.space.'
     }
   ]
 };

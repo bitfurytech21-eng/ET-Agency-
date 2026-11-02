@@ -1,7 +1,8 @@
 import type { PropertyRecord } from '../types.js';
 import { LA_PROPERTIES } from '../../src/data/laLodgingData.js';
+import { enrichPropertyRecord } from '../../src/data/propertyEnrichment.js';
 
-export const defaultProperties: PropertyRecord[] = [
+const rawDefaultProperties: PropertyRecord[] = [
   {
     id: 'unit-91',
     code: '#A',
@@ -253,3 +254,7 @@ export const defaultProperties: PropertyRecord[] = [
   },
   ...(LA_PROPERTIES as any[]),
 ];
+
+export const defaultProperties: PropertyRecord[] = rawDefaultProperties.map((p) =>
+  enrichPropertyRecord(p),
+);

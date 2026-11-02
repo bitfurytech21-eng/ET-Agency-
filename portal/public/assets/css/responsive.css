@@ -1,0 +1,113 @@
+/* Responsive Layout & Mobile Breakpoints */
+
+/* Desktop Large (>= 1440px) */
+@media (min-width: 1440px) {
+  .portal-container {
+    max-width: 1400px;
+  }
+}
+
+/* Tablet & Laptop (<= 1024px) */
+@media (max-width: 1024px) {
+  .portal-container {
+    padding: 1.5rem 1rem;
+  }
+
+  .admin-sidebar {
+    width: 230px;
+  }
+
+  .admin-content {
+    margin-left: 230px;
+    padding: 1.5rem 1.5rem;
+  }
+}
+
+/* Mobile & Small Tablet (<= 768px) */
+@media (max-width: 768px) {
+  /* Navigation */
+  .portal-nav-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .portal-nav-links {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: var(--bg-surface);
+    border-bottom: 1px solid var(--color-slate-border);
+    flex-direction: column;
+    padding: 1rem 1.5rem;
+    box-shadow: var(--shadow-modal);
+  }
+
+  .portal-nav-links.active {
+    display: flex;
+  }
+
+  .portal-nav-link {
+    width: 100%;
+    padding: 0.75rem 1rem;
+  }
+
+  /* Admin Sidebar Collapsible Drawer */
+  .admin-sidebar {
+    transform: translateX(-100%);
+    width: 260px;
+  }
+
+  .admin-sidebar.active {
+    transform: translateX(0);
+  }
+
+  .admin-content {
+    margin-left: 0;
+    padding: 1.25rem 1rem;
+  }
+
+  .admin-mobile-toggle {
+    display: inline-flex !important;
+  }
+
+  /* Welcome Banner */
+  .welcome-banner {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 1.5rem;
+  }
+
+  /* Touch Targets */
+  .portal-btn, .btn, .subnav-item, .portal-nav-link {
+    min-height: 44px;
+  }
+
+  /* Modals */
+  .modal-container, .modal-content {
+    max-height: 95vh;
+    border-radius: var(--radius-lg);
+  }
+}
+
+/* Extra Small Screens (<= 480px) */
+@media (max-width: 480px) {
+  .portal-container {
+    padding: 1rem 0.75rem;
+  }
+
+  .portal-card, .card {
+    padding: 1.25rem;
+    border-radius: var(--radius-md);
+  }
+
+  h1.page-title {
+    font-size: 1.4rem;
+  }
+
+  .stat-value {
+    font-size: 1.5rem;
+  }
+}

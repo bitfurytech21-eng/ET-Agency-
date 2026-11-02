@@ -1,22 +1,42 @@
+import type {
+  BedroomDetail,
+  BlockedDateRange,
+  PropertyLocationInfo,
+  SeasonalPricingRule,
+} from '../../data/propertyEnrichment';
+
 export interface AdminProperty {
   id: string;
+  code?: string;
+  slug?: string;
   unitNumber: string;
   title: string;
   category: string;
+  propertyType?: string;
+  verified?: boolean;
   shortDesc: string;
   fullDesc: string;
   monthlyRate: number;
   pricingNote: string;
   status: 'Available' | 'Inquired' | 'Reserved';
   minimumStayDays: number;
+  maximumStayDays?: number;
+  maxGuests?: number;
   images: string[];
   bedrooms?: number;
   bathrooms?: number;
   sqft?: string;
   location?: string;
-  floor?: string;
+  floor?: 'Downstairs' | 'Upstairs' | string;
   amenities?: string[];
   features?: string[];
+  facilities?: string[];
+  videoTourUrl?: string;
+  videoPosterUrl?: string;
+  bedroomsDetail?: BedroomDetail[];
+  seasonalPricing?: SeasonalPricingRule[];
+  blockedDates?: BlockedDateRange[];
+  locationInfo?: PropertyLocationInfo;
 }
 
 export interface AdminReservation {
@@ -95,7 +115,7 @@ export interface AdminHost {
   phone: string;
   title: string;
   assignedPropertyIds: string[];
-  commissionSplit: string; // e.g. "85% Host / 15% Platform"
+  commissionSplit: string;
   payoutMethod: string;
   ytdPayoutUsd: number;
   status: 'active' | 'pending_agreement' | 'inactive';

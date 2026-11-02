@@ -1,5 +1,6 @@
 import React, { createContext, useCallback, useContext, useEffect, useState } from 'react';
 import { PROPERTIES, Property } from '../data/lodgingData';
+import { BookingAddonSelection, enrichPropertyRecord } from '../data/propertyEnrichment';
 
 export type CatalogItemType = 'accommodation' | 'vehicle' | 'addon_service' | 'unit_package';
 
@@ -56,6 +57,10 @@ export interface CartItemMetadata {
   exteriorColorHex?: string;
   protectionPlan?: 'standard' | 'executive_shield';
   guests?: number;
+  adults?: number;
+  children?: number;
+  infants?: number;
+  selectedAddons?: BookingAddonSelection[];
   unitsIncluded?: number;
   notes?: string;
 }
@@ -133,6 +138,10 @@ interface CartContextValue {
   applyPromo: (code: string) => Promise<boolean>;
   removePromo: () => Promise<boolean>;
   revalidateCart: () => Promise<{ valid: boolean; issues: string[]; cart: CartData }>;
+  wishlistIds: string[];
+  isWishlisted: (propertyId: string) => boolean;
+  refreshWishlist: () => Promise<void>;
+  toggleWishlist: (propertyId: string) => Promise<{ ok: boolean; saved?: boolean; requiresAuth?: boolean }>;
 }
 
 const CART_STORAGE_KEY = 'etl_cart_id';
@@ -178,12 +187,79 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [liveVehicles, setLiveVehicles] = useState<LiveVehicleInventory[]>([]);
   const [catalogItems, setCatalogItems] = useState<CatalogServiceItem[]>([]);
   const [promoHints, setPromoHints] = useState<PromoHint[]>([]);
+  const [wishlistIds, setWishlistIds] = useState<string[]>([]);
 
   const showBanner = useCallback((type: CartBanner['type'], text: string) => {
     setBanner({ type, text });
   }, []);
 
   const clearBanner = useCallback(() => setBanner(null), []);
+
+  const refreshWishlist = useCallback(async () => {
+    if (typeof window === 'undefined') return;
+    const token = window.localStorage.getItem('etl_php_token');
+    if (!token) {
+      setWishlistIds([]);
+      return;
+    }
+    try {
+      const res = await fetch('/api/dashboard/wishlist', {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      if (!res.ok) {
+        if (res.status === 401) setWishlistIds([]);
+        return;
+      }
+      const data = await res.json();
+      if (Array.isArray(data.wishlist)) {
+        setWishlistIds(data.wishlist);
+      }
+    } catch {
+      // Keep current wishlist state on transient failure
+    }
+  }, []);
+
+  const isWishlisted = useCallback(
+    (propertyId: string) => wishlistIds.includes(propertyId),
+    [wishlistIds],
+  );
+
+  const toggleWishlist = useCallback(
+    async (propertyId: string): Promise<{ ok: boolean; saved?: boolean; requiresAuth?: boolean }> => {
+      const token = typeof window !== 'undefined' ? window.localStorage.getItem('etl_php_token') : null;
+      if (!token) {
+        return { ok: false, requiresAuth: true };
+      }
+      try {
+        const res = await fetch('/api/dashboard/wishlist/toggle', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({ propertyId }),
+        });
+        const data = await res.json();
+        if (res.status === 401) {
+          setWishlistIds([]);
+          return { ok: false, requiresAuth: true };
+        }
+        if (!res.ok) {
+          showBanner('error', data.message || 'Unable to update wishlist.');
+          return { ok: false };
+        }
+        if (Array.isArray(data.wishlist)) {
+          setWishlistIds(data.wishlist);
+        }
+        showBanner('info', data.message || (data.saved ? 'Saved to wishlist.' : 'Removed from wishlist.'));
+        return { ok: true, saved: Boolean(data.saved) };
+      } catch {
+        showBanner('error', 'Network error while updating wishlist.');
+        return { ok: false };
+      }
+    },
+    [showBanner],
+  );
 
   const refreshCatalog = useCallback(async () => {
     try {
@@ -193,15 +269,15 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
       if (Array.isArray(data.properties) && data.properties.length > 0) {
         const merged: Property[] = data.properties.map((srvProp: any) => {
           const fallback = PROPERTIES.find((p) => p.id === srvProp.id);
-          const srvImages = Array.isArray(srvProp.images) ? srvProp.images : [];
+          const srvImages = Array.isArray(srvProp.images) ? srvProp.images.filter(Boolean) : [];
           const fallbackImages = fallback?.images || [];
-          const resolvedImages = srvImages.length >= fallbackImages.length && srvImages.length > 0 ? srvImages : fallbackImages;
-          return {
+          const resolvedImages = srvImages.length > 0 ? srvImages : fallbackImages;
+          return enrichPropertyRecord({
             ...(fallback || {}),
             ...srvProp,
             images: resolvedImages,
             liveUrl: srvProp.liveUrl || fallback?.liveUrl || 'https://easytravellodging.com/',
-          };
+          });
         });
         setLiveProperties(merged);
       }
@@ -237,7 +313,8 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
   useEffect(() => {
     refreshCatalog();
     syncCart();
-  }, [refreshCatalog, syncCart]);
+    refreshWishlist();
+  }, [refreshCatalog, syncCart, refreshWishlist]);
 
   useEffect(() => {
     if (!banner) return;
@@ -453,6 +530,10 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
         applyPromo,
         removePromo,
         revalidateCart,
+        wishlistIds,
+        isWishlisted,
+        refreshWishlist,
+        toggleWishlist,
       }}
     >
       {children}

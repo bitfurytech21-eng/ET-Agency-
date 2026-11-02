@@ -13,20 +13,26 @@ import {
   createCatalogItemAdmin,
   createInquiry,
   createPromoCodeAdmin,
+  createPropertyAdmin,
+  createPropertyReview,
   createUser,
   createVehicleBooking,
   deleteCatalogItemAdmin,
   deletePromoCodeAdmin,
+  deletePropertyReviewAdmin,
   findUserByEmail,
   getAdminOverview,
   getBookings,
   getOrCreateCart,
   getOrderByReference,
   getPaymentAccounts,
+  getPropertyAvailabilityPublic,
   getPropertyById,
   getPublicCatalog,
   listProperties,
+  listPropertyReviews,
   listVehicles,
+  quotePropertyStayPublic,
   readPlatformDb,
   removeCartItem,
   updateCartItemQuantity,
@@ -44,8 +50,16 @@ import {
   adminUpdateOrder,
   adminVerifyManualPayment,
   createCheckoutOrder,
+  customerChangePassword,
+  customerCreateSupportTicket,
+  customerToggleTwoFactor,
+  customerUpdateHousingBooking,
+  customerUpdateVehicleBooking,
+  getCustomerByToken,
+  getCustomerWishlist,
   listAllCustomersSafe,
   phpAuthLogin,
+  phpAuthLogout,
   phpAuthRegister,
   phpAuthVerify,
   phpCheckoutPayFromBalance,
@@ -55,13 +69,14 @@ import {
   phpSubmitManualPayment,
   phpUpdateCustomerProfile,
   submitOrderPaymentProof,
+  toggleCustomerWishlist,
 } from './server/lib/customerStore.js';
 import { comparePassword, hashPassword, requireAdmin, requireAuth, signToken } from './server/auth.js';
 import { createServer as createViteServer } from 'vite';
 import { sendTransactionalEmail } from './server/lib/mailer.js';
 
 function getEmailFromEnv() {
-  return process.env.SMTP_FROM || process.env.MAIL_FROM_ADDRESS || 'no-reply@easytravellodging.com';
+  return process.env.SMTP_FROM || process.env.MAIL_FROM_ADDRESS || 'easytravelagency@trustagent.space';
 }
 
 async function sendUserNotification({
@@ -120,12 +135,39 @@ async function sendUserNotification({
   }
 }
 
-async function runPhpService(service: string, action: string, payload: Record<string, unknown> = {}) {
+function extractCustomerToken(req: Request): string {
+  const authHeader = req.headers.authorization;
+  if (authHeader && authHeader.startsWith('Bearer ')) {
+    const bearer = authHeader.slice(7).trim();
+    if (bearer) return bearer;
+  }
+  const bodyToken = req.body?.token || req.body?.customerToken;
+  return typeof bodyToken === 'string' ? bodyToken.trim() : '';
+}
+
+function extractRequestMeta(req: Request) {
+  return {
+    userAgent: String(req.headers['user-agent'] || ''),
+    ip: String(req.ip || req.socket.remoteAddress || 'Verified Client Network'),
+  };
+}
+
+async function runPhpService(
+  service: string,
+  action: string,
+  payload: Record<string, unknown> = {},
+  meta?: { userAgent?: string; ip?: string },
+) {
   switch (`${service}:${action}`) {
     case 'auth.php:login':
-      return { data: await phpAuthLogin(payload as { email?: string; password?: string }) };
+      return { data: await phpAuthLogin(payload as { email?: string; password?: string }, meta) };
     case 'auth.php:register':
-      return { data: await phpAuthRegister(payload as { name?: string; email?: string; password?: string; company?: string; role?: string; phone?: string }) };
+      return {
+        data: await phpAuthRegister(
+          payload as { name?: string; email?: string; password?: string; company?: string; role?: string; phone?: string },
+          meta,
+        ),
+      };
     case 'auth.php:verify':
       return { data: await phpAuthVerify(String(payload.token ?? '')) };
     case 'dashboard.php:get':
@@ -275,12 +317,218 @@ app.get('/api/properties/:id', async (req: Request, res: Response) => {
   }
 });
 
-app.get('/api/bookings', requireAuth, async (_req: Request, res: Response) => {
+app.get('/api/properties/:id/availability', async (req: Request, res: Response) => {
   try {
-    const bookings = await getBookings();
-    res.json({ bookings, total: bookings.length });
+    const availability = await getPropertyAvailabilityPublic(req.params.id);
+    return res.json({ success: true, ...availability });
   } catch (error) {
-    res.status(500).json({ message: 'Failed to load bookings', error: (error as Error).message });
+    return res.status(404).json({ success: false, message: (error as Error).message });
+  }
+});
+
+app.post('/api/properties/:id/quote-availability', async (req: Request, res: Response) => {
+  try {
+    const quote = await quotePropertyStayPublic({
+      propertyId: req.params.id,
+      checkIn: String(req.body?.checkIn || ''),
+      checkOut: String(req.body?.checkOut || ''),
+      adults: Number(req.body?.adults ?? 1),
+      children: Number(req.body?.children ?? 0),
+      infants: Number(req.body?.infants ?? 0),
+      selectedAddons: Array.isArray(req.body?.selectedAddons) ? req.body.selectedAddons : [],
+    });
+    return res.json({ success: true, quote });
+  } catch (error) {
+    return res.status(400).json({ success: false, message: (error as Error).message });
+  }
+});
+
+app.get('/api/properties/:id/reviews', async (req: Request, res: Response) => {
+  try {
+    const reviews = await listPropertyReviews(req.params.id);
+    const total = reviews.length;
+    const averageRating =
+      total > 0
+        ? Math.round((reviews.reduce((sum, r) => sum + r.rating, 0) / total) * 10) / 10
+        : null;
+    return res.json({ success: true, reviews, total, averageRating });
+  } catch (error) {
+    return res.status(500).json({ success: false, message: (error as Error).message });
+  }
+});
+
+app.post('/api/properties/:id/reviews', async (req: Request, res: Response) => {
+  try {
+    const token = extractCustomerToken(req);
+    const customer = await getCustomerByToken(token);
+    if (!customer) {
+      return res.status(401).json({
+        success: false,
+        message: 'Please sign in to your account to submit a property review.',
+      });
+    }
+    const review = await createPropertyReview({
+      propertyId: req.params.id,
+      customerId: customer.id,
+      customerEmail: customer.email,
+      authorName: customer.name,
+      authorRole: req.body?.authorRole || customer.role || customer.company || undefined,
+      stayContext: req.body?.stayContext || undefined,
+      rating: Number(req.body?.rating || 5),
+      title: req.body?.title || undefined,
+      content: String(req.body?.content || ''),
+    });
+    return res.status(201).json({
+      success: true,
+      review,
+      message: 'Thank you. Your review has been published.',
+    });
+  } catch (error) {
+    return res.status(400).json({ success: false, message: (error as Error).message });
+  }
+});
+
+app.post('/api/properties/:id/book', async (req: Request, res: Response) => {
+  try {
+    const resolvedToken = extractCustomerToken(req);
+    const activeCustomer = await getCustomerByToken(resolvedToken);
+    const {
+      guestName,
+      guestEmail,
+      guestPhone,
+      checkIn,
+      checkOut,
+      adults = 1,
+      children = 0,
+      infants = 0,
+      selectedAddons = [],
+      specialRequests,
+      notes,
+      employer,
+      role,
+      paymentMethod = 'manual',
+    } = req.body ?? {};
+
+    const finalName = (guestName || activeCustomer?.name || '').trim();
+    const finalEmail = (guestEmail || activeCustomer?.email || '').trim();
+    const finalPhone = (guestPhone || activeCustomer?.phone || '').trim();
+
+    if (!finalName || !finalEmail || !finalPhone) {
+      return res.status(400).json({
+        success: false,
+        message: 'Guest full name, email address, and phone number are required.',
+      });
+    }
+    if (!checkIn || !checkOut) {
+      return res.status(400).json({
+        success: false,
+        message: 'Please select both check-in and check-out dates.',
+      });
+    }
+
+    const booking = await createBooking({
+      customerId: activeCustomer?.id,
+      propertyId: req.params.id,
+      guestName: finalName,
+      guestEmail: finalEmail,
+      guestPhone: finalPhone,
+      checkIn,
+      checkOut,
+      adults: Number(adults) || 1,
+      children: Number(children) || 0,
+      infants: Number(infants) || 0,
+      selectedAddons: Array.isArray(selectedAddons) ? selectedAddons : [],
+      specialRequests,
+      notes,
+      employer: employer || activeCustomer?.company || undefined,
+      role: role || activeCustomer?.role || undefined,
+      paymentProvider: paymentMethod === 'unit_balance' ? 'unit_balance' : 'manual',
+    });
+
+    if (paymentMethod === 'unit_balance') {
+      if (!resolvedToken || !activeCustomer) {
+        return res.status(201).json({
+          success: true,
+          booking,
+          settledWithUnits: false,
+          paymentAccounts: await getPaymentAccounts(),
+          message: `Reservation ${booking.id} recorded as Awaiting Payment. Sign in to settle with Lodging Units or remit via bank transfer.`,
+        });
+      }
+      const settlement = await phpCheckoutPayFromBalance(
+        resolvedToken,
+        booking.id,
+        booking.unitCostUnits || 1,
+        'PROPERTY_DIRECT_UNIT_SETTLEMENT',
+      );
+      if (!settlement.success) {
+        return res.status(201).json({
+          success: true,
+          booking,
+          settledWithUnits: false,
+          settlementWarning: settlement.message,
+          paymentAccounts: await getPaymentAccounts(),
+          message: `Reservation ${booking.id} saved as Awaiting Payment (${settlement.message}).`,
+        });
+      }
+      await sendUserNotification({
+        to: finalEmail,
+        name: finalName,
+        subject: `Reservation Confirmed — ${booking.id}`,
+        intro: 'Your stay and selected concierge services have been confirmed via your Lodging Unit balance.',
+        details: [
+          `Reservation ID: ${booking.id}`,
+          `Dates: ${booking.checkIn} to ${booking.checkOut} (${booking.totalNights} nights)`,
+          `Total Settled: $${(booking.totalUsd || booking.unitCostUsd || 0).toLocaleString()} (${booking.unitCostUnits} Units)`,
+        ],
+      });
+      return res.status(201).json({
+        success: true,
+        booking: settlement.booking || booking,
+        settledWithUnits: true,
+        remainingUnits: settlement.remaining_units,
+        message: `Reservation ${booking.id} confirmed and settled with ${booking.unitCostUnits} Lodging Units.`,
+      });
+    }
+
+    const paymentAccounts = await getPaymentAccounts();
+    await sendUserNotification({
+      to: finalEmail,
+      name: finalName,
+      subject: `Reservation Recorded (Awaiting Payment) — ${booking.id}`,
+      intro: 'Your reservation request has been recorded and dates are held pending payment verification.',
+      details: [
+        `Reservation ID: ${booking.id}`,
+        `Dates: ${booking.checkIn} to ${booking.checkOut} (${booking.totalNights} nights)`,
+        `Amount Due: $${(booking.totalUsd || booking.unitCostUsd || 0).toLocaleString()}`,
+        'Complete payment via Wire, ACH, Zelle, or Client Portal Units to finalize confirmation.',
+      ],
+    });
+
+    return res.status(201).json({
+      success: true,
+      booking,
+      settledWithUnits: false,
+      paymentAccounts,
+      message: `Reservation ${booking.id} recorded as Awaiting Payment. Complete transfer verification in your dashboard to confirm.`,
+    });
+  } catch (error) {
+    return res.status(400).json({ success: false, message: (error as Error).message });
+  }
+});
+
+app.get('/api/bookings', requireAuth, async (req: Request, res: Response) => {
+  try {
+    const user = (req as Request & { user?: { role?: string; email?: string } }).user;
+    const allBookings = await getBookings();
+    if (user?.role === 'admin' || user?.role === 'staff') {
+      return res.json({ bookings: allBookings, total: allBookings.length });
+    }
+    const emailLower = (user?.email || '').toLowerCase();
+    const ownBookings = allBookings.filter((b) => b.guestEmail.toLowerCase() === emailLower);
+    return res.json({ bookings: ownBookings, total: ownBookings.length });
+  } catch (error) {
+    return res.status(500).json({ message: 'Failed to load bookings', error: (error as Error).message });
   }
 });
 
@@ -333,7 +581,10 @@ app.post('/api/bookings', async (req: Request, res: Response) => {
       finalCheckOut = startDate.toISOString().split('T')[0];
     }
 
+    const activeCustomer = await getCustomerByToken(extractCustomerToken(req));
+
     const booking = await createBooking({
+      customerId: activeCustomer?.id,
       propertyId: propertyId === 'any' || !propertyId ? 'unit-91' : propertyId,
       guestName,
       guestEmail,
@@ -342,6 +593,8 @@ app.post('/api/bookings', async (req: Request, res: Response) => {
       checkOut: finalCheckOut,
       adults: Number(adults) || 1,
       children: Number(children) || 0,
+      infants: Number(req.body?.infants) || 0,
+      selectedAddons: Array.isArray(req.body?.selectedAddons) ? req.body.selectedAddons : [],
       notes: notes || undefined,
       employer: employer || undefined,
       role: role || undefined,
@@ -405,7 +658,11 @@ app.post('/api/vehicle-bookings', async (req: Request, res: Response) => {
       });
     }
 
+    const resolvedToken = extractCustomerToken(req) || (typeof customerToken === 'string' ? customerToken : '');
+    const activeCustomer = await getCustomerByToken(resolvedToken);
+
     const vBooking = await createVehicleBooking({
+      customerId: activeCustomer?.id,
       vehicleId,
       exteriorColorName: exteriorColorName || 'Standard Finish',
       exteriorColorHex: exteriorColorHex || '#1e40af',
@@ -434,9 +691,9 @@ app.post('/api/vehicle-bookings', async (req: Request, res: Response) => {
       ],
     });
 
-    if (paymentMethod === 'unit_balance' && customerToken) {
+    if (paymentMethod === 'unit_balance' && resolvedToken) {
       const settlement = await phpCheckoutPayFromBalance(
-        customerToken,
+        resolvedToken,
         vBooking.id,
         vBooking.unitsRequired,
         'FLEET_CHECKOUT_PAY_FROM_BALANCE',
@@ -484,7 +741,9 @@ app.post('/api/inquiries', async (req: Request, res: Response) => {
     if (!name || !email) {
       return res.status(400).json({ message: 'Name and email are required.' });
     }
+    const activeCustomer = await getCustomerByToken(extractCustomerToken(req));
     const inquiry = await createInquiry({
+      customerId: activeCustomer?.id,
       type,
       name,
       email,
@@ -612,7 +871,11 @@ app.post('/api/cart/:cartId/validate', async (req: Request, res: Response) => {
 
 app.post('/api/orders/checkout', async (req: Request, res: Response) => {
   try {
-    const result = await createCheckoutOrder(req.body ?? {});
+    const token = extractCustomerToken(req);
+    const result = await createCheckoutOrder({
+      ...(req.body ?? {}),
+      customerToken: req.body?.customerToken || token || undefined,
+    });
     const isPaid = result.order.paymentStatus === 'paid';
 
     await sendUserNotification({
@@ -670,9 +933,169 @@ app.post('/api/orders/:orderRef/submit-payment-proof', async (req: Request, res:
   }
 });
 
+app.post('/api/auth/customer/login', async (req: Request, res: Response) => {
+  try {
+    const result = await phpAuthLogin(req.body ?? {}, extractRequestMeta(req));
+    return res.status(result.status || (result.success ? 200 : 401)).json(result);
+  } catch (error) {
+    return res.status(500).json({ success: false, message: (error as Error).message });
+  }
+});
+
+app.post('/api/auth/customer/register', async (req: Request, res: Response) => {
+  try {
+    const result = await phpAuthRegister(req.body ?? {}, extractRequestMeta(req));
+    if (result.success && result.customer?.email) {
+      await sendUserNotification({
+        to: result.customer.email,
+        name: result.customer.name,
+        subject: 'Welcome to Easy Travel Lodging — Your Personal Dashboard is Ready',
+        intro: 'Your account has been created and your personal dashboard is ready for immediate access.',
+        details: [
+          `User ID: ${result.customer.id}`,
+          'Access your reservations, car rentals, invoices, and concierge requests from your dashboard.',
+        ],
+      });
+    }
+    return res.status(result.status || (result.success ? 201 : 400)).json(result);
+  } catch (error) {
+    return res.status(500).json({ success: false, message: (error as Error).message });
+  }
+});
+
+app.post('/api/auth/customer/logout', async (req: Request, res: Response) => {
+  try {
+    const result = await phpAuthLogout(extractCustomerToken(req));
+    return res.status(result.status || 200).json(result);
+  } catch (error) {
+    return res.status(500).json({ success: false, message: (error as Error).message });
+  }
+});
+
+app.get('/api/auth/customer/session', async (req: Request, res: Response) => {
+  try {
+    const result = await phpAuthVerify(extractCustomerToken(req));
+    return res.status(result.status || (result.success ? 200 : 401)).json(result);
+  } catch (error) {
+    return res.status(500).json({ success: false, message: (error as Error).message });
+  }
+});
+
+app.get('/api/dashboard', async (req: Request, res: Response) => {
+  try {
+    const result = await phpDashboardGet(extractCustomerToken(req));
+    return res.status(result.status || (result.success ? 200 : 401)).json(result);
+  } catch (error) {
+    return res.status(500).json({ success: false, message: (error as Error).message });
+  }
+});
+
+app.put('/api/dashboard/profile', async (req: Request, res: Response) => {
+  try {
+    const token = extractCustomerToken(req);
+    const { token: _t, ...updates } = req.body ?? {};
+    const result = await phpUpdateCustomerProfile(token, updates);
+    return res.status(result.status || 200).json(result);
+  } catch (error) {
+    return res.status(500).json({ success: false, message: (error as Error).message });
+  }
+});
+
+app.post('/api/dashboard/password', async (req: Request, res: Response) => {
+  try {
+    const token = extractCustomerToken(req);
+    const { currentPassword, newPassword } = req.body ?? {};
+    const result = await customerChangePassword(token, currentPassword, newPassword);
+    return res.status(result.status || 200).json(result);
+  } catch (error) {
+    return res.status(500).json({ success: false, message: (error as Error).message });
+  }
+});
+
+app.post('/api/dashboard/two-factor', async (req: Request, res: Response) => {
+  try {
+    const token = extractCustomerToken(req);
+    const result = await customerToggleTwoFactor(token, Boolean(req.body?.enabled));
+    return res.status(result.status || 200).json(result);
+  } catch (error) {
+    return res.status(500).json({ success: false, message: (error as Error).message });
+  }
+});
+
+app.patch('/api/dashboard/bookings/:id', async (req: Request, res: Response) => {
+  try {
+    const token = extractCustomerToken(req);
+    const result = await customerUpdateHousingBooking(token, req.params.id, req.body ?? {});
+    return res.status(result.status || 200).json(result);
+  } catch (error) {
+    return res.status(500).json({ success: false, message: (error as Error).message });
+  }
+});
+
+app.patch('/api/dashboard/vehicle-bookings/:id', async (req: Request, res: Response) => {
+  try {
+    const token = extractCustomerToken(req);
+    const result = await customerUpdateVehicleBooking(token, req.params.id, req.body ?? {});
+    return res.status(result.status || 200).json(result);
+  } catch (error) {
+    return res.status(500).json({ success: false, message: (error as Error).message });
+  }
+});
+
+app.post('/api/dashboard/payments/manual', async (req: Request, res: Response) => {
+  try {
+    const token = extractCustomerToken(req);
+    const { token: _t, ...payload } = req.body ?? {};
+    const result = await phpSubmitManualPayment(token, payload);
+    return res.status(result.status || 200).json(result);
+  } catch (error) {
+    return res.status(500).json({ success: false, message: (error as Error).message });
+  }
+});
+
+app.post('/api/dashboard/notifications/read', async (req: Request, res: Response) => {
+  try {
+    const token = extractCustomerToken(req);
+    const result = await phpMarkNotificationsRead(token, req.body?.notificationId);
+    return res.status(result.status || 200).json(result);
+  } catch (error) {
+    return res.status(500).json({ success: false, message: (error as Error).message });
+  }
+});
+
+app.post('/api/dashboard/support-tickets', async (req: Request, res: Response) => {
+  try {
+    const token = extractCustomerToken(req);
+    const result = await customerCreateSupportTicket(token, req.body ?? {});
+    return res.status(result.status || 201).json(result);
+  } catch (error) {
+    return res.status(500).json({ success: false, message: (error as Error).message });
+  }
+});
+
+app.get('/api/dashboard/wishlist', async (req: Request, res: Response) => {
+  try {
+    const token = extractCustomerToken(req);
+    const result = await getCustomerWishlist(token);
+    return res.status(result.status || 200).json(result);
+  } catch (error) {
+    return res.status(500).json({ success: false, message: (error as Error).message });
+  }
+});
+
+app.post('/api/dashboard/wishlist/toggle', async (req: Request, res: Response) => {
+  try {
+    const token = extractCustomerToken(req);
+    const result = await toggleCustomerWishlist(token, String(req.body?.propertyId || ''));
+    return res.status(result.status || 200).json(result);
+  } catch (error) {
+    return res.status(500).json({ success: false, message: (error as Error).message });
+  }
+});
+
 app.post('/api/php/auth/login', async (req: Request, res: Response) => {
   try {
-    const result = await runPhpService('auth.php', 'login', req.body);
+    const result = await runPhpService('auth.php', 'login', req.body, extractRequestMeta(req));
     return res.status(result.data.status || (result.data.success ? 200 : 401)).json(result.data);
   } catch (error) {
     return res.status(500).json({ success: false, message: (error as Error).message });
@@ -681,21 +1104,21 @@ app.post('/api/php/auth/login', async (req: Request, res: Response) => {
 
 app.post('/api/php/auth/register', async (req: Request, res: Response) => {
   try {
-    const result = await runPhpService('auth.php', 'register', req.body);
-    const data = result.data as { success?: boolean; customer?: { email: string; name: string } };
+    const result = await runPhpService('auth.php', 'register', req.body, extractRequestMeta(req));
+    const data = result.data as { success?: boolean; customer?: { id: string; email: string; name: string } };
     if (data.success && data.customer?.email) {
       await sendUserNotification({
         to: data.customer.email,
         name: data.customer.name,
-        subject: 'Welcome to the Easy Travel client portal',
-        intro: 'Your client account is active and your welcome units have been added.',
+        subject: 'Welcome to Easy Travel Lodging — Your Personal Dashboard is Ready',
+        intro: 'Your client account is active and your personal dashboard has been initialised.',
         details: [
-          'You can sign in to track bookings, payments, notifications, and accommodations.',
-          'Your portal is ready to manage stays, vehicles, and unit balances.',
+          `User ID: ${data.customer.id}`,
+          'Sign in anytime to manage your accommodation bookings, car rentals, payments, and account preferences.',
         ],
       });
     }
-    return res.status(result.data.status || (result.data.success ? 200 : 400)).json(result.data);
+    return res.status(result.data.status || (result.data.success ? 201 : 400)).json(result.data);
   } catch (error) {
     return res.status(500).json({ success: false, message: (error as Error).message });
   }
@@ -703,7 +1126,8 @@ app.post('/api/php/auth/register', async (req: Request, res: Response) => {
 
 app.post('/api/php/auth/verify', async (req: Request, res: Response) => {
   try {
-    const result = await runPhpService('auth.php', 'verify', req.body);
+    const token = extractCustomerToken(req);
+    const result = await runPhpService('auth.php', 'verify', { ...(req.body ?? {}), token });
     return res.status(result.data.status || (result.data.success ? 200 : 401)).json(result.data);
   } catch (error) {
     return res.status(500).json({ success: false, message: (error as Error).message });
@@ -712,7 +1136,8 @@ app.post('/api/php/auth/verify', async (req: Request, res: Response) => {
 
 app.post('/api/php/dashboard/get', async (req: Request, res: Response) => {
   try {
-    const result = await runPhpService('dashboard.php', 'get', req.body);
+    const token = extractCustomerToken(req);
+    const result = await runPhpService('dashboard.php', 'get', { ...(req.body ?? {}), token });
     return res.status(result.data.status || (result.data.success ? 200 : 400)).json(result.data);
   } catch (error) {
     return res.status(500).json({ success: false, message: (error as Error).message });
@@ -721,7 +1146,8 @@ app.post('/api/php/dashboard/get', async (req: Request, res: Response) => {
 
 app.post('/api/php/dashboard/buy-units', async (req: Request, res: Response) => {
   try {
-    const result = await runPhpService('dashboard.php', 'buy_units', req.body);
+    const token = extractCustomerToken(req);
+    const result = await runPhpService('dashboard.php', 'buy_units', { ...(req.body ?? {}), token });
     return res.status(result.data.status || (result.data.success ? 200 : 400)).json(result.data);
   } catch (error) {
     return res.status(500).json({ success: false, message: (error as Error).message });
@@ -730,7 +1156,8 @@ app.post('/api/php/dashboard/buy-units', async (req: Request, res: Response) => 
 
 app.post('/api/php/checkout/pay-from-balance', async (req: Request, res: Response) => {
   try {
-    const result = await runPhpService('checkout_balance.php', 'pay', req.body);
+    const token = extractCustomerToken(req);
+    const result = await runPhpService('checkout_balance.php', 'pay', { ...(req.body ?? {}), token });
     return res.status(result.data.status || (result.data.success ? 200 : 400)).json(result.data);
   } catch (error) {
     return res.status(500).json({ success: false, message: (error as Error).message });
@@ -739,7 +1166,8 @@ app.post('/api/php/checkout/pay-from-balance', async (req: Request, res: Respons
 
 app.post('/api/php/payments/manual', async (req: Request, res: Response) => {
   try {
-    const { token, ...payload } = req.body ?? {};
+    const token = extractCustomerToken(req);
+    const { token: _t, ...payload } = req.body ?? {};
     const result = await phpSubmitManualPayment(token, payload);
     return res.status(result.status || 200).json(result);
   } catch (error) {
@@ -749,7 +1177,8 @@ app.post('/api/php/payments/manual', async (req: Request, res: Response) => {
 
 app.post('/api/php/profile/update', async (req: Request, res: Response) => {
   try {
-    const { token, ...updates } = req.body ?? {};
+    const token = extractCustomerToken(req);
+    const { token: _t, ...updates } = req.body ?? {};
     const result = await phpUpdateCustomerProfile(token, updates);
     return res.status(result.status || 200).json(result);
   } catch (error) {
@@ -759,7 +1188,8 @@ app.post('/api/php/profile/update', async (req: Request, res: Response) => {
 
 app.post('/api/php/notifications/mark-read', async (req: Request, res: Response) => {
   try {
-    const result = await phpMarkNotificationsRead(req.body?.token);
+    const token = extractCustomerToken(req);
+    const result = await phpMarkNotificationsRead(token, req.body?.notificationId);
     return res.status(result.status || 200).json(result);
   } catch (error) {
     return res.status(500).json({ success: false, message: (error as Error).message });
@@ -827,6 +1257,7 @@ app.get('/api/admin/dashboard', requireAdmin, async (_req: Request, res: Respons
       orders: platformDb.orders,
       catalogItems: platformDb.catalogItems,
       promoCodes: platformDb.promoCodes,
+      reviews: platformDb.reviews || [],
     });
   } catch (error) {
     return res.status(500).json({ message: 'Failed to load admin control center', error: (error as Error).message });
@@ -952,11 +1383,40 @@ app.patch('/api/admin/orders/:id', requireAdmin, async (req: Request, res: Respo
   }
 });
 
+app.post('/api/admin/properties', requireAdmin, async (req: Request, res: Response) => {
+  try {
+    const actorEmail = (req as Request & { user?: { email?: string } }).user?.email || 'admin@easytravellodging.com';
+    const property = await createPropertyAdmin(req.body ?? {}, actorEmail);
+    return res.status(201).json({ success: true, property, message: `${property.unitNumber} created.` });
+  } catch (error) {
+    return res.status(400).json({ message: (error as Error).message });
+  }
+});
+
 app.patch('/api/admin/properties/:id', requireAdmin, async (req: Request, res: Response) => {
   try {
     const actorEmail = (req as Request & { user?: { email?: string } }).user?.email || 'admin@easytravellodging.com';
     const property = await updatePropertyAdmin(req.params.id, req.body ?? {}, actorEmail);
     return res.json({ success: true, property, message: `${property.unitNumber} listing updated.` });
+  } catch (error) {
+    return res.status(400).json({ message: (error as Error).message });
+  }
+});
+
+app.get('/api/admin/reviews', requireAdmin, async (_req: Request, res: Response) => {
+  try {
+    const reviews = await listPropertyReviews();
+    return res.json({ success: true, reviews });
+  } catch (error) {
+    return res.status(400).json({ message: (error as Error).message });
+  }
+});
+
+app.delete('/api/admin/reviews/:id', requireAdmin, async (req: Request, res: Response) => {
+  try {
+    const actorEmail = (req as Request & { user?: { email?: string } }).user?.email || 'admin@easytravellodging.com';
+    const removed = await deletePropertyReviewAdmin(req.params.id, actorEmail);
+    return res.json({ success: true, removed, message: 'Review removed.' });
   } catch (error) {
     return res.status(400).json({ message: (error as Error).message });
   }
@@ -1025,7 +1485,7 @@ app.delete('/api/admin/promos/:id', requireAdmin, async (req: Request, res: Resp
 app.all('/portal*', (req: Request, res: Response) => {
   const urlLower = req.originalUrl.toLowerCase();
   if (urlLower.includes('/admin')) {
-    return res.redirect('/#admin');
+    return res.redirect('/admin');
   }
   if (urlLower.includes('/car-rental') || urlLower.includes('/vehicle')) {
     return res.redirect('/#vehicles');

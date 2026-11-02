@@ -23,22 +23,22 @@ export const Hero: React.FC<HeroProps> = ({
           {/* Left Column */}
           <div className="lg:col-span-7 space-y-6">
             <div>
-              <h5 className="font-heading font-bold text-sm sm:text-base uppercase tracking-[0.22em] text-[#82634f] mb-1">
-                STAY WITH US IN
-              </h5>
-              <h1 className="font-heading font-black text-5xl sm:text-7xl text-[#282828] tracking-tight leading-none">
-                COMFORT
+              <span className="type-support font-semibold uppercase tracking-[0.12em] text-[#82634f] block mb-1.5">
+                Stay With Us In
+              </span>
+              <h1 className="type-h1 text-[#282828]">
+                Comfort &amp; Turnkey Living
               </h1>
             </div>
 
-            <div className="space-y-3">
+            <div className="space-y-3.5">
               <h6 className="et_section_h6 text-[#282828]">
                 Move-In-Ready Living, Tailored to Your Schedule
               </h6>
-              <p className="font-heading font-semibold text-[19px] sm:text-[21px] text-[#1f1a17] leading-snug max-w-[660px]">
+              <p className="type-body-lg font-medium text-[#1f1a17] max-w-[660px]">
                 Thoughtfully furnished 1- and 2-bedroom residences, private vehicle rentals, and attentive local concierge services for short visits, family relocations, home transitions, and extended stays.
               </p>
-              <p className="text-sm sm:text-[15px] text-[#4a3f37] max-w-[640px] leading-relaxed">
+              <p className="type-body text-[#4a3f37] max-w-[640px]">
                 Whether you are visiting loved ones for a week, navigating a home remodel, relocating across California’s homes, or booking housing for a multi-month project, reserve residences, vehicles, and arrival services together in one seamless cart.
               </p>
             </div>
@@ -63,7 +63,7 @@ export const Hero: React.FC<HeroProps> = ({
               {onOpenBrochure && (
                 <button
                   onClick={onOpenBrochure}
-                  className="text-xs font-bold text-[#358385] hover:text-[#00b7a8] underline underline-offset-4 cursor-pointer px-2 py-1"
+                  className="type-btn text-[#358385] hover:text-[#00b7a8] underline underline-offset-4 cursor-pointer px-2 py-1"
                 >
                   Overview Brochure
                 </button>

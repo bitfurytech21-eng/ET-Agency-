@@ -70,36 +70,36 @@ export const AwardsSection: React.FC<AwardsSectionProps> = ({
 
         {/* Row 2: White Editorial Card Container */}
         <div className="max-w-[960px] mx-auto">
-          <div className="bg-white p-8 sm:p-16 md:p-20 shadow-sm border border-[#e6dfd5] rounded-none sm:rounded-lg text-left space-y-6 sm:space-y-8">
-            <h2 className="text-[#00b7a8] font-heading font-extrabold text-3xl sm:text-5xl md:text-[46px] leading-tight text-center tracking-tight mb-8 sm:mb-12">
+          <div className="bg-white p-8 sm:p-16 md:p-20 shadow-sm border border-[#e6dfd5] rounded-none sm:rounded-lg text-left space-y-6">
+            <h2 className="type-h2 text-[#00b7a8] text-center mb-8 sm:mb-10">
               Our Commitment to Excellence &amp; Ethics
             </h2>
 
-            <p className="text-[#282828] font-sans text-base sm:text-lg md:text-[20px] leading-[1.75] text-left">
-              At <strong className="font-bold text-[#111111]">Easy Travel Lodging</strong>, integrity isn’t just a business value — it’s the foundation of everything we do. We are honored and humbled to be recognized by the <strong className="font-bold text-[#111111]">Better Business Bureau with the prestigious Torch Award</strong>, the highest distinction awarded for <strong className="font-bold text-[#111111]">Business Ethics</strong>. This award celebrates organizations that demonstrate exceptional character, build trust within the community, and uphold the strongest standards of integrity in every interaction.
+            <p className="type-body text-[#282828] text-left">
+              At <strong className="font-semibold text-[#111111]">Easy Travel Lodging</strong>, integrity isn’t just a business value — it’s the foundation of everything we do. We are honored and humbled to be recognized by the <strong className="font-semibold text-[#111111]">Better Business Bureau with the prestigious Torch Award</strong>, the highest distinction awarded for <strong className="font-semibold text-[#111111]">Business Ethics</strong>. This award celebrates organizations that demonstrate exceptional character, build trust within the community, and uphold the strongest standards of integrity in every interaction.
             </p>
 
-            <p className="text-[#282828] font-sans text-base sm:text-lg md:text-[20px] leading-[1.75] text-left">
-              Receiving this award was an extraordinary moment for us. The photos you see of <strong className="font-bold text-[#111111]">Marlena Uhrik and Bill Wheelock</strong> accepting this honor reflect years of dedication to serving our guests with compassion, honesty, and excellence.
+            <p className="type-body text-[#282828] text-left">
+              Receiving this award was an extraordinary moment for us. The photos you see of <strong className="font-semibold text-[#111111]">Marlena Uhrik and Bill Wheelock</strong> accepting this honor reflect years of dedication to serving our guests with compassion, honesty, and excellence.
             </p>
 
-            <p className="text-[#282828] font-sans text-base sm:text-lg md:text-[20px] leading-[1.75] text-left">
-              Our commitment to ethical business practices was further acknowledged through <strong className="font-bold text-[#111111]">Congressional Recognition</strong>, presented by <strong className="font-bold text-[#111111]">U.S. Congressman Ami Bera</strong>, along with commendations from <strong className="font-bold text-[#111111]">California Assemblymember Josh Hoover</strong> and <strong className="font-bold text-[#111111]">California State Senator Roger Niello</strong>.
+            <p className="type-body text-[#282828] text-left">
+              Our commitment to ethical business practices was further acknowledged through <strong className="font-semibold text-[#111111]">Congressional Recognition</strong>, presented by <strong className="font-semibold text-[#111111]">U.S. Congressman Ami Bera</strong>, along with commendations from <strong className="font-semibold text-[#111111]">California Assemblymember Josh Hoover</strong> and <strong className="font-semibold text-[#111111]">California State Senator Roger Niello</strong>.
             </p>
 
-            <p className="text-[#282828] font-sans text-base sm:text-lg md:text-[20px] leading-[1.75] text-left">
+            <p className="type-body text-[#282828] text-left">
               These recognitions affirm our mission: to provide lodging experiences that are not only comfortable and convenient but grounded in trust, respect, and community service.
             </p>
 
-            <p className="text-[#282828] font-sans text-base sm:text-lg md:text-[20px] leading-[1.75] text-left">
+            <p className="type-body text-[#282828] text-left">
               At Easy Travel Lodging, we believe in doing business the right way — with transparency and genuine care. Whether you are visiting family, relocating to the region, bridging a home renovation, or arriving for an extended work assignment, you can count on a responsive local team dedicated to your comfort and peace of mind.
             </p>
 
             <div className="pt-4 border-t border-[#e6dfd5]">
-              <p className="text-base sm:text-lg text-[#282828] font-bold">
+              <p className="type-body-lg text-[#282828] font-semibold">
                 Easy Travel Lodging
               </p>
-              <p className="text-sm sm:text-base text-[#6e5f53] italic">
+              <p className="type-body text-[#6e5f53] italic">
                 Where comfort meets integrity, and every guest is welcomed with dignity and care.
               </p>
             </div>

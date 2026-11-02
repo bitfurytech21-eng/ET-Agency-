@@ -43,28 +43,28 @@ export const HostDesignView: React.FC = () => {
       <section className="relative overflow-hidden text-white py-16 sm:py-24 px-4 sm:px-8 border-b border-[#3a2f28] text-center">
         <LivePhotoBackground scene="interior" secondaryScene="courtyard" overlay="espresso" />
         <div className="relative z-10 max-w-4xl mx-auto space-y-4">
-          <span className="text-xs font-bold uppercase tracking-[4px] text-[#4de0d2] inline-block">
+          <span className="type-support font-semibold uppercase tracking-[0.14em] text-[#4de0d2] inline-block">
             Easy Travel Lodging Design Studio
           </span>
-          <h1 className="font-heading font-black text-4xl sm:text-6xl text-white tracking-tight">
+          <h1 className="type-h1 text-white">
             Interior Design &amp; Staging for Rental Hosts
           </h1>
-          <p className="text-[#f2ebe2] text-base sm:text-xl max-w-3xl mx-auto leading-relaxed pt-2">
-            Partner with <strong>Easy Travel Lodging Design Services</strong> to turn furnished apartments, vacation homes, and extended-stay rentals into high-occupancy, guest-ready residences—in Northern California or remotely nationwide.
+          <p className="type-body-lg text-[#f2ebe2] max-w-3xl mx-auto pt-2">
+            Partner with <strong className="font-semibold text-white">Easy Travel Lodging Design Services</strong> to turn furnished apartments, vacation homes, and extended-stay rentals into high-occupancy, guest-ready residences—in Northern California or remotely nationwide.
           </p>
-          <p className="text-[#dfd3c5] text-sm sm:text-base max-w-2xl mx-auto leading-relaxed">
+          <p className="type-body text-[#dfd3c5] max-w-2xl mx-auto">
             Led by Certified Home Stager Dr. Marlena Uhrik, our studio blends durable hospitality furnishings, smart spatial planning, and listing-ready styling that stands out immediately in search results.
           </p>
 
           <div className="pt-6">
             <button
               onClick={() => setDownloadModalOpen(true)}
-              className="et_pb_button et_pb_button_white group cursor-pointer shadow-md text-xs sm:text-sm font-bold uppercase tracking-wider inline-flex items-center gap-2"
+              className="et_pb_button et_pb_button_white type-btn group cursor-pointer shadow-md inline-flex items-center gap-2"
             >
               <Download className="w-4 h-4 text-[#00b7a8]" />
               <span>Download the Complimentary Host Design Guide</span>
             </button>
-            <p className="text-xs text-[#dfd3c5] mt-2 italic">
+            <p className="type-support text-[#dfd3c5] mt-2.5">
               Five practical interior design strategies that elevate nightly and monthly occupancy
             </p>
           </div>
@@ -75,20 +75,20 @@ export const HostDesignView: React.FC = () => {
           SECTION 2: Main Design Services Narrative & Case Study
           ========================================================================= */}
       <section className="py-14 sm:py-20 px-4 sm:px-8 bg-white border-b border-[#efe9e0] text-left">
-        <div className="max-w-5xl mx-auto space-y-8 text-[#5c5046] text-base sm:text-lg leading-relaxed">
+        <div className="type-body max-w-5xl mx-auto space-y-8 text-[#5c5046]">
           <p>
             From floor-plan flow and durable furniture sourcing to lighting, linens, and finishing artwork, we collaborate with property owners and managers to create spaces that photograph beautifully, hold up between turnovers, and earn consistent five-star reviews.
           </p>
 
           <div className="p-6 sm:p-8 bg-[#faf3e9] rounded-2xl border border-[#e3d2bc] space-y-4">
-            <h2 className="font-heading font-black text-xl sm:text-2xl text-[#3d2e24]">
+            <h2 className="type-h3 text-[#3d2e24]">
               First impressions drive booking decisions in seconds.
             </h2>
-            <p className="text-[#4a3e35] text-sm sm:text-base leading-relaxed">
+            <p className="type-body text-[#4a3e35]">
               With thousands of new short-term and extended-stay listings entering the market each year, prospective guests compare photos side by side before reading a single paragraph of description.
             </p>
-            <p className="text-[#4a3e35] text-sm sm:text-base leading-relaxed">
-              In a local market comparison of two properties in the same zip code—just a mile apart with identical square footage—one residence commanded <strong>over $100 more per night</strong> than its neighbor. The difference came down to cohesive interior styling, lighting, and functional layout.
+            <p className="type-body text-[#4a3e35]">
+              In a local market comparison of two properties in the same zip code—just a mile apart with identical square footage—one residence commanded <strong className="font-semibold text-[#282828]">over $100 more per night</strong> than its neighbor. The difference came down to cohesive interior styling, lighting, and functional layout.
             </p>
           </div>
 
@@ -108,15 +108,15 @@ export const HostDesignView: React.FC = () => {
       <section className="py-14 sm:py-20 px-4 sm:px-8 bg-[#faf8f5] border-b border-[#e6dfd5] text-left">
         <div className="max-w-5xl mx-auto space-y-8">
           <div>
-            <span className="text-xs font-bold uppercase tracking-widest text-[#00b7a8]">
+            <span className="type-support font-semibold uppercase tracking-[0.12em] text-[#00897d] block">
               Turnkey Execution &amp; Return on Investment
             </span>
-            <h2 className="font-heading font-black text-3xl sm:text-5xl text-[#282828] mt-1">
+            <h2 className="type-h2 text-[#282828] mt-1.5">
               Efficient Turnarounds Without Compromising Quality
             </h2>
           </div>
 
-          <div className="space-y-5 text-[#5c5046] text-base sm:text-lg leading-relaxed">
+          <div className="type-body space-y-5 text-[#5c5046]">
             <p>
               As property investors ourselves, we know every vacant week carries a real carrying cost. Our structured procurement and installation workflow gets your listing furnished, staged, and ready to photograph on schedule.
             </p>
@@ -127,14 +127,14 @@ export const HostDesignView: React.FC = () => {
           </div>
 
           <div className="p-8 bg-white rounded-2xl border border-[#e6dfd5] shadow-2xs space-y-4">
-            <h3 className="font-heading font-extrabold text-2xl text-[#00b7a8]">
+            <h3 className="type-h3 text-[#00897d]">
               Launching or Refreshing a Furnished Rental?
             </h3>
-            <p className="text-[#5c5046] text-base leading-relaxed">
+            <p className="type-body text-[#5c5046]">
               Explore what thoughtful positioning can do for your short-stay, vacation, or extended-stay property. Schedule a complimentary discovery call to discuss your floor plan, target guest profile, and revenue goals.
             </p>
-            <div className="p-4 bg-[#e8f8f6] rounded-xl border border-[#b8ebe5] text-[#005951] text-xs sm:text-sm leading-relaxed">
-              <strong>Property Owner Support:</strong> Our comprehensive design and staging packages deliver room-by-room mood boards, clickable procurement lists, floor-plan placement guides, and video walk-through coaching anywhere in California’s homes.
+            <div className="type-support p-4 bg-[#e8f8f6] rounded-xl border border-[#b8ebe5] text-[#005951]">
+              <strong className="font-semibold">Property Owner Support:</strong> Our comprehensive design and staging packages deliver room-by-room mood boards, clickable procurement lists, floor-plan placement guides, and video walk-through coaching anywhere in California’s homes.
             </div>
           </div>
         </div>
@@ -146,54 +146,54 @@ export const HostDesignView: React.FC = () => {
       <section className="py-16 sm:py-24 px-4 sm:px-8 bg-white border-b border-[#e6dfd5] text-left">
         <div className="max-w-5xl mx-auto space-y-12">
           <div className="text-center space-y-2">
-            <h2 className="font-heading font-black text-3xl sm:text-5xl text-[#282828]">
+            <h2 className="type-h2 text-[#282828]">
               Why Owners Work With Our Design Studio
             </h2>
-            <p className="text-[#6e5f53] text-base max-w-2xl mx-auto">
+            <p className="type-body text-[#6e5f53] max-w-2xl mx-auto">
               Three practical principles that turn an ordinary rental into a sought-after residence.
             </p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <div className="p-8 bg-[#faf8f5] rounded-2xl border border-[#e6dfd5] space-y-3">
-              <div className="text-sm font-bold text-[#00b7a8] tabular-nums">
+              <div className="type-support font-semibold text-[#00897d] tabular-nums">
                 01. Tailored Scope
               </div>
-              <h3 className="font-heading font-bold text-xl text-[#282828]">
+              <h3 className="type-h3 text-[#282828]">
                 Custom Design Plans
               </h3>
-              <p className="text-[#5c5046] text-sm leading-relaxed">
+              <p className="type-body text-[#5c5046]">
                 Every property and neighborhood is different. Whether you need full turnkey furnishing, room-by-room styling, or targeted upgrades, we align every selection with your architecture and budget.
               </p>
             </div>
 
             <div className="p-8 bg-[#faf8f5] rounded-2xl border border-[#e6dfd5] space-y-3">
-              <div className="text-sm font-bold text-[#00b7a8] tabular-nums">
+              <div className="type-support font-semibold text-[#00897d] tabular-nums">
                 02. Commercial Performance
               </div>
-              <h3 className="font-heading font-bold text-xl text-[#282828]">
+              <h3 className="type-h3 text-[#282828]">
                 Stronger Rates &amp; Reviews
               </h3>
-              <p className="text-[#5c5046] text-sm leading-relaxed">
+              <p className="type-body text-[#5c5046]">
                 We balance visual warmth with real-world durability—pairing inviting living areas and restful bedrooms with practical amenities that earn stronger nightly and monthly rates.
               </p>
             </div>
 
             <div className="p-8 bg-[#faf8f5] rounded-2xl border border-[#e6dfd5] space-y-3">
-              <div className="text-sm font-bold text-[#00b7a8] tabular-nums">
+              <div className="type-support font-semibold text-[#00897d] tabular-nums">
                 03. Streamlined Delivery
               </div>
-              <h3 className="font-heading font-bold text-xl text-[#282828]">
+              <h3 className="type-h3 text-[#282828]">
                 End-to-End Coordination
               </h3>
-              <p className="text-[#5c5046] text-sm leading-relaxed">
+              <p className="type-body text-[#5c5046]">
                 From initial concept boards and furniture ordering to final accessory placement, we manage the details clearly so you can focus on welcoming guests.
               </p>
             </div>
           </div>
 
           <div className="text-center pt-4 space-y-4">
-            <h3 className="font-heading font-bold text-2xl text-[#282828]">
+            <h3 className="type-h3 text-[#282828]">
               Ready to elevate your rental property? Let’s plan your project together.
             </h3>
 
@@ -201,7 +201,7 @@ export const HostDesignView: React.FC = () => {
               href="https://app.acuityscheduling.com/schedule.php?owner=19330770&appointmentType=13695494"
               target="_blank"
               rel="noopener noreferrer"
-              className="et_pb_button et_pb_button_teal inline-flex items-center gap-2 cursor-pointer shadow-lg text-sm sm:text-base font-bold uppercase tracking-wider py-4 px-8"
+              className="et_pb_button et_pb_button_teal type-btn inline-flex items-center gap-2 cursor-pointer shadow-lg py-3.5 px-7"
             >
               <Calendar className="w-5 h-5" />
               <span>Schedule Your Complimentary Design Discovery Call</span>
@@ -234,28 +234,28 @@ export const HostDesignView: React.FC = () => {
             </div>
 
             <div className="lg:col-span-8 space-y-5">
-              <span className="text-xs font-bold uppercase tracking-[4px] text-[#4de0d2]">
+              <span className="type-support font-semibold uppercase tracking-[0.14em] text-[#4de0d2] block">
                 Reviews &amp; Client Testimonial
               </span>
 
-              <blockquote className="text-[#f2ebe2] text-base sm:text-xl font-light italic leading-relaxed">
+              <blockquote className="type-body-lg text-[#f2ebe2] italic">
                 &ldquo;I wanted a flagship for my corporate housing business. It needed to be a show stopper – but I am good with numbers, not design. So, I retained Marlena.
               </blockquote>
 
-              <blockquote className="text-[#f2ebe2] text-base sm:text-xl font-light italic leading-relaxed">
+              <blockquote className="type-body-lg text-[#f2ebe2] italic">
                 We emailed photos back and forth, discussed how guests would use the space, and created something that exceeded my expectation. There’s no way I could have picked the artwork, fabrics, and patterns that blend so nicely. There’s no way I could have been so clever.
               </blockquote>
 
-              <blockquote className="text-[#f2ebe2] text-base sm:text-xl font-light italic leading-relaxed">
+              <blockquote className="type-body-lg text-[#f2ebe2] italic">
                 I’m looking forward to working with Marlena on other projects. She truly can turn a Timex into a Rolex.&rdquo;
               </blockquote>
 
-              <div className="pt-2 border-t border-white/15">
-                <div className="font-heading font-bold text-white text-lg sm:text-xl">
+              <div className="pt-3 border-t border-white/15">
+                <div className="type-h4 text-white">
                   Al Williamson
                 </div>
-                <div className="text-xs text-[#4de0d2] uppercase tracking-wider font-semibold">
-                  Leading Landlord, Business Owner • Sacramento, CA
+                <div className="type-support text-[#4de0d2] font-semibold mt-0.5">
+                  Leading Landlord, Business Owner · Sacramento, CA
                 </div>
               </div>
             </div>
@@ -277,10 +277,10 @@ export const HostDesignView: React.FC = () => {
               <X className="w-5 h-5" />
             </button>
 
-            <h3 className="text-xl font-heading font-black text-[#282828] mb-1">
+            <h3 className="type-h3 text-[#282828] mb-1.5">
               Download Free Design Secrets Guide
             </h3>
-            <p className="text-xs text-[#6e5f53] mb-5">
+            <p className="type-support text-[#6e5f53] mb-5">
               Discover the Top 5 Interior Design Secrets that Make You Money Every Day with Your Midterm Rental
             </p>
 
@@ -289,22 +289,22 @@ export const HostDesignView: React.FC = () => {
                 <div className="p-4 rounded-2xl bg-[#e8f8f6] border border-[#b8ebe5] flex items-center gap-3">
                   <CheckCircle2 className="w-7 h-7 text-[#00897d] shrink-0" />
                   <div>
-                    <h4 className="font-heading font-bold text-[#005951] text-sm">
-                      Guide Unlocked for {downloadName}!
+                    <h4 className="type-h4 text-[#005951]">
+                      Guide Unlocked for {downloadName}
                     </h4>
-                    <p className="text-xs text-[#007a70]">
-                      Copy also logged for <strong>{downloadEmail}</strong>. Review or print the 5 secrets below:
+                    <p className="type-support text-[#007a70]">
+                      Copy also logged for <strong className="font-semibold">{downloadEmail}</strong>. Review or print the 5 secrets below:
                     </p>
                   </div>
                 </div>
 
-                <div className="space-y-2.5 bg-[#faf8f5] border border-[#e6dfd5] rounded-2xl p-4">
+                <div className="space-y-3 bg-[#faf8f5] border border-[#e6dfd5] rounded-2xl p-4">
                   {HOST_DESIGN_SECRETS.map((sec) => (
-                    <div key={sec.number} className="p-3 bg-white rounded-xl border border-[#e6dfd5] space-y-1">
-                      <div className="text-xs font-black text-[#00b7a8]">
-                        SECRET #{sec.number} — <span className="text-[#282828]">{sec.title}</span>
+                    <div key={sec.number} className="p-3.5 bg-white rounded-xl border border-[#e6dfd5] space-y-1">
+                      <div className="type-label text-[#00897d] tabular-nums">
+                        0{sec.number}. <span className="text-[#282828]">{sec.title}</span>
                       </div>
-                      <p className="text-xs text-[#5c5046] leading-relaxed">{sec.description}</p>
+                      <p className="type-support text-[#5c5046]">{sec.description}</p>
                     </div>
                   ))}
                 </div>
@@ -313,9 +313,9 @@ export const HostDesignView: React.FC = () => {
                   <button
                     type="button"
                     onClick={() => window.print()}
-                    className="px-4 py-2.5 bg-[#00b7a8] hover:bg-[#009e91] text-white text-xs font-bold rounded-xl flex items-center gap-1.5 cursor-pointer"
+                    className="type-btn px-4 py-2.5 bg-[#00b7a8] hover:bg-[#009e91] text-white rounded-xl flex items-center gap-1.5 cursor-pointer"
                   >
-                    <Printer className="w-3.5 h-3.5" />
+                    <Printer className="w-4 h-4" />
                     <span>Print / Save PDF</span>
                   </button>
                   <button
@@ -324,7 +324,7 @@ export const HostDesignView: React.FC = () => {
                       setDownloadModalOpen(false);
                       setDownloadSubmitted(false);
                     }}
-                    className="px-5 py-2.5 bg-[#82634f] hover:bg-[#6e5240] text-white text-xs font-bold rounded-xl cursor-pointer"
+                    className="type-btn px-5 py-2.5 bg-[#82634f] hover:bg-[#6e5240] text-white rounded-xl cursor-pointer"
                   >
                     Done
                   </button>
@@ -333,26 +333,26 @@ export const HostDesignView: React.FC = () => {
             ) : (
               <form onSubmit={handleDownloadSubmit} className="space-y-4">
                 <div>
-                  <label className="block text-xs font-bold text-[#282828] mb-1">Your Name *</label>
+                  <label className="block type-label text-[#282828] mb-1.5">Your Name *</label>
                   <input
                     type="text"
                     required
                     value={downloadName}
                     onChange={(e) => setDownloadName(e.target.value)}
                     placeholder="e.g. Sarah Jenkins"
-                    className="w-full px-3.5 py-2.5 rounded-xl border border-[#d8cfc3] text-sm focus:border-[#00b7a8] outline-none"
+                    className="w-full h-11 px-3.5 rounded-xl border border-[#d8cfc3] text-sm sm:text-base focus:border-[#00b7a8] outline-none"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-xs font-bold text-[#282828] mb-1">Email Address *</label>
+                  <label className="block type-label text-[#282828] mb-1.5">Email Address *</label>
                   <input
                     type="email"
                     required
                     value={downloadEmail}
                     onChange={(e) => setDownloadEmail(e.target.value)}
                     placeholder="sarah@example.com"
-                    className="w-full px-3.5 py-2.5 rounded-xl border border-[#d8cfc3] text-sm focus:border-[#00b7a8] outline-none"
+                    className="w-full h-11 px-3.5 rounded-xl border border-[#d8cfc3] text-sm sm:text-base focus:border-[#00b7a8] outline-none"
                   />
                 </div>
 
@@ -360,13 +360,13 @@ export const HostDesignView: React.FC = () => {
                   <button
                     type="button"
                     onClick={() => setDownloadModalOpen(false)}
-                    className="w-1/2 py-3 border border-[#d8cfc3] text-[#5c5046] text-xs font-bold rounded-xl hover:bg-[#faf8f5] cursor-pointer"
+                    className="type-btn w-1/2 py-3 border border-[#d8cfc3] text-[#5c5046] rounded-xl hover:bg-[#faf8f5] cursor-pointer"
                   >
                     Cancel
                   </button>
                   <button
                     type="submit"
-                    className="w-1/2 py-3 bg-[#00b7a8] hover:bg-[#009e91] text-white text-xs font-bold rounded-xl shadow-xs cursor-pointer transition-colors"
+                    className="type-btn w-1/2 py-3 bg-[#00b7a8] hover:bg-[#009e91] text-white rounded-xl shadow-xs cursor-pointer transition-colors"
                   >
                     Access Download
                   </button>

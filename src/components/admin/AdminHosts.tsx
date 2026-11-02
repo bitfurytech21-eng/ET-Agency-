@@ -23,7 +23,7 @@ export const AdminHosts: React.FC<AdminHostsProps> = () => {
       id: 'host-01',
       name: 'Bill Wheelock & Dr. Marlena Uhrik',
       title: 'Founding Property Owners & Principals',
-      email: 'bill@easytravellodging.com',
+      email: 'easytravelagency@trustagent.space',
       phone: '(916) 800-3295',
       assignedPropertyIds: ['unit-91', 'unit-173', 'unit-250', 'unit-274', 'unit-335'],
       commissionSplit: '100% Direct Principal Owner',

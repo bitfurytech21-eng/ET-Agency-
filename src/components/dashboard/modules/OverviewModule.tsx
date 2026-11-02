@@ -4,26 +4,24 @@ import {
   UserAccommodationReservation,
   UserCarRentalBooking,
   UserPaymentRecord,
+  AccountActivityItem,
+  DashboardTab,
   OverviewSubView,
 } from '../types';
 import { DashboardNav, SubTabOption } from '../includes/DashboardNav';
 import { StatusBadge } from '../components/StatusBadge';
+import { EmptyState } from '../components/EmptyState';
 import {
   Building2,
   Car,
-  Coins,
   CreditCard,
   Calendar,
   Clock,
   ArrowRight,
-  ShieldCheck,
   PlusCircle,
-  FileText,
-  Key,
   MapPin,
-  CheckCircle2,
   User,
-  Activity,
+  Wallet,
 } from 'lucide-react';
 
 interface OverviewModuleProps {
@@ -31,9 +29,11 @@ interface OverviewModuleProps {
   accommodations: UserAccommodationReservation[];
   carRentals: UserCarRentalBooking[];
   payments: UserPaymentRecord[];
+  activities: AccountActivityItem[];
   onOpenBooking: () => void;
+  onExploreFleet: () => void;
   onOpenTopUpUnits: () => void;
-  onNavigateTab: (tab: any, subView?: string) => void;
+  onNavigateTab: (tab: DashboardTab) => void;
   onViewBookingDetails: (booking: UserAccommodationReservation) => void;
   onViewRentalDetails: (rental: UserCarRentalBooking) => void;
 }
@@ -43,7 +43,9 @@ export const OverviewModule: React.FC<OverviewModuleProps> = ({
   accommodations,
   carRentals,
   payments,
+  activities,
   onOpenBooking,
+  onExploreFleet,
   onOpenTopUpUnits,
   onNavigateTab,
   onViewBookingDetails,
@@ -51,370 +53,532 @@ export const OverviewModule: React.FC<OverviewModuleProps> = ({
 }) => {
   const [subView, setSubView] = useState<OverviewSubView>('index');
 
+  const activeAccommodations = accommodations.filter(
+    (b) => b.status === 'confirmed' || b.status === 'active' || b.status === 'pending',
+  );
+  const pastAccommodations = accommodations.filter(
+    (b) => b.status === 'completed' || b.status === 'cancelled',
+  );
+  const activeRentals = carRentals.filter(
+    (r) => r.status === 'confirmed' || r.status === 'active' || r.status === 'pending',
+  );
+  const settledPayments = payments.filter((p) => p.status === 'settled');
+  const pendingPayments = payments.filter((p) => p.status === 'pending');
+
   const subTabOptions: SubTabOption[] = [
-    { id: 'index', label: 'Overview Home', fileName: 'index.php' },
-    { id: 'account-summary', label: 'Account Summary', fileName: 'account-summary.php' },
-    { id: 'upcoming-bookings', label: 'Upcoming Bookings', fileName: 'upcoming-bookings.php' },
-    { id: 'recent-activity', label: 'Recent Activity', fileName: 'recent-activity.php' },
+    { id: 'index', label: 'Overview' },
+    { id: 'account-summary', label: 'Account Summary' },
+    {
+      id: 'upcoming-bookings',
+      label: 'Active & Upcoming',
+      badge: activeAccommodations.length + activeRentals.length,
+    },
+    { id: 'recent-activity', label: 'Recent Activity', badge: activities.length },
   ];
 
-  const upcomingAccommodations = accommodations.filter(
-    (a) => a.status === 'confirmed' || a.status === 'active' || a.status === 'pending'
-  );
-  const upcomingRentals = carRentals.filter(
-    (c) => c.status === 'confirmed' || c.status === 'active' || c.status === 'pending'
-  );
+  const firstName = user.name.trim().split(' ')[0] || user.name;
 
   return (
-      <div className="px-4 sm:px-8 space-y-6">
-        {/* 1. Sub-View: index.php / Overview Home */}
+    <div className="space-y-6">
+      <DashboardNav
+        activeSubTab={subView}
+        options={subTabOptions}
+        onSelectSubTab={(id) => setSubView(id as OverviewSubView)}
+      />
+
+      <div className="px-4 sm:px-8 pb-6 space-y-6">
+        {/* Personal Welcome Header */}
+        <div className="bg-[#241d18] text-white rounded-2xl p-6 sm:p-7 border border-[#3f332b] flex flex-col lg:flex-row lg:items-center justify-between gap-5">
+          <div className="space-y-2">
+            <div className="flex flex-wrap items-center gap-2 text-xs text-[#d6c7b8] tabular-nums">
+              <span>Personal Account</span>
+              <span aria-hidden="true">·</span>
+              <span className="font-mono text-[#ede5dc]">User ID: {user.id}</span>
+              <span aria-hidden="true">·</span>
+              <span className="font-mono text-[#b8a99a]">Dashboard: {user.dashboardId}</span>
+            </div>
+            <h2 className="text-2xl sm:text-3xl font-heading font-black tracking-tight text-white">
+              Welcome back, {firstName}
+            </h2>
+            <p className="text-xs sm:text-sm text-[#d6c7b8] max-w-2xl leading-relaxed">
+              Manage your furnished residence stays, vehicle reservations, invoices, and personal account settings in one secure place.
+            </p>
+          </div>
+
+          <div className="flex flex-wrap items-center gap-2.5 shrink-0">
+            <button
+              type="button"
+              onClick={onOpenBooking}
+              className="px-4 py-2.5 rounded-xl bg-[#00b7a8] hover:bg-[#009e91] text-white text-xs font-bold flex items-center gap-2 transition-colors cursor-pointer whitespace-nowrap shrink-0"
+            >
+              <Building2 className="w-4 h-4" />
+              <span>Book Residence</span>
+            </button>
+            <button
+              type="button"
+              onClick={onExploreFleet}
+              className="px-4 py-2.5 rounded-xl bg-[#322720] hover:bg-[#41332a] border border-[#4f3f34] text-white text-xs font-bold flex items-center gap-2 transition-colors cursor-pointer whitespace-nowrap shrink-0"
+            >
+              <Car className="w-4 h-4 text-[#4de0d2]" />
+              <span>Reserve Car</span>
+            </button>
+            <button
+              type="button"
+              onClick={onOpenTopUpUnits}
+              className="px-4 py-2.5 rounded-xl bg-[#322720] hover:bg-[#41332a] border border-[#4f3f34] text-[#ede5dc] text-xs font-bold flex items-center gap-2 transition-colors cursor-pointer whitespace-nowrap shrink-0"
+            >
+              <PlusCircle className="w-4 h-4 text-[#4de0d2]" />
+              <span>Add Account Funds</span>
+            </button>
+          </div>
+        </div>
+
+        {/* 4 Core KPI Summary Cards */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 tabular-nums">
+          <div className="bg-[#faf8f5] border border-[#e6dfd5] rounded-2xl p-5 flex flex-col justify-between space-y-3">
+            <div className="flex items-center justify-between text-xs text-[#6e5d50]">
+              <span className="font-semibold">Account Balance</span>
+              <Wallet className="w-4 h-4 text-[#00897d]" />
+            </div>
+            <div>
+              <div className="text-2xl font-heading font-black text-[#282828]">
+                ${user.balance_usd.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+              </div>
+              <div className="text-xs text-[#5c5046] mt-0.5">
+                {user.units_balance} Lodging Units available
+              </div>
+            </div>
+            <button
+              type="button"
+              onClick={() => onNavigateTab('payments')}
+              className="text-xs font-bold text-[#00897d] hover:underline flex items-center gap-1 cursor-pointer w-fit whitespace-nowrap"
+            >
+              <span>View ledger &amp; funds</span>
+              <ArrowRight className="w-3.5 h-3.5" />
+            </button>
+          </div>
+
+          <div className="bg-[#faf8f5] border border-[#e6dfd5] rounded-2xl p-5 flex flex-col justify-between space-y-3">
+            <div className="flex items-center justify-between text-xs text-[#6e5d50]">
+              <span className="font-semibold">Accommodation Stays</span>
+              <Building2 className="w-4 h-4 text-[#00897d]" />
+            </div>
+            <div>
+              <div className="text-2xl font-heading font-black text-[#282828]">
+                {activeAccommodations.length}
+              </div>
+              <div className="text-xs text-[#5c5046] mt-0.5">
+                Active &amp; upcoming · {pastAccommodations.length} past
+              </div>
+            </div>
+            <button
+              type="button"
+              onClick={() => onNavigateTab('accommodation')}
+              className="text-xs font-bold text-[#00897d] hover:underline flex items-center gap-1 cursor-pointer w-fit whitespace-nowrap"
+            >
+              <span>Manage stays</span>
+              <ArrowRight className="w-3.5 h-3.5" />
+            </button>
+          </div>
+
+          <div className="bg-[#faf8f5] border border-[#e6dfd5] rounded-2xl p-5 flex flex-col justify-between space-y-3">
+            <div className="flex items-center justify-between text-xs text-[#6e5d50]">
+              <span className="font-semibold">Car Rental Reservations</span>
+              <Car className="w-4 h-4 text-[#82634f]" />
+            </div>
+            <div>
+              <div className="text-2xl font-heading font-black text-[#282828]">
+                {activeRentals.length}
+              </div>
+              <div className="text-xs text-[#5c5046] mt-0.5">
+                Active &amp; upcoming · {carRentals.length} total
+              </div>
+            </div>
+            <button
+              type="button"
+              onClick={() => onNavigateTab('car-rentals')}
+              className="text-xs font-bold text-[#00897d] hover:underline flex items-center gap-1 cursor-pointer w-fit whitespace-nowrap"
+            >
+              <span>Manage fleet rentals</span>
+              <ArrowRight className="w-3.5 h-3.5" />
+            </button>
+          </div>
+
+          <div className="bg-[#faf8f5] border border-[#e6dfd5] rounded-2xl p-5 flex flex-col justify-between space-y-3">
+            <div className="flex items-center justify-between text-xs text-[#6e5d50]">
+              <span className="font-semibold">Payments &amp; Invoices</span>
+              <CreditCard className="w-4 h-4 text-[#82634f]" />
+            </div>
+            <div>
+              <div className="text-2xl font-heading font-black text-[#282828]">
+                {payments.length}
+              </div>
+              <div className="text-xs text-[#5c5046] mt-0.5">
+                {settledPayments.length} settled · {pendingPayments.length} pending verification
+              </div>
+            </div>
+            <button
+              type="button"
+              onClick={() => onNavigateTab('payments')}
+              className="text-xs font-bold text-[#00897d] hover:underline flex items-center gap-1 cursor-pointer w-fit whitespace-nowrap"
+            >
+              <span>Invoices &amp; receipts</span>
+              <ArrowRight className="w-3.5 h-3.5" />
+            </button>
+          </div>
+        </div>
+
+        {/* Sub-view: Overview (Default) */}
         {subView === 'index' && (
-          <div className="space-y-6">
-            {/* Clean Section Header */}
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[#e6dfd5] pb-4">
-              <div>
-                <h3 className="font-heading font-extrabold text-2xl text-[#282828]">
-                  Overview &amp; Account Home
-                </h3>
-                <p className="text-xs text-[#5c5046]">
-                  Real-time ledger overview for account balance, verified suites, 3D fleet rentals, and settlements.
-                </p>
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            {/* Left 2 Columns: Active & Upcoming Bookings */}
+            <div className="lg:col-span-2 space-y-4">
+              <div className="flex items-center justify-between border-b border-[#e6dfd5] pb-3">
+                <div>
+                  <h3 className="font-heading font-bold text-base text-[#282828]">
+                    Active &amp; Upcoming Reservations
+                  </h3>
+                  <p className="text-xs text-[#6e5d50]">
+                    Your current accommodation stays and scheduled fleet vehicles
+                  </p>
+                </div>
+                {(activeAccommodations.length > 0 || activeRentals.length > 0) && (
+                  <button
+                    type="button"
+                    onClick={() => setSubView('upcoming-bookings')}
+                    className="text-xs font-bold text-[#00897d] hover:underline cursor-pointer whitespace-nowrap"
+                  >
+                    View all ({activeAccommodations.length + activeRentals.length})
+                  </button>
+                )}
               </div>
 
-              <div className="flex items-center gap-2">
-                <button
-                  type="button"
-                  onClick={onOpenTopUpUnits}
-                  className="px-4 py-2 bg-[#00b7a8] hover:bg-[#009e91] text-white text-xs font-bold rounded-xl shadow-2xs cursor-pointer flex items-center gap-1.5 transition-colors"
-                >
-                  <PlusCircle className="w-3.5 h-3.5" />
-                  <span>Top-Up Balance</span>
-                </button>
-                <button
-                  type="button"
-                  onClick={onOpenBooking}
-                  className="px-4 py-2 bg-[#faf8f5] hover:bg-[#f2ece3] border border-[#d8cfc3] text-[#282828] text-xs font-bold rounded-xl cursor-pointer transition-colors flex items-center gap-1.5"
-                >
-                  <Calendar className="w-3.5 h-3.5 text-[#00b7a8]" />
-                  <span>New Stay</span>
-                </button>
-              </div>
+              {activeAccommodations.length === 0 && activeRentals.length === 0 ? (
+                <EmptyState
+                  icon={Calendar}
+                  title="No active or upcoming bookings yet"
+                  description="Your personal dashboard is ready. Reserve a furnished 1- or 2-bedroom suite or schedule a fleet vehicle delivery anytime."
+                  actionText="Browse Residences"
+                  onAction={onOpenBooking}
+                />
+              ) : (
+                <div className="space-y-3">
+                  {activeAccommodations.slice(0, 3).map((booking) => (
+                    <div
+                      key={booking.id}
+                      className="p-4 rounded-2xl border border-[#e6dfd5] bg-[#faf8f5] flex flex-col sm:flex-row sm:items-center justify-between gap-4"
+                    >
+                      <div className="space-y-1">
+                        <div className="flex flex-wrap items-center gap-2 text-xs tabular-nums">
+                          <span className="font-semibold text-[#82634f]">Accommodation</span>
+                          <span aria-hidden="true">·</span>
+                          <span className="font-mono text-[#5c5046]">{booking.id}</span>
+                          <span aria-hidden="true">·</span>
+                          <StatusBadge status={booking.status} size="sm" />
+                        </div>
+                        <h4 className="font-heading font-bold text-sm text-[#282828]">
+                          {booking.propertyTitle} ({booking.unitNumber})
+                        </h4>
+                        <div className="flex flex-wrap items-center gap-2 text-xs text-[#5c5046] tabular-nums">
+                          <span>
+                            {booking.checkIn} to {booking.checkOut}
+                          </span>
+                          <span aria-hidden="true">·</span>
+                          <span>{booking.totalNights} nights</span>
+                          <span aria-hidden="true">·</span>
+                          <span className="font-semibold text-[#282828]">
+                            ${booking.totalUsd.toLocaleString()} USD
+                          </span>
+                        </div>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => onViewBookingDetails(booking)}
+                        className="px-3.5 py-2 rounded-xl bg-white border border-[#d8cfc3] hover:border-[#00b7a8] text-xs font-bold text-[#282828] flex items-center gap-1.5 cursor-pointer whitespace-nowrap shrink-0 self-start sm:self-center"
+                      >
+                        <span>View Stay</span>
+                        <ArrowRight className="w-3.5 h-3.5 text-[#00b7a8]" />
+                      </button>
+                    </div>
+                  ))}
+
+                  {activeRentals.slice(0, 3).map((rental) => (
+                    <div
+                      key={rental.id}
+                      className="p-4 rounded-2xl border border-[#e6dfd5] bg-[#faf8f5] flex flex-col sm:flex-row sm:items-center justify-between gap-4"
+                    >
+                      <div className="space-y-1">
+                        <div className="flex flex-wrap items-center gap-2 text-xs tabular-nums">
+                          <span className="font-semibold text-[#00897d]">Car Rental</span>
+                          <span aria-hidden="true">·</span>
+                          <span className="font-mono text-[#5c5046]">{rental.id}</span>
+                          <span aria-hidden="true">·</span>
+                          <StatusBadge status={rental.status} size="sm" />
+                        </div>
+                        <h4 className="font-heading font-bold text-sm text-[#282828]">
+                          {rental.year} {rental.vehicleName} ({rental.colorName})
+                        </h4>
+                        <div className="flex flex-wrap items-center gap-2 text-xs text-[#5c5046] tabular-nums">
+                          <span>
+                            {rental.pickupDate} to {rental.returnDate}
+                          </span>
+                          <span aria-hidden="true">·</span>
+                          <span>{rental.totalDays} days</span>
+                          <span aria-hidden="true">·</span>
+                          <span className="font-semibold text-[#282828]">
+                            ${rental.totalUsd.toLocaleString()} USD
+                          </span>
+                        </div>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => onViewRentalDetails(rental)}
+                        className="px-3.5 py-2 rounded-xl bg-white border border-[#d8cfc3] hover:border-[#00b7a8] text-xs font-bold text-[#282828] flex items-center gap-1.5 cursor-pointer whitespace-nowrap shrink-0 self-start sm:self-center"
+                      >
+                        <span>View Rental</span>
+                        <ArrowRight className="w-3.5 h-3.5 text-[#00b7a8]" />
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
 
-            {/* Quick KPI Stat Cards */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-              {/* Card 1: Account Balance */}
-              <div className="p-5 bg-white border border-[#e6dfd5] rounded-2xl shadow-2xs space-y-3">
+            {/* Right Column: Registered Profile & Recent Activity */}
+            <div className="space-y-6">
+              <div className="p-5 rounded-2xl border border-[#e6dfd5] bg-[#faf8f5] space-y-4">
                 <div className="flex items-center justify-between">
-                  <span className="text-[11px] font-bold uppercase tracking-wider text-[#857568]">
-                    Account Balance
-                  </span>
-                  <div className="w-8 h-8 rounded-lg bg-[#faf8f5] border border-[#e6dfd5] flex items-center justify-center text-[#00b7a8]">
-                    <CreditCard className="w-4 h-4" />
+                  <div className="flex items-center gap-2">
+                    <User className="w-4 h-4 text-[#00897d]" />
+                    <h3 className="font-heading font-bold text-sm text-[#282828]">
+                      Registered Profile
+                    </h3>
                   </div>
+                  <button
+                    type="button"
+                    onClick={() => onNavigateTab('profile')}
+                    className="text-xs font-bold text-[#00897d] hover:underline cursor-pointer whitespace-nowrap"
+                  >
+                    Edit Profile
+                  </button>
                 </div>
-                <div>
-                  <div className="text-3xl font-heading font-black text-[#282828] tabular-nums">
-                    ${user.balance_usd.toLocaleString()}{' '}
-                    <span className="text-xs font-bold text-[#00b7a8]">USD</span>
+
+                <dl className="space-y-2.5 text-xs">
+                  <div className="flex justify-between gap-3">
+                    <dt className="text-[#6e5d50]">Full Name</dt>
+                    <dd className="font-bold text-[#282828] text-right">{user.name}</dd>
                   </div>
-                  <span className="text-xs text-[#5c5046]">
-                    Available for housing &amp; fleet rentals
-                  </span>
-                </div>
-                <button
-                  type="button"
-                  onClick={onOpenTopUpUnits}
-                  className="w-full py-1.5 bg-[#faf8f5] hover:bg-[#f2ece3] text-[#282828] text-xs font-semibold rounded-lg border border-[#d8cfc3] flex items-center justify-center gap-1 cursor-pointer transition-colors"
-                >
-                  <PlusCircle className="w-3.5 h-3.5 text-[#00b7a8]" />
-                  <span>Top-Up Balance</span>
-                </button>
+                  <div className="flex justify-between gap-3">
+                    <dt className="text-[#6e5d50]">Email</dt>
+                    <dd className="font-semibold text-[#282828] text-right truncate">{user.email}</dd>
+                  </div>
+                  <div className="flex justify-between gap-3">
+                    <dt className="text-[#6e5d50]">Phone</dt>
+                    <dd className="font-semibold text-[#282828] text-right tabular-nums">
+                      {user.phone || 'Not provided'}
+                    </dd>
+                  </div>
+                  <div className="flex justify-between gap-3">
+                    <dt className="text-[#6e5d50]">Organization</dt>
+                    <dd className="font-semibold text-[#282828] text-right truncate">
+                      {user.company || 'Personal Account'}
+                    </dd>
+                  </div>
+                  <div className="flex justify-between gap-3">
+                    <dt className="text-[#6e5d50]">Member Since</dt>
+                    <dd className="font-semibold text-[#282828] text-right tabular-nums">
+                      {user.memberSince}
+                    </dd>
+                  </div>
+                </dl>
               </div>
 
-              {/* Card 2: Housing Stays */}
-              <div className="p-5 bg-white border border-[#e6dfd5] rounded-2xl shadow-2xs space-y-3">
+              <div className="p-5 rounded-2xl border border-[#e6dfd5] bg-[#faf8f5] space-y-3">
                 <div className="flex items-center justify-between">
-                  <span className="text-[11px] font-bold uppercase tracking-wider text-[#857568]">
-                    Reserved Suites
-                  </span>
-                  <div className="w-8 h-8 rounded-lg bg-[#faf8f5] border border-[#e6dfd5] flex items-center justify-center text-[#82634f]">
-                    <Building2 className="w-4 h-4" />
-                  </div>
+                  <h3 className="font-heading font-bold text-sm text-[#282828]">Recent Activity</h3>
+                  {activities.length > 0 && (
+                    <button
+                      type="button"
+                      onClick={() => setSubView('recent-activity')}
+                      className="text-xs font-bold text-[#00897d] hover:underline cursor-pointer whitespace-nowrap"
+                    >
+                      All activity
+                    </button>
+                  )}
                 </div>
-                <div>
-                  <div className="text-3xl font-heading font-black text-[#282828] tabular-nums">
-                    {upcomingAccommodations.length}{' '}
-                    <span className="text-xs font-semibold text-[#857568]">Active/Upcoming</span>
-                  </div>
-                  <span className="text-xs text-[#5c5046]">
-                    Across our verified US portfolio
-                  </span>
-                </div>
-                <button
-                  type="button"
-                  onClick={() => onNavigateTab('accommodation')}
-                  className="w-full py-1.5 bg-[#faf8f5] hover:bg-[#f2ece3] text-[#282828] text-xs font-semibold rounded-lg border border-[#d8cfc3] flex items-center justify-center gap-1 cursor-pointer transition-colors"
-                >
-                  <span>View Suites</span>
-                  <ArrowRight className="w-3.5 h-3.5 text-[#82634f]" />
-                </button>
-              </div>
 
-              {/* Card 3: 3D Fleet Rentals */}
-              <div className="p-5 bg-white border border-[#e6dfd5] rounded-2xl shadow-2xs space-y-3">
-                <div className="flex items-center justify-between">
-                  <span className="text-[11px] font-bold uppercase tracking-wider text-[#857568]">
-                    3D Fleet Vehicles
-                  </span>
-                  <div className="w-8 h-8 rounded-lg bg-[#faf8f5] border border-[#e6dfd5] flex items-center justify-center text-[#00b7a8]">
-                    <Car className="w-4 h-4" />
+                {activities.length === 0 ? (
+                  <p className="text-xs text-[#6e5d50] py-2">
+                    Account initialized on {user.memberSince}. New reservations and payment updates will appear here.
+                  </p>
+                ) : (
+                  <div className="divide-y divide-[#e6dfd5]">
+                    {activities.slice(0, 4).map((act) => (
+                      <div key={act.id} className="py-2.5 first:pt-0 last:pb-0 space-y-0.5">
+                        <div className="flex items-center justify-between gap-2 text-xs">
+                          <span className="font-bold text-[#282828] truncate">{act.title}</span>
+                          <span className="text-[11px] text-[#857568] tabular-nums shrink-0">
+                            {act.timestamp.split('T')[0]}
+                          </span>
+                        </div>
+                        <p className="text-[11px] text-[#5c5046] line-clamp-2">{act.description}</p>
+                      </div>
+                    ))}
                   </div>
-                </div>
-                <div>
-                  <div className="text-3xl font-heading font-black text-[#282828] tabular-nums">
-                    {upcomingRentals.length}{' '}
-                    <span className="text-xs font-semibold text-[#857568]">Reservations</span>
-                  </div>
-                  <span className="text-xs text-[#5c5046]">
-                    Airport &amp; suite delivery dispatch
-                  </span>
-                </div>
-                <button
-                  type="button"
-                  onClick={() => onNavigateTab('car-rentals')}
-                  className="w-full py-1.5 bg-[#faf8f5] hover:bg-[#f2ece3] text-[#282828] text-xs font-semibold rounded-lg border border-[#d8cfc3] flex items-center justify-center gap-1 cursor-pointer transition-colors"
-                >
-                  <span>Fleet Bookings</span>
-                  <ArrowRight className="w-3.5 h-3.5 text-[#00b7a8]" />
-                </button>
-              </div>
-
-              {/* Card 4: Payments / Ledger */}
-              <div className="p-5 bg-white border border-[#e6dfd5] rounded-2xl shadow-2xs space-y-3">
-                <div className="flex items-center justify-between">
-                  <span className="text-[11px] font-bold uppercase tracking-wider text-[#857568]">
-                    Payments Settled
-                  </span>
-                  <div className="w-8 h-8 rounded-lg bg-[#faf8f5] border border-[#e6dfd5] flex items-center justify-center text-emerald-600">
-                    <CreditCard className="w-4 h-4" />
-                  </div>
-                </div>
-                <div>
-                  <div className="text-3xl font-heading font-black text-[#282828] tabular-nums">
-                    {payments.length}{' '}
-                    <span className="text-xs font-semibold text-[#857568]">Invoices/Receipts</span>
-                  </div>
-                  <span className="text-xs text-emerald-700 font-semibold flex items-center gap-1">
-                    <CheckCircle2 className="w-3.5 h-3.5" />
-                    <span>Per Diem / CPA Reconciled</span>
-                  </span>
-                </div>
-                <button
-                  type="button"
-                  onClick={() => onNavigateTab('payments')}
-                  className="w-full py-1.5 bg-[#faf8f5] hover:bg-[#f2ece3] text-[#282828] text-xs font-semibold rounded-lg border border-[#d8cfc3] flex items-center justify-center gap-1 cursor-pointer transition-colors"
-                >
-                  <span>Invoices &amp; Receipts</span>
-                  <ArrowRight className="w-3.5 h-3.5 text-emerald-700" />
-                </button>
+                )}
               </div>
             </div>
           </div>
         )}
 
-        {/* 2. Sub-View: account-summary.php */}
+        {/* Sub-view: Account Summary */}
         {subView === 'account-summary' && (
-          <div className="bg-white border border-[#e6dfd5] rounded-3xl p-6 sm:p-8 space-y-6 shadow-xs">
-            <div className="border-b border-[#e6dfd5] pb-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-              <div>
-                <div className="flex items-center gap-2">
-                  <span className="text-xs font-bold uppercase tracking-wider text-[#00b7a8]">Corporate Tier Profile</span>
-                  <span className="px-2 py-0.5 rounded bg-emerald-100 text-emerald-800 text-[10px] font-bold">Verified Account</span>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="p-6 rounded-2xl border border-[#e6dfd5] bg-[#faf8f5] space-y-4">
+              <h3 className="font-heading font-bold text-base text-[#282828]">
+                Account &amp; Dashboard Identity
+              </h3>
+              <dl className="space-y-3 text-xs tabular-nums">
+                <div className="flex justify-between gap-4 border-b border-[#efe9e0] pb-2.5">
+                  <dt className="text-[#6e5d50]">Account Holder</dt>
+                  <dd className="font-bold text-[#282828]">{user.name}</dd>
                 </div>
-                <h3 className="text-2xl font-heading font-black text-[#282828] mt-1">
-                  Account Summary (account-summary.php)
-                </h3>
-                <p className="text-xs text-[#5c5046]">
-                  Complete member portfolio breakdown, corporate partner credentials, and balance entitlements.
-                </p>
-              </div>
-
-              <button
-                type="button"
-                onClick={onOpenTopUpUnits}
-                className="px-4 py-2 bg-[#00b7a8] hover:bg-[#009e91] text-white text-xs font-bold rounded-xl shadow-2xs cursor-pointer"
-              >
-                + Top-Up Balance
-              </button>
+                <div className="flex justify-between gap-4 border-b border-[#efe9e0] pb-2.5">
+                  <dt className="text-[#6e5d50]">Unique User ID</dt>
+                  <dd className="font-mono font-bold text-[#282828]">{user.id}</dd>
+                </div>
+                <div className="flex justify-between gap-4 border-b border-[#efe9e0] pb-2.5">
+                  <dt className="text-[#6e5d50]">Personal Dashboard ID</dt>
+                  <dd className="font-mono font-bold text-[#282828]">{user.dashboardId}</dd>
+                </div>
+                <div className="flex justify-between gap-4 border-b border-[#efe9e0] pb-2.5">
+                  <dt className="text-[#6e5d50]">Registered Email</dt>
+                  <dd className="font-semibold text-[#282828]">{user.email}</dd>
+                </div>
+                <div className="flex justify-between gap-4 border-b border-[#efe9e0] pb-2.5">
+                  <dt className="text-[#6e5d50]">Two-Factor Authentication</dt>
+                  <dd className="font-bold text-[#282828]">
+                    {user.twoFactorEnabled ? 'Enabled' : 'Standard Password Protection'}
+                  </dd>
+                </div>
+                <div className="flex justify-between gap-4">
+                  <dt className="text-[#6e5d50]">Preferred Timezone</dt>
+                  <dd className="font-semibold text-[#282828]">{user.timezone}</dd>
+                </div>
+              </dl>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 text-xs">
-              <div className="p-5 bg-[#faf8f5] rounded-2xl border border-[#efe9e0] space-y-2">
-                <span className="text-[11px] font-bold uppercase text-[#857568]">Client Name</span>
-                <span className="font-bold text-base text-[#282828] block">{user.name}</span>
-                <span className="text-[#5c5046]">{user.role}</span>
-              </div>
-
-              <div className="p-5 bg-[#faf8f5] rounded-2xl border border-[#efe9e0] space-y-2">
-                <span className="text-[11px] font-bold uppercase text-[#857568]">Enterprise Partner</span>
-                <span className="font-bold text-base text-[#282828] block">{user.company}</span>
-                <span className="text-[#5c5046]">Client ID: <strong className="font-mono">{user.id}</strong></span>
-              </div>
-
-              <div className="p-5 bg-[#faf8f5] rounded-2xl border border-[#efe9e0] space-y-2">
-                <span className="text-[11px] font-bold uppercase text-[#857568]">Membership Status</span>
-                <span className="font-bold text-base text-[#00b7a8] block">{user.tier}</span>
-                <span className="text-[#5c5046]">Member Since: {user.memberSince}</span>
-              </div>
-            </div>
-
-            <div className="p-6 bg-[#faf8f5] rounded-2xl border border-[#efe9e0] space-y-4">
-              <h4 className="font-heading font-bold text-base text-[#282828]">Balance &amp; Credit Ledger</h4>
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-xs">
-                <div>
-                  <span className="text-[#857568] block">Account USD Balance</span>
-                  <span className="text-2xl font-black text-[#00897d]">${user.balance_usd.toLocaleString()} USD</span>
+            <div className="p-6 rounded-2xl border border-[#e6dfd5] bg-[#faf8f5] space-y-4 tabular-nums">
+              <h3 className="font-heading font-bold text-base text-[#282828]">
+                Booking &amp; Financial Totals
+              </h3>
+              <dl className="space-y-3 text-xs">
+                <div className="flex justify-between gap-4 border-b border-[#efe9e0] pb-2.5">
+                  <dt className="text-[#6e5d50]">Available USD Balance</dt>
+                  <dd className="font-bold text-[#00897d]">
+                    ${user.balance_usd.toLocaleString('en-US', { minimumFractionDigits: 2 })} USD
+                  </dd>
                 </div>
-                <div>
-                  <span className="text-[#857568] block">Preferred Settlement Currency</span>
-                  <span className="text-2xl font-black text-[#282828]">{user.preferredCurrency}</span>
+                <div className="flex justify-between gap-4 border-b border-[#efe9e0] pb-2.5">
+                  <dt className="text-[#6e5d50]">Available Lodging Units</dt>
+                  <dd className="font-bold text-[#282828]">{user.units_balance} Units</dd>
                 </div>
-                <div>
-                  <span className="text-[#857568] block">Security Hold Status</span>
-                  <span className="text-2xl font-black text-emerald-700">Clear ($0 Hold)</span>
+                <div className="flex justify-between gap-4 border-b border-[#efe9e0] pb-2.5">
+                  <dt className="text-[#6e5d50]">Total Residence Reservations</dt>
+                  <dd className="font-bold text-[#282828]">{accommodations.length}</dd>
                 </div>
-              </div>
+                <div className="flex justify-between gap-4 border-b border-[#efe9e0] pb-2.5">
+                  <dt className="text-[#6e5d50]">Total Car Rental Reservations</dt>
+                  <dd className="font-bold text-[#282828]">{carRentals.length}</dd>
+                </div>
+                <div className="flex justify-between gap-4">
+                  <dt className="text-[#6e5d50]">Recorded Invoices &amp; Transfers</dt>
+                  <dd className="font-bold text-[#282828]">{payments.length}</dd>
+                </div>
+              </dl>
             </div>
           </div>
         )}
 
-        {/* 3. Sub-View: upcoming-bookings.php */}
+        {/* Sub-view: Upcoming Bookings */}
         {subView === 'upcoming-bookings' && (
           <div className="space-y-4">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[#e6dfd5] pb-3">
-              <div>
-                <h3 className="font-heading font-bold text-lg text-[#282828]">
-                  Upcoming &amp; Active Stays (upcoming-bookings.php)
-                </h3>
-                <p className="text-xs text-[#5c5046]">
-                  Keyless smart-lock codes, arrival timetables, and curbside fleet vehicle delivery.
-                </p>
-              </div>
-              <button
-                type="button"
-                onClick={onOpenBooking}
-                className="text-xs font-bold text-[#00b7a8] hover:underline"
-              >
-                + Book Another Residence
-              </button>
-            </div>
-
-            {upcomingAccommodations.length === 0 && upcomingRentals.length === 0 ? (
-              <div className="p-8 text-center bg-white border border-[#e6dfd5] rounded-2xl space-y-2">
-                <p className="text-xs text-[#5c5046]">No active or upcoming bookings currently found.</p>
-                <button
-                  type="button"
-                  onClick={onOpenBooking}
-                  className="px-4 py-2 bg-[#00b7a8] text-white text-xs font-bold rounded-xl"
-                >
-                  Explore Nationwide Suites
-                </button>
-              </div>
+            <h3 className="font-heading font-bold text-base text-[#282828]">
+              All Active &amp; Upcoming Reservations
+            </h3>
+            {activeAccommodations.length === 0 && activeRentals.length === 0 ? (
+              <EmptyState
+                icon={Calendar}
+                title="No active or upcoming bookings"
+                description="You do not currently have any active accommodation stays or car rental reservations."
+                actionText="Book a Residence"
+                onAction={onOpenBooking}
+              />
             ) : (
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {upcomingAccommodations.map((acc) => (
+              <div className="space-y-3">
+                {activeAccommodations.map((b) => (
                   <div
-                    key={acc.id}
-                    className="p-5 bg-white border border-[#e6dfd5] rounded-2xl space-y-3 hover:border-[#00b7a8] transition-all shadow-2xs"
+                    key={b.id}
+                    className="p-4 rounded-2xl border border-[#e6dfd5] bg-[#faf8f5] flex flex-col sm:flex-row sm:items-center justify-between gap-4"
                   >
-                    <div className="flex items-start justify-between gap-3">
-                      <div>
-                        <div className="flex items-center gap-2">
-                          <StatusBadge status={acc.status} size="sm" />
-                          <span className="text-[11px] font-mono text-[#857568]">{acc.id}</span>
-                        </div>
-                        <h4 className="font-heading font-bold text-base text-[#282828] mt-1">
-                          {acc.propertyTitle} — Unit {acc.unitNumber}
-                        </h4>
-                        <div className="flex items-center gap-1 text-xs text-[#5c5046]">
-                          <MapPin className="w-3.5 h-3.5 text-[#00897d]" />
-                          <span>{acc.location}</span>
-                        </div>
+                    <div className="space-y-1">
+                      <div className="flex items-center gap-2 text-xs tabular-nums">
+                        <span className="font-mono font-bold text-[#82634f]">{b.id}</span>
+                        <span aria-hidden="true">·</span>
+                        <StatusBadge status={b.status} size="sm" />
                       </div>
-                      <span className="text-sm font-black text-[#00897d] tabular-nums">
-                        ${acc.totalUsd.toLocaleString()}
-                      </span>
-                    </div>
-
-                    <div className="p-3 bg-[#faf8f5] rounded-xl border border-[#efe9e0] text-xs grid grid-cols-2 gap-2">
-                      <div>
-                        <span className="text-[10px] text-[#857568] font-bold block uppercase">Check-In</span>
-                        <span className="font-semibold text-[#282828]">{acc.checkIn}</span>
-                      </div>
-                      <div>
-                        <span className="text-[10px] text-[#857568] font-bold block uppercase">Smart-Lock Code</span>
-                        <span className="font-mono font-bold text-amber-700 flex items-center gap-1">
-                          <Key className="w-3 h-3" />
-                          {acc.accessCode}
+                      <h4 className="font-heading font-bold text-sm text-[#282828]">
+                        {b.propertyTitle} ({b.unitNumber})
+                      </h4>
+                      <div className="flex flex-wrap items-center gap-2 text-xs text-[#5c5046] tabular-nums">
+                        <MapPin className="w-3.5 h-3.5 text-[#00897d]" />
+                        <span>{b.location}</span>
+                        <span aria-hidden="true">·</span>
+                        <span>
+                          {b.checkIn} – {b.checkOut}
                         </span>
                       </div>
                     </div>
-
-                    <div className="flex justify-end">
-                      <button
-                        type="button"
-                        onClick={() => onViewBookingDetails(acc)}
-                        className="text-xs font-bold text-[#00b7a8] hover:underline flex items-center gap-1 cursor-pointer"
-                      >
-                        <span>View Check-In Instructions</span>
-                        <ArrowRight className="w-3.5 h-3.5" />
-                      </button>
-                    </div>
+                    <button
+                      type="button"
+                      onClick={() => onViewBookingDetails(b)}
+                      className="px-4 py-2 rounded-xl bg-[#00b7a8] hover:bg-[#009e91] text-white text-xs font-bold cursor-pointer whitespace-nowrap shrink-0"
+                    >
+                      Open Stay Details
+                    </button>
                   </div>
                 ))}
 
-                {upcomingRentals.map((veh) => (
+                {activeRentals.map((r) => (
                   <div
-                    key={veh.id}
-                    className="p-5 bg-white border border-[#e6dfd5] rounded-2xl space-y-3 hover:border-[#00b7a8] transition-all shadow-2xs"
+                    key={r.id}
+                    className="p-4 rounded-2xl border border-[#e6dfd5] bg-[#faf8f5] flex flex-col sm:flex-row sm:items-center justify-between gap-4"
                   >
-                    <div className="flex items-start justify-between gap-3">
-                      <div>
-                        <div className="flex items-center gap-2">
-                          <StatusBadge status={veh.status} size="sm" />
-                          <span className="text-[11px] font-mono text-[#857568]">{veh.id}</span>
-                        </div>
-                        <h4 className="font-heading font-bold text-base text-[#282828] mt-1">
-                          {veh.year} {veh.vehicleName}
-                        </h4>
-                        <span className="text-xs text-[#00897d] font-bold">{veh.category}</span>
+                    <div className="space-y-1">
+                      <div className="flex items-center gap-2 text-xs tabular-nums">
+                        <span className="font-mono font-bold text-[#00897d]">{r.id}</span>
+                        <span aria-hidden="true">·</span>
+                        <StatusBadge status={r.status} size="sm" />
                       </div>
-                      <span className="text-sm font-black text-[#00897d] tabular-nums">
-                        ${veh.totalUsd.toLocaleString()}
-                      </span>
-                    </div>
-
-                    <div className="p-3 bg-[#faf8f5] rounded-xl border border-[#efe9e0] text-xs space-y-1">
-                      <div className="flex items-center justify-between">
-                        <span className="text-[10px] text-[#857568] font-bold uppercase">Pickup Date</span>
-                        <span className="font-semibold text-[#282828]">{veh.pickupDate}</span>
-                      </div>
-                      <div className="text-[11px] text-[#5c5046] truncate">
-                        Location: <strong>{veh.pickupLocation}</strong>
+                      <h4 className="font-heading font-bold text-sm text-[#282828]">
+                        {r.year} {r.vehicleName} ({r.colorName})
+                      </h4>
+                      <div className="flex flex-wrap items-center gap-2 text-xs text-[#5c5046] tabular-nums">
+                        <MapPin className="w-3.5 h-3.5 text-[#00897d]" />
+                        <span>{r.pickupLocation}</span>
+                        <span aria-hidden="true">·</span>
+                        <span>
+                          {r.pickupDate} – {r.returnDate}
+                        </span>
                       </div>
                     </div>
-
-                    <div className="flex justify-end">
-                      <button
-                        type="button"
-                        onClick={() => onViewRentalDetails(veh)}
-                        className="text-xs font-bold text-[#00b7a8] hover:underline flex items-center gap-1 cursor-pointer"
-                      >
-                        <span>View Handover Details</span>
-                        <ArrowRight className="w-3.5 h-3.5" />
-                      </button>
-                    </div>
+                    <button
+                      type="button"
+                      onClick={() => onViewRentalDetails(r)}
+                      className="px-4 py-2 rounded-xl bg-[#00b7a8] hover:bg-[#009e91] text-white text-xs font-bold cursor-pointer whitespace-nowrap shrink-0"
+                    >
+                      Open Rental Details
+                    </button>
                   </div>
                 ))}
               </div>
@@ -422,61 +586,52 @@ export const OverviewModule: React.FC<OverviewModuleProps> = ({
           </div>
         )}
 
-        {/* 4. Sub-View: recent-activity.php */}
+        {/* Sub-view: Recent Activity */}
         {subView === 'recent-activity' && (
-          <div className="bg-white border border-[#e6dfd5] rounded-3xl p-6 sm:p-8 shadow-xs space-y-6 max-w-3xl">
-            <div className="border-b border-[#e6dfd5] pb-4">
-              <h3 className="font-heading font-bold text-xl text-[#282828]">
-                Recent Account Activity (recent-activity.php)
-              </h3>
-              <p className="text-xs text-[#5c5046]">
-                Audit log of transactions, key code dispatches, and verification milestones.
-              </p>
-            </div>
-
-            <div className="divide-y divide-[#efe9e0] text-xs space-y-2">
-              <div className="py-4 flex items-center justify-between">
-                <div className="flex items-center gap-3.5">
-                  <div className="w-9 h-9 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-700 flex items-center justify-center font-bold">
-                    ✓
+          <div className="space-y-4">
+            <h3 className="font-heading font-bold text-base text-[#282828]">
+              Account Activity History
+            </h3>
+            {activities.length === 0 ? (
+              <EmptyState
+                icon={Clock}
+                title="No activity recorded yet"
+                description="All bookings, car rental reservations, payment verifications, and support tickets on your account will appear chronologically here."
+              />
+            ) : (
+              <div className="divide-y divide-[#e6dfd5] border border-[#e6dfd5] rounded-2xl bg-[#faf8f5] px-5">
+                {activities.map((act) => (
+                  <div
+                    key={act.id}
+                    className="py-4 flex flex-col sm:flex-row sm:items-center justify-between gap-2"
+                  >
+                    <div className="space-y-0.5">
+                      <div className="flex flex-wrap items-center gap-2 text-xs">
+                        <span className="font-bold text-[#282828]">{act.title}</span>
+                        {act.status && (
+                          <>
+                            <span className="text-[#857568]" aria-hidden="true">·</span>
+                            <StatusBadge status={act.status} size="sm" />
+                          </>
+                        )}
+                      </div>
+                      <p className="text-xs text-[#5c5046]">{act.description}</p>
+                    </div>
+                    <div className="sm:text-right text-xs text-[#857568] tabular-nums shrink-0">
+                      {act.amountUsd !== undefined && act.amountUsd !== 0 && (
+                        <div className="font-bold text-[#282828]">
+                          ${Math.abs(act.amountUsd).toLocaleString()} USD
+                        </div>
+                      )}
+                      <div>{act.timestamp.replace('T', ' ').slice(0, 16)}</div>
+                    </div>
                   </div>
-                  <div>
-                    <span className="font-bold text-sm text-[#282828] block">Corporate Unit Remittance Verified</span>
-                    <span className="text-[#857568]">Wire reference settled and credited to client balance</span>
-                  </div>
-                </div>
-                <span className="text-[#857568] font-medium">Just now</span>
+                ))}
               </div>
-
-              <div className="py-4 flex items-center justify-between">
-                <div className="flex items-center gap-3.5">
-                  <div className="w-9 h-9 rounded-xl bg-[#faf8f5] border border-[#efe9e0] text-[#00b7a8] flex items-center justify-center font-bold text-base">
-                    🔑
-                  </div>
-                  <div>
-                    <span className="font-bold text-sm text-[#282828] block">Smart-Lock Digital Key Generated</span>
-                    <span className="text-[#857568]">Unique entry pin issued for upcoming arrival</span>
-                  </div>
-                </div>
-                <span className="text-[#857568] font-medium">Yesterday</span>
-              </div>
-
-              <div className="py-4 flex items-center justify-between">
-                <div className="flex items-center gap-3.5">
-                  <div className="w-9 h-9 rounded-xl bg-[#faf8f5] border border-[#efe9e0] text-[#82634f] flex items-center justify-center font-bold text-base">
-                    📄
-                  </div>
-                  <div>
-                    <span className="font-bold text-sm text-[#282828] block">Consolidated Monthly Lease Agreement Generated</span>
-                    <span className="text-[#857568]">Tax-exempt 30+ day corporate housing packet ready</span>
-                  </div>
-                </div>
-                <span className="text-[#857568] font-medium">3 days ago</span>
-              </div>
-            </div>
+            )}
           </div>
         )}
       </div>
+    </div>
   );
 };
-

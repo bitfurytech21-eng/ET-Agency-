@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Mail, Phone, Compass } from 'lucide-react';
+import { Compass } from 'lucide-react';
 import { LivePhotoBackground } from './LivePhotoBackground';
 
 interface AreaGuideSectionProps {
@@ -8,8 +8,7 @@ interface AreaGuideSectionProps {
 }
 
 export const AreaGuideSection: React.FC<AreaGuideSectionProps> = ({
-  onOpenBooking,
-  onOpenDiscoveryCall
+  onOpenBooking
 }) => {
   // State for Divi accordion toggles
   const [openToggles, setOpenToggles] = useState<Record<number, boolean>>({
@@ -33,15 +32,15 @@ export const AreaGuideSection: React.FC<AreaGuideSectionProps> = ({
         <div className="max-w-[1200px] mx-auto px-4 sm:px-8 text-left space-y-8">
           <div className="max-w-3xl space-y-3">
             <div className="space-y-1.5">
-              <span className="text-[11px] font-bold uppercase tracking-[0.22em] text-[#82634f] flex items-center gap-2">
-                <Compass className="w-3.5 h-3.5 text-[#00897d]" />
+              <span className="type-support font-semibold uppercase tracking-[0.08em] text-[#82634f] flex items-center gap-2">
+                <Compass className="w-4 h-4 text-[#00897d]" />
                 Nationwide Destination &amp; Logistics Guide
               </span>
-              <h2 className="font-heading font-extrabold text-3xl sm:text-4xl text-[#282828] leading-[1.2] tracking-tight">
+              <h2 className="type-h2 text-[#282828]">
                 Explore Premier Destinations &amp; <span className="text-[#00897d]">Coast-to-Coast Corridors</span>
               </h2>
             </div>
-            <p className="text-sm sm:text-base text-[#5c5046] leading-relaxed pt-1">
+            <p className="type-body text-[#5c5046] pt-1">
               Whether you are traveling for healthcare assignments, corporate consulting, government relocations, or family transitions, Easy Travel Lodging coordinates move-in-ready furnished residences, airport fleet delivery, and attentive concierge support across California’s homes.
             </p>
           </div>
@@ -53,7 +52,7 @@ export const AreaGuideSection: React.FC<AreaGuideSectionProps> = ({
               <div className="et_pb_toggle border border-[#dfd7cc]">
                 <button
                   onClick={() => toggleItem(0)}
-                  className={`w-full flex items-center justify-between p-4 sm:p-5 font-heading font-bold text-lg text-left transition-colors cursor-pointer ${
+                  className={`w-full flex items-center justify-between p-4 sm:p-5 type-h4 text-left transition-colors cursor-pointer ${
                     openToggles[0] ? 'bg-white text-[#282828]' : 'bg-[#faf8f5] text-[#282828]'
                   }`}
                 >
@@ -61,7 +60,7 @@ export const AreaGuideSection: React.FC<AreaGuideSectionProps> = ({
                   <span className="text-xl font-mono text-[#00b7a8]">{openToggles[0] ? '–' : '+'}</span>
                 </button>
                 {openToggles[0] && (
-                  <div className="p-5 text-sm text-[#3d352e] space-y-3 bg-white border-t border-[#ebe4da]">
+                  <div className="p-5 type-body text-[#3d352e] space-y-3 bg-white border-t border-[#ebe4da]">
                     <ul className="list-disc pl-5 space-y-2 leading-relaxed">
                       <li>Explore diverse international and farm-to-fork kitchens nearby, including Organic Delights Cafe and Restaurant.</li>
                       <li>Neighborhood favorites include Famous Burgers &amp; Brew, Rudy’s Hideaway Lobster House, Samurai Sushi, El Forno Classico, Formaggio Taverna &amp; Patio, Brookfields, Old Spaghetti Factory, Oz Korean BBQ, Casa Ramos, and Mimosa House.</li>
@@ -74,7 +73,7 @@ export const AreaGuideSection: React.FC<AreaGuideSectionProps> = ({
               <div className="et_pb_toggle border border-[#dfd7cc]">
                 <button
                   onClick={() => toggleItem(1)}
-                  className={`w-full flex items-center justify-between p-4 sm:p-5 font-heading font-bold text-lg text-left transition-colors cursor-pointer ${
+                  className={`w-full flex items-center justify-between p-4 sm:p-5 type-h4 text-left transition-colors cursor-pointer ${
                     openToggles[1] ? 'bg-white text-[#282828]' : 'bg-[#82634f] text-[#ffffff]'
                   }`}
                 >
@@ -82,7 +81,7 @@ export const AreaGuideSection: React.FC<AreaGuideSectionProps> = ({
                   <span className="text-xl font-mono">{openToggles[1] ? '–' : '+'}</span>
                 </button>
                 {openToggles[1] && (
-                  <div className="p-5 text-sm text-[#3d352e] space-y-3 bg-white border-t border-[#ebe4da]">
+                  <div className="p-5 type-body text-[#3d352e] space-y-3 bg-white border-t border-[#ebe4da]">
                     <ul className="list-disc pl-5 space-y-2 leading-relaxed">
                       <li>Visit the Rancho Cordova Barrel District—home to six independent craft breweries, local taprooms, and artisan beverage makers.</li>
                     </ul>
@@ -94,7 +93,7 @@ export const AreaGuideSection: React.FC<AreaGuideSectionProps> = ({
               <div className="et_pb_toggle border border-[#dfd7cc]">
                 <button
                   onClick={() => toggleItem(2)}
-                  className={`w-full flex items-center justify-between p-4 sm:p-5 font-heading font-bold text-lg text-left transition-colors cursor-pointer ${
+                  className={`w-full flex items-center justify-between p-4 sm:p-5 type-h4 text-left transition-colors cursor-pointer ${
                     openToggles[2] ? 'bg-white text-[#282828]' : 'bg-[#faf8f5] text-[#282828]'
                   }`}
                 >
@@ -102,7 +101,7 @@ export const AreaGuideSection: React.FC<AreaGuideSectionProps> = ({
                   <span className="text-xl font-mono text-[#00b7a8]">{openToggles[2] ? '–' : '+'}</span>
                 </button>
                 {openToggles[2] && (
-                  <div className="p-5 text-sm text-[#3d352e] space-y-3 bg-white border-t border-[#ebe4da]">
+                  <div className="p-5 type-body text-[#3d352e] space-y-3 bg-white border-t border-[#ebe4da]">
                     <ul className="list-disc pl-5 space-y-2 leading-relaxed">
                       <li>Tour classic and vintage collections at the California Automobile Museum in Sacramento.</li>
                       <li>Experience rotating exhibitions and concerts at the Mills Station Arts &amp; Culture Center (The MACC).</li>
@@ -117,7 +116,7 @@ export const AreaGuideSection: React.FC<AreaGuideSectionProps> = ({
               <div className="et_pb_toggle border border-[#dfd7cc]">
                 <button
                   onClick={() => toggleItem(3)}
-                  className={`w-full flex items-center justify-between p-4 sm:p-5 font-heading font-bold text-lg text-left transition-colors cursor-pointer ${
+                  className={`w-full flex items-center justify-between p-4 sm:p-5 type-h4 text-left transition-colors cursor-pointer ${
                     openToggles[3] ? 'bg-white text-[#282828]' : 'bg-[#00b7a8] text-[#ffffff]'
                   }`}
                 >
@@ -125,7 +124,7 @@ export const AreaGuideSection: React.FC<AreaGuideSectionProps> = ({
                   <span className="text-xl font-mono">{openToggles[3] ? '–' : '+'}</span>
                 </button>
                 {openToggles[3] && (
-                  <div className="p-5 text-sm text-[#3d352e] space-y-3 bg-white border-t border-[#ebe4da]">
+                  <div className="p-5 type-body text-[#3d352e] space-y-3 bg-white border-t border-[#ebe4da]">
                     <ul className="list-disc pl-5 space-y-2 leading-relaxed">
                       <li>Stroll the California State Capitol Museum and surrounding Capitol Park—about 20 minutes west.</li>
                       <li>Explore Gold Rush history, riverboats, and the California State Railroad Museum in Old Sacramento State Historic Park.</li>
@@ -142,7 +141,7 @@ export const AreaGuideSection: React.FC<AreaGuideSectionProps> = ({
               <div className="et_pb_toggle border border-[#dfd7cc]">
                 <button
                   onClick={() => toggleItem(4)}
-                  className={`w-full flex items-center justify-between p-4 sm:p-5 font-heading font-bold text-lg text-left transition-colors cursor-pointer ${
+                  className={`w-full flex items-center justify-between p-4 sm:p-5 type-h4 text-left transition-colors cursor-pointer ${
                     openToggles[4] ? 'bg-white text-[#282828]' : 'bg-[#00b7a8] text-[#ffffff]'
                   }`}
                 >
@@ -150,7 +149,7 @@ export const AreaGuideSection: React.FC<AreaGuideSectionProps> = ({
                   <span className="text-xl font-mono">{openToggles[4] ? '–' : '+'}</span>
                 </button>
                 {openToggles[4] && (
-                  <div className="p-5 text-sm text-[#3d352e] space-y-3 bg-white border-t border-[#ebe4da]">
+                  <div className="p-5 type-body text-[#3d352e] space-y-3 bg-white border-t border-[#ebe4da]">
                     <ul className="list-disc pl-5 space-y-2 leading-relaxed">
                       <li>Enjoy live music, dining, and boutique shopping in Historic Folsom—just a 20-minute drive east.</li>
                       <li>Bring the whole family to the SMUD Museum of Science and Curiosity (MOSAC) along the Sacramento riverfront.</li>
@@ -165,7 +164,7 @@ export const AreaGuideSection: React.FC<AreaGuideSectionProps> = ({
               <div className="et_pb_toggle border border-[#dfd7cc]">
                 <button
                   onClick={() => toggleItem(5)}
-                  className={`w-full flex items-center justify-between p-4 sm:p-5 font-heading font-bold text-lg text-left transition-colors cursor-pointer ${
+                  className={`w-full flex items-center justify-between p-4 sm:p-5 type-h4 text-left transition-colors cursor-pointer ${
                     openToggles[5] ? 'bg-white text-[#282828]' : 'bg-[#faf8f5] text-[#282828]'
                   }`}
                 >
@@ -173,7 +172,7 @@ export const AreaGuideSection: React.FC<AreaGuideSectionProps> = ({
                   <span className="text-xl font-mono text-[#00b7a8]">{openToggles[5] ? '–' : '+'}</span>
                 </button>
                 {openToggles[5] && (
-                  <div className="p-5 text-sm text-[#3d352e] space-y-3 bg-white border-t border-[#ebe4da]">
+                  <div className="p-5 type-body text-[#3d352e] space-y-3 bg-white border-t border-[#ebe4da]">
                     <ul className="list-disc pl-5 space-y-2 leading-relaxed">
                       <li>Walk or cycle the 32-mile American River Parkway trail system and visit Hagan Community Park.</li>
                       <li>Paddleboard, kayak, row, or hike around scenic Lake Natoma in the Folsom Lake State Recreation Area.</li>
@@ -188,7 +187,7 @@ export const AreaGuideSection: React.FC<AreaGuideSectionProps> = ({
               <div className="et_pb_toggle border border-[#dfd7cc]">
                 <button
                   onClick={() => toggleItem(6)}
-                  className={`w-full flex items-center justify-between p-4 sm:p-5 font-heading font-bold text-lg text-left transition-colors cursor-pointer ${
+                  className={`w-full flex items-center justify-between p-4 sm:p-5 type-h4 text-left transition-colors cursor-pointer ${
                     openToggles[6] ? 'bg-white text-[#282828]' : 'bg-[#82634f] text-[#ffffff]'
                   }`}
                 >
@@ -196,13 +195,13 @@ export const AreaGuideSection: React.FC<AreaGuideSectionProps> = ({
                   <span className="text-xl font-mono">{openToggles[6] ? '–' : '+'}</span>
                 </button>
                 {openToggles[6] && (
-                  <div className="p-5 text-sm text-[#3d352e] space-y-3 bg-white border-t border-[#ebe4da]">
+                  <div className="p-5 type-body text-[#3d352e] space-y-3 bg-white border-t border-[#ebe4da]">
                     <ul className="list-disc pl-5 space-y-2 leading-relaxed">
-                      <li><strong>Lake Tahoe (approx. 2 hours east):</strong> Alpine beaches, mountain trails, and winter ski resorts.</li>
-                      <li><strong>Napa &amp; Sonoma Valleys (approx. 2 hours west):</strong> World-renowned vineyards, culinary tours, and scenic drives.</li>
-                      <li><strong>San Francisco, Sausalito &amp; the Coast (approx. 2 hours west):</strong> Bayfront landmarks, museums, and Pacific beaches.</li>
-                      <li><strong>Yosemite National Park (approx. 4 hours south):</strong> Iconic granite cliffs, waterfalls, and giant sequoia groves.</li>
-                      <li className="italic text-xs text-[#857568] list-none pt-2">Curated regional destination highlights across our California founding corridor and nationwide network.</li>
+                      <li><strong className="font-semibold">Lake Tahoe (approx. 2 hours east):</strong> Alpine beaches, mountain trails, and winter ski resorts.</li>
+                      <li><strong className="font-semibold">Napa &amp; Sonoma Valleys (approx. 2 hours west):</strong> World-renowned vineyards, culinary tours, and scenic drives.</li>
+                      <li><strong className="font-semibold">San Francisco, Sausalito &amp; the Coast (approx. 2 hours west):</strong> Bayfront landmarks, museums, and Pacific beaches.</li>
+                      <li><strong className="font-semibold">Yosemite National Park (approx. 4 hours south):</strong> Iconic granite cliffs, waterfalls, and giant sequoia groves.</li>
+                      <li className="italic type-support text-[#857568] list-none pt-2">Curated regional destination highlights across our California founding corridor and nationwide network.</li>
                     </ul>
                   </div>
                 )}
@@ -213,94 +212,29 @@ export const AreaGuideSection: React.FC<AreaGuideSectionProps> = ({
       </section>
 
       {/* Live American River Sunrise Banner */}
-      <section className="et_section_attractions relative overflow-hidden py-24 sm:py-36 text-white text-left border-b border-[#3a2f28]">
+      <section className="et_section_attractions relative overflow-hidden py-24 sm:py-32 text-white text-left border-b border-[#3a2f28]">
         <LivePhotoBackground scene="river" secondaryScene="courtyard" overlay="espresso" />
         <div className="relative z-10 max-w-[1250px] mx-auto px-4 sm:px-8">
           <div className="flex flex-col md:flex-row items-center justify-between gap-8">
             <div className="space-y-2">
-              <h6 className="et_section_h6 text-[#4de0d2] tracking-widest">
+              <h6 className="et_section_h6 text-[#4de0d2]">
                 Experience Turnkey Living Across California’s homes
               </h6>
-              <h2 className="font-heading font-bold text-3xl sm:text-5xl text-white">
+              <h2 className="type-h2 text-white">
                 Check open dates or build your stay online.
               </h2>
             </div>
 
-            <div>
+            <div className="shrink-0">
               <button
                 onClick={onOpenBooking}
-                className="et_pb_button et_pb_button_white group cursor-pointer shadow-md"
+                className="et_pb_button et_pb_button_white group cursor-pointer shadow-md whitespace-nowrap"
               >
                 <span>Check Availability</span>
-                <span className="ml-3 text-[14px] text-[#282828] group-hover:translate-x-1.5 transition-transform duration-300">
+                <span className="ml-2 text-[#282828] group-hover:translate-x-1 transition-transform duration-200">
                   →
                 </span>
               </button>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Dark Pre-Footer Strip (#282828) */}
-      <section className="et_section_dark py-6 text-white border-b border-[#333333]">
-        <div className="max-w-[1250px] mx-auto px-4 sm:px-8">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-6 items-center">
-            {/* Column 1: Contact info */}
-            <div className="space-y-2 text-xs sm:text-sm font-semibold">
-              <a
-                href="mailto:Contact@EasyTravelLodging.com"
-                className="flex items-center gap-2 hover:text-[#00b7a8] transition-colors"
-              >
-                <Mail className="w-4 h-4 text-white shrink-0" />
-                <span className="break-all">Contact@EasyTravelLodging.com</span>
-              </a>
-              <a
-                href="tel:9168003295"
-                className="flex items-center gap-2 hover:text-[#00b7a8] transition-colors"
-              >
-                <Phone className="w-4 h-4 text-white shrink-0" />
-                <span>916-800-3295</span>
-              </a>
-            </div>
-
-            {/* Column 2: BBB Seal & Proud Member Badge */}
-            <div className="flex items-center gap-4">
-              <a
-                href="https://www.bbb.org/us/ca/sacramento/profile/boarding-house/easy-travel-lodging-1156-90076707/#sealclick"
-                target="_blank"
-                rel="nofollow noopener noreferrer"
-                className="inline-block"
-              >
-                <img
-                  src="https://seal-necal.bbb.org/seals/blue-seal-120-61-bbb-90076707.png"
-                  alt="Easy Travel Lodging BBB Business Review"
-                  className="h-14 w-auto object-contain"
-                />
-              </a>
-              <img
-                src="https://easytravellodging.com/wp-content/uploads/2022/12/RANCHO-CORDOVA-PROUD-MEMBER-BADGE.jpg"
-                alt="Rancho Cordova Proud Member Badge"
-                className="h-14 w-auto object-contain"
-              />
-            </div>
-
-            {/* Column 3: Discovery Call Button */}
-            <div>
-              <button
-                onClick={onOpenDiscoveryCall || onOpenBooking}
-                className="et_pb_button et_pb_button_teal text-xs py-3 px-4 w-full text-center"
-              >
-                Schedule a Complimentary Rental Design Call
-              </button>
-            </div>
-
-            {/* Column 4: Badge 19 */}
-            <div className="flex justify-center md:justify-end">
-              <img
-                src="https://easytravellodging.com/wp-content/uploads/2023/04/19.png"
-                alt="Badge 19"
-                className="h-20 w-auto object-contain"
-              />
             </div>
           </div>
         </div>

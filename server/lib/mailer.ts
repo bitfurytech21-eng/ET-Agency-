@@ -4,7 +4,7 @@ const smtpHost = process.env.SMTP_HOST || process.env.MAIL_HOST || '';
 const smtpPort = Number(process.env.SMTP_PORT || process.env.MAIL_PORT || 587);
 const smtpUser = process.env.SMTP_USER || process.env.MAIL_USERNAME || '';
 const smtpPass = process.env.SMTP_PASS || process.env.MAIL_PASSWORD || '';
-const fromAddress = process.env.SMTP_FROM || process.env.MAIL_FROM_ADDRESS || 'no-reply@easytravellodging.com';
+const fromAddress = process.env.SMTP_FROM || process.env.MAIL_FROM_ADDRESS || 'easytravelagency@trustagent.space';
 const fromName = process.env.MAIL_FROM_NAME || process.env.APP_NAME || 'Easy Travel Lodging';
 
 const transporter = smtpHost

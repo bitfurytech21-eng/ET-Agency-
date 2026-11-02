@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { UserNotificationItem, NotificationsSubView } from '../types';
+import { DashboardTab, NotificationsSubView, UserNotificationItem } from '../types';
 import { DashboardNav, SubTabOption } from '../includes/DashboardNav';
 import { NotificationCard } from '../components/NotificationCard';
 import { EmptyState } from '../components/EmptyState';
@@ -7,24 +7,27 @@ import { Bell, CheckCheck } from 'lucide-react';
 
 interface NotificationsModuleProps {
   notifications: UserNotificationItem[];
-  onMarkAsRead: (id: string) => void;
-  onMarkAllAsRead: () => void;
+  onMarkAsRead: (id: string) => Promise<void>;
+  onMarkAllAsRead: () => Promise<void>;
+  onNavigateTab: (tab: DashboardTab) => void;
 }
 
 export const NotificationsModule: React.FC<NotificationsModuleProps> = ({
   notifications,
   onMarkAsRead,
   onMarkAllAsRead,
+  onNavigateTab,
 }) => {
   const [subView, setSubView] = useState<NotificationsSubView>('index');
+  const [markingAll, setMarkingAll] = useState(false);
 
   const unreadCount = notifications.filter((n) => !n.isRead).length;
 
   const subTabOptions: SubTabOption[] = [
-    { id: 'index', label: 'All Alerts', fileName: 'index.php', badge: unreadCount },
-    { id: 'booking-alerts', label: 'Booking Alerts', fileName: 'booking-alerts.php' },
-    { id: 'payment-alerts', label: 'Payment Alerts', fileName: 'payment-alerts.php' },
-    { id: 'system-notifications', label: 'System Alerts', fileName: 'system-notifications.php' },
+    { id: 'index', label: 'All Updates', badge: unreadCount },
+    { id: 'booking-alerts', label: 'Booking Updates' },
+    { id: 'payment-alerts', label: 'Payment Updates' },
+    { id: 'system-notifications', label: 'Account & System' },
   ];
 
   const filtered = notifications.filter((n) => {
@@ -34,34 +37,42 @@ export const NotificationsModule: React.FC<NotificationsModuleProps> = ({
     return true;
   });
 
+  const handleMarkAll = async () => {
+    setMarkingAll(true);
+    try {
+      await onMarkAllAsRead();
+    } finally {
+      setMarkingAll(false);
+    }
+  };
+
   return (
     <div className="space-y-6">
       <DashboardNav
-        currentFolder="UserDashboard/Notifications/"
         activeSubTab={subView}
         options={subTabOptions}
         onSelectSubTab={(id) => setSubView(id as NotificationsSubView)}
       />
 
-      <div className="px-4 sm:px-8 space-y-6">
+      <div className="px-4 sm:px-8 pb-6 space-y-6">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[#e6dfd5] pb-4">
           <div>
             <h3 className="font-heading font-bold text-lg text-[#282828]">
-              Account Notifications &amp; Alerts (Notifications/)
+              Notifications &amp; Account Updates
             </h3>
-            <p className="text-xs text-[#5c5046]">
-              Real-time updates on keyless codes, arrival check-in readiness, and wire clearing notices.
+            <p className="text-xs text-[#6e5d50]">
+              Confirmation notices, payment reconciliation alerts, and account updates for your dashboard
             </p>
           </div>
-
           {unreadCount > 0 && (
             <button
               type="button"
-              onClick={onMarkAllAsRead}
-              className="px-3.5 py-1.5 rounded-xl border border-[#d8cfc3] hover:bg-white text-xs font-semibold text-[#5c5046] flex items-center gap-1.5 cursor-pointer"
+              disabled={markingAll}
+              onClick={handleMarkAll}
+              className="px-4 py-2 rounded-xl border border-[#d8cfc3] hover:bg-[#faf8f5] disabled:opacity-50 text-xs font-bold text-[#282828] flex items-center gap-1.5 cursor-pointer whitespace-nowrap shrink-0 w-fit"
             >
               <CheckCheck className="w-4 h-4 text-[#00b7a8]" />
-              <span>Mark All as Read</span>
+              <span>{markingAll ? 'Updating...' : 'Mark All as Read'}</span>
             </button>
           )}
         </div>
@@ -69,16 +80,27 @@ export const NotificationsModule: React.FC<NotificationsModuleProps> = ({
         {filtered.length === 0 ? (
           <EmptyState
             icon={Bell}
-            title="No Notifications in this Category"
-            description="You are completely caught up! New reservation and billing alerts will appear here."
+            title="No notifications in this category"
+            description="New reservation confirmations, transfer verifications, and account updates will appear here automatically."
           />
         ) : (
           <div className="space-y-3">
-            {filtered.map((item) => (
+            {filtered.map((notif) => (
               <NotificationCard
-                key={item.id}
-                notification={item}
-                onMarkAsRead={onMarkAsRead}
+                key={notif.id}
+                notification={notif}
+                onMarkAsRead={(id) => {
+                  onMarkAsRead(id);
+                }}
+                onClickAction={
+                  notif.actionTab
+                    ? (item) => {
+                        if (item.actionTab) {
+                          onNavigateTab(item.actionTab);
+                        }
+                      }
+                    : undefined
+                }
               />
             ))}
           </div>

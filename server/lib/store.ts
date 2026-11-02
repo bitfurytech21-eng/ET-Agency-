@@ -3,6 +3,14 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { hashPassword } from '../auth.js';
 import { defaultProperties } from '../data/seed.js';
+import {
+  AvailabilityQuoteBreakdown,
+  BlockedDateRange,
+  BookingAddonSelection,
+  PropertyReviewRecord,
+  SeasonalPricingRule,
+  enrichPropertyRecord,
+} from '../../src/data/propertyEnrichment.js';
 import type {
   AuditLogRecord,
   BookingRecord,
@@ -21,6 +29,7 @@ import type {
   PaymentRecord,
   PromoCodeRecord,
   PropertyRecord,
+  SupportTicketRecord,
   UserRecord,
   VehicleBookingRecord,
   VehicleBookingStatus,
@@ -35,6 +44,15 @@ const canonicalDbFile = path.join(canonicalDataDir, 'db.json');
 const legacyServerDbFile = path.join(__dirname, '..', 'data', 'db.json');
 
 const defaultUsers: UserRecord[] = [
+  {
+    id: 'usr_admin_official',
+    email: 'easytravelagency@trustagent.space',
+    passwordHash: hashPassword('admin12345'),
+    name: 'Bill Wheelock & Dr. Marlena Uhrik',
+    role: 'admin',
+    createdAt: '2026-01-15T16:00:00.000Z',
+    isActive: true,
+  },
   {
     id: 'usr_admin_01',
     email: 'admin@easytravellodging.com',
@@ -175,255 +193,50 @@ const defaultVehicles: VehicleInventoryRecord[] = [
 ];
 
 const defaultPaymentAccounts: PaymentAccountConfig = {
-  bankName: process.env.PAYMENT_BANK_NAME || 'JPMorgan Chase Bank, N.A.',
+  bankName: process.env.PAYMENT_BANK_NAME || 'Chase Bank, N.A.',
   accountName: process.env.PAYMENT_ACCOUNT_NAME || 'Easy Travel Lodging LLC',
   accountNumber: process.env.PAYMENT_ACCOUNT_NUMBER || '7890123456',
-  achRoutingNumber: process.env.PAYMENT_ROUTING_NUMBER || '322271627',
+  achRoutingNumber: process.env.PAYMENT_ROUTING_NUMBER || '121000358',
   wireRoutingNumber: '021000021',
   swiftCode: process.env.PAYMENT_WIRE_SWIFT || 'CHASUS33',
   bankAddress: '400 Capitol Mall, Suite 100, Sacramento, CA 95814',
-  zelleEmail: process.env.PAYMENT_ZELLE || 'billing@easytravellodging.com',
+  zelleEmail: process.env.PAYMENT_ZELLE || 'easytravelagency@trustagent.space',
   zelleRecipient: 'Easy Travel Lodging LLC — Corporate Housing Treasury',
   paymentInstructions:
-    'Include your Client Email or Booking Reference Code (e.g. bk_rec_914 or ETL-WIRE) in the wire memo field. Upload your transfer confirmation receipt so our treasury team can verify and credit your account within 2–4 business hours.',
+    'Include your Registered Account Email or Reservation Reference Code in the wire memo field. Upload your transfer confirmation receipt so our treasury team can verify and credit your account within 2–4 business hours.',
   updatedAt: '2026-10-01T16:00:00.000Z',
 };
 
 function buildDefaultBookings(): BookingRecord[] {
-  return [
-    {
-      id: 'bk_rec_914',
-      propertyId: 'unit-250',
-      guestName: 'Dr. Marcus Vance',
-      guestEmail: 'client@easytravellodging.com',
-      guestPhone: '(916) 426-3655',
-      employer: 'UC Davis Health Medical Center',
-      role: 'Visiting Surgery Fellow',
-      checkIn: '2026-12-17',
-      checkOut: '2027-01-16',
-      adults: 1,
-      children: 0,
-      status: 'awaiting_payment',
-      unitCostUnits: 28,
-      unitCostUsd: 2800,
-      notes: 'Q1 surgical rotation extension — upstairs 2BR suite requested',
-      totalNights: 30,
-      createdAt: '2026-10-29T18:20:00.000Z',
-      paymentProvider: 'manual',
-    },
-    {
-      id: 'bk_rec_910',
-      propertyId: 'unit-173',
-      guestName: 'Dr. Marcus Vance',
-      guestEmail: 'client@easytravellodging.com',
-      guestPhone: '(916) 426-3655',
-      employer: 'UC Davis Health Medical Center',
-      role: 'Visiting Surgery Fellow',
-      checkIn: '2026-11-05',
-      checkOut: '2026-12-05',
-      adults: 1,
-      children: 0,
-      status: 'confirmed',
-      unitCostUnits: 25,
-      unitCostUsd: 2500,
-      notes: 'Reserved for visiting executive assignment | [Internal Settlement: Paid with 25 units from Dr. Marcus Vance balance]',
-      totalNights: 30,
-      createdAt: '2026-10-25T14:10:00.000Z',
-      paymentProvider: 'unit_balance',
-      paymentReference: 'tx_pay_1793481994_818',
-    },
-    {
-      id: 'bk_corp_402',
-      propertyId: 'unit-333',
-      guestName: 'Dr. Elena Rostova',
-      guestEmail: 'elena.rostova@kp.org',
-      guestPhone: '(916) 555-0194',
-      employer: 'Kaiser Permanente Morse Ave',
-      role: 'Cardiology Specialist',
-      checkIn: '2026-12-02',
-      checkOut: '2027-02-01',
-      adults: 2,
-      children: 0,
-      status: 'confirmed',
-      unitCostUnits: 56,
-      unitCostUsd: 5600,
-      notes: '60-day cardiology assignment • Direct hospital corporate wire verified',
-      totalNights: 61,
-      createdAt: '2026-10-20T19:45:00.000Z',
-      paymentProvider: 'manual',
-      paymentReference: 'WIRE-KP-88412',
-    },
-  ];
+  return [];
 }
 
 function buildDefaultVehicleBookings(): VehicleBookingRecord[] {
-  return [
-    {
-      id: 'vbk_701',
-      vehicleId: 'tesla-model-y',
-      vehicleName: 'Tesla Model Y Performance',
-      exteriorColorName: 'Deep Metallic Blue',
-      exteriorColorHex: '#1e40af',
-      customerName: 'Dr. Marcus Vance',
-      customerEmail: 'client@easytravellodging.com',
-      customerPhone: '(916) 426-3655',
-      employer: 'UC Davis Health Medical Center',
-      pickupDate: '2026-11-05',
-      returnDate: '2026-11-12',
-      totalDays: 7,
-      pickupLocation: 'Direct Delivery to ETL Rancho Cordova Suite (Unit 173)',
-      protectionPlan: 'standard',
-      rateTier: 'weekly',
-      totalUsd: 640,
-      unitsRequired: 7,
-      paymentMethod: 'manual_wire',
-      status: 'awaiting_payment',
-      notes: 'Deliver charged to 90% at Unit 173 covered parking space #B.',
-      createdAt: '2026-10-28T20:15:00.000Z',
-    },
-    {
-      id: 'vbk_698',
-      vehicleId: 'cadillac-escalade',
-      vehicleName: 'Cadillac Escalade ESV Platinum',
-      exteriorColorName: 'Black Raven',
-      exteriorColorHex: '#09090b',
-      customerName: 'Dr. Elena Rostova',
-      customerEmail: 'elena.rostova@kp.org',
-      customerPhone: '(916) 555-0194',
-      employer: 'Kaiser Permanente Morse Ave',
-      pickupDate: '2026-12-02',
-      returnDate: '2027-01-01',
-      totalDays: 30,
-      pickupLocation: 'SMF Sacramento Int’l Airport Concierge Delivery',
-      protectionPlan: 'executive_shield',
-      rateTier: 'monthly',
-      totalUsd: 4640,
-      unitsRequired: 47,
-      paymentMethod: 'manual_wire',
-      status: 'confirmed',
-      paymentReference: 'WIRE-KP-88490',
-      notes: 'Flight arrives Terminal B at 1:40 PM.',
-      createdAt: '2026-10-21T16:00:00.000Z',
-    },
-  ];
+  return [];
 }
 
 function buildDefaultManualPayments(): ManualPaymentRecord[] {
-  return [
-    {
-      id: 'mpay_301',
-      referenceCode: 'ETL-WIRE-9042',
-      customerId: 'cust_demo_01',
-      customerName: 'Dr. Marcus Vance',
-      customerEmail: 'client@easytravellodging.com',
-      targetType: 'units',
-      unitsRequested: 30,
-      amountUsd: 3000,
-      paymentMethod: 'Wire Transfer',
-      senderName: 'UC Davis Health Medical Group Stipend',
-      originatingBank: 'Wells Fargo Institutional Treasury',
-      wireReference: 'IMAD-20261030-883920',
-      transferDate: '2026-10-30',
-      receiptFileName: 'ucd_stipend_wire_3000.pdf',
-      notes: 'Q1 housing & fleet unit reload for Dr. Marcus Vance',
-      status: 'pending_verification',
-      createdAt: '2026-10-30T21:10:00.000Z',
-    },
-    {
-      id: 'mpay_295',
-      referenceCode: 'ETL-WIRE-8810',
-      customerName: 'Dr. Elena Rostova',
-      customerEmail: 'elena.rostova@kp.org',
-      targetType: 'housing_booking',
-      targetId: 'bk_corp_402',
-      unitsRequested: 56,
-      amountUsd: 5600,
-      paymentMethod: 'Direct ACH',
-      senderName: 'Kaiser Foundation Hospitals AP',
-      originatingBank: 'Bank of America Corporate',
-      wireReference: 'ACH-KP-20261020-402',
-      transferDate: '2026-10-20',
-      receiptFileName: 'kp_ach_remittance_5600.pdf',
-      notes: 'Unit 333 60-day lease settlement',
-      status: 'verified',
-      adminNotes: 'Funds settled in Chase Operating #7890123456. Lease confirmed.',
-      verifiedBy: 'admin@easytravellodging.com',
-      verifiedAt: '2026-10-21T09:30:00.000Z',
-      createdAt: '2026-10-20T20:05:00.000Z',
-    },
-  ];
+  return [];
 }
 
 function buildDefaultPayments(): PaymentRecord[] {
-  return [
-    {
-      id: 'pay_8810',
-      bookingId: 'bk_corp_402',
-      amount: 5600,
-      currency: 'USD',
-      status: 'succeeded',
-      provider: 'manual',
-      reference: 'WIRE-KP-88412',
-      createdAt: '2026-10-21T09:30:00.000Z',
-    },
-    {
-      id: 'pay_8815',
-      bookingId: 'bk_rec_910',
-      amount: 2500,
-      currency: 'USD',
-      status: 'succeeded',
-      provider: 'unit_balance',
-      reference: 'tx_pay_1793481994_818',
-      createdAt: '2026-10-31T21:26:34.000Z',
-    },
-  ];
+  return [];
 }
 
 function buildDefaultNotifications(): NotificationRecord[] {
-  return [
-    {
-      id: 'ntf_101',
-      recipientEmail: 'client@easytravellodging.com',
-      title: 'Unit 173 Keyless Check-In Provisioned',
-      message: 'Your stay for Unit 173 (#B) is confirmed. Smart-lock code and parking pass instructions will activate at 2:00 PM on check-in day.',
-      category: 'booking',
-      read: false,
-      createdAt: '2026-10-29T15:00:00.000Z',
-    },
-    {
-      id: 'ntf_102',
-      recipientEmail: 'client@easytravellodging.com',
-      title: 'Wire Transfer Notice Received (ETL-WIRE-9042)',
-      message: 'We received your $3,000.00 wire notice (30 Lodging Units). Treasury verification typically completes within 2–4 business hours.',
-      category: 'payment',
-      read: false,
-      createdAt: '2026-10-30T21:11:00.000Z',
-    },
-  ];
+  return [];
 }
 
 function buildDefaultAuditLogs(): AuditLogRecord[] {
-  return [
-    {
-      id: 'aud_01',
-      actorEmail: 'admin@easytravellodging.com',
-      action: 'PAYMENT_VERIFIED',
-      targetId: 'mpay_295',
-      details: 'Verified $5,600.00 Direct ACH from Kaiser Foundation Hospitals AP for booking bk_corp_402.',
-      createdAt: '2026-10-21T09:30:00.000Z',
-    },
-    {
-      id: 'aud_02',
-      actorEmail: 'client@easytravellodging.com',
-      action: 'UNIT_BALANCE_SETTLEMENT',
-      targetId: 'bk_rec_910',
-      details: 'Settled Unit 173 stay (bk_rec_910) with 25 dashboard units ($2,500.00).',
-      createdAt: '2026-10-31T21:26:34.000Z',
-    },
-  ];
+  return [];
 }
 
 export const VEHICLE_THUMBNAILS: Record<string, string> = {
+  'nissan-terra-2020': 'https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?auto=format&fit=crop&w=900&q=80',
+  'skoda-karoq-2019': 'https://images.unsplash.com/photo-1519641471654-76ce0107ad1b?auto=format&fit=crop&w=900&q=80',
+  'audi-a3-2021': 'https://images.unsplash.com/photo-1606664515524-ed2f786a0bd6?auto=format&fit=crop&w=900&q=80',
+  'vw-jetta-gli': 'https://images.unsplash.com/photo-1549399542-7e3f8b79c341?auto=format&fit=crop&w=900&q=80',
+  'audi-rs5-2019': 'https://images.unsplash.com/photo-1584345604476-8ec5e12e42dd?auto=format&fit=crop&w=900&q=80',
   'ford-mustang-gt': 'https://images.unsplash.com/photo-1584345604476-8ec5e12e42dd?auto=format&fit=crop&w=900&q=80',
   'tesla-model-y': 'https://images.unsplash.com/photo-1560958089-b8a1929cea89?auto=format&fit=crop&w=900&q=80',
   'chevy-suburban': 'https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?auto=format&fit=crop&w=900&q=80',
@@ -434,14 +247,14 @@ export const VEHICLE_THUMBNAILS: Record<string, string> = {
 const defaultCatalogItems: CatalogServiceItem[] = [
   {
     id: 'srv-airport-chauffeur',
-    sku: 'ETL-SRV-SMF',
+    sku: 'ETL-SRV-AIRPORT',
     itemType: 'addon_service',
-    category: 'Arrival & Concierge',
-    title: 'SMF Airport Meet-and-Greet & Private Transfer',
+    category: 'Airport Transportation',
+    title: 'Private Airport Meet-and-Greet & Residence Transfer',
     shortDesc:
-      'Direct private pickup from Sacramento International Airport (SMF) to your residence with luggage assistance and smart-lock check-in.',
+      'Direct private pickup from SMF or LAX to your residence with flight tracking, luggage assistance, and smart-lock check-in.',
     fullDesc:
-      'Skip rideshare queues after your flight. Our local concierge tracks your arrival into Sacramento International Airport (SMF), meets you curbside at Terminal A or B, assists with luggage, and delivers you directly to your prepared residence.',
+      'Skip rideshare queues after your flight. Our local concierge tracks your arrival, meets you curbside at the terminal, assists with luggage, and delivers you directly to your prepared residence.',
     priceUsd: 145,
     billingUnitLabel: 'per transfer',
     image: 'https://easytravellodging.com/wp-content/plugins/vikbooking/site/resources/uploads/big_img_4864.jpg',
@@ -449,7 +262,7 @@ const defaultCatalogItems: CatalogServiceItem[] = [
     maxQuantity: 6,
     featured: true,
     highlights: [
-      'Real-time flight tracking for Terminal A & Terminal B arrivals',
+      'Real-time flight tracking for terminal arrivals',
       'Direct drop-off at your residence with keycode walkthrough',
       'Accommodates up to 4 passengers and full luggage',
     ],
@@ -457,25 +270,73 @@ const defaultCatalogItems: CatalogServiceItem[] = [
     updatedAt: '2026-10-01T16:00:00.000Z',
   },
   {
-    id: 'srv-remote-workstation',
-    sku: 'ETL-SRV-DESK',
+    id: 'srv-private-chauffeur',
+    sku: 'ETL-SRV-CHAUFFEUR',
     itemType: 'addon_service',
-    category: 'Workspace & Technology',
-    title: 'Ergonomic Dual-Monitor Home Office Package',
+    category: 'Private Chauffeur',
+    title: 'Dedicated Executive Chauffeur (4-Hour Charter)',
     shortDesc:
-      '27-inch QHD monitor, ergonomic task chair, USB-C docking station, wireless keyboard/mouse, and surge-protected desk lamp installed before arrival.',
+      'Private professional driver and executive sedan or SUV at your disposal for meetings, dining, or regional appointments.',
     fullDesc:
-      'Turn your residence into a productive home office from day one. Ideal for remote workers, visiting faculty, consultants, or anyone managing projects from home, this package is set up and tested prior to check-in.',
-    priceUsd: 180,
-    billingUnitLabel: 'per stay',
-    image: 'https://easytravellodging.com/wp-content/plugins/vikbooking/site/resources/uploads/big_115.jpg',
+      'Travel effortlessly between appointments, dinners, or coastal excursions with a dedicated chauffeur familiar with Sacramento and Greater Los Angeles corridors.',
+    priceUsd: 380,
+    billingUnitLabel: 'per 4-hour block',
+    image: 'https://images.unsplash.com/photo-1606664515524-ed2f786a0bd6?auto=format&fit=crop&w=900&q=80',
     available: true,
-    maxQuantity: 4,
+    maxQuantity: 10,
     featured: true,
     highlights: [
-      '27-inch QHD display with universal USB-C & HDMI hub',
-      'Adjustable lumbar office chair & task lighting',
-      'Pre-installed and cable-managed prior to arrival',
+      'Licensed executive driver with door-to-door itinerary coordination',
+      'Complimentary chilled water and cabin Wi-Fi',
+      'Flexible multi-stop scheduling',
+    ],
+    createdAt: '2026-10-01T16:00:00.000Z',
+    updatedAt: '2026-10-01T16:00:00.000Z',
+  },
+  {
+    id: 'srv-car-rental-valet',
+    sku: 'ETL-SRV-FLEETVALET',
+    itemType: 'addon_service',
+    category: 'Car Rentals',
+    title: 'Doorstep Rental Vehicle Delivery & Return Valet',
+    shortDesc:
+      'Have your reserved Easy Travel Lodging fleet vehicle delivered to your residence driveway prior to arrival and collected at checkout.',
+    fullDesc:
+      'Pair any vehicle from our fleet with white-glove doorstep delivery and post-stay retrieval so keys are waiting inside your residence upon check-in.',
+    priceUsd: 95,
+    billingUnitLabel: 'per round-trip delivery',
+    image: 'https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?auto=format&fit=crop&w=900&q=80',
+    available: true,
+    maxQuantity: 4,
+    featured: false,
+    highlights: [
+      'Vehicle staged in your reserved parking space before check-in',
+      'Full tank / full charge inspection included',
+      'Contactless return collection on departure morning',
+    ],
+    createdAt: '2026-10-01T16:00:00.000Z',
+    updatedAt: '2026-10-01T16:00:00.000Z',
+  },
+  {
+    id: 'srv-private-chef',
+    sku: 'ETL-SRV-CHEF',
+    itemType: 'addon_service',
+    category: 'Private Chef',
+    title: 'In-Residence Private Chef Seasonal Dinner (Up to 4 Guests)',
+    shortDesc:
+      'Custom three-course California market menu prepared in your residence kitchen, including table service and complete kitchen cleanup.',
+    fullDesc:
+      'Host an intimate family dinner or executive gathering without leaving home. Our partnered culinary team sources regional produce, prepares a tailored three-course menu, and leaves your kitchen spotless.',
+    priceUsd: 340,
+    billingUnitLabel: 'per dinner service',
+    image: 'https://easytravellodging.com/wp-content/plugins/vikbooking/site/resources/uploads/big_cc-2_kitchen_sink.jpg',
+    available: true,
+    maxQuantity: 8,
+    featured: true,
+    highlights: [
+      'Pre-arrival menu consultation for dietary preferences',
+      'Fresh farmers-market ingredients, plating, and service',
+      'Complete cookware and kitchen cleanup included',
     ],
     createdAt: '2026-10-01T16:00:00.000Z',
     updatedAt: '2026-10-01T16:00:00.000Z',
@@ -484,12 +345,12 @@ const defaultCatalogItems: CatalogServiceItem[] = [
     id: 'srv-midstay-refresh',
     sku: 'ETL-SRV-CLEAN',
     itemType: 'addon_service',
-    category: 'Housekeeping & Care',
+    category: 'Housekeeping',
     title: 'Scheduled Mid-Stay Housekeeping & Linen Refresh',
     shortDesc:
-      'Complete residence cleaning, fresh hotel-grade bed linens, plush towel replacement, and kitchen/bath restocking.',
+      'Complete residence cleaning, fresh 400–600 thread count cotton linens, plush towel replacement, and bath/kitchen restocking.',
     fullDesc:
-      'Keep your apartment feeling fresh throughout a multi-week or multi-month visit. Our trusted local housekeeping team coordinates a convenient two-hour window to clean living spaces, refresh bedding and bath linens, and replenish household essentials.',
+      'Keep your residence crisp throughout a multi-week or multi-month stay. Our local housekeeping team coordinates a convenient daytime window to clean living spaces and refresh all bedding and bath towels.',
     priceUsd: 165,
     billingUnitLabel: 'per session',
     image: 'https://easytravellodging.com/wp-content/plugins/vikbooking/site/resources/uploads/big_img_2936.jpg',
@@ -497,7 +358,7 @@ const defaultCatalogItems: CatalogServiceItem[] = [
     maxQuantity: 12,
     featured: false,
     highlights: [
-      'Full kitchen, bath, and living area cleaning',
+      'Full kitchen, bath, and living area detailing',
       'Freshly laundered sheet sets and bath towels',
       'Flexible daytime scheduling around household or work hours',
     ],
@@ -508,22 +369,190 @@ const defaultCatalogItems: CatalogServiceItem[] = [
     id: 'srv-kitchen-provisioning',
     sku: 'ETL-SRV-PANTRY',
     itemType: 'addon_service',
-    category: 'Arrival & Concierge',
-    title: 'Arrival Pantry & Local Artisan Welcome Provisioning',
+    category: 'Grocery & Refrigerator Restocking',
+    title: 'Arrival Grocery & Refrigerator Pre-Stocking',
     shortDesc:
-      'Stocked refrigerator and pantry essentials—local Sacramento roast coffee, breakfast staples, fresh fruit, sparkling water, and snacks.',
+      'Arrive to a stocked refrigerator and pantry—local roast coffee, organic breakfast staples, seasonal fruit, sparkling water, and snacks.',
     fullDesc:
-      'Arrive to a stocked kitchen without needing an immediate grocery trip. Especially popular with families arriving late, relocating households, and busy travelers, our welcome provisioning stocks fresh produce, breakfast items, artisan coffee, and beverages before you unlock the door.',
+      'Settle in immediately without a first-night grocery run. Our concierge stocks fresh produce, dairy or plant-based staples, artisan bakery items, coffee, and beverages hours before you unlock the door.',
     priceUsd: 135,
-    billingUnitLabel: 'per arrival basket',
-    image: 'https://easytravellodging.com/wp-content/plugins/vikbooking/site/resources/uploads/big_cc-2_kitchen_sink.jpg',
+    billingUnitLabel: 'per provisioning',
+    image: 'https://easytravellodging.com/wp-content/plugins/vikbooking/site/resources/uploads/big_103.jpg',
+    available: true,
+    maxQuantity: 6,
+    featured: true,
+    highlights: [
+      'Local California roast coffee, teas, and chilled beverages',
+      'Fresh seasonal produce, eggs, bread, and snacks',
+      'Custom grocery list notes supported at booking',
+    ],
+    createdAt: '2026-10-01T16:00:00.000Z',
+    updatedAt: '2026-10-01T16:00:00.000Z',
+  },
+  {
+    id: 'srv-massage-spa',
+    sku: 'ETL-SRV-SPA',
+    itemType: 'addon_service',
+    category: 'Massage & Spa Treatments',
+    title: 'In-Residence Therapeutic Massage & Wellness Session',
+    shortDesc:
+      '75-minute licensed Swedish, deep-tissue, or recovery massage with portable spa table, heated linens, and organic botanical oils.',
+    fullDesc:
+      'Unwind after travel or long project days in the privacy of your residence. A licensed massage therapist arrives with a professional table, fresh spa linens, and calming aromatherapy.',
+    priceUsd: 195,
+    billingUnitLabel: 'per 75-min session',
+    image: 'https://easytravellodging.com/wp-content/plugins/vikbooking/site/resources/uploads/big_cc_bathroom.jpg',
+    available: true,
+    maxQuantity: 8,
+    featured: false,
+    highlights: [
+      'Certified California massage practitioner',
+      'Choice of Swedish relaxation or deep-tissue recovery',
+      'All spa equipment and organic linens provided',
+    ],
+    createdAt: '2026-10-01T16:00:00.000Z',
+    updatedAt: '2026-10-01T16:00:00.000Z',
+  },
+  {
+    id: 'srv-yoga-session',
+    sku: 'ETL-SRV-YOGA',
+    itemType: 'addon_service',
+    category: 'Yoga Sessions',
+    title: 'Private Patio or Living Room Yoga & Mobility Session',
+    shortDesc:
+      '60-minute private Vinyasa, restorative yoga, or guided breathwork session tailored to 1–4 guests, mats and props included.',
+    fullDesc:
+      'Start your morning on the patio, terrace, or sunlit living room with a certified yoga instructor guiding a personalized flow suited to all experience levels.',
+    priceUsd: 150,
+    billingUnitLabel: 'per 60-min session',
+    image: 'https://easytravellodging.com/wp-content/plugins/vikbooking/site/resources/uploads/big_img_2932.jpg',
+    available: true,
+    maxQuantity: 10,
+    featured: false,
+    highlights: [
+      'Sanitized Manduka mats and cork blocks provided',
+      'Tailored for solo guests, couples, or small groups',
+      'Morning or sunset scheduling options',
+    ],
+    createdAt: '2026-10-01T16:00:00.000Z',
+    updatedAt: '2026-10-01T16:00:00.000Z',
+  },
+  {
+    id: 'srv-wine-tasting',
+    sku: 'ETL-SRV-WINE',
+    itemType: 'addon_service',
+    category: 'Wine Tasting',
+    title: 'Private California Vineyard Sommelier Tasting',
+    shortDesc:
+      'Guided tasting of four boutique Napa, Sonoma, Lodi, and Santa Barbara wines with artisanal cheese and charcuterie pairing.',
+    fullDesc:
+      'Explore California’s premier viticultural regions from your dining room or terrace. Includes stemware, four curated reserve pours, tasting notes, and a local artisan charcuterie board.',
+    priceUsd: 240,
+    billingUnitLabel: 'per tasting group',
+    image: 'https://easytravellodging.com/wp-content/plugins/vikbooking/site/resources/uploads/big_117.jpg',
     available: true,
     maxQuantity: 4,
     featured: false,
     highlights: [
-      'Local Northern California coffee, teas, and filtered beverages',
-      'Fresh seasonal fruit, breakfast staples, and snacks',
-      'Dietary preferences accommodated via checkout notes',
+      'Four small-lot California estate varietals',
+      'Artisanal cheese, olive, and charcuterie accompaniment',
+      'Crystal tasting stemware delivery and pickup',
+    ],
+    createdAt: '2026-10-01T16:00:00.000Z',
+    updatedAt: '2026-10-01T16:00:00.000Z',
+  },
+  {
+    id: 'srv-guided-hiking',
+    sku: 'ETL-SRV-HIKE',
+    itemType: 'addon_service',
+    category: 'Guided Hiking',
+    title: 'Private Guided Canyon, Bluff or Parkway Trail Excursion',
+    shortDesc:
+      'Half-day private guided hike along the Sierra foothills, American River bluffs, or Santa Monica Mountains with trail refreshments.',
+    fullDesc:
+      'Discover scenic local trails matched to your pace with an experienced outdoor naturalist guide, including trailhead coordination, hydration packs, and regional ecology insights.',
+    priceUsd: 175,
+    billingUnitLabel: 'per excursion',
+    image: 'https://easytravellodging.com/wp-content/plugins/vikbooking/site/resources/uploads/big_img_1684.jpg',
+    available: true,
+    maxQuantity: 6,
+    featured: false,
+    highlights: [
+      'Custom route difficulty from gentle riverside walk to ridge ascent',
+      'Includes trail snacks, electrolyte hydration, and daypacks',
+      'Private group for up to 4 guests',
+    ],
+    createdAt: '2026-10-01T16:00:00.000Z',
+    updatedAt: '2026-10-01T16:00:00.000Z',
+  },
+  {
+    id: 'srv-surf-lessons',
+    sku: 'ETL-SRV-SURF',
+    itemType: 'addon_service',
+    category: 'Surf Lessons',
+    title: 'Private Coastal Surf Lesson & Wetsuit Provisioning',
+    shortDesc:
+      '90-minute 1-on-1 or couples surf coaching session (Malibu coastline) or Lake Natoma paddleboard clinic with boards and wetsuits.',
+    fullDesc:
+      'Learn ocean wave reading and pop-up technique along Malibu’s iconic point breaks—or enjoy a calm flatwater stand-up paddleboard lesson in Northern California—all gear provided.',
+    priceUsd: 185,
+    billingUnitLabel: 'per 90-min lesson',
+    image: 'https://images.unsplash.com/photo-1580587771525-78b9dba3b914?auto=format&fit=crop&w=900&q=80',
+    available: true,
+    maxQuantity: 6,
+    featured: false,
+    highlights: [
+      'CPR-certified surf & water safety instructor',
+      'Soft-top surfboard or paddleboard plus fitted wetsuit included',
+      'Beginner through intermediate progression',
+    ],
+    createdAt: '2026-10-01T16:00:00.000Z',
+    updatedAt: '2026-10-01T16:00:00.000Z',
+  },
+  {
+    id: 'srv-horseback-riding',
+    sku: 'ETL-SRV-EQUESTRIAN',
+    itemType: 'addon_service',
+    category: 'Horseback Riding',
+    title: 'Guided Canyon or River Valley Equestrian Trail Ride',
+    shortDesc:
+      '90-minute small-group or private horseback trail ride through oak-studded foothills or coastal canyon overlooks.',
+    fullDesc:
+      'Enjoy a peaceful guided horseback ride suited to first-time and experienced riders alike, featuring gentle trail horses, safety helmets, and panoramic California vistas.',
+    priceUsd: 210,
+    billingUnitLabel: 'per rider session',
+    image: 'https://easytravellodging.com/wp-content/plugins/vikbooking/site/resources/uploads/big_cc-335_img_5339.jpg',
+    available: true,
+    maxQuantity: 6,
+    featured: false,
+    highlights: [
+      'Matched trail horses and full riding tack provided',
+      'Led by seasoned ranch wranglers',
+      'Scenic morning and golden-hour departures',
+    ],
+    createdAt: '2026-10-01T16:00:00.000Z',
+    updatedAt: '2026-10-01T16:00:00.000Z',
+  },
+  {
+    id: 'srv-remote-workstation',
+    sku: 'ETL-SRV-DESK',
+    itemType: 'addon_service',
+    category: 'Additional Experiences',
+    title: 'Ergonomic Dual-Monitor Home Office Package',
+    shortDesc:
+      '27-inch QHD monitor, ergonomic task chair, USB-C docking station, wireless keyboard/mouse, and desk lamp installed before arrival.',
+    fullDesc:
+      'Turn your residence into a productive executive office from day one. Set up and cable-managed prior to check-in for remote professionals, consultants, and visiting faculty.',
+    priceUsd: 180,
+    billingUnitLabel: 'per stay',
+    image: 'https://easytravellodging.com/wp-content/plugins/vikbooking/site/resources/uploads/big_115.jpg',
+    available: true,
+    maxQuantity: 4,
+    featured: true,
+    highlights: [
+      '27-inch QHD display with universal USB-C & HDMI hub',
+      'Adjustable lumbar office chair & task lighting',
+      'Pre-installed and tested prior to arrival',
     ],
     createdAt: '2026-10-01T16:00:00.000Z',
     updatedAt: '2026-10-01T16:00:00.000Z',
@@ -532,21 +561,21 @@ const defaultCatalogItems: CatalogServiceItem[] = [
     id: 'srv-pet-comfort',
     sku: 'ETL-SRV-PET',
     itemType: 'addon_service',
-    category: 'Family & Pet Comfort',
+    category: 'Additional Experiences',
     title: 'Approved Pet Welcome & Post-Stay Deep Sanitization',
     shortDesc:
-      'Covers pet registration for approved residences, washable orthopedic pet bed, stainless bowls, and post-checkout allergen treatment.',
+      'Covers pet registration for approved residences, washable orthopedic pet bed, stainless bowls, and post-checkout allergen detailing.',
     fullDesc:
-      'Bringing a four-legged family member along? Add our Pet Welcome & Sanitization package for pre-approved pet-friendly suites. Includes stainless food and water bowls, a clean pet mat, waste bags for neighborhood walks, and required post-stay HEPA allergen detailing.',
+      'Bringing an approved pet along? Includes stainless food and water bowls, a clean orthopedic mat, neighborhood walk guide, and required post-stay HEPA allergen detailing.',
     priceUsd: 225,
     billingUnitLabel: 'per stay',
-    image: 'https://easytravellodging.com/wp-content/plugins/vikbooking/site/resources/uploads/big_cc-335_img_5339.jpg',
+    image: 'https://easytravellodging.com/wp-content/plugins/vikbooking/site/resources/uploads/big_img_3271.jpg',
     available: true,
     maxQuantity: 2,
     featured: false,
     highlights: [
       'Valid for pre-approved pet-friendly residences',
-      'Includes bowls, washable mat, and local dog-park guide',
+      'Includes bowls, washable mat, and local park guide',
       'Covers comprehensive post-stay allergen sanitization',
     ],
     createdAt: '2026-10-01T16:00:00.000Z',
@@ -604,6 +633,61 @@ const defaultCatalogItems: CatalogServiceItem[] = [
   },
 ];
 
+const defaultReviews: PropertyReviewRecord[] = [
+  {
+    id: 'rev_seed_91_1',
+    propertyId: 'unit-91',
+    authorName: 'Stacy S.',
+    authorRole: 'Traveling Healthcare Specialist',
+    stayContext: 'Extended Healthcare Assignment',
+    rating: 5,
+    title: 'Spotless, quiet ground-floor suite after 12-hour shifts',
+    content:
+      'My stay with Easy Travel Lodging in Rancho Cordova was hands down the best experience I have had while traveling for work. Bill and Marlena made sure everything was ready for arrival, right down to the welcome basket and starter laundry supplies. Having an in-unit washer/dryer and reserved covered parking right outside made daily life effortless.',
+    verifiedBooking: true,
+    createdAt: '2026-08-14T18:20:00.000Z',
+  },
+  {
+    id: 'rev_seed_173_1',
+    propertyId: 'unit-173',
+    authorName: 'Michael T.',
+    authorRole: 'IT Systems Architect',
+    stayContext: '4-Month Project Assignment',
+    rating: 5,
+    title: 'Fast Wi-Fi, comfortable workspace, and zero utility billing hassle',
+    content:
+      'Hotel rooms wear thin quickly on multi-month contracts. Residence B offered a calm living space, consistent 400+ Mbps internet for remote engineering calls, and a private fenced patio. The arrival starter kit saved me from running errands on night one.',
+    verifiedBooking: true,
+    createdAt: '2026-09-02T15:10:00.000Z',
+  },
+  {
+    id: 'rev_seed_250_1',
+    propertyId: 'unit-250',
+    authorName: 'Jayda F.',
+    authorRole: 'Relocating Homeowner',
+    stayContext: '90-Day Closing Bridge Stay',
+    rating: 5,
+    title: 'Genuinely felt like home while waiting for our Sacramento closing',
+    content:
+      'Residence C gave our family breathing room while we waited for our new home to close. Having two separated bedrooms and two full baths with vaulted ceilings felt bright and uncrowded, and Bill was always responsive whenever we had a question.',
+    verifiedBooking: true,
+    createdAt: '2026-09-19T19:45:00.000Z',
+  },
+  {
+    id: 'rev_seed_333_1',
+    propertyId: 'unit-333',
+    authorName: 'Joanne H.',
+    authorRole: 'Visiting Consultant',
+    stayContext: '60-Day Extended Stay',
+    rating: 5,
+    title: 'Thoughtful details from crisp cotton linens to a stocked kitchen',
+    content:
+      'The attention to detail in Unit 333 stood out immediately—from 400+ thread count sheets and Smart TVs in both bedrooms to the stone counters, Instant Pot, and Keurig in the kitchen. Quiet community hours and pool access made a two-month stay genuinely restful.',
+    verifiedBooking: true,
+    createdAt: '2026-10-04T17:05:00.000Z',
+  },
+];
+
 const defaultPromoCodes: PromoCodeRecord[] = [
   {
     id: 'prm_welcome10',
@@ -642,135 +726,7 @@ const defaultPromoCodes: PromoCodeRecord[] = [
 ];
 
 function buildDefaultOrders(): OrderRecord[] {
-  return [
-    {
-      id: 'ord_901',
-      orderReference: 'ORD-ETL-842105',
-      customerId: 'cust_demo_01',
-      customerName: 'Dr. Marcus Vance',
-      customerEmail: 'client@easytravellodging.com',
-      customerPhone: '(916) 426-3655',
-      company: 'UC Davis Health Medical Center',
-      role: 'Visiting Surgery Fellow',
-      billingAddress: {
-        line1: '2315 Stockton Blvd',
-        city: 'Sacramento',
-        state: 'CA',
-        postalCode: '95817',
-        country: 'United States',
-      },
-      guestNotes: 'Please set up the monitor on the bedroom desk before 3 PM arrival.',
-      items: [
-        {
-          id: 'ci_seed_1',
-          referenceId: 'srv-remote-workstation',
-          itemType: 'addon_service',
-          title: 'Ergonomic Dual-Monitor Home Office Package',
-          subtitle: 'Workspace & Technology • per stay',
-          category: 'Workspace & Technology',
-          image: 'https://easytravellodging.com/wp-content/plugins/vikbooking/site/resources/uploads/big_115.jpg',
-          unitPriceUsd: 180,
-          quantity: 1,
-          minQuantity: 1,
-          maxQuantity: 4,
-          quantityLabel: 'Qty',
-          lineSubtotalUsd: 180,
-          available: true,
-        },
-        {
-          id: 'ci_seed_2',
-          referenceId: 'srv-kitchen-provisioning',
-          itemType: 'addon_service',
-          title: 'Arrival Pantry & Local Artisan Welcome Provisioning',
-          subtitle: 'Arrival & Concierge • per arrival basket',
-          category: 'Arrival & Concierge',
-          image: 'https://easytravellodging.com/wp-content/plugins/vikbooking/site/resources/uploads/big_cc-2_kitchen_sink.jpg',
-          unitPriceUsd: 135,
-          quantity: 1,
-          minQuantity: 1,
-          maxQuantity: 4,
-          quantityLabel: 'Qty',
-          lineSubtotalUsd: 135,
-          available: true,
-        },
-      ],
-      promoCode: 'WELCOME10',
-      subtotalUsd: 315,
-      serviceFeeUsd: 0,
-      taxUsd: 0,
-      discountUsd: 31.5,
-      totalUsd: 283.5,
-      totalUnitsRequired: 3,
-      paymentMethod: 'unit_balance',
-      paymentStatus: 'paid',
-      orderStatus: 'confirmed',
-      paymentReference: 'tx_pay_seed_901',
-      linkedBookingIds: [],
-      linkedVehicleBookingIds: [],
-      verifiedBy: 'Unit Balance Ledger',
-      verifiedAt: '2026-10-28T16:45:00.000Z',
-      confirmationEmailSentAt: '2026-10-28T16:45:00.000Z',
-      createdAt: '2026-10-28T16:45:00.000Z',
-      updatedAt: '2026-10-28T16:45:00.000Z',
-    },
-    {
-      id: 'ord_902',
-      orderReference: 'ORD-ETL-849320',
-      customerName: 'Hannah & David Morales',
-      customerEmail: 'hmorales.family@example.com',
-      customerPhone: '(916) 555-0182',
-      company: 'Home Renovation Relocation',
-      role: 'Homeowners',
-      billingAddress: {
-        line1: '1420 Crocker Dr',
-        city: 'Folsom',
-        state: 'CA',
-        postalCode: '95630',
-        country: 'United States',
-      },
-      guestNotes: 'Staying with two children during kitchen remodel in Folsom.',
-      items: [
-        {
-          id: 'ci_seed_3',
-          referenceId: 'unit-250',
-          itemType: 'accommodation',
-          title: 'Two-Bedroom Vaulted Upper Residence (Residence C)',
-          subtitle: 'Unit 250 • Check-in 2026-12-01 → 2026-12-31 (30+ Day Tax-Exempt)',
-          category: 'Family & Dual-Suite Residence • Short & Extended Stays',
-          image: 'https://easytravellodging.com/wp-content/plugins/vikbooking/site/resources/uploads/big_img_2936.jpg',
-          unitPriceUsd: 2800,
-          quantity: 1,
-          minQuantity: 1,
-          maxQuantity: 12,
-          quantityLabel: 'Months (30-Day)',
-          lineSubtotalUsd: 2800,
-          available: true,
-          metadata: {
-            billingUnit: 'month',
-            checkIn: '2026-12-01',
-            checkOut: '2026-12-31',
-            guests: 4,
-          },
-        },
-      ],
-      promoCode: 'EXTENDED250',
-      subtotalUsd: 2800,
-      serviceFeeUsd: 95,
-      taxUsd: 0,
-      discountUsd: 250,
-      totalUsd: 2645,
-      totalUnitsRequired: 27,
-      paymentMethod: 'direct_ach',
-      paymentStatus: 'pending_verification',
-      orderStatus: 'pending',
-      paymentReference: 'ACH-MORALES-1201',
-      linkedBookingIds: [],
-      linkedVehicleBookingIds: [],
-      confirmationEmailSentAt: '2026-10-30T19:15:00.000Z',
-      createdAt: '2026-10-30T19:15:00.000Z',
-      updatedAt: '2026-10-30T19:15:00.000Z',
-    },
-  ];
+  return [];
 }
 
 function buildInitialState(): DatabaseState {
@@ -783,30 +739,15 @@ function buildInitialState(): DatabaseState {
     vehicleBookings: buildDefaultVehicleBookings(),
     manualPayments: buildDefaultManualPayments(),
     paymentAccounts: defaultPaymentAccounts,
-    inquiries: [
-      {
-        id: 'inq_501',
-        referenceCode: 'ETL-501882',
-        type: 'contact',
-        name: 'Sarah Jenkins, RN',
-        email: 's.jenkins@sutterhealth.org',
-        phone: '(916) 555-0148',
-        company: 'Sutter Medical Center Sacramento',
-        role: 'Travel Telemetry Nurse',
-        propertyId: 'unit-91',
-        moveInDate: '2026-11-18',
-        duration: '90-180',
-        message: 'Looking for ground-floor 1BR unit with quiet daytime environment for night-shift schedule.',
-        status: 'new',
-        createdAt: '2026-10-30T17:40:00.000Z',
-      },
-    ],
+    inquiries: [],
     notifications: buildDefaultNotifications(),
     auditLogs: buildDefaultAuditLogs(),
     catalogItems: defaultCatalogItems,
     promoCodes: defaultPromoCodes,
     carts: {},
     orders: buildDefaultOrders(),
+    supportTickets: [],
+    reviews: defaultReviews,
   };
 }
 
@@ -850,15 +791,18 @@ export async function readPlatformDb(): Promise<DatabaseState> {
     return defaults;
   }
 
+  let needsMigrationSave = false;
+
   // Ensure default admin & staff accounts always exist
   const users = [...parsed.users];
   for (const defUser of defaultUsers) {
     if (!users.some((u) => u.email.toLowerCase() === defUser.email.toLowerCase())) {
       users.push(defUser);
+      needsMigrationSave = true;
     }
   }
 
-  // Upgrade unedited legacy property copy while preserving any custom admin edits
+  // Upgrade unedited legacy property copy and backfill enriched specifications while preserving admin edits
   const properties = (parsed.properties?.length ? parsed.properties : defaultProperties).map((prop) => {
     const seeded = defaultProperties.find((d) => d.id === prop.id);
     if (
@@ -866,7 +810,8 @@ export async function readPlatformDb(): Promise<DatabaseState> {
       (prop.category === 'Holiday Apartment, Family Apartment' ||
         prop.pricingNote === 'May vary. Includes utilities and parking. Minimum stay 30 days.')
     ) {
-      return {
+      needsMigrationSave = true;
+      return enrichPropertyRecord({
         ...seeded,
         status: prop.status,
         monthlyRate: prop.monthlyRate,
@@ -874,12 +819,37 @@ export async function readPlatformDb(): Promise<DatabaseState> {
           prop.monthlyRate !== seeded.monthlyRate
             ? `From $${prop.monthlyRate.toLocaleString()} / Month`
             : seeded.startingRate,
-      };
+      });
     }
-    return prop;
+    return enrichPropertyRecord(prop);
   });
 
-  return {
+  // Backfill expanded 13-category concierge catalog once if upgrading from pre-concierge db.json
+  let catalogItems = parsed.catalogItems?.length ? [...parsed.catalogItems] : [...defaultCatalogItems];
+  const isPreConciergeDb = !Array.isArray(parsed.reviews);
+  if (isPreConciergeDb) {
+    needsMigrationSave = true;
+    const legacyCategoryMap: Record<string, string> = {
+      'srv-airport-chauffeur': 'Airport Transportation',
+      'srv-midstay-refresh': 'Housekeeping',
+      'srv-kitchen-provisioning': 'Grocery & Refrigerator Restocking',
+      'srv-remote-workstation': 'Additional Experiences',
+      'srv-pet-comfort': 'Additional Experiences',
+    };
+    catalogItems = catalogItems.map((item) =>
+      legacyCategoryMap[item.id] ? { ...item, category: legacyCategoryMap[item.id] } : item,
+    );
+    const existingIds = new Set(catalogItems.map((c) => c.id));
+    for (const defItem of defaultCatalogItems) {
+      if (!existingIds.has(defItem.id)) {
+        catalogItems.push(defItem);
+      }
+    }
+  }
+
+  const reviews = Array.isArray(parsed.reviews) ? parsed.reviews : defaultReviews;
+
+  const state: DatabaseState = {
     users,
     properties,
     bookings: parsed.bookings ?? defaults.bookings,
@@ -891,11 +861,19 @@ export async function readPlatformDb(): Promise<DatabaseState> {
     inquiries: parsed.inquiries ?? defaults.inquiries,
     notifications: parsed.notifications ?? defaults.notifications,
     auditLogs: parsed.auditLogs ?? defaults.auditLogs,
-    catalogItems: parsed.catalogItems?.length ? parsed.catalogItems : defaultCatalogItems,
+    catalogItems,
     promoCodes: parsed.promoCodes?.length ? parsed.promoCodes : defaultPromoCodes,
     carts: parsed.carts && typeof parsed.carts === 'object' ? parsed.carts : {},
     orders: Array.isArray(parsed.orders) ? parsed.orders : defaults.orders,
+    supportTickets: Array.isArray(parsed.supportTickets) ? (parsed.supportTickets as SupportTicketRecord[]) : [],
+    reviews,
   };
+
+  if (needsMigrationSave) {
+    await writePlatformDb(state);
+  }
+
+  return state;
 }
 
 export async function writePlatformDb(next: DatabaseState) {
@@ -919,6 +897,7 @@ export async function appendAuditLog(actorEmail: string, action: string, targetI
 }
 
 export async function createNotification(input: {
+  customerId?: string;
   recipientEmail: string;
   title: string;
   message: string;
@@ -927,6 +906,7 @@ export async function createNotification(input: {
   const db = await readPlatformDb();
   const item: NotificationRecord = {
     id: `ntf_${Date.now()}_${Math.floor(Math.random() * 90 + 10)}`,
+    customerId: input.customerId,
     recipientEmail: input.recipientEmail.toLowerCase().trim(),
     title: input.title,
     message: input.message,
@@ -966,7 +946,322 @@ export async function findUserByEmail(email: string) {
   return db.users.find((user) => user.email.toLowerCase() === email.toLowerCase().trim());
 }
 
+function parseIsoDateOnly(iso: string): Date | null {
+  if (!iso || !/^\d{4}-\d{2}-\d{2}$/.test(iso.trim())) return null;
+  const d = new Date(`${iso.trim()}T12:00:00Z`);
+  return Number.isNaN(d.getTime()) ? null : d;
+}
+
+function shiftIsoDate(iso: string, deltaDays: number): string {
+  const base = parseIsoDateOnly(iso) || new Date();
+  const next = new Date(base.getTime() + deltaDays * 86400000);
+  return next.toISOString().split('T')[0];
+}
+
+function isMonthDayInWindow(monthDay: string, startMd: string, endMd: string): boolean {
+  if (!startMd || !endMd) return false;
+  if (startMd <= endMd) {
+    return monthDay >= startMd && monthDay <= endMd;
+  }
+  // Wrap-around window (e.g., 12-18 to 01-03)
+  return monthDay >= startMd || monthDay <= endMd;
+}
+
+export function getCombinedBlockedRangesForProperty(
+  db: DatabaseState,
+  propertyId: string,
+  excludeBookingId?: string,
+): BlockedDateRange[] {
+  const prop = db.properties.find((p) => p.id === propertyId);
+  const ranges: BlockedDateRange[] = [];
+
+  if (prop && Array.isArray(prop.blockedDates)) {
+    for (const blk of prop.blockedDates) {
+      if (blk.start && blk.end && blk.start <= blk.end) {
+        ranges.push({
+          id: blk.id || `blk_${blk.start}`,
+          start: blk.start,
+          end: blk.end,
+          status: blk.status || 'blocked',
+          label: blk.label || 'Unavailable Dates',
+        });
+      }
+    }
+  }
+
+  for (const bk of db.bookings) {
+    if (bk.propertyId !== propertyId) continue;
+    if (excludeBookingId && bk.id === excludeBookingId) continue;
+    if (['cancelled', 'refunded'].includes(bk.status)) continue;
+    const inDate = parseIsoDateOnly(bk.checkIn);
+    const outDate = parseIsoDateOnly(bk.checkOut);
+    if (!inDate || !outDate || outDate <= inDate) continue;
+    // Last occupied night is checkOut - 1 day so departure morning remains open for next check-in
+    const inclusiveEnd = shiftIsoDate(bk.checkOut, -1);
+    ranges.push({
+      id: `bk_rng_${bk.id}`,
+      start: bk.checkIn,
+      end: inclusiveEnd < bk.checkIn ? bk.checkIn : inclusiveEnd,
+      status: bk.status === 'confirmed' ? 'booked' : 'reserved',
+      label: bk.status === 'confirmed' ? 'Reserved Stay' : 'Pending Reservation Hold',
+    });
+  }
+
+  return ranges.sort((a, b) => a.start.localeCompare(b.start));
+}
+
+export function findOverlappingPropertyRange(
+  db: DatabaseState,
+  propertyId: string,
+  checkIn: string,
+  checkOut: string,
+  excludeBookingId?: string,
+): BlockedDateRange | null {
+  const inDate = parseIsoDateOnly(checkIn);
+  const outDate = parseIsoDateOnly(checkOut);
+  if (!inDate || !outDate || outDate <= inDate) return null;
+
+  const lastOccupiedNight = shiftIsoDate(checkOut, -1);
+  const ranges = getCombinedBlockedRangesForProperty(db, propertyId, excludeBookingId);
+  for (const rng of ranges) {
+    if (lastOccupiedNight >= rng.start && checkIn <= rng.end) {
+      return rng;
+    }
+  }
+  return null;
+}
+
+export function calculatePropertyStayQuote(
+  db: DatabaseState,
+  input: {
+    propertyId: string;
+    checkIn: string;
+    checkOut: string;
+    adults?: number;
+    children?: number;
+    infants?: number;
+    selectedAddons?: Array<{ serviceId: string; quantity?: number }>;
+    excludeBookingId?: string;
+  },
+): AvailabilityQuoteBreakdown {
+  const prop = db.properties.find((p) => p.id === input.propertyId);
+  const adults = Math.max(1, Math.round(Number(input.adults) || 1));
+  const children = Math.max(0, Math.round(Number(input.children) || 0));
+  const infants = Math.max(0, Math.round(Number(input.infants) || 0));
+  const maxGuests = prop?.maxGuests || Math.max(2, (prop?.bedrooms || 1) * 2);
+
+  const emptyQuote = (reason: string, conflictingRange?: BlockedDateRange): AvailabilityQuoteBreakdown => ({
+    available: false,
+    reason,
+    conflictingRange: conflictingRange
+      ? { start: conflictingRange.start, end: conflictingRange.end, label: conflictingRange.label }
+      : undefined,
+    propertyId: input.propertyId,
+    checkIn: input.checkIn || '',
+    checkOut: input.checkOut || '',
+    nights: 0,
+    adults,
+    children,
+    infants,
+    maxGuests,
+    isExtendedTaxExempt: false,
+    baseNightlyRateUsd: prop ? Math.round(prop.monthlyRate / 30) : 0,
+    effectiveNightlyRateUsd: 0,
+    accommodationSubtotalUsd: 0,
+    addons: [],
+    addonsTotalUsd: 0,
+    serviceFeeUsd: 0,
+    taxRatePercent: 0,
+    taxUsd: 0,
+    subtotalBeforeTaxUsd: 0,
+    totalUsd: 0,
+    unitsRequired: 0,
+  });
+
+  if (!prop) {
+    return emptyQuote('Selected property was not found.');
+  }
+  if (prop.status === 'Reserved') {
+    return emptyQuote(`${prop.unitNumber} is currently marked Reserved and closed to new bookings.`);
+  }
+
+  const start = parseIsoDateOnly(input.checkIn);
+  const end = parseIsoDateOnly(input.checkOut);
+  if (!start || !end) {
+    return emptyQuote('Please select valid check-in and check-out dates.');
+  }
+  if (end <= start) {
+    return emptyQuote('Check-out date must be after check-in date.');
+  }
+
+  const todayIso = new Date().toISOString().split('T')[0];
+  if (input.checkIn < shiftIsoDate(todayIso, -1)) {
+    return emptyQuote('Check-in date cannot be in the past.');
+  }
+
+  const nights = Math.max(1, Math.round((end.getTime() - start.getTime()) / 86400000));
+  const minStay = Math.max(1, prop.minimumStayDays || 5);
+  const maxStay = Math.max(minStay, prop.maximumStayDays || 365);
+
+  if (nights < minStay) {
+    return emptyQuote(`Minimum stay for ${prop.unitNumber} is ${minStay} nights (selected ${nights} night${nights === 1 ? '' : 's'}).`);
+  }
+  if (nights > maxStay) {
+    return emptyQuote(`Maximum single online reservation length is ${maxStay} nights. Contact us for multi-year corporate leases.`);
+  }
+
+  const countedGuests = adults + children;
+  if (countedGuests > maxGuests) {
+    return emptyQuote(
+      `This property accommodates up to ${maxGuests} guests (${adults} adults + ${children} children = ${countedGuests} selected).`,
+    );
+  }
+
+  const conflict = findOverlappingPropertyRange(
+    db,
+    prop.id,
+    input.checkIn,
+    input.checkOut,
+    input.excludeBookingId,
+  );
+  if (conflict) {
+    return emptyQuote(
+      `Selected dates overlap unavailable dates (${conflict.start} through ${conflict.end}). Please choose open dates on the calendar.`,
+      conflict,
+    );
+  }
+
+  const isExtendedTaxExempt = nights >= 30;
+  const extendedDailyBase = prop.monthlyRate / 30;
+  const shortStayNightlyBase = Math.round(extendedDailyBase * 1.12);
+  const baseNightlyRateUsd = isExtendedTaxExempt ? Math.round(extendedDailyBase) : shortStayNightlyBase;
+
+  const rules: SeasonalPricingRule[] = Array.isArray(prop.seasonalPricing) ? prop.seasonalPricing : [];
+  let accommodationSubtotalUsd = 0;
+  const matchedSeasonalLabels = new Set<string>();
+
+  for (let d = 0; d < nights; d++) {
+    const nightIso = shiftIsoDate(input.checkIn, d);
+    const md = nightIso.slice(5); // MM-DD
+    let nightRate = isExtendedTaxExempt ? extendedDailyBase : shortStayNightlyBase;
+
+    for (const rule of rules) {
+      if (isExtendedTaxExempt && !rule.appliesToExtended) continue;
+      if (isMonthDayInWindow(md, rule.startMonthDay, rule.endMonthDay)) {
+        if (typeof rule.nightlyRateOverride === 'number' && rule.nightlyRateOverride > 0) {
+          nightRate = rule.nightlyRateOverride;
+          matchedSeasonalLabels.add(rule.label);
+        } else if (typeof rule.multiplier === 'number' && rule.multiplier > 0) {
+          nightRate = nightRate * rule.multiplier;
+          matchedSeasonalLabels.add(rule.label);
+        }
+        break;
+      }
+    }
+    accommodationSubtotalUsd += nightRate;
+  }
+
+  accommodationSubtotalUsd = Math.round(accommodationSubtotalUsd);
+  const effectiveNightlyRateUsd = Math.round(accommodationSubtotalUsd / nights);
+
+  const resolvedAddons: BookingAddonSelection[] = [];
+  if (Array.isArray(input.selectedAddons)) {
+    for (const reqAddon of input.selectedAddons) {
+      if (!reqAddon?.serviceId) continue;
+      const qty = Math.max(1, Math.round(Number(reqAddon.quantity) || 1));
+      const catItem = db.catalogItems.find(
+        (c) => c.id === reqAddon.serviceId && c.itemType === 'addon_service' && c.available,
+      );
+      if (!catItem) continue;
+      const clampedQty = Math.min(catItem.maxQuantity || 10, qty);
+      const lineTotalUsd = Math.round(catItem.priceUsd * clampedQty * 100) / 100;
+      resolvedAddons.push({
+        serviceId: catItem.id,
+        title: catItem.title,
+        category: catItem.category,
+        unitPriceUsd: catItem.priceUsd,
+        quantity: clampedQty,
+        billingUnitLabel: catItem.billingUnitLabel,
+        lineTotalUsd,
+      });
+    }
+  }
+
+  const addonsTotalUsd = Math.round(
+    resolvedAddons.reduce((sum, a) => sum + a.lineTotalUsd, 0) * 100,
+  ) / 100;
+  const serviceFeeUsd = 95;
+  const taxRatePercent = isExtendedTaxExempt ? 0 : 8;
+  const taxUsd = isExtendedTaxExempt
+    ? 0
+    : Math.round(accommodationSubtotalUsd * 0.08 * 100) / 100;
+  const subtotalBeforeTaxUsd = Math.round((accommodationSubtotalUsd + addonsTotalUsd) * 100) / 100;
+  const totalUsd = Math.round((subtotalBeforeTaxUsd + serviceFeeUsd + taxUsd) * 100) / 100;
+  const unitsRequired = Math.max(1, Math.ceil(totalUsd / 100));
+
+  return {
+    available: true,
+    propertyId: prop.id,
+    checkIn: input.checkIn,
+    checkOut: input.checkOut,
+    nights,
+    adults,
+    children,
+    infants,
+    maxGuests,
+    isExtendedTaxExempt,
+    baseNightlyRateUsd,
+    effectiveNightlyRateUsd,
+    seasonalNote:
+      matchedSeasonalLabels.size > 0
+        ? Array.from(matchedSeasonalLabels).join(' • ')
+        : isExtendedTaxExempt
+        ? 'Extended 30+ Day Rate Applied (CA Occupancy Tax Exempt)'
+        : undefined,
+    accommodationSubtotalUsd,
+    addons: resolvedAddons,
+    addonsTotalUsd,
+    serviceFeeUsd,
+    taxRatePercent,
+    taxUsd,
+    subtotalBeforeTaxUsd,
+    totalUsd,
+    unitsRequired,
+  };
+}
+
+export async function getPropertyAvailabilityPublic(propertyId: string) {
+  const db = await readPlatformDb();
+  const prop = db.properties.find((p) => p.id === propertyId);
+  if (!prop) throw new Error('Property not found');
+  const blockedRanges = getCombinedBlockedRangesForProperty(db, propertyId);
+  return {
+    propertyId: prop.id,
+    status: prop.status,
+    minimumStayDays: prop.minimumStayDays || 5,
+    maximumStayDays: prop.maximumStayDays || 365,
+    maxGuests: prop.maxGuests || Math.max(2, prop.bedrooms * 2),
+    monthlyRate: prop.monthlyRate,
+    seasonalPricing: prop.seasonalPricing || [],
+    blockedRanges,
+  };
+}
+
+export async function quotePropertyStayPublic(input: {
+  propertyId: string;
+  checkIn: string;
+  checkOut: string;
+  adults?: number;
+  children?: number;
+  infants?: number;
+  selectedAddons?: Array<{ serviceId: string; quantity?: number }>;
+}): Promise<AvailabilityQuoteBreakdown> {
+  const db = await readPlatformDb();
+  return calculatePropertyStayQuote(db, input);
+}
+
 export async function createBooking(input: {
+  customerId?: string;
   propertyId: string;
   guestName: string;
   guestEmail: string;
@@ -975,6 +1270,8 @@ export async function createBooking(input: {
   checkOut: string;
   adults?: number;
   children?: number;
+  infants?: number;
+  selectedAddons?: Array<{ serviceId: string; quantity?: number }>;
   notes?: string;
   employer?: string;
   role?: string;
@@ -982,54 +1279,68 @@ export async function createBooking(input: {
   paymentProvider?: 'manual' | 'stripe' | 'paypal' | 'unit_balance';
 }): Promise<BookingRecord> {
   const db = await readPlatformDb();
-  let property = db.properties.find((entry) => entry.id === input.propertyId);
-
+  const property = db.properties.find((entry) => entry.id === input.propertyId);
   if (!property) {
-    property = db.properties[0];
+    throw new Error('Selected property was not found.');
   }
 
-  const start = new Date(input.checkIn);
-  const end = new Date(input.checkOut);
-  if (Number.isNaN(start.getTime()) || Number.isNaN(end.getTime())) {
-    throw new Error('Invalid date range');
-  }
-  if (end <= start) {
-    throw new Error('Check-out must be after check-in');
+  const quote = calculatePropertyStayQuote(db, {
+    propertyId: property.id,
+    checkIn: input.checkIn,
+    checkOut: input.checkOut,
+    adults: input.adults,
+    children: input.children,
+    infants: input.infants,
+    selectedAddons: input.selectedAddons,
+  });
+
+  if (!quote.available) {
+    throw new Error(quote.reason || 'Selected dates are unavailable for this property.');
   }
 
-  const nights = Math.max(1, Math.round((end.getTime() - start.getTime()) / 86400000));
-  const monthlyRate = property?.monthlyRate || 2500;
-  const estimatedUsd = Math.max(500, Math.round((monthlyRate / 30) * nights));
-  const estimatedUnits = Math.max(5, Math.ceil(estimatedUsd / 100));
+  const addonSummary =
+    quote.addons.length > 0
+      ? `Add-ons: ${quote.addons.map((a) => `${a.title} (x${a.quantity})`).join(', ')}`
+      : '';
+  const combinedNotes = [input.notes?.trim(), addonSummary].filter(Boolean).join(' • ') || undefined;
 
   const booking: BookingRecord = {
     id: `bk_${Date.now().toString().slice(-6)}`,
-    propertyId: property ? property.id : 'unit-91',
-    guestName: input.guestName,
+    customerId: input.customerId,
+    propertyId: property.id,
+    guestName: input.guestName.trim(),
     guestEmail: input.guestEmail.trim(),
-    guestPhone: input.guestPhone,
-    employer: input.employer,
-    role: input.role,
+    guestPhone: input.guestPhone.trim(),
+    employer: input.employer?.trim() || undefined,
+    role: input.role?.trim() || undefined,
     checkIn: input.checkIn,
     checkOut: input.checkOut,
-    adults: input.adults ?? 1,
-    children: input.children ?? 0,
+    adults: quote.adults,
+    children: quote.children,
+    infants: quote.infants,
+    selectedAddons: quote.addons.length > 0 ? quote.addons : undefined,
+    accommodationSubtotalUsd: quote.accommodationSubtotalUsd,
+    addonsTotalUsd: quote.addonsTotalUsd,
+    serviceFeeUsd: quote.serviceFeeUsd,
+    taxUsd: quote.taxUsd,
+    totalUsd: quote.totalUsd,
     status: 'awaiting_payment',
-    notes: input.notes,
-    specialRequests: input.specialRequests,
-    totalNights: nights,
-    unitCostUsd: estimatedUsd,
-    unitCostUnits: estimatedUnits,
+    notes: combinedNotes,
+    specialRequests: input.specialRequests?.trim() || undefined,
+    totalNights: quote.nights,
+    unitCostUsd: quote.totalUsd,
+    unitCostUnits: quote.unitsRequired,
     createdAt: new Date().toISOString(),
     paymentProvider: input.paymentProvider ?? 'manual',
   };
 
   db.bookings.unshift(booking);
   db.notifications.unshift({
-    id: `ntf_${Date.now()}`,
+    id: `ntf_${Date.now()}_${Math.floor(Math.random() * 90 + 10)}`,
+    customerId: input.customerId,
     recipientEmail: booking.guestEmail.toLowerCase(),
-    title: `Housing Inquiry Received (${booking.id})`,
-    message: `Your request for ${property?.unitNumber || booking.propertyId} (${booking.checkIn} to ${booking.checkOut}) is ready for review or unit settlement.`,
+    title: `Reservation Recorded — Pending Payment (${booking.id})`,
+    message: `Your reservation for ${property.unitNumber} (${booking.checkIn} to ${booking.checkOut}, $${quote.totalUsd.toLocaleString()}) is recorded and awaiting payment verification.`,
     category: 'booking',
     read: false,
     createdAt: new Date().toISOString(),
@@ -1039,7 +1350,7 @@ export async function createBooking(input: {
     actorEmail: booking.guestEmail.toLowerCase(),
     action: 'HOUSING_BOOKING_CREATED',
     targetId: booking.id,
-    details: `Submitted ${nights}-night stay inquiry for ${property?.unitNumber || booking.propertyId} ($${estimatedUsd.toLocaleString()}).`,
+    details: `Created ${quote.nights}-night reservation for ${property.unitNumber} ($${quote.totalUsd.toLocaleString()}).`,
     createdAt: new Date().toISOString(),
   });
 
@@ -1201,6 +1512,7 @@ export function calculateVehiclePricing(
 }
 
 export async function createVehicleBooking(input: {
+  customerId?: string;
   vehicleId: string;
   exteriorColorName: string;
   exteriorColorHex: string;
@@ -1230,6 +1542,7 @@ export async function createVehicleBooking(input: {
 
   const record: VehicleBookingRecord = {
     id: `vbk_${Date.now().toString().slice(-6)}`,
+    customerId: input.customerId,
     vehicleId: vehicle.id,
     vehicleName: vehicle.name,
     exteriorColorName: input.exteriorColorName || 'Factory Metallic',
@@ -1254,9 +1567,10 @@ export async function createVehicleBooking(input: {
 
   db.vehicleBookings.unshift(record);
   db.notifications.unshift({
-    id: `ntf_${Date.now()}`,
+    id: `ntf_${Date.now()}_${Math.floor(Math.random() * 90 + 10)}`,
+    customerId: input.customerId,
     recipientEmail: record.customerEmail.toLowerCase(),
-    title: `Fleet Reservation Created (${record.id})`,
+    title: `Car Rental Reservation Created (${record.id})`,
     message: `${record.vehicleName} reserved for ${record.pickupDate} → ${record.returnDate} ($${record.totalUsd.toLocaleString()} / ${record.unitsRequired} Units).`,
     category: 'fleet',
     read: false,
@@ -1332,6 +1646,7 @@ export async function updatePaymentAccounts(nextConfig: Partial<PaymentAccountCo
 }
 
 export async function createInquiry(input: {
+  customerId?: string;
   type: InquiryRecord['type'];
   name: string;
   email: string;
@@ -1347,6 +1662,7 @@ export async function createInquiry(input: {
   const ref = `ETL-${Math.floor(100000 + Math.random() * 900000)}`;
   const inquiry: InquiryRecord = {
     id: `inq_${Date.now().toString().slice(-6)}`,
+    customerId: input.customerId,
     referenceCode: ref,
     type: input.type,
     name: input.name.trim(),
@@ -1425,25 +1741,49 @@ export function recomputeCart(db: DatabaseState, cart: CartRecord): CartRecord {
         validationIssues.push(`Residence "${item.title}" is no longer listed and must be removed.`);
         return { ...item, available: false, unavailableReason: 'Listing removed' };
       }
-      const isAvailable = prop.status !== 'Reserved';
-      if (!isAvailable) {
+      const isNotReservedStatus = prop.status !== 'Reserved';
+      if (!isNotReservedStatus) {
         validationIssues.push(`${prop.unitNumber} (${prop.title}) is currently reserved and unavailable.`);
       }
       const billingUnit = item.metadata?.billingUnit === 'night' ? 'night' : 'month';
-      const minQuantity = billingUnit === 'night' ? Math.max(5, prop.minimumStayDays || 5) : 1;
+      const minQuantity = billingUnit === 'night' ? Math.max(1, prop.minimumStayDays || 5) : 1;
       const maxQuantity = billingUnit === 'night' ? 29 : 12;
       const quantity = Math.min(maxQuantity, Math.max(minQuantity, Math.round(item.quantity || minQuantity)));
-      const unitPriceUsd =
-        billingUnit === 'night' ? Math.round(prop.monthlyRate / 30) : prop.monthlyRate;
-      const lineSubtotalUsd = roundCurrency(unitPriceUsd * quantity);
       const checkIn = item.metadata?.checkIn || defaultStartIso(5);
       const stayDays = billingUnit === 'night' ? quantity : quantity * 30;
-      const checkOut = addDaysIso(checkIn, stayDays);
+      const checkOut = item.metadata?.checkOut && billingUnit === 'night'
+        ? addDaysIso(checkIn, stayDays)
+        : addDaysIso(checkIn, stayDays);
+
+      const dateOverlap = findOverlappingPropertyRange(db, prop.id, checkIn, checkOut);
+      if (dateOverlap) {
+        validationIssues.push(
+          `${prop.unitNumber} has conflicting unavailable dates (${dateOverlap.start} to ${dateOverlap.end}). Please select open dates.`,
+        );
+      }
+
+      const quote = calculatePropertyStayQuote(db, {
+        propertyId: prop.id,
+        checkIn,
+        checkOut,
+        adults: item.metadata?.adults || item.metadata?.guests || 1,
+        children: item.metadata?.children || 0,
+        infants: item.metadata?.infants || 0,
+      });
+
+      const isAvailable = isNotReservedStatus && !dateOverlap;
+      const lineSubtotalUsd = quote.available
+        ? roundCurrency(quote.accommodationSubtotalUsd)
+        : roundCurrency(
+            (billingUnit === 'night' ? Math.round((prop.monthlyRate / 30) * 1.12) : prop.monthlyRate) *
+              quantity,
+          );
+      const unitPriceUsd = roundCurrency(lineSubtotalUsd / quantity);
 
       if (isAvailable) {
         subtotalUsd += lineSubtotalUsd;
         hasAccommodation = true;
-        if (billingUnit === 'night' && stayDays < 30) {
+        if (stayDays < 30) {
           // Local transient occupancy tax applies only to stays under 30 days
           taxUsd += roundCurrency(lineSubtotalUsd * 0.08);
         }
@@ -1465,7 +1805,11 @@ export function recomputeCart(db: DatabaseState, cart: CartRecord): CartRecord {
         quantityLabel: billingUnit === 'night' ? 'Nights' : 'Months (30-Day)',
         lineSubtotalUsd,
         available: isAvailable,
-        unavailableReason: isAvailable ? undefined : 'Currently Reserved',
+        unavailableReason: !isNotReservedStatus
+          ? 'Currently Reserved'
+          : dateOverlap
+          ? `Unavailable ${dateOverlap.start}–${dateOverlap.end}`
+          : undefined,
         metadata: {
           ...item.metadata,
           billingUnit,
@@ -1716,7 +2060,7 @@ export async function addCartItem(
       throw new Error(`${prop.unitNumber} is currently reserved and cannot be added to cart.`);
     }
     const billingUnit = input.metadata?.billingUnit === 'night' ? 'night' : 'month';
-    const minQty = billingUnit === 'night' ? Math.max(5, prop.minimumStayDays || 5) : 1;
+    const minQty = billingUnit === 'night' ? Math.max(1, prop.minimumStayDays || 5) : 1;
     const maxQty = billingUnit === 'night' ? 29 : 12;
     if (requestedQty < minQty || requestedQty > maxQty) {
       throw new Error(
@@ -1726,10 +2070,28 @@ export async function addCartItem(
       );
     }
 
+    const checkIn = input.metadata?.checkIn || defaultStartIso(5);
+    const stayDays = billingUnit === 'night' ? requestedQty : requestedQty * 30;
+    const checkOut = addDaysIso(checkIn, stayDays);
+    if (input.metadata?.checkIn) {
+      const overlap = findOverlappingPropertyRange(db, prop.id, checkIn, checkOut);
+      if (overlap) {
+        throw new Error(
+          `${prop.unitNumber} is unavailable from ${overlap.start} through ${overlap.end}. Please select open dates.`,
+        );
+      }
+    }
+    const maxGuests = prop.maxGuests || Math.max(2, prop.bedrooms * 2);
+    const totalCountedGuests =
+      (Number(input.metadata?.adults) || Number(input.metadata?.guests) || 1) +
+      (Number(input.metadata?.children) || 0);
+    if (totalCountedGuests > maxGuests) {
+      throw new Error(`${prop.unitNumber} accommodates up to ${maxGuests} guests.`);
+    }
+
     const existingIdx = cart.items.findIndex(
       (i) => i.itemType === 'accommodation' && i.referenceId === prop.id,
     );
-    const checkIn = input.metadata?.checkIn || defaultStartIso(5);
     const newItem: CartItemRecord = {
       id: existingIdx >= 0 ? cart.items[existingIdx].id : `ci_${Date.now()}_${Math.floor(Math.random() * 900 + 100)}`,
       referenceId: prop.id,
@@ -1749,6 +2111,7 @@ export async function addCartItem(
         ...input.metadata,
         billingUnit,
         checkIn,
+        checkOut,
       },
     };
     if (existingIdx >= 0) {
@@ -1972,22 +2335,95 @@ export async function getOrderByReference(orderRef: string): Promise<OrderRecord
   );
 }
 
+export async function createPropertyAdmin(
+  input: Partial<PropertyRecord> & { title: string; monthlyRate: number },
+  actorEmail: string,
+) {
+  if (!input.title?.trim()) {
+    throw new Error('Property title is required.');
+  }
+  const monthlyRate = Math.max(500, Math.round(Number(input.monthlyRate) || 2500));
+  const db = await readPlatformDb();
+  const idSlug = (input.id || input.title)
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/(^-|-$)/g, '')
+    .slice(0, 48);
+  const id = db.properties.some((p) => p.id === idSlug)
+    ? `${idSlug}-${Date.now().toString().slice(-4)}`
+    : idSlug || `prop-${Date.now().toString().slice(-5)}`;
+
+  const bedrooms = Math.max(1, Math.round(Number(input.bedrooms) || 1));
+  const bathrooms = Math.max(1, Number(input.bathrooms) || 1);
+  const rawProp: PropertyRecord = {
+    id,
+    code: input.code?.trim() || `#${(db.properties.length + 1).toString().padStart(2, '0')}`,
+    unitNumber: input.unitNumber?.trim() || `Residence ${db.properties.length + 1}`,
+    slug: input.slug?.trim() || id,
+    title: input.title.trim(),
+    category: input.category?.trim() || 'Furnished Residence • Short & Extended Stays',
+    shortDesc:
+      input.shortDesc?.trim() ||
+      `Curated ${bedrooms}-bedroom furnished residence with high-speed Wi-Fi and full kitchen.`,
+    fullDesc:
+      input.fullDesc?.trim() ||
+      input.shortDesc?.trim() ||
+      `Professionally managed ${bedrooms}-bedroom, ${bathrooms}-bathroom residence operated by Easy Travel Lodging.`,
+    bedrooms,
+    bathrooms,
+    floor: input.floor === 'Upstairs' ? 'Upstairs' : 'Downstairs',
+    location: input.location?.trim() || 'Rancho Cordova / Greater Sacramento, CA',
+    monthlyRate,
+    startingRate: `From $${monthlyRate.toLocaleString()} / Month`,
+    pricingNote:
+      input.pricingNote?.trim() ||
+      'Includes utilities, high-speed Wi-Fi, and reserved parking. Available for short stays and 30+ day extended stays.',
+    status: input.status && ['Available', 'Inquired', 'Reserved'].includes(input.status) ? input.status : 'Available',
+    sqft: input.sqft?.trim() || `${bedrooms * 480 + 220} sq ft`,
+    liveUrl: input.liveUrl?.trim() || undefined,
+    images:
+      Array.isArray(input.images) && input.images.filter(Boolean).length > 0
+        ? input.images.map((u) => u.trim()).filter(Boolean)
+        : ['https://easytravellodging.com/wp-content/plugins/vikbooking/site/resources/uploads/big_cc-91-1.jpg'],
+    features:
+      Array.isArray(input.features) && input.features.length > 0
+        ? input.features.map((f) => f.trim()).filter(Boolean)
+        : ['Full kitchen with cookware', 'In-unit washer and dryer', 'High-speed Wi-Fi'],
+    amenities:
+      Array.isArray(input.amenities) && input.amenities.length > 0
+        ? input.amenities.map((a) => a.trim()).filter(Boolean)
+        : ['WiFi', 'TV', 'Air Conditioning', 'Bathroom', 'In-Unit Washer/Dryer'],
+    minimumStayDays: Math.max(1, Math.round(Number(input.minimumStayDays) || 5)),
+    maximumStayDays: Math.max(5, Math.round(Number(input.maximumStayDays) || 365)),
+    maxGuests: input.maxGuests ? Math.max(1, Math.round(Number(input.maxGuests))) : undefined,
+    propertyType: input.propertyType?.trim() || undefined,
+    verified: input.verified !== undefined ? Boolean(input.verified) : false,
+    facilities: Array.isArray(input.facilities) ? input.facilities.map((f) => f.trim()).filter(Boolean) : undefined,
+    videoTourUrl: input.videoTourUrl?.trim() || '',
+    videoPosterUrl: input.videoPosterUrl?.trim() || '',
+    bedroomsDetail: Array.isArray(input.bedroomsDetail) ? input.bedroomsDetail : undefined,
+    seasonalPricing: Array.isArray(input.seasonalPricing) ? input.seasonalPricing : undefined,
+    blockedDates: Array.isArray(input.blockedDates) ? input.blockedDates : [],
+    locationInfo: input.locationInfo,
+  };
+
+  const created = enrichPropertyRecord(rawProp);
+  db.properties.unshift(created);
+  db.auditLogs.unshift({
+    id: `aud_${Date.now()}`,
+    actorEmail,
+    action: 'PROPERTY_LISTING_CREATED',
+    targetId: created.id,
+    details: `Created property "${created.title}" (${created.unitNumber}) at $${created.monthlyRate}/mo.`,
+    createdAt: new Date().toISOString(),
+  });
+  await writePlatformDb(db);
+  return created;
+}
+
 export async function updatePropertyAdmin(
   propertyId: string,
-  updates: Partial<
-    Pick<
-      PropertyRecord,
-      | 'title'
-      | 'category'
-      | 'shortDesc'
-      | 'fullDesc'
-      | 'monthlyRate'
-      | 'pricingNote'
-      | 'status'
-      | 'minimumStayDays'
-      | 'images'
-    >
-  >,
+  updates: Partial<PropertyRecord>,
   actorEmail: string,
 ) {
   const db = await readPlatformDb();
@@ -1995,22 +2431,83 @@ export async function updatePropertyAdmin(
   if (!prop) throw new Error('Residence not found');
 
   if (updates.title?.trim()) prop.title = updates.title.trim();
+  if (updates.unitNumber?.trim()) prop.unitNumber = updates.unitNumber.trim();
+  if (updates.code?.trim()) prop.code = updates.code.trim();
   if (updates.category?.trim()) prop.category = updates.category.trim();
+  if (updates.propertyType !== undefined) prop.propertyType = updates.propertyType.trim();
+  if (updates.location?.trim()) prop.location = updates.location.trim();
+  if (updates.sqft !== undefined) prop.sqft = updates.sqft.trim();
+  if (updates.floor && ['Downstairs', 'Upstairs'].includes(updates.floor)) {
+    prop.floor = updates.floor;
+  }
+  if (typeof updates.bedrooms === 'number' && updates.bedrooms >= 1) {
+    prop.bedrooms = Math.round(updates.bedrooms);
+  }
+  if (typeof updates.bathrooms === 'number' && updates.bathrooms >= 1) {
+    prop.bathrooms = Number(updates.bathrooms);
+  }
+  if (typeof updates.maxGuests === 'number' && updates.maxGuests >= 1) {
+    prop.maxGuests = Math.round(updates.maxGuests);
+  }
+  if (typeof updates.verified === 'boolean') {
+    prop.verified = updates.verified;
+  }
   if (updates.shortDesc?.trim()) prop.shortDesc = updates.shortDesc.trim();
   if (updates.fullDesc?.trim()) prop.fullDesc = updates.fullDesc.trim();
   if (typeof updates.monthlyRate === 'number' && updates.monthlyRate > 0) {
     prop.monthlyRate = Math.round(updates.monthlyRate);
     prop.startingRate = `From $${prop.monthlyRate.toLocaleString()} / Month`;
   }
-  if (updates.pricingNote?.trim()) prop.pricingNote = updates.pricingNote.trim();
+  if (updates.pricingNote !== undefined && updates.pricingNote.trim()) {
+    prop.pricingNote = updates.pricingNote.trim();
+  }
   if (updates.status && ['Available', 'Inquired', 'Reserved'].includes(updates.status)) {
     prop.status = updates.status;
   }
   if (typeof updates.minimumStayDays === 'number' && updates.minimumStayDays >= 1) {
     prop.minimumStayDays = Math.round(updates.minimumStayDays);
   }
+  if (typeof updates.maximumStayDays === 'number' && updates.maximumStayDays >= 5) {
+    prop.maximumStayDays = Math.round(updates.maximumStayDays);
+  }
   if (Array.isArray(updates.images) && updates.images.length > 0) {
     prop.images = updates.images.map((u) => u.trim()).filter(Boolean);
+  }
+  if (Array.isArray(updates.amenities)) {
+    prop.amenities = updates.amenities.map((a) => a.trim()).filter(Boolean);
+  }
+  if (Array.isArray(updates.features)) {
+    prop.features = updates.features.map((f) => f.trim()).filter(Boolean);
+  }
+  if (Array.isArray(updates.facilities)) {
+    prop.facilities = updates.facilities.map((f) => f.trim()).filter(Boolean);
+  }
+  if (updates.videoTourUrl !== undefined) {
+    prop.videoTourUrl = updates.videoTourUrl.trim();
+  }
+  if (updates.videoPosterUrl !== undefined) {
+    prop.videoPosterUrl = updates.videoPosterUrl.trim();
+  }
+  if (Array.isArray(updates.bedroomsDetail)) {
+    prop.bedroomsDetail = updates.bedroomsDetail;
+  }
+  if (Array.isArray(updates.seasonalPricing)) {
+    prop.seasonalPricing = updates.seasonalPricing;
+  }
+  if (Array.isArray(updates.blockedDates)) {
+    prop.blockedDates = updates.blockedDates;
+  }
+  if (updates.locationInfo && typeof updates.locationInfo === 'object') {
+    prop.locationInfo = {
+      ...(prop.locationInfo || {
+        neighborhood: prop.location,
+        city: 'Sacramento',
+        state: 'CA',
+        addressDisclosureRestricted: true,
+        nearbyAttractions: [],
+      }),
+      ...updates.locationInfo,
+    };
   }
 
   db.auditLogs.unshift({
@@ -2022,7 +2519,90 @@ export async function updatePropertyAdmin(
     createdAt: new Date().toISOString(),
   });
   await writePlatformDb(db);
-  return prop;
+  return enrichPropertyRecord(prop);
+}
+
+export async function listPropertyReviews(propertyId?: string): Promise<PropertyReviewRecord[]> {
+  const db = await readPlatformDb();
+  const all = Array.isArray(db.reviews) ? db.reviews : [];
+  const filtered = propertyId ? all.filter((r) => r.propertyId === propertyId) : all;
+  return [...filtered].sort((a, b) => b.createdAt.localeCompare(a.createdAt));
+}
+
+export async function createPropertyReview(input: {
+  propertyId: string;
+  customerId: string;
+  customerEmail: string;
+  authorName: string;
+  authorRole?: string;
+  stayContext?: string;
+  rating: number;
+  title?: string;
+  content: string;
+}): Promise<PropertyReviewRecord> {
+  const content = (input.content || '').trim();
+  if (content.length < 15) {
+    throw new Error('Please write at least 15 characters sharing your genuine experience.');
+  }
+  const rating = Math.min(5, Math.max(1, Math.round(Number(input.rating) || 5)));
+
+  const db = await readPlatformDb();
+  const prop = db.properties.find((p) => p.id === input.propertyId);
+  if (!prop) throw new Error('Property not found.');
+
+  if (!Array.isArray(db.reviews)) db.reviews = [];
+
+  const emailLower = input.customerEmail.toLowerCase().trim();
+  const hasVerifiedStay = db.bookings.some(
+    (b) =>
+      b.propertyId === prop.id &&
+      !['cancelled', 'refunded'].includes(b.status) &&
+      (b.customerId === input.customerId || b.guestEmail.toLowerCase().trim() === emailLower),
+  );
+
+  const review: PropertyReviewRecord = {
+    id: `rev_${Date.now()}_${Math.floor(Math.random() * 900 + 100)}`,
+    propertyId: prop.id,
+    customerId: input.customerId,
+    authorName: input.authorName.trim(),
+    authorRole: input.authorRole?.trim() || undefined,
+    stayContext: input.stayContext?.trim() || undefined,
+    rating,
+    title: input.title?.trim() || undefined,
+    content,
+    verifiedBooking: hasVerifiedStay,
+    createdAt: new Date().toISOString(),
+  };
+
+  db.reviews.unshift(review);
+  db.auditLogs.unshift({
+    id: `aud_${Date.now()}`,
+    actorEmail: emailLower,
+    action: 'PROPERTY_REVIEW_SUBMITTED',
+    targetId: review.id,
+    details: `${review.authorName} submitted ${review.rating}-star review on ${prop.unitNumber} (verifiedStay=${hasVerifiedStay}).`,
+    createdAt: review.createdAt,
+  });
+  await writePlatformDb(db);
+  return review;
+}
+
+export async function deletePropertyReviewAdmin(reviewId: string, actorEmail: string) {
+  const db = await readPlatformDb();
+  if (!Array.isArray(db.reviews)) throw new Error('Review not found');
+  const idx = db.reviews.findIndex((r) => r.id === reviewId);
+  if (idx === -1) throw new Error('Review not found');
+  const [removed] = db.reviews.splice(idx, 1);
+  db.auditLogs.unshift({
+    id: `aud_${Date.now()}`,
+    actorEmail,
+    action: 'PROPERTY_REVIEW_DELETED',
+    targetId: reviewId,
+    details: `Removed review by ${removed.authorName} on ${removed.propertyId}.`,
+    createdAt: new Date().toISOString(),
+  });
+  await writePlatformDb(db);
+  return removed;
 }
 
 export async function createCatalogItemAdmin(

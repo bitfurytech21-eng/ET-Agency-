@@ -1,3 +1,21 @@
+import type {
+  BedroomDetail,
+  BlockedDateRange,
+  BookingAddonSelection,
+  PropertyLocationInfo,
+  PropertyReviewRecord,
+  SeasonalPricingRule,
+} from '../src/data/propertyEnrichment.js';
+
+export type {
+  BedroomDetail,
+  BlockedDateRange,
+  BookingAddonSelection,
+  PropertyLocationInfo,
+  PropertyReviewRecord,
+  SeasonalPricingRule,
+} from '../src/data/propertyEnrichment.js';
+
 export type Role = 'guest' | 'admin' | 'staff';
 
 export type BookingStatus = 'pending' | 'awaiting_payment' | 'confirmed' | 'cancelled' | 'completed' | 'refunded';
@@ -39,10 +57,22 @@ export interface PropertyRecord {
   features: string[];
   amenities: string[];
   minimumStayDays: number;
+  maximumStayDays?: number;
+  maxGuests?: number;
+  propertyType?: string;
+  verified?: boolean;
+  facilities?: string[];
+  videoTourUrl?: string;
+  videoPosterUrl?: string;
+  bedroomsDetail?: BedroomDetail[];
+  seasonalPricing?: SeasonalPricingRule[];
+  blockedDates?: BlockedDateRange[];
+  locationInfo?: PropertyLocationInfo;
 }
 
 export interface BookingRecord {
   id: string;
+  customerId?: string;
   propertyId: string;
   guestName: string;
   guestEmail: string;
@@ -53,6 +83,13 @@ export interface BookingRecord {
   checkOut: string;
   adults: number;
   children: number;
+  infants?: number;
+  selectedAddons?: BookingAddonSelection[];
+  accommodationSubtotalUsd?: number;
+  addonsTotalUsd?: number;
+  serviceFeeUsd?: number;
+  taxUsd?: number;
+  totalUsd?: number;
   status: BookingStatus;
   notes?: string;
   specialRequests?: string;
@@ -66,6 +103,7 @@ export interface BookingRecord {
 
 export interface PaymentRecord {
   id: string;
+  customerId?: string;
   bookingId: string;
   amount: number;
   currency: string;
@@ -102,6 +140,7 @@ export interface VehicleInventoryRecord {
 
 export interface VehicleBookingRecord {
   id: string;
+  customerId?: string;
   vehicleId: string;
   vehicleName: string;
   exteriorColorName: string;
@@ -181,6 +220,10 @@ export interface CartItemMetadata {
   exteriorColorHex?: string;
   protectionPlan?: 'standard' | 'executive_shield';
   guests?: number;
+  adults?: number;
+  children?: number;
+  infants?: number;
+  selectedAddons?: BookingAddonSelection[];
   unitsIncluded?: number;
   notes?: string;
 }
@@ -302,6 +345,7 @@ export interface PaymentAccountConfig {
 
 export interface InquiryRecord {
   id: string;
+  customerId?: string;
   referenceCode: string;
   type: 'contact' | 'brochure' | 'host_design' | 'live_chat';
   name: string;
@@ -319,12 +363,28 @@ export interface InquiryRecord {
 
 export interface NotificationRecord {
   id: string;
+  customerId?: string;
   recipientEmail: string;
   title: string;
   message: string;
   category: 'booking' | 'payment' | 'fleet' | 'units' | 'system';
   read: boolean;
   createdAt: string;
+}
+
+export interface SupportTicketRecord {
+  id: string;
+  ticketNumber: string;
+  customerId: string;
+  customerName: string;
+  customerEmail: string;
+  category: string;
+  priority: 'normal' | 'urgent';
+  subject: string;
+  message: string;
+  status: 'open' | 'in_progress' | 'resolved';
+  createdAt: string;
+  updatedAt: string;
 }
 
 export interface AuditLogRecord {
@@ -352,4 +412,6 @@ export interface DatabaseState {
   promoCodes: PromoCodeRecord[];
   carts: Record<string, CartRecord>;
   orders: OrderRecord[];
+  supportTickets?: SupportTicketRecord[];
+  reviews?: PropertyReviewRecord[];
 }

@@ -3,90 +3,144 @@ export type DashboardTab =
   | 'accommodation'
   | 'car-rentals'
   | 'payments'
-  | 'saved-items'
   | 'notifications'
-  | 'messages'
   | 'profile'
   | 'security'
-  | 'settings'
   | 'support';
 
 export type OverviewSubView = 'index' | 'account-summary' | 'upcoming-bookings' | 'recent-activity';
+
 export type AccommodationSubView =
   | 'index'
   | 'my-reservations'
   | 'reservation-details'
   | 'booking-history'
   | 'check-in-details'
-  | 'check-out-details'
   | 'modification-request'
   | 'cancellation-request';
+
 export type CarRentalsSubView =
   | 'index'
   | 'my-rentals'
   | 'rental-details'
   | 'rental-history'
   | 'pickup-details'
-  | 'return-details'
+  | 'driver-information'
   | 'modification-request'
-  | 'cancellation-request'
-  | 'driver-information';
+  | 'cancellation-request';
+
 export type PaymentsSubView =
   | 'index'
   | 'payment-history'
   | 'pending-payments'
   | 'payment-details'
-  | 'payment-methods'
   | 'upload-payment-proof'
-  | 'invoices'
-  | 'receipts';
-export type SavedItemsSubView = 'index' | 'saved-properties' | 'saved-vehicles';
+  | 'invoices';
+
 export type NotificationsSubView = 'index' | 'booking-alerts' | 'payment-alerts' | 'system-notifications';
-export type MessagesSubView = 'index' | 'conversations' | 'new-message' | 'support-tickets';
-export type ProfileSubView =
-  | 'index'
-  | 'personal-information'
-  | 'contact-information'
-  | 'profile-photo'
-  | 'identification'
-  | 'preferences';
+
+export type ProfileSubView = 'index' | 'personal-information' | 'preferences';
+
 export type SecuritySubView =
   | 'index'
   | 'change-password'
   | 'two-factor'
   | 'active-sessions'
   | 'login-history';
-export type SettingsSubView =
-  | 'index'
-  | 'account-settings'
-  | 'notification-settings'
-  | 'privacy-settings'
-  | 'language-currency';
-export type SupportSubView = 'index' | 'help-center' | 'faq' | 'contact-support' | 'submit-request';
+
+export type SupportSubView = 'index' | 'my-tickets' | 'submit-request' | 'faq' | 'contact-support';
+
+export interface UserPreferences {
+  thermostat: string;
+  pillows: string;
+  quietHours: string;
+  emailNotifications: boolean;
+  smsNotifications: boolean;
+  preferredCurrency: string;
+  timezone: string;
+}
+
+export interface UserDriverInfo {
+  primaryDriver: string;
+  licenseNumber: string;
+  issuingState: string;
+}
+
+export interface UserAddress {
+  street: string;
+  city: string;
+  state: string;
+  zip: string;
+  country: string;
+}
+
+export interface DashboardMetadata {
+  id: string;
+  user_id: string;
+  created_at: string;
+  last_accessed_at: string;
+  initialized: boolean;
+}
+
+export interface PaymentAccountInfo {
+  bankName: string;
+  accountName: string;
+  accountNumber: string;
+  achRoutingNumber: string;
+  wireRoutingNumber: string;
+  swiftCode: string;
+  zelleEmail: string;
+  corporateMailingAddress: string;
+  paymentInstructions: string;
+}
+
+export interface ActiveSessionItem {
+  id: string;
+  isCurrent: boolean;
+  device: string;
+  ip: string;
+  createdAt: string;
+  lastActiveAt: string;
+  expiresAt: string;
+}
+
+export interface LoginHistoryItem {
+  id: string;
+  timestamp: string;
+  device: string;
+  ip: string;
+}
+
+export interface AccountActivityItem {
+  id: string;
+  category: 'booking' | 'rental' | 'payment' | 'support' | 'account';
+  title: string;
+  description: string;
+  timestamp: string;
+  amountUsd?: number;
+  status?: string;
+}
 
 export interface UserSession {
   id: string;
+  dashboardId: string;
+  dashboardCreatedAt: string;
+  lastAccessedAt: string;
   name: string;
   email: string;
   phone: string;
   company: string;
   role: string;
-  avatarUrl?: string;
-  units_balance?: number;
+  units_balance: number;
   balance_usd: number;
   memberSince: string;
-  tier: string;
+  passwordUpdatedAt?: string;
   twoFactorEnabled: boolean;
-  idVerified: boolean;
   preferredCurrency: string;
   timezone: string;
-  address?: {
-    street: string;
-    city: string;
-    state: string;
-    zip: string;
-    country: string;
-  };
+  address: UserAddress;
+  preferences: UserPreferences;
+  driverInfo: UserDriverInfo;
 }
 
 export interface UserAccommodationReservation {
@@ -101,12 +155,16 @@ export interface UserAccommodationReservation {
   guestsCount: number;
   status: 'confirmed' | 'pending' | 'completed' | 'cancelled' | 'active';
   totalUsd: number;
+  unitsRequired?: number;
+  paymentMethod?: string;
   accessCode: string;
   wifiNetwork: string;
   wifiPassword: string;
   parkingSpace: string;
   checkInInstructions: string;
   checkOutInstructions: string;
+  specialRequests?: string;
+  notes?: string;
   bookedAt: string;
   image: string;
 }
@@ -127,11 +185,14 @@ export interface UserCarRentalBooking {
   protectionPlan: 'standard' | 'executive_shield';
   status: 'confirmed' | 'active' | 'completed' | 'cancelled' | 'pending';
   totalUsd: number;
+  unitsRequired?: number;
+  paymentMethod?: string;
   primaryDriver: string;
   driverLicenseNumber: string;
   driverLicenseState: string;
-  flightNumber?: string;
+  notes?: string;
   handoverCode: string;
+  createdAt?: string;
   image: string;
 }
 
@@ -154,29 +215,19 @@ export interface UserNotificationItem {
   title: string;
   message: string;
   timestamp: string;
+  createdAtIso?: string;
   isRead: boolean;
-  actionUrl?: string;
-}
-
-export interface UserMessageItem {
-  id: string;
-  sender: 'host' | 'concierge' | 'user' | 'support';
-  senderName: string;
-  subject: string;
-  body: string;
-  timestamp: string;
-  isRead: boolean;
-  ticketId?: string;
-  status?: 'open' | 'resolved' | 'waiting';
+  actionTab?: DashboardTab;
 }
 
 export interface UserSupportTicket {
   id: string;
-  category: 'Housing' | 'Fleet Vehicle' | 'Billing' | 'Access / Keyless' | 'General';
+  ticketNumber: string;
+  category: string;
   subject: string;
+  message: string;
   status: 'open' | 'in_progress' | 'resolved';
-  priority: 'low' | 'normal' | 'urgent';
+  priority: 'normal' | 'urgent';
   createdAt: string;
   updatedAt: string;
-  messagesCount: number;
 }

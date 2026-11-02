@@ -21,26 +21,26 @@ export const AmenitiesSection: React.FC = () => {
         <LivePhotoBackground scene="interior" secondaryScene="courtyard" overlay="subtle" />
         <div className="relative z-10 h-full max-w-[1200px] mx-auto px-4 sm:px-8 flex items-end pb-6 sm:pb-8">
           <div className="text-left">
-            <span className="text-xs font-extrabold uppercase tracking-[0.2em] text-[#4de0d2] block">
+            <span className="type-support font-semibold uppercase tracking-[0.1em] text-[#4de0d2] block">
               Interior Architecture &amp; Comfort
             </span>
-            <p className="font-heading font-bold text-lg sm:text-2xl text-white mt-0.5">
+            <h3 className="type-h3 text-white mt-1">
               Sunlit California living spaces outfitted for effortless arrivals
-            </p>
+            </h3>
           </div>
         </div>
       </div>
 
       <section className="bg-white py-14 sm:py-20 border-b border-[#e6dfd5]">
         <div className="max-w-[1200px] mx-auto px-4 sm:px-8 text-left space-y-10">
-          <div className="space-y-2">
+          <div className="space-y-2.5">
             <h6 className="et_section_h6 text-[#82634f]">
               Included With Every Residence
             </h6>
-            <h2 className="font-heading font-extrabold text-3xl sm:text-4xl text-[#282828] leading-tight">
+            <h2 className="type-h2 text-[#282828]">
               Everyday Home Comforts &amp; <span className="text-[#00897d]">Turnkey Essentials</span>
             </h2>
-            <p className="text-sm sm:text-base text-[#5c5046] max-w-3xl pt-1">
+            <p className="type-body text-[#5c5046] max-w-3xl pt-1">
               Every apartment includes utilities, household essentials, and full community amenities so you can settle in from your first evening without unexpected setup costs.
             </p>
           </div>
@@ -52,10 +52,10 @@ export const AmenitiesSection: React.FC = () => {
                   <Check className="w-4 h-4 stroke-[2.5]" />
                 </div>
                 <div>
-                  <h5 className="font-heading font-bold text-base text-[#282828]">
+                  <h4 className="type-h4 text-[#282828]">
                     {item.title}
-                  </h5>
-                  <p className="text-xs text-[#5c5046] mt-0.5 leading-relaxed">{item.desc}</p>
+                  </h4>
+                  <p className="type-support text-[#5c5046] mt-1">{item.desc}</p>
                 </div>
               </div>
             ))}

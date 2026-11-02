@@ -1,0 +1,1 @@
+CREATE TABLE IF NOT EXISTS payment_accounts (id INTEGER PRIMARY KEY AUTOINCREMENT, bank_name VARCHAR(255) NOT NULL, account_name VARCHAR(255) NOT NULL, account_number VARCHAR(100) NOT NULL, routing_number VARCHAR(100) NOT NULL, swift_code VARCHAR(100), zelle_identifier VARCHAR(255), notes TEXT, is_active INTEGER DEFAULT 1, created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP);

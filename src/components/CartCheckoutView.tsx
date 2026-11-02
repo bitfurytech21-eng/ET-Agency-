@@ -139,8 +139,8 @@ export const CartCheckoutView: React.FC<CartCheckoutViewProps> = ({
   } | null>(null);
 
   // Inline client login inside checkout
-  const [portalEmail, setPortalEmail] = useState('client@easytravellodging.com');
-  const [portalPassword, setPortalPassword] = useState('welcome123');
+  const [portalEmail, setPortalEmail] = useState('');
+  const [portalPassword, setPortalPassword] = useState('');
   const [portalAuthLoading, setPortalAuthLoading] = useState(false);
   const [portalAuthError, setPortalAuthError] = useState<string | null>(null);
 
@@ -205,10 +205,9 @@ export const CartCheckoutView: React.FC<CartCheckoutViewProps> = ({
       setClientAccount(null);
       return;
     }
-    fetch('/api/php/dashboard/get', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ token: clientToken }),
+    fetch('/api/dashboard', {
+      method: 'GET',
+      headers: { Authorization: `Bearer ${clientToken}` },
     })
       .then((r) => r.json())
       .then((d) => {
@@ -281,10 +280,10 @@ export const CartCheckoutView: React.FC<CartCheckoutViewProps> = ({
     setPortalAuthLoading(true);
     setPortalAuthError(null);
     try {
-      const res = await fetch('/api/php/auth/login', {
+      const res = await fetch('/api/auth/customer/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email: portalEmail, password: portalPassword }),
+        body: JSON.stringify({ email: portalEmail.trim(), password: portalPassword }),
       });
       const data = await res.json();
       if (!res.ok || !data.success || !data.token) {
@@ -294,7 +293,7 @@ export const CartCheckoutView: React.FC<CartCheckoutViewProps> = ({
       window.localStorage.setItem('etl_php_token', data.token);
       setClientToken(data.token);
     } catch {
-      setPortalAuthError('Unable to reach Client Portal authentication service.');
+      setPortalAuthError('Unable to reach authentication service.');
     } finally {
       setPortalAuthLoading(false);
     }
@@ -333,9 +332,14 @@ export const CartCheckoutView: React.FC<CartCheckoutViewProps> = ({
         return;
       }
 
+      const checkoutHeaders: Record<string, string> = { 'Content-Type': 'application/json' };
+      if (clientToken) {
+        checkoutHeaders.Authorization = `Bearer ${clientToken}`;
+      }
+
       const res = await fetch('/api/orders/checkout', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: checkoutHeaders,
         body: JSON.stringify({
           cartId,
           customerToken: clientToken || undefined,

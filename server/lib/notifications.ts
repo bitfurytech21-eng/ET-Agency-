@@ -9,7 +9,7 @@ export type AdminNotificationKind =
   | 'welcome_user';
 
 function getFromAddress() {
-  return process.env.SMTP_FROM || process.env.MAIL_FROM_ADDRESS || 'no-reply@easytravellodging.com';
+  return process.env.SMTP_FROM || process.env.MAIL_FROM_ADDRESS || 'easytravelagency@trustagent.space';
 }
 
 function getFromName() {

@@ -1,0 +1,225 @@
+/* Customer Dashboard Specific Styling */
+
+/* Welcome Banner */
+.welcome-banner {
+  background: linear-gradient(135deg, var(--color-navy-dark) 0%, #1e293b 100%);
+  color: #ffffff;
+  border-radius: var(--radius-xl);
+  padding: 2.25rem 2.5rem;
+  margin-bottom: 2rem;
+  box-shadow: var(--shadow-card);
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 2rem;
+}
+
+.welcome-banner::after {
+  content: '';
+  position: absolute;
+  top: -40%;
+  right: -10%;
+  width: 320px;
+  height: 320px;
+  background: radial-gradient(circle, rgba(2, 132, 199, 0.25) 0%, rgba(13, 148, 136, 0) 70%);
+  pointer-events: none;
+}
+
+.welcome-content h1 {
+  color: #ffffff;
+  font-size: 1.85rem;
+  font-weight: 800;
+  margin-bottom: 0.35rem;
+  letter-spacing: -0.02em;
+}
+
+.welcome-content p {
+  color: #cbd5e1;
+  font-size: 0.95rem;
+}
+
+.grant-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: rgba(13, 148, 136, 0.25);
+  border: 1px solid rgba(45, 212, 191, 0.4);
+  color: #2dd4bf;
+  padding: 0.35rem 0.85rem;
+  border-radius: 9999px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  margin-top: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* Internal Balance Command Terminal Card */
+.terminal-card {
+  background: #0f172a;
+  border: 1px solid #1e293b;
+  border-left: 4px solid var(--accent-teal);
+  border-radius: var(--radius-lg);
+  padding: 1.5rem 1.75rem;
+  margin-bottom: 2rem;
+  color: #f8fafc;
+  box-shadow: var(--shadow-card);
+}
+
+.terminal-title {
+  font-family: var(--font-mono);
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #38bdf8;
+  margin-bottom: 0.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.terminal-title::before {
+  content: '⚡';
+  font-size: 1rem;
+}
+
+/* Vehicle Cards Grid */
+.vehicle-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 1.75rem;
+  margin-bottom: 2rem;
+}
+
+.vehicle-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--color-slate-border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-card);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  display: flex;
+  flex-direction: column;
+}
+
+.vehicle-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-hover);
+  border-color: var(--accent-blue-border);
+}
+
+.vehicle-card-img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  background-color: var(--bg-surface-elevated);
+}
+
+.vehicle-card-body {
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.vehicle-title {
+  font-size: 1.2rem;
+  font-weight: 800;
+  color: var(--color-navy-dark);
+  margin-bottom: 0.35rem;
+}
+
+.vehicle-category {
+  font-size: 0.8rem;
+  color: var(--accent-blue);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 0.75rem;
+}
+
+.vehicle-specs {
+  display: flex;
+  gap: 1rem;
+  font-size: 0.825rem;
+  color: var(--color-slate-muted);
+  margin-bottom: 1.25rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--color-slate-border);
+}
+
+.vehicle-price {
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: var(--color-navy-dark);
+}
+
+.vehicle-price span {
+  font-size: 0.825rem;
+  font-weight: 500;
+  color: var(--color-slate-muted);
+}
+
+.vehicle-actions {
+  margin-top: auto;
+  display: flex;
+  gap: 0.75rem;
+}
+
+/* 3D Canvas Container */
+.canvas-3d-wrapper {
+  width: 100%;
+  height: 380px;
+  background: radial-gradient(circle at center, #1e293b 0%, #0b192c 100%);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  position: relative;
+  box-shadow: var(--shadow-modal);
+  border: 1px solid #334155;
+  margin-bottom: 1.5rem;
+}
+
+.canvas-3d-wrapper canvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.canvas-3d-overlay {
+  position: absolute;
+  bottom: 1rem;
+  left: 1rem;
+  right: 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  pointer-events: none;
+}
+
+.canvas-3d-controls {
+  pointer-events: auto;
+  display: flex;
+  gap: 0.5rem;
+  background: rgba(15, 23, 42, 0.75);
+  backdrop-filter: blur(8px);
+  padding: 0.4rem 0.75rem;
+  border-radius: 9999px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.canvas-btn {
+  background: none;
+  border: none;
+  color: #ffffff;
+  font-size: 0.8rem;
+  font-weight: 600;
+  padding: 0.25rem 0.65rem;
+  border-radius: 9999px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.canvas-btn:hover, .canvas-btn.active {
+  background: var(--accent-blue);
+}

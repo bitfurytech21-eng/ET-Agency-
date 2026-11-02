@@ -20,7 +20,6 @@ import {
   Coins,
   Download,
   Inbox,
-  Sparkles,
   ArrowLeft,
   ShoppingBag,
   Package,
@@ -43,6 +42,7 @@ import { AdminHousekeeping } from './admin/AdminHousekeeping';
 import { AdminReports } from './admin/AdminReports';
 import { AdminSettings } from './admin/AdminSettings';
 import type { AdminProperty, AdminReservation, AdminVehicle, AdminGuest } from './admin/adminTypes';
+import { CONCIERGE_CATEGORIES, PropertyReviewRecord } from '../data/propertyEnrichment';
 
 interface AdminPortalProps {
   onNavigateTab: (tab: string) => void;
@@ -250,19 +250,7 @@ interface AdminOrderRecord {
   createdAt: string;
 }
 
-interface AdminPropertyRecord {
-  id: string;
-  unitNumber: string;
-  title: string;
-  category: string;
-  shortDesc: string;
-  fullDesc: string;
-  monthlyRate: number;
-  pricingNote: string;
-  status: 'Available' | 'Inquired' | 'Reserved';
-  minimumStayDays: number;
-  images: string[];
-}
+type AdminPropertyRecord = AdminProperty;
 
 interface AdminCatalogItem {
   id: string;
@@ -317,11 +305,32 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ onNavigateTab }) => {
   const { refreshCatalog } = useCart();
   const [adminToken, setAdminToken] = useState<string | null>(() => localStorage.getItem('etl_admin_token'));
   const [adminProfile, setAdminProfile] = useState<{ name: string; email: string; role: string } | null>(null);
-  const [activeTab, setActiveTab] = useState<AdminTab>('properties');
+  const [activeTab, setActiveTab] = useState<AdminTab>(() => {
+    const seg = window.location.pathname.replace(/^\/+/, '').replace(/\/+$/, '').split('/')[1]?.toLowerCase();
+    const validTabs: AdminTab[] = [
+      'properties',
+      'reservations',
+      'car-rentals',
+      'payments',
+      'guests',
+      'hosts',
+      'housekeeping',
+      'reports',
+      'settings',
+      'overview',
+      'orders',
+      'catalog',
+      'wires',
+      'bookings',
+      'fleet',
+      'clients',
+    ];
+    return seg && validTabs.includes(seg as AdminTab) ? (seg as AdminTab) : 'properties';
+  });
 
   // Login inputs
-  const [loginEmail, setLoginEmail] = useState('admin@easytravellodging.com');
-  const [loginPassword, setLoginPassword] = useState('admin12345');
+  const [loginEmail, setLoginEmail] = useState('');
+  const [loginPassword, setLoginPassword] = useState('');
 
   // Dashboard state
   const [overview, setOverview] = useState<AdminOverview | null>(null);
@@ -337,6 +346,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ onNavigateTab }) => {
   const [inquiries, setInquiries] = useState<AdminInquiry[]>([]);
   const [auditLogs, setAuditLogs] = useState<AdminAuditLog[]>([]);
   const [paymentAccounts, setPaymentAccounts] = useState<PaymentAccountConfig | null>(null);
+  const [reviews, setReviews] = useState<PropertyReviewRecord[]>([]);
 
   // Action states
   const [isLoading, setIsLoading] = useState(false);
@@ -361,7 +371,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ onNavigateTab }) => {
 
   // New Catalog Item form
   const [newItemType, setNewItemType] = useState<'addon_service' | 'unit_package'>('addon_service');
-  const [newItemCategory, setNewItemCategory] = useState('Arrival & Concierge');
+  const [newItemCategory, setNewItemCategory] = useState<string>(CONCIERGE_CATEGORIES[0]);
   const [newItemTitle, setNewItemTitle] = useState('');
   const [newItemShortDesc, setNewItemShortDesc] = useState('');
   const [newItemPrice, setNewItemPrice] = useState('145');
@@ -412,6 +422,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ onNavigateTab }) => {
         setInquiries(data.inquiries || []);
         setAuditLogs(data.auditLogs || []);
         setPaymentAccounts(data.paymentAccounts || null);
+        setReviews(data.reviews || []);
       }
     } catch (err) {
       console.error('[Admin Dashboard] Error:', err);
@@ -954,6 +965,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ onNavigateTab }) => {
   });
 
   const unifiedProperties: AdminProperty[] = properties.map((p) => ({
+    ...p,
     id: p.id,
     unitNumber: p.unitNumber,
     title: p.title,
@@ -964,7 +976,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ onNavigateTab }) => {
     pricingNote: p.pricingNote,
     status: p.status,
     minimumStayDays: p.minimumStayDays,
-    images: p.images,
+    images: p.images || [],
   }));
 
   const unifiedReservations: AdminReservation[] = [
@@ -1058,8 +1070,78 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ onNavigateTab }) => {
   };
 
   const handleUnifiedAddProperty = async (newProp: AdminProperty) => {
-    setProperties((prev) => [...prev, newProp as AdminPropertyRecord]);
-    setSuccessMsg(`Added ${newProp.title} to portfolio`);
+    if (!adminToken) return;
+    try {
+      const res = await fetch('/api/admin/properties', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${adminToken}`,
+        },
+        body: JSON.stringify(newProp),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.message || 'Could not create residence');
+      setSuccessMsg(`Published ${data.property?.title || newProp.title} to portfolio.`);
+      await refreshCatalog();
+      fetchAdminDashboard(adminToken);
+    } catch (err: unknown) {
+      setErrorMsg(err instanceof Error ? err.message : 'Could not create residence');
+    }
+  };
+
+  const handleCreateConciergeFromProperties = async (payload: {
+    category: string;
+    title: string;
+    shortDesc: string;
+    priceUsd: number;
+    billingUnitLabel: string;
+    image?: string;
+  }) => {
+    if (!adminToken) return;
+    try {
+      const res = await fetch('/api/admin/catalog', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${adminToken}`,
+        },
+        body: JSON.stringify({
+          itemType: 'addon_service',
+          category: payload.category,
+          title: payload.title,
+          shortDesc: payload.shortDesc,
+          fullDesc: payload.shortDesc,
+          priceUsd: payload.priceUsd,
+          billingUnitLabel: payload.billingUnitLabel,
+          image: payload.image,
+          available: true,
+        }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.message || 'Could not publish concierge service');
+      setSuccessMsg(`Added "${data.item.title}" to Concierge Add-Ons.`);
+      await refreshCatalog();
+      fetchAdminDashboard(adminToken);
+    } catch (err: unknown) {
+      setErrorMsg(err instanceof Error ? err.message : 'Could not publish concierge service');
+    }
+  };
+
+  const handleDeleteReviewAdmin = async (reviewId: string) => {
+    if (!adminToken) return;
+    try {
+      const res = await fetch(`/api/admin/reviews/${encodeURIComponent(reviewId)}`, {
+        method: 'DELETE',
+        headers: { Authorization: `Bearer ${adminToken}` },
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.message || 'Could not remove review');
+      setSuccessMsg('Customer review removed.');
+      fetchAdminDashboard(adminToken);
+    } catch (err: unknown) {
+      setErrorMsg(err instanceof Error ? err.message : 'Review removal failed');
+    }
   };
 
   const handleUnifiedReservationStatus = async (id: string, newStatus: AdminReservation['status']) => {
@@ -1131,10 +1213,17 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ onNavigateTab }) => {
             <div className="flex flex-wrap items-center gap-2.5">
               <button
                 type="button"
-                onClick={() => onNavigateTab('portal')}
+                onClick={() => onNavigateTab('home')}
                 className="px-3.5 py-2 rounded-xl bg-white/15 hover:bg-white/25 backdrop-blur-xs border border-white/25 text-white text-xs font-semibold flex items-center gap-1.5 transition-colors cursor-pointer"
               >
                 <ArrowLeft className="w-3.5 h-3.5" />
+                <span>Live Website</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => onNavigateTab('portal')}
+                className="px-3.5 py-2 rounded-xl bg-white/15 hover:bg-white/25 backdrop-blur-xs border border-white/25 text-white text-xs font-semibold flex items-center gap-1.5 transition-colors cursor-pointer"
+              >
                 <span>Client Portal</span>
               </button>
 
@@ -1236,39 +1325,12 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ onNavigateTab }) => {
                     </p>
                   </div>
 
-                  <div className="p-4 bg-[#faf8f5] border border-[#e6dfd5] rounded-xl space-y-2 text-xs">
-                    <div className="flex items-center justify-between text-[#00897d] font-bold">
-                      <span className="flex items-center gap-1.5">
-                        <Sparkles className="w-3.5 h-3.5" /> Pre-Seeded Admin Credentials
-                      </span>
-                      <span className="text-[10px] font-mono text-[#857568]">RBAC: admin / staff</span>
-                    </div>
-                    <div className="font-mono text-[11px] text-[#5c5046] space-y-1">
-                      <div><strong className="text-[#282828]">Admin:</strong> admin@easytravellodging.com / admin12345</div>
-                      <div><strong className="text-[#282828]">Staff:</strong> concierge@easytravellodging.com / staff12345</div>
-                    </div>
-                    <div className="flex gap-2 pt-1">
-                      <button
-                        type="button"
-                        onClick={() => {
-                          setLoginEmail('admin@easytravellodging.com');
-                          setLoginPassword('admin12345');
-                        }}
-                        className="flex-1 py-1.5 bg-[#82634f] hover:bg-[#6e5240] rounded-lg text-[11px] font-bold text-white transition-colors cursor-pointer"
-                      >
-                        Load Host Admin
-                      </button>
-                      <button
-                        type="button"
-                        onClick={() => {
-                          setLoginEmail('concierge@easytravellodging.com');
-                          setLoginPassword('staff12345');
-                        }}
-                        className="flex-1 py-1.5 bg-white hover:bg-[#f4efe9] border border-[#dfd6ca] rounded-lg text-[11px] font-bold text-[#5c5046] transition-colors cursor-pointer"
-                      >
-                        Load Concierge Staff
-                      </button>
-                    </div>
+                  <div className="p-3.5 bg-[#faf8f5] border border-[#e6dfd5] rounded-xl flex items-center justify-between text-xs text-[#5c5046]">
+                    <span className="flex items-center gap-1.5 font-semibold text-[#00897d]">
+                      <ShieldCheck className="w-3.5 h-3.5 shrink-0" />
+                      Role-Based Administrative Access
+                    </span>
+                    <span className="font-mono text-[11px] text-[#857568]">admin · staff</span>
                   </div>
 
                   <form onSubmit={handleLogin} className="space-y-4">
@@ -1401,13 +1463,15 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ onNavigateTab }) => {
             {/* Admin Navigation Tabs */}
             <div className="flex flex-wrap gap-2 border-b border-[#e6dfd5] pb-3">
               {[
-                { id: 'properties', label: 'Properties', icon: Building2, badge: properties.length },
+                { id: 'properties', label: 'Properties & Concierge', icon: Building2, badge: properties.length },
+                { id: 'catalog', label: 'Storefront & Promos', icon: ShoppingBag, badge: catalogItems.length },
+                { id: 'orders', label: 'Cart Orders', icon: Package, badge: overview.pendingOrdersCount },
                 { id: 'reservations', label: 'Reservations', icon: FileSpreadsheet, badge: overview.pendingBookings },
                 { id: 'car-rentals', label: 'Car Rentals', icon: Car, badge: vehicles.length },
                 { id: 'payments', label: 'Payments', icon: Landmark, badge: overview.pendingWireCount },
                 { id: 'guests', label: 'Guests', icon: Users, badge: customers.length },
                 { id: 'hosts', label: 'Hosts', icon: Users },
-                { id: 'housekeeping', label: 'Housekeeping', icon: Sparkles },
+                { id: 'housekeeping', label: 'Housekeeping', icon: Wrench },
                 { id: 'reports', label: 'Reports', icon: FileSpreadsheet },
                 { id: 'settings', label: 'Settings', icon: Wrench },
                 { id: 'overview', label: 'Inquiries & Leads', icon: Inbox, badge: overview.newInquiriesCount },
@@ -1441,12 +1505,18 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ onNavigateTab }) => {
               })}
             </div>
 
-            {/* 1. PROPERTIES (admin/properties/) */}
+            {/* 1. PROPERTIES & CONCIERGE */}
             {activeTab === 'properties' && (
               <AdminProperties
                 properties={unifiedProperties}
                 onUpdateProperty={handleUnifiedPropertyUpdate}
                 onAddProperty={handleUnifiedAddProperty}
+                catalogItems={catalogItems}
+                onCreateConciergeService={handleCreateConciergeFromProperties}
+                onToggleConciergeService={handleToggleCatalogAvailability}
+                onDeleteConciergeService={handleDeleteCatalogItem}
+                reviews={reviews}
+                onDeleteReview={handleDeleteReviewAdmin}
               />
             )}
 
@@ -2057,14 +2127,18 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ onNavigateTab }) => {
                           </div>
                           <div>
                             <label className="block font-bold text-[#5c5046] mb-1">Category</label>
-                            <input
-                              type="text"
-                              required
+                            <select
                               value={newItemCategory}
                               onChange={(e) => setNewItemCategory(e.target.value)}
-                              placeholder="Arrival & Concierge"
                               className="w-full h-10 px-3 bg-[#faf8f5] border border-[#dfd6ca] rounded-xl text-[#282828] outline-none focus:border-[#00b7a8] focus:bg-white"
-                            />
+                            >
+                              {CONCIERGE_CATEGORIES.map((cat) => (
+                                <option key={cat} value={cat}>
+                                  {cat}
+                                </option>
+                              ))}
+                              <option value="Prepaid Lodging Units">Prepaid Lodging Units</option>
+                            </select>
                           </div>
                         </div>
 

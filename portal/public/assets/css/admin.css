@@ -1,0 +1,173 @@
+/* Administration Control Panel Layout */
+
+body.admin-body {
+  background-color: var(--bg-canvas);
+  display: flex;
+  min-height: 100vh;
+}
+
+.admin-layout {
+  display: flex;
+  width: 100%;
+  min-height: 100vh;
+}
+
+/* Sidebar Navigation */
+.admin-sidebar {
+  width: 270px;
+  background-color: var(--color-navy-dark);
+  color: #94a3b8;
+  display: flex;
+  flex-direction: column;
+  padding: 1.5rem 1.25rem;
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 100;
+  overflow-y: auto;
+  border-right: 1px solid #1e293b;
+  box-shadow: 4px 0 20px rgba(0, 0, 0, 0.15);
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.admin-sidebar-header {
+  padding-bottom: 1.5rem;
+  margin-bottom: 1.5rem;
+  border-bottom: 1px solid #1e293b;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.admin-sidebar-brand {
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: #ffffff;
+  letter-spacing: -0.02em;
+}
+
+.admin-sidebar-brand span {
+  color: var(--accent-blue-border);
+  font-weight: 600;
+  font-size: 0.75rem;
+  background: rgba(2, 132, 199, 0.2);
+  padding: 0.15rem 0.45rem;
+  border-radius: 4px;
+  margin-left: 0.35rem;
+}
+
+.admin-sidebar-section {
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #64748b;
+  margin: 1.25rem 0 0.5rem 0.75rem;
+}
+
+.admin-sidebar nav {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.admin-sidebar a {
+  color: #94a3b8;
+  text-decoration: none;
+  font-size: 0.875rem;
+  font-weight: 500;
+  padding: 0.65rem 0.85rem;
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  transition: all 0.2s ease;
+}
+
+.admin-sidebar a:hover {
+  color: #ffffff;
+  background-color: rgba(255, 255, 255, 0.06);
+}
+
+.admin-sidebar a.active {
+  color: #ffffff;
+  background-color: var(--accent-blue);
+  font-weight: 600;
+  box-shadow: 0 4px 12px rgba(2, 132, 199, 0.3);
+}
+
+.admin-sidebar-footer {
+  margin-top: auto;
+  padding-top: 1.5rem;
+  border-top: 1px solid #1e293b;
+}
+
+/* Admin Main Content Wrapper */
+.admin-content {
+  margin-left: 270px;
+  flex: 1;
+  padding: 2rem 2.5rem;
+  min-width: 0;
+}
+
+.admin-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 2rem;
+  padding-bottom: 1.25rem;
+  border-bottom: 1px solid var(--color-slate-border);
+  gap: 1.5rem;
+}
+
+.admin-header h1 {
+  font-size: 1.65rem;
+  font-weight: 800;
+}
+
+/* Audit Logs Timeline */
+.timeline {
+  position: relative;
+  padding-left: 1.75rem;
+}
+
+.timeline::before {
+  content: '';
+  position: absolute;
+  left: 0.5rem;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background-color: var(--color-slate-border);
+}
+
+.timeline-item {
+  position: relative;
+  margin-bottom: 1.5rem;
+}
+
+.timeline-dot {
+  position: absolute;
+  left: -1.75rem;
+  top: 0.25rem;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background-color: var(--accent-blue);
+  border: 2px solid #ffffff;
+  box-shadow: 0 0 0 2px var(--accent-blue-light);
+}
+
+.timeline-content {
+  background: var(--bg-surface);
+  border: 1px solid var(--color-slate-border);
+  border-radius: var(--radius-md);
+  padding: 1rem 1.25rem;
+}
+
+.timeline-time {
+  font-size: 0.775rem;
+  color: var(--color-slate-muted);
+  font-weight: 500;
+}

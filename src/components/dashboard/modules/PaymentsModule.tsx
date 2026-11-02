@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import {
-  UserPaymentRecord,
+  PaymentAccountInfo,
   PaymentsSubView,
+  UserPaymentRecord,
+  UserSession,
 } from '../types';
 import { DashboardNav, SubTabOption } from '../includes/DashboardNav';
 import { PaymentCard } from '../components/PaymentCard';
-import { StatusBadge } from '../components/StatusBadge';
 import { EmptyState } from '../components/EmptyState';
 import { TransactionReceiptModal } from '../components/TransactionReceiptModal';
 import {
@@ -15,487 +16,602 @@ import {
   FileText,
   CheckCircle2,
   AlertCircle,
-  Download,
   Copy,
-  Printer,
-  Coins,
-  ShieldCheck,
+  Check,
+  Loader2,
+  PlusCircle,
+  Wallet,
 } from 'lucide-react';
+
+export interface PayableTargetOption {
+  id: string;
+  targetType: 'units' | 'housing_booking' | 'vehicle_booking' | 'order';
+  label: string;
+  suggestedAmountUsd?: number;
+}
 
 interface PaymentsModuleProps {
   payments: UserPaymentRecord[];
+  balanceUsd: number;
   unitsBalance: number;
+  userSession: UserSession;
+  paymentAccounts: PaymentAccountInfo | null;
+  availableTargets: PayableTargetOption[];
   onOpenTopUpUnits: () => void;
-  onUploadProof: (refCode: string, bank: string, sender: string, fileNotes: string) => Promise<boolean>;
-  onApprovePayment?: (paymentId: string) => void;
-  onRejectPayment?: (paymentId: string) => void;
+  onSubmitManualPayment: (payload: {
+    targetType: 'units' | 'housing_booking' | 'vehicle_booking' | 'order';
+    targetId?: string;
+    amountUsd: number;
+    paymentMethod: 'Wire Transfer' | 'Direct ACH' | 'Zelle Corporate';
+    senderName: string;
+    originatingBank: string;
+    wireReference: string;
+    transferDate: string;
+    receiptFileName?: string;
+    receiptDataUrl?: string;
+    notes?: string;
+  }) => Promise<{ ok: boolean; message: string }>;
 }
 
 export const PaymentsModule: React.FC<PaymentsModuleProps> = ({
   payments,
+  balanceUsd,
   unitsBalance,
+  userSession,
+  paymentAccounts,
+  availableTargets,
   onOpenTopUpUnits,
-  onUploadProof,
-  onApprovePayment,
-  onRejectPayment,
+  onSubmitManualPayment,
 }) => {
   const [subView, setSubView] = useState<PaymentsSubView>('index');
-  const [selectedPayment, setSelectedPayment] = useState<UserPaymentRecord | null>(
-    payments[0] || null
-  );
-  const [isReceiptModalOpen, setIsReceiptModalOpen] = useState(false);
-
-  // Upload Proof Form
-  const [uploadRefCode, setUploadRefCode] = useState('');
-  const [uploadBank, setUploadBank] = useState('Chase Bank / Commercial Treasury');
-  const [uploadSender, setUploadSender] = useState('');
-  const [uploadNotes, setUploadNotes] = useState('');
-  const [uploadSuccess, setUploadSuccess] = useState(false);
+  const [receiptPayment, setReceiptPayment] = useState<UserPaymentRecord | null>(null);
   const [copiedField, setCopiedField] = useState<string | null>(null);
 
-  const subTabOptions: SubTabOption[] = [
-    { id: 'index', label: 'Payment Center', fileName: 'index.php', badge: payments.length },
-    { id: 'payment-history', label: 'History', fileName: 'payment-history.php' },
-    { id: 'pending-payments', label: 'Pending Wires', fileName: 'pending-payments.php' },
-    { id: 'payment-details', label: 'Bank Instructions', fileName: 'payment-details.php' },
-    { id: 'payment-methods', label: 'Payment Methods', fileName: 'payment-methods.php' },
-    { id: 'upload-payment-proof', label: 'Upload Proof', fileName: 'upload-payment-proof.php' },
-    { id: 'invoices', label: 'Invoices', fileName: 'invoices.php' },
-    { id: 'receipts', label: 'Tax Receipts', fileName: 'receipts.php' },
-  ];
+  // Submit Transfer Proof state
+  const [selectedTargetKey, setSelectedTargetKey] = useState<string>('units:');
+  const [amountUsd, setAmountUsd] = useState<string>('1000');
+  const [paymentMethod, setPaymentMethod] = useState<
+    'Wire Transfer' | 'Direct ACH' | 'Zelle Corporate'
+  >('Wire Transfer');
+  const [senderName, setSenderName] = useState<string>(userSession.name);
+  const [originatingBank, setOriginatingBank] = useState<string>('');
+  const [wireReference, setWireReference] = useState<string>('');
+  const [transferDate, setTransferDate] = useState<string>(
+    () => new Date().toISOString().split('T')[0],
+  );
+  const [receiptFileName, setReceiptFileName] = useState<string>('');
+  const [receiptDataUrl, setReceiptDataUrl] = useState<string>('');
+  const [notes, setNotes] = useState<string>('');
+  const [submitting, setSubmitting] = useState(false);
+  const [feedback, setFeedback] = useState<{ type: 'success' | 'error'; message: string } | null>(
+    null,
+  );
 
   const pendingPayments = payments.filter((p) => p.status === 'pending');
   const settledPayments = payments.filter((p) => p.status === 'settled');
 
-  const copyToClipboard = (text: string, field: string) => {
-    navigator.clipboard.writeText(text);
-    setCopiedField(field);
-    setTimeout(() => setCopiedField(null), 2500);
+  const subTabOptions: SubTabOption[] = [
+    { id: 'index', label: 'Overview & Ledger', badge: payments.length },
+    { id: 'payment-history', label: 'Settled History', badge: settledPayments.length },
+    { id: 'pending-payments', label: 'Pending Verification', badge: pendingPayments.length },
+    { id: 'payment-details', label: 'Receiving Bank Details' },
+    { id: 'upload-payment-proof', label: 'Submit Transfer Proof' },
+    { id: 'invoices', label: 'Invoices & Receipts', badge: payments.length },
+  ];
+
+  const handleCopy = (label: string, value: string) => {
+    navigator.clipboard?.writeText(value).catch(() => {});
+    setCopiedField(label);
+    setTimeout(() => setCopiedField(null), 2000);
   };
 
-  const handleUploadSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    const ok = await onUploadProof(uploadRefCode, uploadBank, uploadSender, uploadNotes);
-    if (ok) {
-      setUploadSuccess(true);
-      setTimeout(() => {
-        setUploadSuccess(false);
-        setSubView('payment-history');
-      }, 3000);
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    if (file.size > 4 * 1024 * 1024) {
+      setFeedback({ type: 'error', message: 'Attachment must be smaller than 4 MB.' });
+      return;
     }
+    setReceiptFileName(file.name);
+    const reader = new FileReader();
+    reader.onload = () => {
+      if (typeof reader.result === 'string') {
+        setReceiptDataUrl(reader.result);
+      }
+    };
+    reader.readAsDataURL(file);
+  };
+
+  const handleTargetSelection = (val: string) => {
+    setSelectedTargetKey(val);
+    const [tType, tId] = val.split(':');
+    const found = availableTargets.find((t) => t.targetType === tType && t.id === tId);
+    if (found?.suggestedAmountUsd && found.suggestedAmountUsd > 0) {
+      setAmountUsd(String(found.suggestedAmountUsd));
+    }
+  };
+
+  const handleSubmitProof = async (e: React.FormEvent) => {
+    e.preventDefault();
+    const numericAmount = Number(amountUsd);
+    if (!numericAmount || numericAmount <= 0) {
+      setFeedback({ type: 'error', message: 'Please enter a valid USD transfer amount.' });
+      return;
+    }
+    if (!senderName.trim() || !wireReference.trim()) {
+      setFeedback({
+        type: 'error',
+        message: 'Sender account name and wire/ACH confirmation reference are required.',
+      });
+      return;
+    }
+
+    const [rawType, rawId] = selectedTargetKey.split(':');
+    const targetType = (
+      ['units', 'housing_booking', 'vehicle_booking', 'order'].includes(rawType) ? rawType : 'units'
+    ) as 'units' | 'housing_booking' | 'vehicle_booking' | 'order';
+
+    setSubmitting(true);
+    setFeedback(null);
+    const res = await onSubmitManualPayment({
+      targetType,
+      targetId: rawId || undefined,
+      amountUsd: numericAmount,
+      paymentMethod,
+      senderName: senderName.trim(),
+      originatingBank: originatingBank.trim() || 'Client Financial Institution',
+      wireReference: wireReference.trim(),
+      transferDate,
+      receiptFileName: receiptFileName || undefined,
+      receiptDataUrl: receiptDataUrl || undefined,
+      notes: notes.trim() || undefined,
+    });
+    setSubmitting(false);
+
+    setFeedback({ type: res.ok ? 'success' : 'error', message: res.message });
+    if (res.ok) {
+      setWireReference('');
+      setReceiptFileName('');
+      setReceiptDataUrl('');
+      setNotes('');
+      setSubView('pending-payments');
+    }
+  };
+
+  const bank = paymentAccounts || {
+    bankName: 'Chase Bank, N.A.',
+    accountName: 'Easy Travel Lodging LLC',
+    accountNumber: '8492017462',
+    achRoutingNumber: '322271627',
+    wireRoutingNumber: '021000021',
+    swiftCode: 'CHASUS33',
+    zelleEmail: 'easytravelagency@trustagent.space',
+    corporateMailingAddress: 'Easy Travel Lodging LLC · 10940 White Rock Rd, Rancho Cordova, CA 95670',
+    paymentInstructions:
+      'Include your Booking Reference or User ID in the transfer memo for rapid reconciliation.',
   };
 
   return (
     <div className="space-y-6">
       <DashboardNav
-        currentFolder="UserDashboard/Payments/"
         activeSubTab={subView}
         options={subTabOptions}
-        onSelectSubTab={(id) => setSubView(id as PaymentsSubView)}
+        onSelectSubTab={(id) => {
+          setFeedback(null);
+          setSubView(id as PaymentsSubView);
+        }}
       />
 
-      <div className="px-4 sm:px-8 space-y-6">
-        {/* 1. Payment Center (index.php) */}
-        {subView === 'index' && (
-          <div className="space-y-6">
-            <div className="p-6 bg-white border border-[#e6dfd5] rounded-3xl flex flex-col md:flex-row items-start md:items-center justify-between gap-6 shadow-2xs">
-              <div className="space-y-2">
-                <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-[#00897d]">
-                  <Landmark className="w-4 h-4" />
-                  <span>Corporate Treasury &amp; Per Diem Ledger</span>
-                </div>
-                <h3 className="font-heading font-black text-2xl text-[#282828]">
-                  Client Balance &amp; Settlement Center
-                </h3>
-                <p className="text-xs text-[#5c5046] max-w-xl leading-relaxed">
-                  Track direct domestic wire transfers, ACH clearing notices, corporate invoicing, and tax-exempt monthly housing statements.
-                </p>
-              </div>
-
-              <div className="p-4 bg-[#faf8f5] rounded-2xl border border-[#efe9e0] text-center min-w-[200px]">
-                <span className="text-[10px] uppercase font-bold text-[#857568] block">Account USD Balance</span>
-                <span className="text-2xl font-black text-[#00897d] block tabular-nums">
-                  ${(unitsBalance * 100).toLocaleString()} USD
-                </span>
-                <span className="text-[11px] text-[#5c5046] block mb-2">
-                  Verified Treasury Funds
-                </span>
-                <button
-                  type="button"
-                  onClick={onOpenTopUpUnits}
-                  className="w-full py-1.5 bg-[#00b7a8] hover:bg-[#009e91] text-white text-xs font-bold rounded-lg cursor-pointer transition-colors shadow-2xs"
-                >
-                  + Top-Up Balance
-                </button>
-              </div>
+      <div className="px-4 sm:px-8 pb-6 space-y-6">
+        {/* Summary Bar */}
+        <div className="bg-[#241d18] text-white rounded-2xl p-6 border border-[#3f332b] flex flex-col sm:flex-row sm:items-center justify-between gap-4 tabular-nums">
+          <div className="space-y-1">
+            <div className="flex items-center gap-2 text-xs text-[#d6c7b8]">
+              <Wallet className="w-4 h-4 text-[#4de0d2]" />
+              <span>Personal Account Balance</span>
             </div>
-
-            <div className="border-b border-[#e6dfd5] pb-3 flex items-center justify-between">
-              <h4 className="font-heading font-bold text-base text-[#282828]">
-                Recent Remittances &amp; Transactions
-              </h4>
-              <button
-                type="button"
-                onClick={() => setSubView('upload-payment-proof')}
-                className="text-xs font-bold text-[#00b7a8] hover:underline"
-              >
-                + Upload Wire Remittance Slip
-              </button>
+            <div className="text-2xl sm:text-3xl font-heading font-black text-white">
+              ${balanceUsd.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} USD
             </div>
+            <div className="text-xs text-[#b8a99a]">
+              {unitsBalance} Lodging Units · {settledPayments.length} settled · {pendingPayments.length} pending verification
+            </div>
+          </div>
 
-            {payments.length === 0 ? (
-              <EmptyState
-                icon={CreditCard}
-                title="No Payment Records Found"
-                description="Your reconciled invoices, ACH settlements, and account fund transfers will appear here."
-              />
+          <div className="flex flex-wrap items-center gap-2.5 shrink-0">
+            <button
+              type="button"
+              onClick={onOpenTopUpUnits}
+              className="px-4 py-2.5 rounded-xl bg-[#00b7a8] hover:bg-[#009e91] text-white text-xs font-bold flex items-center gap-2 cursor-pointer whitespace-nowrap"
+            >
+              <PlusCircle className="w-4 h-4" />
+              <span>Add Account Funds</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => setSubView('upload-payment-proof')}
+              className="px-4 py-2.5 rounded-xl bg-[#322720] hover:bg-[#41332a] border border-[#4f3f34] text-[#ede5dc] text-xs font-bold flex items-center gap-2 cursor-pointer whitespace-nowrap"
+            >
+              <Upload className="w-4 h-4 text-[#4de0d2]" />
+              <span>Submit Transfer Proof</span>
+            </button>
+          </div>
+        </div>
+
+        {feedback && (
+          <div
+            className={`p-4 rounded-xl border text-xs flex items-start gap-2.5 ${
+              feedback.type === 'success'
+                ? 'bg-emerald-50 border-emerald-200 text-emerald-900'
+                : 'bg-rose-50 border-rose-200 text-rose-900'
+            }`}
+          >
+            {feedback.type === 'success' ? (
+              <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
             ) : (
-              <div className="space-y-3">
-                {payments.map((p) => (
-                  <PaymentCard
-                    key={p.id}
-                    payment={p}
-                    onViewInvoice={(pay) => {
-                      setSelectedPayment(pay);
-                      setSubView('invoices');
-                    }}
-                    onViewReceipt={(pay) => {
-                      setSelectedPayment(pay);
-                      setIsReceiptModalOpen(true);
-                    }}
-                    onApprove={(pay) => onApprovePayment?.(pay.id)}
-                    onReject={(pay) => onRejectPayment?.(pay.id)}
-                  />
-                ))}
-              </div>
+              <AlertCircle className="w-4 h-4 text-rose-600 shrink-0 mt-0.5" />
             )}
+            <span className="font-medium">{feedback.message}</span>
           </div>
         )}
 
-        {/* 2. Payment History (payment-history.php) */}
-        {subView === 'payment-history' && (
-          <div className="space-y-6">
-            <div className="border-b border-[#e6dfd5] pb-4">
-              <h3 className="font-heading font-bold text-lg text-[#282828]">
-                Settlement &amp; Remittance History (payment-history.php)
-              </h3>
-              <p className="text-xs text-[#5c5046]">
-                All completed bank transfers, card authorizations, and account balance payments.
-              </p>
-            </div>
-
-            <div className="space-y-3">
-              {settledPayments.map((p) => (
+        {/* Overview & Ledger */}
+        {subView === 'index' &&
+          (payments.length === 0 ? (
+            <EmptyState
+              icon={CreditCard}
+              title="No payment or invoice records yet"
+              description="Settled transactions, wire transfer verifications, and official invoices for your account will appear here."
+              actionText="View Receiving Bank Details"
+              onAction={() => setSubView('payment-details')}
+            />
+          ) : (
+            <div className="space-y-4">
+              {payments.map((payment) => (
                 <PaymentCard
-                  key={p.id}
-                  payment={p}
-                  onViewInvoice={(pay) => {
-                    setSelectedPayment(pay);
-                    setSubView('invoices');
-                  }}
-                  onViewReceipt={(pay) => {
-                    setSelectedPayment(pay);
-                    setIsReceiptModalOpen(true);
-                  }}
+                  key={payment.id}
+                  payment={payment}
+                  onViewInvoice={(p) => setReceiptPayment(p)}
+                  onViewReceipt={(p) => setReceiptPayment(p)}
                 />
               ))}
             </div>
-          </div>
-        )}
+          ))}
 
-        {/* 3. Pending Payments (pending-payments.php) */}
-        {subView === 'pending-payments' && (
-          <div className="space-y-6">
-            <div className="border-b border-[#e6dfd5] pb-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-              <div>
-                <h3 className="font-heading font-bold text-lg text-[#282828]">
-                  Pending Verifications &amp; Admin Approvals (pending-payments.php)
-                </h3>
-                <p className="text-xs text-[#5c5046]">
-                  Manual top-ups stay pending until a treasury admin approves the transfer.
-                </p>
-              </div>
-
-              <span className="px-3 py-1 bg-amber-100 border border-amber-300 text-amber-900 rounded-full text-xs font-bold shrink-0">
-                {pendingPayments.length} Pending Approval
-              </span>
+        {/* Settled History */}
+        {subView === 'payment-history' &&
+          (settledPayments.length === 0 ? (
+            <EmptyState
+              icon={CreditCard}
+              title="No settled payments yet"
+              description="Once a transfer or account settlement is verified, it will be listed here with a printable receipt."
+            />
+          ) : (
+            <div className="space-y-4">
+              {settledPayments.map((payment) => (
+                <PaymentCard
+                  key={payment.id}
+                  payment={payment}
+                  onViewInvoice={(p) => setReceiptPayment(p)}
+                  onViewReceipt={(p) => setReceiptPayment(p)}
+                />
+              ))}
             </div>
+          ))}
 
-            {pendingPayments.length === 0 ? (
-              <EmptyState
-                icon={CheckCircle2}
-                title="All Payments Reconciled"
-                description="There are currently zero pending bank transfers or unverified slips."
-              />
-            ) : (
-              <div className="space-y-3">
-                {pendingPayments.map((p) => (
-                  <PaymentCard
-                    key={p.id}
-                    payment={p}
-                    onApprove={(pay) => onApprovePayment?.(pay.id)}
-                    onReject={(pay) => onRejectPayment?.(pay.id)}
-                  />
-                ))}
-              </div>
-            )}
-          </div>
-        )}
+        {/* Pending Verification */}
+        {subView === 'pending-payments' &&
+          (pendingPayments.length === 0 ? (
+            <EmptyState
+              icon={Landmark}
+              title="No transfers pending verification"
+              description="All submitted wire, ACH, or Zelle payment notices have been processed."
+              actionText="Submit New Transfer Proof"
+              onAction={() => setSubView('upload-payment-proof')}
+            />
+          ) : (
+            <div className="space-y-4">
+              {pendingPayments.map((payment) => (
+                <PaymentCard
+                  key={payment.id}
+                  payment={payment}
+                  onViewInvoice={(p) => setReceiptPayment(p)}
+                  onViewReceipt={(p) => setReceiptPayment(p)}
+                />
+              ))}
+            </div>
+          ))}
 
-        {/* 4. Bank Instructions (payment-details.php) */}
+        {/* Receiving Bank Details */}
         {subView === 'payment-details' && (
-          <div className="bg-white border border-[#e6dfd5] rounded-3xl p-6 sm:p-8 space-y-6 max-w-3xl mx-auto">
-            <div className="border-b border-[#e6dfd5] pb-4">
-              <h3 className="font-heading font-bold text-lg text-[#282828]">
-                Direct Corporate Wire &amp; ACH Routing (payment-details.php)
-              </h3>
-              <p className="text-xs text-[#5c5046]">
-                Official wire credentials for accounts payable, corporate travel desks, and per diem settlements.
-              </p>
+          <div className="p-6 rounded-2xl border border-[#e6dfd5] bg-[#faf8f5] space-y-5">
+            <div>
+              <h4 className="font-heading font-bold text-base text-[#282828]">
+                Official Receiving Bank &amp; Remittance Instructions
+              </h4>
+              <p className="text-xs text-[#6e5d50] mt-0.5">{bank.paymentInstructions}</p>
             </div>
 
-            <div className="p-4 bg-emerald-50 rounded-2xl border border-emerald-200 text-xs text-emerald-900 flex items-center gap-2">
-              <ShieldCheck className="w-4 h-4 text-emerald-700 shrink-0" />
-              <span>Zero transaction fees. Domestic wires clear in 1–2 business hours upon receipt.</span>
-            </div>
-
-            <div className="divide-y divide-[#efe9e0] text-xs">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs tabular-nums">
               {[
-                { label: 'Beneficiary Name', val: 'Easy Travel Lodging LLC', id: 'name' },
-                { label: 'Receiving Bank', val: 'Bank of America, N.A.', id: 'bank' },
-                { label: 'Bank Address', val: 'Corporate Treasury Hub, Charlotte, NC', id: 'addr' },
-                { label: 'Routing / ABA (Domestic Wire)', val: '121000358', id: 'wire_aba' },
-                { label: 'Routing / ACH (Direct Deposit)', val: '121042882', id: 'ach_aba' },
-                { label: 'Account Number', val: '325088219441', id: 'acct' },
-                { label: 'Account Type', val: 'Commercial Checking / Operating Escrow', id: 'type' },
-              ].map((row) => (
-                <div key={row.id} className="py-3 flex items-center justify-between">
-                  <span className="font-semibold text-[#5c5046]">{row.label}</span>
-                  <div className="flex items-center gap-2">
-                    <span className="font-mono font-bold text-[#282828]">{row.val}</span>
-                    <button
-                      type="button"
-                      onClick={() => copyToClipboard(row.val, row.id)}
-                      className="p-1 text-[#857568] hover:text-[#00b7a8] cursor-pointer"
-                      title="Copy"
-                    >
-                      <Copy className="w-3.5 h-3.5" />
-                    </button>
-                    {copiedField === row.id && (
-                      <span className="text-[10px] text-emerald-600 font-bold">Copied!</span>
-                    )}
+                { label: 'Beneficiary Institution', value: bank.bankName },
+                { label: 'Beneficiary Account Name', value: bank.accountName },
+                { label: 'Account Number', value: bank.accountNumber },
+                { label: 'ACH Routing Number', value: bank.achRoutingNumber },
+                { label: 'Domestic Wire Routing', value: bank.wireRoutingNumber },
+                { label: 'International SWIFT', value: bank.swiftCode },
+                { label: 'Zelle Corporate Email', value: bank.zelleEmail },
+                { label: 'Reference Memo', value: `User ID ${userSession.id}` },
+              ].map((item) => (
+                <div
+                  key={item.label}
+                  className="p-3.5 bg-white rounded-xl border border-[#efe9e0] flex items-center justify-between gap-3"
+                >
+                  <div className="min-w-0">
+                    <span className="text-[11px] text-[#857568] block">{item.label}</span>
+                    <strong className="font-mono text-xs text-[#282828] truncate block mt-0.5">
+                      {item.value}
+                    </strong>
                   </div>
+                  <button
+                    type="button"
+                    onClick={() => handleCopy(item.label, item.value)}
+                    className="p-2 rounded-lg border border-[#e6dfd5] hover:border-[#00b7a8] text-[#5c5046] hover:text-[#00897d] cursor-pointer shrink-0"
+                    title={`Copy ${item.label}`}
+                  >
+                    {copiedField === item.label ? (
+                      <Check className="w-3.5 h-3.5 text-emerald-600" />
+                    ) : (
+                      <Copy className="w-3.5 h-3.5" />
+                    )}
+                  </button>
                 </div>
               ))}
             </div>
-          </div>
-        )}
 
-        {/* 5. Payment Methods (payment-methods.php) */}
-        {subView === 'payment-methods' && (
-          <div className="bg-white border border-[#e6dfd5] rounded-3xl p-6 sm:p-8 space-y-6">
-            <div className="border-b border-[#e6dfd5] pb-4">
-              <h3 className="font-heading font-bold text-lg text-[#282828]">
-                Accepted Payment Methods (payment-methods.php)
-              </h3>
-              <p className="text-xs text-[#5c5046]">
-                Configure corporate settlement preferences, direct deposit, or instant account balance settlements.
-              </p>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
-              <div className="p-5 rounded-2xl bg-[#faf8f5] border border-[#e6dfd5] space-y-2">
-                <span className="text-sm font-bold text-[#282828] block flex items-center gap-2">
-                  <CreditCard className="w-4 h-4 text-[#00b7a8]" /> Account USD Balance
-                </span>
-                <p className="text-[#5c5046]">
-                  Immediate 1-click checkout for suites, vehicles, and amenities with zero credit card merchant fees.
-                </p>
-                <span className="inline-block px-2 py-0.5 rounded bg-emerald-100 text-emerald-800 font-bold text-[10px]">
-                  Primary Account Balance
-                </span>
-              </div>
-
-              <div className="p-5 rounded-2xl bg-[#faf8f5] border border-[#e6dfd5] space-y-2">
-                <span className="text-sm font-bold text-[#282828] block flex items-center gap-2">
-                  <Landmark className="w-4 h-4 text-[#00b7a8]" /> Domestic Wire Transfer
-                </span>
-                <p className="text-[#5c5046]">
-                  Same-day commercial wire routing directly to our verified Bank of America operating escrow.
-                </p>
-                <span className="inline-block px-2 py-0.5 rounded bg-blue-100 text-blue-800 font-bold text-[10px]">
-                  Preferred for Corporate Invoices
-                </span>
-              </div>
-
-              <div className="p-5 rounded-2xl bg-[#faf8f5] border border-[#e6dfd5] space-y-2">
-                <span className="text-sm font-bold text-[#282828] block flex items-center gap-2">
-                  <CreditCard className="w-4 h-4 text-[#82634f]" /> Direct ACH / Direct Deposit
-                </span>
-                <p className="text-[#5c5046]">
-                  Standard Automated Clearing House transfers for multi-month housing reimbursements and healthcare travel nurse stipends.
-                </p>
-                <span className="inline-block px-2 py-0.5 rounded bg-amber-100 text-amber-800 font-bold text-[10px]">
-                  Standard 1-3 Business Days
-                </span>
-              </div>
+            <div className="text-xs text-[#5c5046] pt-2 border-t border-[#e6dfd5]">
+              Mailing Address: <strong>{bank.corporateMailingAddress}</strong> · Accounting Desk:{' '}
+              <strong>easytravelagency@trustagent.space</strong>
             </div>
           </div>
         )}
 
-        {/* 6. Upload Payment Proof (upload-payment-proof.php) */}
+        {/* Submit Transfer Proof */}
         {subView === 'upload-payment-proof' && (
-          <div className="bg-white border border-[#e6dfd5] rounded-3xl p-6 sm:p-8 space-y-6 max-w-2xl mx-auto">
-            <div className="border-b border-[#e6dfd5] pb-4">
-              <h3 className="font-heading font-bold text-lg text-[#282828]">
-                Upload Wire / ACH Transfer Slip (upload-payment-proof.php)
-              </h3>
-              <p className="text-xs text-[#5c5046]">
-                Submit your federal wire tracking number or bank transaction confirmation for rapid clearance.
+          <form
+            onSubmit={handleSubmitProof}
+            className="max-w-2xl p-6 rounded-2xl border border-[#e6dfd5] bg-[#faf8f5] space-y-4"
+          >
+            <div>
+              <h4 className="font-heading font-bold text-base text-[#282828]">
+                Submit Wire, ACH, or Zelle Remittance Proof
+              </h4>
+              <p className="text-xs text-[#6e5d50] mt-0.5">
+                Link your bank transfer confirmation to an active reservation or add funds to your personal balance.
               </p>
             </div>
 
-            {uploadSuccess && (
-              <div className="p-4 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs flex items-center gap-2">
-                <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
-                <span>Wire receipt submitted successfully. Concierge will reconcile your ledger shortly.</span>
-              </div>
-            )}
-
-            <form onSubmit={handleUploadSubmit} className="space-y-4 text-xs">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <label className="block text-[#5c5046] font-bold mb-1">
-                  Federal Reference Code / Federal Wire Number *
+                <label className="block text-xs font-bold text-[#282828] mb-1">
+                  Apply Payment Toward *
+                </label>
+                <select
+                  value={selectedTargetKey}
+                  onChange={(e) => handleTargetSelection(e.target.value)}
+                  className="w-full h-10 px-3 bg-white border border-[#d8cfc3] rounded-xl text-xs text-[#282828] outline-none focus:border-[#00b7a8]"
+                >
+                  <option value="units:">Add Account Funds / Lodging Units</option>
+                  {availableTargets.map((t) => (
+                    <option key={`${t.targetType}:${t.id}`} value={`${t.targetType}:${t.id}`}>
+                      {t.label}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              <div>
+                <label className="block text-xs font-bold text-[#282828] mb-1">
+                  Transfer Amount (USD) *
+                </label>
+                <input
+                  type="number"
+                  min={1}
+                  step="0.01"
+                  required
+                  value={amountUsd}
+                  onChange={(e) => setAmountUsd(e.target.value)}
+                  className="w-full h-10 px-3 bg-white border border-[#d8cfc3] rounded-xl text-xs text-[#282828] outline-none focus:border-[#00b7a8] tabular-nums"
+                />
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label className="block text-xs font-bold text-[#282828] mb-1">
+                  Payment Channel *
+                </label>
+                <select
+                  value={paymentMethod}
+                  onChange={(e) =>
+                    setPaymentMethod(
+                      e.target.value as 'Wire Transfer' | 'Direct ACH' | 'Zelle Corporate',
+                    )
+                  }
+                  className="w-full h-10 px-3 bg-white border border-[#d8cfc3] rounded-xl text-xs text-[#282828] outline-none focus:border-[#00b7a8]"
+                >
+                  <option value="Wire Transfer">Wire Transfer</option>
+                  <option value="Direct ACH">Direct ACH</option>
+                  <option value="Zelle Corporate">Zelle Corporate</option>
+                </select>
+              </div>
+
+              <div>
+                <label className="block text-xs font-bold text-[#282828] mb-1">
+                  Transfer Date *
+                </label>
+                <input
+                  type="date"
+                  required
+                  value={transferDate}
+                  onChange={(e) => setTransferDate(e.target.value)}
+                  className="w-full h-10 px-3 bg-white border border-[#d8cfc3] rounded-xl text-xs text-[#282828] outline-none focus:border-[#00b7a8] tabular-nums"
+                />
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label className="block text-xs font-bold text-[#282828] mb-1">
+                  Sender Account Name *
                 </label>
                 <input
                   type="text"
                   required
-                  placeholder="e.g. FED-WIRE-88910293 or ACH-77401"
-                  value={uploadRefCode}
-                  onChange={(e) => setUploadRefCode(e.target.value)}
-                  className="w-full h-10 px-3 bg-white border border-[#d8cfc3] rounded-xl font-mono text-xs text-[#282828]"
+                  value={senderName}
+                  onChange={(e) => setSenderName(e.target.value)}
+                  placeholder="Account holder or company name"
+                  className="w-full h-10 px-3 bg-white border border-[#d8cfc3] rounded-xl text-xs text-[#282828] outline-none focus:border-[#00b7a8]"
                 />
               </div>
 
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-[#5c5046] font-bold mb-1">Originating Financial Institution *</label>
-                  <input
-                    type="text"
-                    required
-                    value={uploadBank}
-                    onChange={(e) => setUploadBank(e.target.value)}
-                    className="w-full h-10 px-3 bg-white border border-[#d8cfc3] rounded-xl text-xs text-[#282828]"
-                  />
-                </div>
-                <div>
-                  <label className="block text-[#5c5046] font-bold mb-1">Remitter / Company Name *</label>
-                  <input
-                    type="text"
-                    required
-                    placeholder="e.g. Acme Corp Travel Desk"
-                    value={uploadSender}
-                    onChange={(e) => setUploadSender(e.target.value)}
-                    className="w-full h-10 px-3 bg-white border border-[#d8cfc3] rounded-xl text-xs text-[#282828]"
-                  />
-                </div>
-              </div>
-
               <div>
-                <label className="block text-[#5c5046] font-bold mb-1">Additional Notes / Cost Center</label>
-                <textarea
-                  rows={3}
-                  placeholder="e.g. Settlement for Dr. Vance Suite #91 & Nissan Terra vehicle rental..."
-                  value={uploadNotes}
-                  onChange={(e) => setUploadNotes(e.target.value)}
-                  className="w-full p-3 bg-white border border-[#d8cfc3] rounded-xl text-xs text-[#282828] outline-none"
+                <label className="block text-xs font-bold text-[#282828] mb-1">
+                  Originating Bank Name *
+                </label>
+                <input
+                  type="text"
+                  required
+                  value={originatingBank}
+                  onChange={(e) => setOriginatingBank(e.target.value)}
+                  placeholder="e.g. Wells Fargo, Citibank, Chase"
+                  className="w-full h-10 px-3 bg-white border border-[#d8cfc3] rounded-xl text-xs text-[#282828] outline-none focus:border-[#00b7a8]"
+                />
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label className="block text-xs font-bold text-[#282828] mb-1">
+                  Wire / ACH / Zelle Reference Code *
+                </label>
+                <input
+                  type="text"
+                  required
+                  value={wireReference}
+                  onChange={(e) => setWireReference(e.target.value)}
+                  placeholder="IMAD / Trace / Confirmation #"
+                  className="w-full h-10 px-3 bg-white border border-[#d8cfc3] rounded-xl text-xs text-[#282828] outline-none focus:border-[#00b7a8] font-mono"
                 />
               </div>
 
-              <div className="flex justify-end gap-3 pt-2">
-                <button
-                  type="submit"
-                  className="px-5 py-2 bg-[#00b7a8] hover:bg-[#009e91] text-white font-bold rounded-xl shadow-2xs cursor-pointer"
-                >
-                  Submit Remittance Notice
-                </button>
-              </div>
-            </form>
-          </div>
-        )}
-
-        {/* 7. Invoices (invoices.php) & 8. Receipts (receipts.php) */}
-        {(subView === 'invoices' || subView === 'receipts') && (
-          <div className="bg-white border border-[#e6dfd5] rounded-3xl p-6 sm:p-8 space-y-6 max-w-3xl mx-auto shadow-xs">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[#e6dfd5] pb-4">
               <div>
-                <h3 className="font-heading font-black text-xl text-[#282828]">
-                  {subView === 'invoices' ? 'Corporate Invoice Statement' : 'Official Tax Receipt'}
-                </h3>
-                <span className="text-xs text-[#5c5046] font-mono">
-                  Invoice #{selectedPayment?.invoiceNumber || 'INV-2026-9901'} • GSA Per Diem Compliant
-                </span>
-              </div>
-              <button
-                type="button"
-                onClick={() => setIsReceiptModalOpen(true)}
-                className="px-4 py-2 rounded-xl bg-black hover:bg-neutral-800 text-white text-xs font-bold flex items-center gap-2 cursor-pointer shadow-xs transition-colors"
-              >
-                <Printer className="w-4 h-4 text-emerald-400" />
-                <span>Print Transactional Receipt (White/Black)</span>
-              </button>
-            </div>
-
-            <div className="space-y-4 text-xs text-[#5c5046]">
-              <div className="flex justify-between border-b border-[#efe9e0] pb-3">
-                <div className="flex items-start gap-3">
-                  <img
-                    src="https://easytravellodging.com/wp-content/uploads/2022/02/Easy-Travel-Lodging-Logo_jpeg-color.jpg"
-                    alt="Easy Travel Lodging Logo"
-                    className="h-10 w-auto object-contain shrink-0"
-                  />
-                  <div>
-                    <strong className="text-[#282828] block">Issued By:</strong>
-                    <span>Easy Travel Lodging LLC</span><br />
-                    <span>100 Corporate Center Drive, Suite 500, Los Angeles, CA</span>
-                  </div>
-                </div>
-                <div className="text-right">
-                  <strong className="text-[#282828] block">Billed To:</strong>
-                  <span>Client Ledger #{selectedPayment?.referenceCode || 'REF-8819'}</span>
-                </div>
-              </div>
-
-              <div className="p-4 bg-[#faf8f5] rounded-xl border border-[#efe9e0] flex items-center justify-between">
-                <div>
-                  <span className="font-bold text-[#282828] block">{selectedPayment?.description || 'Corporate Lodging Stay Settlement'}</span>
-                  <span className="text-[#857568]">Settlement: {selectedPayment?.paymentMethod || 'Wire Transfer'}</span>
-                </div>
-                <span className="text-base font-black text-[#00897d] tabular-nums">
-                  ${selectedPayment?.amountUsd.toLocaleString() || '3,100'} USD
-                </span>
-              </div>
-
-              <div className="pt-2 text-center">
-                <button
-                  type="button"
-                  onClick={() => setIsReceiptModalOpen(true)}
-                  className="px-5 py-2.5 bg-black text-white text-xs font-bold rounded-xl hover:bg-neutral-800 transition-colors cursor-pointer inline-flex items-center gap-2"
-                >
-                  <Printer className="w-4 h-4 text-emerald-400" />
-                  <span>View Printable White &amp; Black Receipt Template</span>
-                </button>
+                <label className="block text-xs font-bold text-[#282828] mb-1">
+                  Receipt Document (Optional, Max 4 MB)
+                </label>
+                <input
+                  type="file"
+                  accept="image/*,.pdf"
+                  onChange={handleFileChange}
+                  className="w-full h-10 px-2.5 py-1.5 bg-white border border-[#d8cfc3] rounded-xl text-xs text-[#5c5046]"
+                />
+                {receiptFileName && (
+                  <span className="text-[11px] text-[#00897d] font-semibold block mt-1">
+                    Attached: {receiptFileName}
+                  </span>
+                )}
               </div>
             </div>
-          </div>
+
+            <div>
+              <label className="block text-xs font-bold text-[#282828] mb-1">
+                Accounting Memo (Optional)
+              </label>
+              <textarea
+                rows={2}
+                value={notes}
+                onChange={(e) => setNotes(e.target.value)}
+                placeholder="Optional invoice or booking reference note..."
+                className="w-full p-3 bg-white border border-[#d8cfc3] rounded-xl text-xs text-[#282828] outline-none focus:border-[#00b7a8]"
+              />
+            </div>
+
+            <button
+              type="submit"
+              disabled={submitting}
+              className="px-5 py-2.5 rounded-xl bg-[#00b7a8] hover:bg-[#009e91] disabled:opacity-50 text-white text-xs font-bold flex items-center gap-2 cursor-pointer whitespace-nowrap"
+            >
+              {submitting ? (
+                <>
+                  <Loader2 className="w-4 h-4 animate-spin" />
+                  <span>Submitting Notice...</span>
+                </>
+              ) : (
+                <>
+                  <Upload className="w-4 h-4" />
+                  <span>Submit Transfer Confirmation</span>
+                </>
+              )}
+            </button>
+          </form>
         )}
+
+        {/* Invoices & Receipts */}
+        {subView === 'invoices' &&
+          (payments.length === 0 ? (
+            <EmptyState
+              icon={FileText}
+              title="No invoices generated yet"
+              description="Invoices and printable payment statements are automatically generated when you submit a payment or complete a booking settlement."
+            />
+          ) : (
+            <div className="overflow-x-auto border border-[#e6dfd5] rounded-2xl bg-white">
+              <table className="w-full text-left text-xs tabular-nums">
+                <thead className="bg-[#faf8f5] border-b border-[#e6dfd5] text-[#6e5d50]">
+                  <tr>
+                    <th className="py-3 px-4 font-bold">Invoice #</th>
+                    <th className="py-3 px-4 font-bold">Date</th>
+                    <th className="py-3 px-4 font-bold">Description</th>
+                    <th className="py-3 px-4 font-bold">Method</th>
+                    <th className="py-3 px-4 font-bold text-right">Amount</th>
+                    <th className="py-3 px-4 font-bold text-right">Statement</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-[#efe9e0]">
+                  {payments.map((inv) => (
+                    <tr key={inv.id} className="hover:bg-[#faf8f5]">
+                      <td className="py-3 px-4 font-mono font-bold text-[#282828]">
+                        {inv.invoiceNumber}
+                      </td>
+                      <td className="py-3 px-4 text-[#5c5046]">{inv.date}</td>
+                      <td className="py-3 px-4 text-[#282828] font-medium">{inv.description}</td>
+                      <td className="py-3 px-4 text-[#5c5046]">{inv.paymentMethod}</td>
+                      <td className="py-3 px-4 text-right font-bold text-[#00897d]">
+                        ${inv.amountUsd.toLocaleString('en-US', { minimumFractionDigits: 2 })}
+                      </td>
+                      <td className="py-3 px-4 text-right">
+                        <button
+                          type="button"
+                          onClick={() => setReceiptPayment(inv)}
+                          className="px-3 py-1.5 rounded-lg border border-[#d8cfc3] hover:border-[#00b7a8] text-xs font-semibold text-[#282828] cursor-pointer whitespace-nowrap"
+                        >
+                          Open Receipt
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          ))}
       </div>
 
-      {/* Transaction Receipt Modal (White Background & Black Writing Template) */}
       <TransactionReceiptModal
-        isOpen={isReceiptModalOpen}
-        onClose={() => setIsReceiptModalOpen(false)}
-        payment={selectedPayment}
+        isOpen={Boolean(receiptPayment)}
+        onClose={() => setReceiptPayment(null)}
+        payment={receiptPayment}
+        userSession={userSession}
+        paymentAccounts={paymentAccounts}
       />
     </div>
   );

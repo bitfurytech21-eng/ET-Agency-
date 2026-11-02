@@ -1,0 +1,372 @@
+@import url('/portal/assets/css/variables.css');
+@import url('/portal/assets/css/reset.css');
+@import url('/portal/assets/css/typography.css');
+@import url('/portal/assets/css/layout.css');
+@import url('/portal/assets/css/components.css');
+@import url('/portal/assets/css/navigation.css');
+@import url('/portal/assets/css/homepage.css');
+@import url('/portal/assets/css/booking.css');
+@import url('/portal/assets/css/car-rental.css');
+@import url('/portal/assets/css/dashboard.css');
+@import url('/portal/assets/css/admin.css');
+@import url('/portal/assets/css/payments.css');
+@import url('/portal/assets/css/forms.css');
+@import url('/portal/assets/css/tables.css');
+@import url('/portal/assets/css/animations.css');
+@import url('/portal/assets/css/accessibility.css');
+@import url('/portal/assets/css/responsive.css');
+
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400;1,600&family=JetBrains+Mono:wght@400;500;600&display=swap');
+
+:root {
+  /* Colors */
+  --bg-canvas: #f8fafc;
+  --bg-surface: #ffffff;
+  --bg-surface-elevated: #f1f5f9;
+  --bg-subtle: #f8fafc;
+  
+  --color-navy-dark: #0b192c;
+  --color-navy: #1e293b;
+  --color-navy-light: #334155;
+  --color-slate-muted: #64748b;
+  --color-slate-subtle: #94a3b8;
+  --color-slate-border: #e2e8f0;
+  
+  --accent-blue: #0284c7;
+  --accent-blue-hover: #0369a1;
+  --accent-blue-light: #e0f2fe;
+  --accent-blue-border: #bae6fd;
+  
+  --accent-teal: #0d9488;
+  --accent-teal-dark: #0f766e;
+  --accent-teal-light: #ccfbf1;
+  
+  --success-green: #10b981;
+  --success-bg: #ecfdf5;
+  --success-border: #a7f3d0;
+  --success-text: #047857;
+  
+  --warning-amber: #f59e0b;
+  --warning-bg: #fffbeb;
+  --warning-border: #fef3c7;
+  --warning-text: #b45309;
+  
+  --danger-red: #ef4444;
+  --danger-bg: #fef2f2;
+  --danger-border: #fecaca;
+  --danger-text: #b91c1c;
+
+  /* Spacing & Radii */
+  --radius-sm: 8px;
+  --radius-md: 14px;
+  --radius-lg: 18px;
+  --radius-xl: 24px;
+  
+  /* Shadows */
+  --shadow-xs: 0 1px 2px 0 rgba(15, 23, 42, 0.04);
+  --shadow-sm: 0 2px 8px -2px rgba(15, 23, 42, 0.05), 0 1px 4px -1px rgba(15, 23, 42, 0.03);
+  --shadow-card: 0 10px 25px -5px rgba(15, 23, 42, 0.05), 0 4px 10px -2px rgba(15, 23, 42, 0.02);
+  --shadow-hover: 0 20px 30px -10px rgba(15, 23, 42, 0.08), 0 8px 15px -4px rgba(15, 23, 42, 0.03);
+  --shadow-modal: 0 25px 50px -12px rgba(15, 23, 42, 0.25);
+
+  /* Typography */
+  --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 16px;
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: var(--bg-canvas);
+  color: var(--color-navy);
+  line-height: 1.6;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Tabular Numbers for Prices & Figures */
+.tabular-nums, .stat-value, .price-display, td.amount-cell {
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum";
+}
+
+/* Layout Container */
+.portal-container {
+  max-width: 1360px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 2rem 1.5rem;
+  flex: 1;
+}
+
+/* Header & Top Bar Navigation */
+.portal-nav {
+  background: var(--bg-surface);
+  border-bottom: 1px solid var(--color-slate-border);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: var(--shadow-xs);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  background-color: rgba(255, 255, 255, 0.95);
+}
+
+.portal-nav-inner {
+  max-width: 1360px;
+  margin: 0 auto;
+  padding: 0.85rem 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+}
+
+.portal-brand {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  text-decoration: none;
+}
+
+.portal-brand-logo {
+  width: 38px;
+  height: 38px;
+  background: linear-gradient(135deg, var(--color-navy-dark), var(--accent-blue));
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+  font-weight: 800;
+  font-size: 1.1rem;
+  box-shadow: 0 4px 10px rgba(2, 132, 199, 0.25);
+}
+
+.portal-brand-text {
+  font-size: 1.15rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--color-navy-dark);
+}
+
+.portal-brand-tag {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--accent-blue);
+  background: var(--accent-blue-light);
+  padding: 0.15rem 0.5rem;
+  border-radius: 6px;
+  border: 1px solid var(--accent-blue-border);
+}
+
+.portal-nav-links {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.portal-nav-link {
+  color: var(--color-navy-light);
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 0.9rem;
+  padding: 0.5rem 0.85rem;
+  border-radius: var(--radius-sm);
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.portal-nav-link:hover {
+  color: var(--accent-blue);
+  background-color: var(--bg-surface-elevated);
+}
+
+.portal-nav-link.active {
+  color: var(--accent-blue);
+  font-weight: 600;
+  background-color: var(--accent-blue-light);
+}
+
+.portal-nav-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+/* Mobile Nav Toggle */
+.portal-nav-toggle {
+  display: none;
+  background: none;
+  border: 1px solid var(--color-slate-border);
+  border-radius: var(--radius-sm);
+  padding: 0.5rem;
+  cursor: pointer;
+  color: var(--color-navy);
+}
+
+/* Sub-header Navigation Bar (Customer Dashboard Header) */
+.subnav-bar {
+  background: var(--bg-surface);
+  border-bottom: 1px solid var(--color-slate-border);
+  padding: 0.65rem 1.5rem;
+  margin-bottom: 2rem;
+  box-shadow: var(--shadow-xs);
+}
+
+.subnav-inner {
+  max-width: 1360px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.subnav-inner::-webkit-scrollbar {
+  display: none;
+}
+
+.subnav-item {
+  color: var(--color-slate-muted);
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 0.875rem;
+  padding: 0.5rem 1rem;
+  border-radius: var(--radius-sm);
+  white-space: nowrap;
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.subnav-item:hover {
+  color: var(--color-navy);
+  background-color: var(--bg-surface-elevated);
+}
+
+.subnav-item.active {
+  color: var(--accent-blue);
+  font-weight: 600;
+  background: var(--accent-blue-light);
+}
+
+.subnav-item-highlight {
+  color: var(--accent-teal-dark);
+  background: var(--accent-teal-light);
+  font-weight: 600;
+}
+
+.subnav-item-highlight:hover {
+  background: #99f6e4;
+  color: #0f766e;
+}
+
+/* Typography Hierarchy */
+h1, h2, h3, h4, h5, h6 {
+  color: var(--color-navy-dark);
+  letter-spacing: -0.02em;
+  font-weight: 700;
+  line-height: 1.25;
+}
+
+h1.page-title {
+  font-size: 1.75rem;
+  font-weight: 800;
+  color: var(--color-navy-dark);
+  margin-bottom: 0.35rem;
+}
+
+p.page-subtitle {
+  font-size: 0.95rem;
+  color: var(--color-slate-muted);
+  margin-bottom: 1.75rem;
+}
+
+/* Footer */
+.portal-footer {
+  background: var(--color-navy-dark);
+  color: #94a3b8;
+  padding: 3rem 1.5rem 2rem;
+  margin-top: auto;
+  border-top: 1px solid #1e293b;
+}
+
+.portal-footer-inner {
+  max-width: 1360px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 2.5rem;
+  margin-bottom: 2.5rem;
+}
+
+.portal-footer-brand h4 {
+  color: #ffffff;
+  font-weight: 800;
+  font-size: 1.1rem;
+  margin-bottom: 0.75rem;
+}
+
+.portal-footer-brand p {
+  font-size: 0.85rem;
+  line-height: 1.6;
+  color: #94a3b8;
+}
+
+.portal-footer-col h5 {
+  color: #ffffff;
+  font-size: 0.9rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.portal-footer-col ul {
+  list-style: none;
+}
+
+.portal-footer-col li {
+  margin-bottom: 0.6rem;
+}
+
+.portal-footer-col a {
+  color: #94a3b8;
+  text-decoration: none;
+  font-size: 0.85rem;
+  transition: color 0.2s;
+}
+
+.portal-footer-col a:hover {
+  color: var(--accent-blue-border);
+}
+
+.portal-footer-bottom {
+  max-width: 1360px;
+  margin: 0 auto;
+  padding-top: 1.5rem;
+  border-top: 1px solid #1e293b;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+  font-size: 0.8rem;
+  color: #64748b;
+}

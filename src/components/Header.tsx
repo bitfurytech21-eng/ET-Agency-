@@ -1,19 +1,31 @@
 import React, { useState } from 'react';
 import { PROPERTIES } from '../data/lodgingData';
 import { useCart } from '../context/CartContext';
-import { Search, ChevronDown, Menu, X, User, ShoppingBag } from 'lucide-react';
+import {
+  Search,
+  ChevronDown,
+  Menu,
+  X,
+  ShoppingBag,
+  LayoutDashboard,
+  LogOut,
+} from 'lucide-react';
 
 interface HeaderProps {
   currentTab: string;
   setCurrentTab: (tab: string) => void;
   onOpenBooking: (propertyId?: string) => void;
   onSearchListings?: (query: string) => void;
+  authUser?: { id: string; name: string; email: string } | null;
+  onSignOut?: () => void;
 }
 
 export const Header: React.FC<HeaderProps> = ({
   currentTab,
   setCurrentTab,
   onSearchListings,
+  authUser,
+  onSignOut,
 }) => {
   const { cart, openDrawer, liveProperties } = useCart();
   const navProperties = liveProperties.length > 0 ? liveProperties : PROPERTIES;
@@ -42,9 +54,14 @@ export const Header: React.FC<HeaderProps> = ({
     setSearchOpen(false);
   };
 
+  const firstName = authUser?.name ? authUser.name.trim().split(' ')[0] : '';
+
   return (
     <header className="sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-[#e6dfd5] shadow-2xs">
-      <div id="main-header" className="max-w-[1380px] mx-auto px-4 sm:px-8 flex items-center justify-between h-[86px]">
+      <div
+        id="main-header"
+        className="max-w-[1380px] mx-auto px-4 sm:px-8 flex items-center justify-between h-[86px]"
+      >
         {/* Logo Container */}
         <div className="logo_container flex items-center shrink-0">
           <a
@@ -57,11 +74,8 @@ export const Header: React.FC<HeaderProps> = ({
           >
             {logoFailed ? (
               <div className="flex flex-col leading-tight">
-                <span className="font-heading font-black text-lg tracking-tight text-[#282828]">
-                  EASY TRAVEL <span className="text-[#00b7a8]">LODGING</span>
-                </span>
-                <span className="text-[10px] font-bold uppercase tracking-widest text-[#82634f]">
-                  Furnished Stays &amp; Mobility
+                <span className="font-heading font-bold text-lg tracking-tight text-[#282828] whitespace-nowrap">
+                  Easy Travel <span className="text-[#00b7a8]">Lodging</span>
                 </span>
               </div>
             ) : (
@@ -77,14 +91,17 @@ export const Header: React.FC<HeaderProps> = ({
         </div>
 
         {/* Desktop Navigation */}
-        <div id="et-top-navigation" className="hidden xl:flex items-center gap-5">
+        <div id="et-top-navigation" className="hidden xl:flex items-center gap-4">
           <nav id="top-menu-nav">
-            <ul id="top-menu" className="flex items-center gap-4 text-[13.5px] font-semibold tracking-normal text-[#555555]">
+            <ul
+              id="top-menu"
+              className="flex items-center gap-1.5 type-nav font-medium text-[#555555]"
+            >
               <li className={currentTab === 'home' ? 'current-menu-item' : ''}>
                 <button
                   onClick={() => handleNavClick('home')}
-                  className={`hover:text-[#00b7a8] transition-colors cursor-pointer ${
-                    currentTab === 'home' ? 'text-[#00b7a8] font-bold' : ''
+                  className={`type-nav hover:text-[#00b7a8] transition-colors cursor-pointer whitespace-nowrap shrink-0 ${
+                    currentTab === 'home' ? 'text-[#00b7a8] font-semibold' : ''
                   }`}
                 >
                   Home
@@ -99,9 +116,10 @@ export const Header: React.FC<HeaderProps> = ({
               >
                 <button
                   onClick={() => handleNavClick('portfolio')}
-                  className={`flex items-center gap-1 hover:text-[#00b7a8] transition-colors cursor-pointer ${
-                    ['portfolio', 'faq', 'terms'].includes(currentTab) || currentTab.startsWith('listing:')
-                      ? 'text-[#00b7a8] font-bold'
+                  className={`type-nav flex items-center gap-1 hover:text-[#00b7a8] transition-colors cursor-pointer whitespace-nowrap shrink-0 ${
+                    ['portfolio', 'faq', 'terms'].includes(currentTab) ||
+                    currentTab.startsWith('listing:')
+                      ? 'text-[#00b7a8] font-semibold'
                       : ''
                   }`}
                 >
@@ -110,11 +128,11 @@ export const Header: React.FC<HeaderProps> = ({
                 </button>
 
                 {portfolioDropdownOpen && (
-                  <ul className="absolute top-full left-0 mt-1 w-72 bg-white border-t-2 border-[#00b7a8] border-x border-b border-x-[#e6dfd5] border-b-[#e6dfd5] shadow-xl rounded-b-md py-2 z-50 text-[13px] animate-in fade-in">
+                  <ul className="absolute top-full left-0 mt-1 w-80 bg-white border-t-2 border-[#00b7a8] border-x border-b border-x-[#e6dfd5] border-b-[#e6dfd5] shadow-xl rounded-b-md py-2 z-50 type-nav animate-in fade-in">
                     <li>
                       <button
                         onClick={() => handleNavClick('portfolio')}
-                        className="w-full text-left px-4 py-1.5 text-[#282828] hover:text-[#00b7a8] hover:bg-[#faf8f5] font-bold cursor-pointer"
+                        className="w-full text-left px-4 py-2 text-[#282828] hover:text-[#00b7a8] hover:bg-[#faf8f5] font-semibold cursor-pointer"
                       >
                         All Accommodation Listings
                       </button>
@@ -124,12 +142,12 @@ export const Header: React.FC<HeaderProps> = ({
                       <li key={prop.id}>
                         <button
                           onClick={() => handleNavClick(`listing:${prop.id}`)}
-                          className="w-full text-left px-4 py-1.5 text-[#555555] hover:text-[#00b7a8] hover:bg-[#faf8f5] text-xs flex justify-between items-center gap-2 cursor-pointer"
+                          className="w-full text-left px-4 py-2 text-[#555555] hover:text-[#00b7a8] hover:bg-[#faf8f5] type-nav flex justify-between items-center gap-2 cursor-pointer"
                         >
                           <span className="truncate">
                             {prop.unitNumber} ({prop.code})
                           </span>
-                          <span className="text-[#82634f] font-semibold tabular-nums shrink-0">
+                          <span className="type-support text-[#82634f] font-semibold tabular-nums shrink-0">
                             ${prop.monthlyRate.toLocaleString()}/mo
                           </span>
                         </button>
@@ -139,7 +157,7 @@ export const Header: React.FC<HeaderProps> = ({
                     <li>
                       <button
                         onClick={() => handleNavClick('guide')}
-                        className="w-full text-left px-4 py-1.5 text-[#555555] hover:text-[#00b7a8] hover:bg-[#faf8f5] font-medium cursor-pointer"
+                        className="w-full text-left px-4 py-2 text-[#555555] hover:text-[#00b7a8] hover:bg-[#faf8f5] font-medium cursor-pointer"
                       >
                         Destination &amp; Area Guide
                       </button>
@@ -151,8 +169,8 @@ export const Header: React.FC<HeaderProps> = ({
               <li className={currentTab === 'vehicles' ? 'current-menu-item' : ''}>
                 <button
                   onClick={() => handleNavClick('vehicles')}
-                  className={`hover:text-[#00b7a8] transition-colors cursor-pointer ${
-                    currentTab === 'vehicles' ? 'text-[#00b7a8] font-bold' : ''
+                  className={`type-nav hover:text-[#00b7a8] transition-colors cursor-pointer whitespace-nowrap shrink-0 ${
+                    currentTab === 'vehicles' ? 'text-[#00b7a8] font-semibold' : ''
                   }`}
                 >
                   Car Rentals
@@ -162,8 +180,8 @@ export const Header: React.FC<HeaderProps> = ({
               <li className={currentTab === 'about' ? 'current-menu-item' : ''}>
                 <button
                   onClick={() => handleNavClick('about')}
-                  className={`hover:text-[#00b7a8] transition-colors cursor-pointer ${
-                    currentTab === 'about' ? 'text-[#00b7a8] font-bold' : ''
+                  className={`type-nav hover:text-[#00b7a8] transition-colors cursor-pointer whitespace-nowrap shrink-0 ${
+                    currentTab === 'about' ? 'text-[#00b7a8] font-semibold' : ''
                   }`}
                 >
                   About Us
@@ -173,23 +191,40 @@ export const Header: React.FC<HeaderProps> = ({
               <li className={currentTab === 'contact' ? 'current-menu-item' : ''}>
                 <button
                   onClick={() => handleNavClick('contact')}
-                  className={`hover:text-[#00b7a8] transition-colors cursor-pointer ${
-                    currentTab === 'contact' ? 'text-[#00b7a8] font-bold' : ''
+                  className={`type-nav hover:text-[#00b7a8] transition-colors cursor-pointer whitespace-nowrap shrink-0 ${
+                    currentTab === 'contact' ? 'text-[#00b7a8] font-semibold' : ''
                   }`}
                 >
                   Contact
                 </button>
               </li>
+
+              <li
+                className={
+                  currentTab === 'dashboard' || currentTab === 'portal' ? 'current-menu-item' : ''
+                }
+              >
+                <button
+                  onClick={() => handleNavClick('dashboard')}
+                  className={`type-nav hover:text-[#00b7a8] transition-colors cursor-pointer whitespace-nowrap shrink-0 ${
+                    currentTab === 'dashboard' || currentTab === 'portal'
+                      ? 'text-[#00b7a8] font-semibold'
+                      : ''
+                  }`}
+                >
+                  Dashboard
+                </button>
+              </li>
             </ul>
           </nav>
 
-          <div className="flex items-center gap-2.5 pl-1 border-l border-[#e6dfd5]">
+          <div className="flex items-center gap-2 pl-2 border-l border-[#e6dfd5]">
             {/* Live Shopping Cart Drawer Trigger */}
             <button
               type="button"
               onClick={openDrawer}
               aria-label={`Shopping cart with ${cart.itemCount} items`}
-              className={`relative inline-flex items-center gap-2 px-3.5 py-2 rounded-lg text-xs font-bold transition-colors cursor-pointer border ${
+              className={`type-btn relative inline-flex items-center gap-2 px-3.5 py-2 rounded-lg transition-colors cursor-pointer border whitespace-nowrap shrink-0 ${
                 currentTab === 'cart' || currentTab === 'checkout'
                   ? 'bg-[#282828] text-white border-[#282828]'
                   : 'bg-white hover:bg-[#faf8f5] text-[#282828] border-[#dcd3c7] hover:border-[#00b7a8]'
@@ -197,40 +232,71 @@ export const Header: React.FC<HeaderProps> = ({
             >
               <ShoppingBag className="w-4 h-4 text-[#00b7a8]" />
               <span>Cart</span>
-              <span className="px-1.5 py-0.5 rounded bg-[#00b7a8] text-white text-[11px] font-extrabold leading-none tabular-nums">
+              <span className="px-1.5 py-0.5 rounded bg-[#00b7a8] text-white text-xs font-semibold leading-none tabular-nums">
                 {cart.itemCount}
               </span>
             </button>
 
-            {/* Sign In Action */}
-            <button
-              type="button"
-              onClick={() => handleNavClick('login')}
-              className={`text-xs font-bold px-3 py-2 rounded-lg transition-colors cursor-pointer ${
-                currentTab === 'login' ? 'text-[#00b7a8] font-extrabold' : 'text-[#555555] hover:text-[#00b7a8]'
-              }`}
-            >
-              Sign In
-            </button>
+            {authUser ? (
+              <>
+                <button
+                  type="button"
+                  onClick={() => handleNavClick('dashboard')}
+                  className={`type-btn inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg transition-colors cursor-pointer border whitespace-nowrap shrink-0 ${
+                    currentTab === 'dashboard' || currentTab === 'portal'
+                      ? 'bg-[#00b7a8] text-white border-[#00b7a8]'
+                      : 'bg-[#e8f8f6] hover:bg-[#d5f3ef] text-[#00897d] border-[#00b7a8]/40'
+                  }`}
+                >
+                  <LayoutDashboard className="w-4 h-4" />
+                  <span>{firstName ? `${firstName}'s Dashboard` : 'My Dashboard'}</span>
+                </button>
 
-            {/* Sign Up Action */}
-            <button
-              type="button"
-              onClick={() => handleNavClick('register')}
-              className={`text-xs font-bold px-3.5 py-2 rounded-lg transition-colors cursor-pointer border ${
-                currentTab === 'register'
-                  ? 'bg-[#00b7a8] text-white border-[#00b7a8]'
-                  : 'bg-white hover:bg-[#e6f8f6] text-[#00897d] border-[#00b7a8]/40'
-              }`}
-            >
-              Sign Up
-            </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setMobileMenuOpen(false);
+                    if (onSignOut) onSignOut();
+                  }}
+                  className="type-btn inline-flex items-center gap-1.5 px-3 py-2 rounded-lg text-[#555555] hover:text-rose-700 hover:bg-rose-50 transition-colors cursor-pointer whitespace-nowrap shrink-0"
+                >
+                  <LogOut className="w-4 h-4" />
+                  <span>Sign Out</span>
+                </button>
+              </>
+            ) : (
+              <>
+                <button
+                  type="button"
+                  onClick={() => handleNavClick('login')}
+                  className={`type-btn px-3 py-2 rounded-lg transition-colors cursor-pointer whitespace-nowrap shrink-0 ${
+                    currentTab === 'login'
+                      ? 'text-[#00b7a8] font-bold'
+                      : 'text-[#555555] hover:text-[#00b7a8]'
+                  }`}
+                >
+                  Sign In
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => handleNavClick('register')}
+                  className={`type-btn px-3.5 py-2 rounded-lg transition-colors cursor-pointer border whitespace-nowrap shrink-0 ${
+                    currentTab === 'register'
+                      ? 'bg-[#00b7a8] text-white border-[#00b7a8]'
+                      : 'bg-white hover:bg-[#e6f8f6] text-[#00897d] border-[#00b7a8]/40'
+                  }`}
+                >
+                  Sign Up
+                </button>
+              </>
+            )}
 
             {/* Search Icon */}
             <div className="relative">
               <button
                 onClick={() => setSearchOpen(!searchOpen)}
-                className="text-[#666666] hover:text-[#00b7a8] p-1.5 cursor-pointer transition-colors"
+                className="text-[#666666] hover:text-[#00b7a8] p-2 cursor-pointer transition-colors"
                 aria-label="Search residences"
               >
                 <Search className="w-4 h-4" />
@@ -239,14 +305,14 @@ export const Header: React.FC<HeaderProps> = ({
               {searchOpen && (
                 <form
                   onSubmit={handleSearchSubmit}
-                  className="absolute right-0 top-full mt-2 w-64 bg-white p-2 rounded-lg shadow-lg border border-[#e6dfd5] z-50 flex items-center"
+                  className="absolute right-0 top-full mt-2 w-72 bg-white p-2 rounded-lg shadow-lg border border-[#e6dfd5] z-50 flex items-center"
                 >
                   <input
                     type="text"
                     placeholder="Search residences & amenities..."
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
-                    className="w-full px-2 py-1 text-xs outline-none text-[#282828]"
+                    className="w-full px-3 py-1.5 text-sm outline-none text-[#282828]"
                     autoFocus
                   />
                 </form>
@@ -255,19 +321,19 @@ export const Header: React.FC<HeaderProps> = ({
           </div>
         </div>
 
-        {/* Tablet & Mobile Controls (Cart + Search + Hamburger) */}
-        <div className="xl:hidden flex items-center gap-2.5">
+        {/* Controls (Cart + Search + Hamburger Menu) */}
+        <div className="flex items-center gap-2.5">
           <button
             type="button"
             onClick={openDrawer}
             aria-label={`Open cart (${cart.itemCount} items)`}
-            className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg border border-[#dcd3c7] bg-white text-[#282828] text-xs font-bold cursor-pointer"
+            className="type-btn inline-flex xl:hidden items-center gap-1.5 px-3 py-2 rounded-lg border border-[#dcd3c7] bg-white text-[#282828] cursor-pointer"
           >
             <ShoppingBag className="w-4 h-4 text-[#00b7a8]" />
-            <span className="tabular-nums font-extrabold">{cart.itemCount}</span>
+            <span className="tabular-nums font-semibold">{cart.itemCount}</span>
           </button>
 
-          <div className="relative">
+          <div className="relative xl:hidden">
             <button
               onClick={() => setSearchOpen(!searchOpen)}
               className="text-[#282828] hover:text-[#00b7a8] p-2 cursor-pointer transition-colors"
@@ -286,7 +352,7 @@ export const Header: React.FC<HeaderProps> = ({
                   placeholder="Search residences..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full px-2 py-1 text-xs outline-none text-[#282828]"
+                  className="w-full px-3 py-1.5 text-sm outline-none text-[#282828]"
                   autoFocus
                 />
               </form>
@@ -295,25 +361,25 @@ export const Header: React.FC<HeaderProps> = ({
 
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="p-2 cursor-pointer text-[#358385] hover:text-[#00b7a8] transition-colors"
+            className="p-2 sm:p-2.5 cursor-pointer text-[#00897d] hover:text-[#00b7a8] transition-colors rounded-xl hover:bg-[#faf8f5]"
             aria-label="Toggle Navigation Menu"
           >
             {mobileMenuOpen ? (
-              <X className="w-7 h-7 stroke-[2.5]" />
+              <X className="w-12 h-12 sm:w-14 sm:h-14 stroke-[3.2] transform scale-125" />
             ) : (
-              <Menu className="w-7 h-7 stroke-[2.5]" />
+              <Menu className="w-12 h-12 sm:w-14 sm:h-14 stroke-[3.2] transform scale-125" />
             )}
           </button>
         </div>
       </div>
 
-      {/* Mobile & Tablet Navigation Drawer */}
+      {/* Navigation Drawer */}
       {mobileMenuOpen && (
-        <div className="xl:hidden bg-white border-t border-[#e6dfd5] px-6 py-4 space-y-2 shadow-md animate-in fade-in">
+        <div className="bg-white border-t border-[#e6dfd5] px-6 py-4 space-y-1 shadow-md animate-in fade-in">
           <button
             onClick={() => handleNavClick('home')}
-            className={`block w-full text-left py-2 text-sm font-semibold cursor-pointer ${
-              currentTab === 'home' ? 'text-[#00b7a8] font-bold' : 'text-[#282828]'
+            className={`block w-full text-left py-2.5 type-nav cursor-pointer text-base sm:text-lg ${
+              currentTab === 'home' ? 'text-[#00b7a8] font-bold' : 'text-[#282828] font-medium hover:text-[#00b7a8]'
             }`}
           >
             Home
@@ -321,8 +387,11 @@ export const Header: React.FC<HeaderProps> = ({
 
           <button
             onClick={() => handleNavClick('portfolio')}
-            className={`block w-full text-left py-2 text-sm font-semibold cursor-pointer ${
-              ['portfolio', 'faq', 'terms'].includes(currentTab) || currentTab.startsWith('listing:') ? 'text-[#00b7a8] font-bold' : 'text-[#282828]'
+            className={`block w-full text-left py-2.5 type-nav cursor-pointer text-base sm:text-lg ${
+              ['portfolio', 'faq', 'terms'].includes(currentTab) ||
+              currentTab.startsWith('listing:')
+                ? 'text-[#00b7a8] font-bold'
+                : 'text-[#282828] font-medium hover:text-[#00b7a8]'
             }`}
           >
             Accommodation
@@ -330,8 +399,8 @@ export const Header: React.FC<HeaderProps> = ({
 
           <button
             onClick={() => handleNavClick('vehicles')}
-            className={`block w-full text-left py-2 text-sm font-semibold cursor-pointer ${
-              currentTab === 'vehicles' ? 'text-[#00b7a8] font-bold' : 'text-[#282828]'
+            className={`block w-full text-left py-2.5 type-nav cursor-pointer text-base sm:text-lg ${
+              currentTab === 'vehicles' ? 'text-[#00b7a8] font-bold' : 'text-[#282828] font-medium hover:text-[#00b7a8]'
             }`}
           >
             Car Rentals
@@ -339,8 +408,8 @@ export const Header: React.FC<HeaderProps> = ({
 
           <button
             onClick={() => handleNavClick('about')}
-            className={`block w-full text-left py-2 text-sm font-semibold cursor-pointer ${
-              currentTab === 'about' ? 'text-[#00b7a8] font-bold' : 'text-[#282828]'
+            className={`block w-full text-left py-2.5 type-nav cursor-pointer text-base sm:text-lg ${
+              currentTab === 'about' ? 'text-[#00b7a8] font-bold' : 'text-[#282828] font-medium hover:text-[#00b7a8]'
             }`}
           >
             About Us
@@ -348,32 +417,37 @@ export const Header: React.FC<HeaderProps> = ({
 
           <button
             onClick={() => handleNavClick('contact')}
-            className={`block w-full text-left py-2 text-sm font-semibold cursor-pointer ${
-              currentTab === 'contact' ? 'text-[#00b7a8] font-bold' : 'text-[#282828]'
+            className={`block w-full text-left py-2.5 type-nav cursor-pointer text-base sm:text-lg ${
+              currentTab === 'contact' ? 'text-[#00b7a8] font-bold' : 'text-[#282828] font-medium hover:text-[#00b7a8]'
             }`}
           >
             Contact
           </button>
 
-          <div className="pt-2 border-t border-[#efe9e0] space-y-2">
-            <button
-              onClick={() => handleNavClick('login')}
-              className={`block w-full text-left py-2 text-sm font-semibold cursor-pointer ${
-                currentTab === 'login' ? 'text-[#00b7a8] font-bold' : 'text-[#555555]'
-              }`}
-            >
-              Sign In
-            </button>
+          <button
+            onClick={() => handleNavClick('dashboard')}
+            className={`block w-full text-left py-2.5 type-nav cursor-pointer text-base sm:text-lg ${
+              currentTab === 'dashboard' || currentTab === 'portal'
+                ? 'text-[#00b7a8] font-bold'
+                : 'text-[#282828] font-medium hover:text-[#00b7a8]'
+            }`}
+          >
+            {authUser ? `My Dashboard (${authUser.name})` : 'Dashboard'}
+          </button>
 
-            <button
-              onClick={() => handleNavClick('register')}
-              className={`block w-full text-left py-2 text-sm font-semibold cursor-pointer ${
-                currentTab === 'register' ? 'text-[#00b7a8] font-bold' : 'text-[#555555]'
-              }`}
-            >
-              Sign Up
-            </button>
-          </div>
+          {authUser && (
+            <div className="pt-2 border-t border-[#efe9e0]">
+              <button
+                onClick={() => {
+                  setMobileMenuOpen(false);
+                  if (onSignOut) onSignOut();
+                }}
+                className="block w-full text-left py-2.5 type-nav font-semibold text-rose-700 hover:text-rose-800 cursor-pointer text-base sm:text-lg"
+              >
+                Sign Out
+              </button>
+            </div>
+          )}
         </div>
       )}
     </header>

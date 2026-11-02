@@ -1,6 +1,6 @@
 import React from 'react';
 import { UserNotificationItem } from '../types';
-import { Bell, CreditCard, ShieldCheck, Clock, Check } from 'lucide-react';
+import { Bell, CreditCard, ShieldCheck, Check } from 'lucide-react';
 
 interface NotificationCardProps {
   notification: UserNotificationItem;
@@ -26,27 +26,29 @@ export const NotificationCard: React.FC<NotificationCardProps> = ({
 
   return (
     <div
-      className={`p-4 rounded-2xl border transition-all flex flex-col sm:flex-row sm:items-center justify-between gap-3 ${
+      className={`p-4 rounded-2xl border transition-colors flex flex-col sm:flex-row sm:items-center justify-between gap-3 ${
         notification.isRead
           ? 'bg-white border-[#e6dfd5]'
-          : 'bg-[#faf8f5] border-[#00b7a8]/50 shadow-2xs'
+          : 'bg-[#faf8f5] border-[#00b7a8]/60'
       }`}
     >
       <div className="flex items-start gap-3">
-        <div className="w-9 h-9 rounded-xl bg-white border border-[#e6dfd5] flex items-center justify-center shrink-0 shadow-2xs">
+        <div className="w-9 h-9 rounded-xl bg-white border border-[#e6dfd5] flex items-center justify-center shrink-0">
           {getIcon()}
         </div>
         <div className="space-y-1">
-          <div className="flex items-center gap-2">
+          <div className="flex flex-wrap items-center gap-2 text-xs">
             <h5 className="font-heading font-bold text-sm text-[#282828]">{notification.title}</h5>
             {!notification.isRead && (
-              <span className="w-2 h-2 rounded-full bg-[#00b7a8] animate-pulse" />
+              <>
+                <span className="text-[#857568]" aria-hidden="true">·</span>
+                <span className="text-[11px] font-bold text-[#00897d]">Unread</span>
+              </>
             )}
           </div>
           <p className="text-xs text-[#5c5046] leading-relaxed">{notification.message}</p>
-          <div className="flex items-center gap-1.5 text-[11px] text-[#857568]">
-            <Clock className="w-3 h-3" />
-            <span>{notification.timestamp}</span>
+          <div className="text-[11px] text-[#857568] tabular-nums">
+            {notification.timestamp}
           </div>
         </div>
       </div>
@@ -56,19 +58,19 @@ export const NotificationCard: React.FC<NotificationCardProps> = ({
           <button
             type="button"
             onClick={() => onMarkAsRead(notification.id)}
-            className="px-2.5 py-1 rounded-lg border border-[#d8cfc3] hover:bg-white text-xs font-semibold text-[#5c5046] flex items-center gap-1 cursor-pointer"
+            className="px-3 py-1.5 rounded-lg border border-[#d8cfc3] hover:bg-white text-xs font-semibold text-[#5c5046] flex items-center gap-1 cursor-pointer whitespace-nowrap"
           >
-            <Check className="w-3 h-3 text-[#00b7a8]" />
+            <Check className="w-3.5 h-3.5 text-[#00b7a8]" />
             <span>Mark Read</span>
           </button>
         )}
-        {notification.actionUrl && onClickAction && (
+        {notification.actionTab && onClickAction && (
           <button
             type="button"
             onClick={() => onClickAction(notification)}
-            className="px-3 py-1 rounded-lg bg-[#00b7a8] hover:bg-[#009e91] text-white text-xs font-bold cursor-pointer"
+            className="px-3 py-1.5 rounded-lg bg-[#00b7a8] hover:bg-[#009e91] text-white text-xs font-bold cursor-pointer whitespace-nowrap"
           >
-            View
+            Open Section
           </button>
         )}
       </div>

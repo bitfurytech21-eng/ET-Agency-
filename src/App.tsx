@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Header } from './components/Header';
 import { Hero } from './components/Hero';
 import { AwardsSection } from './components/AwardsSection';
@@ -38,11 +38,111 @@ import { PROPERTIES } from './data/lodgingData';
 import { UsVehicle } from './data/vehicleData';
 import { FloatingConcierge } from './components/FloatingConcierge';
 
+export interface AuthCustomerSummary {
+  id: string;
+  name: string;
+  email: string;
+}
+
+const ROUTE_TAB_MAP: Record<string, string> = {
+  corporate: 'corporate',
+  'extended-stays': 'corporate',
+  portfolio: 'portfolio',
+  residences: 'portfolio',
+  about: 'about',
+  'about-us': 'about',
+  beahost: 'beahost',
+  'want-to-be-a-host': 'beahost',
+  guide: 'guide',
+  'area-guide': 'guide',
+  faq: 'faq',
+  faqs: 'faq',
+  terms: 'terms',
+  'terms-and-conditions': 'terms',
+  blog: 'blog',
+  contact: 'contact',
+  'contact-us': 'contact',
+  privacy: 'privacy',
+  'privacy-policy': 'privacy',
+  vehicles: 'vehicles',
+  fleet: 'vehicles',
+  cars: 'vehicles',
+  'car-rentals': 'vehicles',
+  'vehicle-rentals': 'vehicles',
+  shop: 'shop',
+  services: 'shop',
+  packages: 'shop',
+  store: 'shop',
+  cart: 'cart',
+  checkout: 'checkout',
+  orders: 'cart',
+  'track-order': 'cart',
+  portal: 'dashboard',
+  'client-portal': 'dashboard',
+  dashboard: 'dashboard',
+  units: 'dashboard',
+  login: 'login',
+  signin: 'login',
+  'sign-in': 'login',
+  register: 'register',
+  signup: 'register',
+  'sign-up': 'register',
+  'create-account': 'register',
+  admin: 'admin',
+  'admin-portal': 'admin',
+};
+
+function resolveTabFromUrl(propertiesList = PROPERTIES): string {
+  const rawHash = window.location.hash.replace(/^#/, '').replace(/^\/+/, '').replace(/\/+$/, '');
+  const rawPath = window.location.pathname.replace(/^\/+/, '').replace(/\/+$/, '');
+  const candidate = rawHash || rawPath;
+
+  if (!candidate || candidate === 'home' || candidate === 'index.html') {
+    return 'home';
+  }
+
+  const lower = candidate.toLowerCase();
+  if (lower === 'admin' || lower === 'admin-portal' || lower.startsWith('admin/')) {
+    return 'admin';
+  }
+
+  if (ROUTE_TAB_MAP[lower]) {
+    return ROUTE_TAB_MAP[lower];
+  }
+
+  if (candidate.startsWith('listing:')) {
+    return candidate;
+  }
+
+  if (lower.startsWith('listing/') || lower.startsWith('properties/') || lower.startsWith('property/')) {
+    const slugOrId = candidate.split('/').slice(1).join('/');
+    const matchedProp = propertiesList.find(
+      (p) => p.slug === slugOrId || p.id === slugOrId || p.unitNumber === slugOrId || p.code === slugOrId,
+    );
+    return matchedProp ? `listing:${matchedProp.id}` : `listing:${slugOrId}`;
+  }
+
+  const matched = propertiesList.find(
+    (p) => p.slug === candidate || p.id === candidate || p.unitNumber === candidate || p.code === candidate,
+  );
+  if (matched) {
+    return `listing:${matched.id}`;
+  }
+
+  return 'home';
+}
+
 function AppShell() {
-  const { liveProperties } = useCart();
+  const { liveProperties, refreshWishlist } = useCart();
   const activeProperties = liveProperties.length > 0 ? liveProperties : PROPERTIES;
 
-  const [currentTab, setCurrentTab] = useState<string>('home');
+  const [currentTab, setCurrentTab] = useState<string>(() => {
+    const initial = resolveTabFromUrl(PROPERTIES);
+    const token = localStorage.getItem('etl_php_token');
+    if (initial === 'dashboard' && !token) return 'login';
+    if ((initial === 'login' || initial === 'register') && token) return 'dashboard';
+    return initial;
+  });
   const [brochureOpen, setBrochureOpen] = useState<boolean>(false);
   const [bookingModalOpen, setBookingModalOpen] = useState<boolean>(false);
   const [selectedPropertyId, setSelectedPropertyId] = useState<string>('any');
@@ -57,11 +157,57 @@ function AppShell() {
   // Portfolio search filter state
   const [portfolioSearchQuery, setPortfolioSearchQuery] = useState<string>('');
 
-  // Auth state & redirect notice
-  const [authToken, setAuthToken] = useState<string | null>(() => localStorage.getItem('etl_php_token'));
+  // Authenticated customer session state
+  const [authToken, setAuthToken] = useState<string | null>(() => {
+    localStorage.removeItem('etl_user_session');
+    return localStorage.getItem('etl_php_token');
+  });
+  const [authUser, setAuthUser] = useState<AuthCustomerSummary | null>(null);
   const [authNotice, setAuthNotice] = useState<string | null>(null);
 
-  // Sync token state on change
+  // Verify stored token against backend session on startup & token change
+  useEffect(() => {
+    localStorage.removeItem('etl_user_session');
+    if (!authToken) {
+      setAuthUser(null);
+      return;
+    }
+
+    let cancelled = false;
+    fetch('/api/auth/customer/session', {
+      method: 'GET',
+      headers: { Authorization: `Bearer ${authToken}` },
+    })
+      .then((res) => res.json().then((body) => ({ ok: res.ok, body })))
+      .then(({ ok, body }) => {
+        if (cancelled) return;
+        if (ok && body.success && body.customer) {
+          setAuthUser({
+            id: body.customer.id,
+            name: body.customer.name,
+            email: body.customer.email,
+          });
+          refreshWishlist();
+        } else {
+          localStorage.removeItem('etl_php_token');
+          setAuthToken(null);
+          setAuthUser(null);
+          refreshWishlist();
+          if (currentTab === 'dashboard' || currentTab === 'portal') {
+            setAuthNotice('Your session expired. Please sign in to access your personal dashboard.');
+            setCurrentTab('login');
+            window.location.hash = 'login';
+          }
+        }
+      })
+      .catch(() => {});
+
+    return () => {
+      cancelled = true;
+    };
+  }, [authToken]);
+
+  // Sync token across browser tabs
   useEffect(() => {
     const handleStorage = () => {
       setAuthToken(localStorage.getItem('etl_php_token'));
@@ -70,94 +216,46 @@ function AppShell() {
     return () => window.removeEventListener('storage', handleStorage);
   }, []);
 
-  // Handle URL hash if any
+  // Handle URL pathname + hash routing and protected dashboard guards
   useEffect(() => {
-    const handleHash = () => {
-      const hash = window.location.hash.replace('#', '').replace(/^\//, '').replace(/\/$/, '');
-      if (!hash || hash === 'home') {
-        setCurrentTab('home');
-        return;
-      }
+    const syncRoute = () => {
+      const resolved = resolveTabFromUrl(activeProperties);
+      const token = localStorage.getItem('etl_php_token');
 
-      const tabMap: Record<string, string> = {
-        corporate: 'corporate',
-        'extended-stays': 'corporate',
-        portfolio: 'portfolio',
-        residences: 'portfolio',
-        about: 'about',
-        'about-us': 'about',
-        beahost: 'beahost',
-        'want-to-be-a-host': 'beahost',
-        guide: 'guide',
-        'area-guide': 'guide',
-        faq: 'faq',
-        faqs: 'faq',
-        terms: 'terms',
-        'terms-and-conditions': 'terms',
-        blog: 'blog',
-        contact: 'contact',
-        'contact-us': 'contact',
-        privacy: 'privacy',
-        'privacy-policy': 'privacy',
-        vehicles: 'vehicles',
-        fleet: 'vehicles',
-        cars: 'vehicles',
-        'car-rentals': 'vehicles',
-        'vehicle-rentals': 'vehicles',
-        shop: 'shop',
-        services: 'shop',
-        packages: 'shop',
-        store: 'shop',
-        cart: 'cart',
-        checkout: 'checkout',
-        orders: 'cart',
-        'track-order': 'cart',
-        portal: 'dashboard',
-        'client-portal': 'dashboard',
-        dashboard: 'dashboard',
-        units: 'dashboard',
-        login: 'login',
-        signin: 'login',
-        'sign-in': 'login',
-        register: 'register',
-        signup: 'register',
-        'sign-up': 'register',
-        'create-account': 'register',
-        admin: 'admin',
-        'admin-portal': 'admin',
-      };
-
-      const resolved = tabMap[hash] || (hash.startsWith('listing:') ? hash : null);
-
-      if (resolved === 'dashboard') {
-        const token = localStorage.getItem('etl_php_token');
-        if (!token) {
-          setAuthNotice('Sign in required to access your User Dashboard. Create an account below if you do not have one yet.');
-          setCurrentTab('login');
+      if (resolved === 'dashboard' && !token) {
+        setAuthNotice(
+          'Please sign in or create an account to access your personal dashboard.',
+        );
+        setCurrentTab('login');
+        if (window.location.pathname !== '/') {
+          window.history.replaceState(null, '', '/#login');
+        } else {
           window.location.hash = 'login';
-          return;
         }
-      }
-
-      if (resolved) {
-        setCurrentTab(resolved);
         return;
       }
 
-      const matched = PROPERTIES.find(
-        (p) => p.slug === hash || p.id === hash || p.unitNumber === hash || p.code === hash,
-      );
-      if (matched) {
-        setCurrentTab(`listing:${matched.id}`);
+      if ((resolved === 'login' || resolved === 'register') && token) {
+        setCurrentTab('dashboard');
+        if (window.location.pathname !== '/') {
+          window.history.replaceState(null, '', '/#dashboard');
+        } else {
+          window.location.hash = 'dashboard';
+        }
         return;
       }
 
-      setCurrentTab('home');
+      setCurrentTab(resolved);
     };
-    handleHash();
-    window.addEventListener('hashchange', handleHash);
-    return () => window.removeEventListener('hashchange', handleHash);
-  }, []);
+
+    syncRoute();
+    window.addEventListener('hashchange', syncRoute);
+    window.addEventListener('popstate', syncRoute);
+    return () => {
+      window.removeEventListener('hashchange', syncRoute);
+      window.removeEventListener('popstate', syncRoute);
+    };
+  }, [activeProperties]);
 
   const handleOpenBooking = (propertyId?: string, moveInDate?: string, duration?: string) => {
     setSelectedPropertyId(propertyId || 'any');
@@ -170,22 +268,79 @@ function AppShell() {
     setBookingModalOpen(true);
   };
 
-  const navigateToTab = (tab: string) => {
+  const navigateToTab = useCallback((tab: string) => {
+    const token = localStorage.getItem('etl_php_token');
+
     if (tab === 'dashboard' || tab === 'portal') {
-      const token = localStorage.getItem('etl_php_token');
       if (!token) {
-        setAuthNotice('Sign in required to access your User Dashboard. Create an account below if you do not have one yet.');
+        setAuthNotice(
+          'Please sign in or create an account to access your personal dashboard.',
+        );
         setCurrentTab('login');
-        window.location.hash = 'login';
+        if (window.location.pathname !== '/') {
+          window.history.pushState(null, '', '/#login');
+        } else {
+          window.location.hash = 'login';
+        }
         window.scrollTo({ top: 0, behavior: 'smooth' });
         return;
       }
+      setCurrentTab('dashboard');
+      if (window.location.pathname !== '/') {
+        window.history.pushState(null, '', '/#dashboard');
+      } else {
+        window.location.hash = 'dashboard';
+      }
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      return;
+    }
+
+    if ((tab === 'login' || tab === 'register') && token) {
+      setCurrentTab('dashboard');
+      if (window.location.pathname !== '/') {
+        window.history.pushState(null, '', '/#dashboard');
+      } else {
+        window.location.hash = 'dashboard';
+      }
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      return;
     }
 
     setCurrentTab(tab);
-    window.location.hash = tab;
+    if (tab === 'admin') {
+      window.history.pushState(null, '', '/admin');
+    } else if (tab === 'home') {
+      window.history.pushState(null, '', '/');
+    } else if (window.location.pathname !== '/') {
+      window.history.pushState(null, '', `/#${tab}`);
+    } else {
+      window.location.hash = tab;
+    }
     window.scrollTo({ top: 0, behavior: 'smooth' });
-  };
+  }, []);
+
+  const handleSignOut = useCallback(async () => {
+    const token = localStorage.getItem('etl_php_token');
+    if (token) {
+      try {
+        await fetch('/api/auth/customer/logout', {
+          method: 'POST',
+          headers: { Authorization: `Bearer ${token}` },
+        });
+      } catch {
+        // Proceed with client sign-out
+      }
+    }
+    localStorage.removeItem('etl_php_token');
+    localStorage.removeItem('etl_user_session');
+    setAuthToken(null);
+    setAuthUser(null);
+    setAuthNotice(null);
+    refreshWishlist();
+    setCurrentTab('login');
+    window.location.hash = 'login';
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, [refreshWishlist]);
 
   const knownViews = [
     'corporate',
@@ -215,6 +370,8 @@ function AppShell() {
         currentTab={currentTab}
         setCurrentTab={navigateToTab}
         onOpenBooking={() => handleOpenBooking()}
+        authUser={authUser}
+        onSignOut={handleSignOut}
         onSearchListings={(q) => {
           setPortfolioSearchQuery(q);
           navigateToTab('portfolio');
@@ -256,14 +413,14 @@ function AppShell() {
           <>
             <div className="relative overflow-hidden py-16 sm:py-20 px-4 text-center text-white border-b border-[#3a2f28]">
               <LivePhotoBackground scene="courtyard" secondaryScene="interior" overlay="espresso" />
-              <div className="relative z-10 max-w-3xl mx-auto">
-                <span className="text-xs uppercase font-extrabold text-[#4de0d2] tracking-widest">
+              <div className="relative z-10 max-w-4xl mx-auto">
+                <span className="type-support uppercase font-semibold text-[#4de0d2] tracking-[0.08em] block">
                   Furnished Residences · California’s homes
                 </span>
-                <h1 className="text-3xl sm:text-5xl font-heading font-black mt-2 text-white">
+                <h1 className="type-h1 mt-2 text-white">
                   1- &amp; 2-Bedroom Furnished Apartments &amp; Suites
                 </h1>
-                <p className="text-[#ede5dc] text-sm sm:text-base max-w-2xl mx-auto mt-3 leading-relaxed">
+                <p className="type-body text-[#ede5dc] max-w-2xl mx-auto mt-4">
                   Move-in-ready furnished residences and corporate housing across California’s homes for flexible stays (5+ nights), extended 30+ day corporate leases, family relocations, and organizational housing.
                 </p>
               </div>
@@ -314,14 +471,14 @@ function AppShell() {
           <>
             <div className="relative overflow-hidden py-16 sm:py-20 px-4 text-center text-white border-b border-[#3a2f28]">
               <LivePhotoBackground scene="river" secondaryScene="courtyard" overlay="espresso" />
-              <div className="relative z-10 max-w-3xl mx-auto">
-                <span className="text-xs uppercase font-extrabold text-[#4de0d2] tracking-widest">
+              <div className="relative z-10 max-w-4xl mx-auto">
+                <span className="type-support uppercase font-semibold text-[#4de0d2] tracking-[0.08em] block">
                   California’s homes Corridor &amp; Regional Guide
                 </span>
-                <h1 className="text-3xl sm:text-5xl font-heading font-black mt-2 text-white">
+                <h1 className="type-h1 mt-2 text-white">
                   California’s homes Metropolitan &amp; Destination Guide
                 </h1>
-                <p className="text-[#ede5dc] text-sm sm:text-base max-w-xl mx-auto mt-3 leading-relaxed">
+                <p className="type-body text-[#ede5dc] max-w-2xl mx-auto mt-4">
                   Explore corporate hubs, scenic outdoor trails, cultural landmarks, culinary districts, and seamless connectivity across major California’s homes regions.
                 </p>
               </div>
@@ -372,6 +529,15 @@ function AppShell() {
           <CustomerPortal
             onOpenBooking={() => handleOpenBooking()}
             onNavigateTab={navigateToTab}
+            onSignOut={handleSignOut}
+            onAuthExpired={() => {
+              setAuthToken(null);
+              setAuthUser(null);
+              setAuthNotice('Please sign in to access your personal dashboard.');
+              setCurrentTab('login');
+              window.location.hash = 'login';
+            }}
+            onUserUpdated={(updated) => setAuthUser(updated)}
           />
         )}
 
@@ -379,10 +545,20 @@ function AppShell() {
           <SignInView
             onNavigateTab={navigateToTab}
             authNotice={authNotice}
-            onLoginSuccess={(token) => {
+            onLoginSuccess={(token, customer) => {
               setAuthToken(token);
+              if (customer?.id) {
+                setAuthUser({
+                  id: customer.id,
+                  name: customer.name,
+                  email: customer.email,
+                });
+              }
+              refreshWishlist();
               setAuthNotice(null);
-              navigateToTab('dashboard');
+              setCurrentTab('dashboard');
+              window.location.hash = 'dashboard';
+              window.scrollTo({ top: 0, behavior: 'smooth' });
             }}
           />
         )}
@@ -390,10 +566,20 @@ function AppShell() {
         {currentTab === 'register' && (
           <RegisterView
             onNavigateTab={navigateToTab}
-            onRegisterSuccess={(token) => {
+            onRegisterSuccess={(token, customer) => {
               setAuthToken(token);
+              if (customer?.id) {
+                setAuthUser({
+                  id: customer.id,
+                  name: customer.name,
+                  email: customer.email,
+                });
+              }
+              refreshWishlist();
               setAuthNotice(null);
-              navigateToTab('dashboard');
+              setCurrentTab('dashboard');
+              window.location.hash = 'dashboard';
+              window.scrollTo({ top: 0, behavior: 'smooth' });
             }}
           />
         )}
