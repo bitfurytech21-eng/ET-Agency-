@@ -178,7 +178,7 @@ const CartContext = createContext<CartContextValue | null>(null);
 export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [cartId] = useState<string>(getInitialCartId);
   const [cart, setCart] = useState<CartData>(() => createEmptyCart(cartId));
-  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isMutating, setIsMutating] = useState<boolean>(false);
   const [isDrawerOpen, setIsDrawerOpen] = useState<boolean>(false);
   const [banner, setBanner] = useState<CartBanner | null>(null);
@@ -296,11 +296,11 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
   }, []);
 
   const syncCart = useCallback(async () => {
-    setIsLoading(true);
     try {
       const res = await fetch(`/api/cart/${encodeURIComponent(cartId)}`);
+      if (!res.ok) return;
       const data = await res.json();
-      if (res.ok && data.cart) {
+      if (data && data.cart) {
         setCart(data.cart);
       }
     } catch {

@@ -191,7 +191,7 @@ const RAW_PROPERTIES: PropertyListing[] = [
     bedrooms: 1,
     bathrooms: 1,
     floor: 'Downstairs',
-    location: 'Rancho Cordova / Greater Sacramento, CA',
+    location: 'El Dorado Hills, CA',
     monthlyRate: 2500,
     startingRate: 'From $2,500 / Month',
     pricingNote:
@@ -242,11 +242,11 @@ const RAW_PROPERTIES: PropertyListing[] = [
     shortDesc:
       'Calm ground-floor one-bedroom suite featuring curated furnishings, a cozy fireplace, private patio, workspace, and pet-friendly options on approval.',
     fullDesc:
-      'Residence B pairs residential warmth with everyday practicality in Greater Sacramento. Thoughtfully arranged for solo guests, couples, homeowners between closings or renovations, and travelers bringing an approved pet, this ground-floor apartment makes it easy to settle into your normal routine.\n\nPrepare meals in the updated kitchen, unwind beside the fireplace with a 55-inch Smart TV, handle laundry inside your suite, or step out onto your private fenced patio. Shops, neighborhood dining, American River Parkway trails, and Highway 50 are all minutes away.',
+      'Residence B pairs residential warmth with everyday practicality in El Dorado Hills, CA. Thoughtfully arranged for solo guests, couples, homeowners between closings or renovations, and travelers bringing an approved pet, this ground-floor apartment makes it easy to settle into your normal routine.\n\nPrepare meals in the updated kitchen, unwind beside the fireplace with a 55-inch Smart TV, handle laundry inside your suite, or step out onto your private fenced patio. Shops, neighborhood dining, American River Parkway trails, and Highway 50 are all minutes away.',
     bedrooms: 1,
     bathrooms: 1,
     floor: 'Downstairs',
-    location: 'Rancho Cordova / Greater Sacramento, CA',
+    location: 'El Dorado Hills, CA',
     monthlyRate: 2500,
     startingRate: 'From $2,500 / Month',
     pricingNote:
@@ -305,7 +305,7 @@ const RAW_PROPERTIES: PropertyListing[] = [
     bedrooms: 2,
     bathrooms: 2,
     floor: 'Upstairs',
-    location: 'Rancho Cordova / Greater Sacramento, CA',
+    location: 'El Dorado Hills, CA',
     monthlyRate: 2800,
     startingRate: 'From $2,800 / Month',
     pricingNote:
@@ -359,11 +359,11 @@ const RAW_PROPERTIES: PropertyListing[] = [
     shortDesc:
       'Refined two-bedroom, two-bath residence with quartz kitchen counters, three Smart TVs, private balcony, and high-speed Wi-Fi.',
     fullDesc:
-      'Residence D blends modern residential finishes with everyday comfort. Designed for families visiting Greater Sacramento, relocating homeowners, remote workers, and multi-week travelers, this quiet upstairs apartment provides room to cook, work, and unwind.\n\nBoth bedrooms include queen mattresses with crisp 400–600 thread count linens and dedicated 43-inch Smart TVs, complementing the 55-inch Smart TV and fireplace in the main living room. An updated kitchen with stone counters, in-unit laundry, and a peaceful balcony overlooking landscaped grounds complete the home.',
+      'Residence D blends modern residential finishes with everyday comfort. Designed for families visiting El Dorado Hills, CA, relocating homeowners, remote workers, and multi-week travelers, this quiet upstairs apartment provides room to cook, work, and unwind.\n\nBoth bedrooms include queen mattresses with crisp 400–600 thread count linens and dedicated 43-inch Smart TVs, complementing the 55-inch Smart TV and fireplace in the main living room. An updated kitchen with stone counters, in-unit laundry, and a peaceful balcony overlooking landscaped grounds complete the home.',
     bedrooms: 2,
     bathrooms: 2,
     floor: 'Upstairs',
-    location: 'Rancho Cordova / Greater Sacramento, CA',
+    location: 'El Dorado Hills, CA',
     monthlyRate: 2800,
     startingRate: 'From $2,800 / Month',
     pricingNote:
@@ -431,7 +431,7 @@ const RAW_PROPERTIES: PropertyListing[] = [
     bedrooms: 2,
     bathrooms: 2,
     floor: 'Downstairs',
-    location: 'Rancho Cordova / Greater Sacramento, CA',
+    location: 'El Dorado Hills, CA',
     monthlyRate: 2800,
     startingRate: 'From $2,800 / Month',
     pricingNote:
@@ -697,7 +697,7 @@ export const REVIEWS: ReviewItem[] = [
     role: 'Corporate Relocation Executive',
     date: '3-Month Stay',
     rating: 5,
-    content: 'Easy Travel Lodging gave us our sanity back while we waited for our new home in Sacramento to close. The condo was spotless, beautifully furnished, and genuinely felt like home rather than an impersonal hotel room. The high-speed internet made remote work effortless, and Bill was always just a phone call away if we had any questions. Highly recommend!',
+    content: 'Easy Travel Lodging gave us our sanity back while we waited for our new home in El Dorado Hills, CA to close. The condo was spotless, beautifully furnished, and genuinely felt like home rather than an impersonal hotel room. The high-speed internet made remote work effortless, and Bill was always just a phone call away if we had any questions. Highly recommend!',
     image: 'https://easytravellodging.com/wp-content/uploads/2023/06/Jayda-F.-.png',
     badge: 'Relocation Guest'
   },
@@ -902,28 +902,28 @@ export const AREA_ATTRACTIONS = {
     { name: 'The Barrel District', desc: 'Chill and sample our Local Craft Beers at the 6 craft breweries, distillery, and hard kombucha taprooms in the Rancho Cordova Barrel District.' }
   ],
   artsAndCulture: [
-    { name: 'California Automobile Museum', desc: 'Enjoy the amazing display of cool cars at the California Automobile Museum in Sacramento.' },
+    { name: 'California Automobile Museum', desc: 'Enjoy the amazing display of classic and vintage cars within an easy drive from El Dorado Hills, CA.' },
     { name: 'The MACC (Mills Station Arts & Culture Center)', desc: 'Admire the visual arts and historic 1911 architecture at The MACC in Rancho Cordova.' },
-    { name: 'Crocker Art Museum', desc: 'Visit the world-class Crocker Art Museum in downtown Sacramento, premier museum of California art.' },
+    { name: 'Crocker Art Museum', desc: 'Visit the world-class Crocker Art Museum, premier museum of California art near El Dorado Hills, CA.' },
     { name: 'Rancho Cordova City Hall Art Gallery', desc: 'Check out the art of our local talent displayed year-round at the Rancho Cordova City Hall.' }
   ],
   history: [
-    { name: 'California State Capitol', desc: 'Come see the beautiful California State Capitol in downtown Sacramento — 20 minutes away.' },
-    { name: 'Old Sacramento State Historic Park', desc: 'Relive Gold Rush history with wooden sidewalks, riverboats, and California State Railroad Museum.' },
-    { name: 'Sutter’s Fort State Historic Park', desc: 'Historic 1839 agricultural outpost in downtown Sacramento.' }
+    { name: 'California State Capitol', desc: 'Come see the beautiful California State Capitol and 40-acre park — an easy drive from El Dorado Hills, CA.' },
+    { name: 'Historic Waterfront & Railroad District', desc: 'Relive Gold Rush history with wooden sidewalks, riverboats, and the California State Railroad Museum near El Dorado Hills, CA.' },
+    { name: 'Sutter’s Fort State Historic Park', desc: 'Historic 1839 pioneer outpost within easy reach of El Dorado Hills, CA.' }
   ],
   entertainment: [
-    { name: 'Downtown Folsom Live Music', desc: 'Lots of live music in historic downtown Folsom — a scenic 20-minute drive.' },
-    { name: 'SMUD Museum of Science and Curiosity (MOSAC)', desc: 'Enjoy the new and amazing Powerhouse Science Center on the Sacramento riverfront.' },
+    { name: 'Downtown Folsom Live Music', desc: 'Lots of live music in historic downtown Folsom — a scenic drive from El Dorado Hills, CA.' },
+    { name: 'SMUD Museum of Science and Curiosity (MOSAC)', desc: 'Enjoy the interactive Powerhouse Science Center within an easy drive of El Dorado Hills, CA.' },
     { name: 'Fireworks Rancho Cordova (July 3–4)', desc: 'No one does fireworks quite like Rancho Cordova! Two full days of fireworks, parades, floats, carnivals, and corndogs.' },
     { name: 'Moonlight Movies', desc: 'Moonlight Movies every Friday in June in the park.' },
     { name: 'Summer Concert Series', desc: 'Summer Concert Series every Friday in August.' },
     { name: 'California Capitol Airshow', desc: 'Thrilling aerial performances at Mather Airport — usually in September.' }
   ],
   outdoors: [
-    { name: 'Sacramento Valley Live Steamers Railroad', desc: 'Enjoy miniature railroad train rides at Hagan Park. A great place for a picnic or stroll along the American River Parkway.' },
+    { name: 'Folsom Valley & Hagan Park Live Steamers', desc: 'Enjoy miniature railroad train rides at Hagan Park. A great place for a picnic or stroll along the American River Parkway.' },
     { name: 'Monster Mini Golf', desc: 'Be a kid again and enjoy a fun-filled afternoon at Monster Mini Golf.' },
-    { name: 'Sacramento Zoo', desc: 'Visit the Sacramento Zoo in nearby Land Park.' },
+    { name: 'Folsom City Zoo Sanctuary', desc: 'Visit rescued native wildlife and shaded botanical trails minutes from El Dorado Hills, CA.' },
     { name: 'Mather Golf Course', desc: 'Test your accuracy at the scenic golf course at Mather — designed by Jack Fleming amidst native valley oaks.' },
     { name: 'Lake Natoma Aquatic Park', desc: 'Paddleboard, kayak, sail, canoe, swim, and hike on Lake Natoma.' },
     { name: 'Granite Arch Climbing Center', desc: 'Climb to new heights with over 20,000 square feet of realistic indoor climbing surfaces!' }
@@ -955,16 +955,16 @@ export const BLOG_POSTS: BlogPost[] = [
   {
     id: 'post-2',
     slug: 'embrace-history-and-nature-a-delightful-stay-in-rancho-cordovas-gold-rush-haven',
-    title: "Trails, River Views & Local Flavor: Exploring Rancho Cordova and Sacramento",
+    title: "Trails, Lake Views & Local Flavor: Exploring El Dorado Hills, CA and Rancho Cordova",
     category: 'Local Guide',
     date: 'October 2025',
     readTime: '5 min read',
-    excerpt: "Set along the American River Parkway in California's historic Gold Country corridor, Rancho Cordova pairs peaceful riverside trails with quick access to Midtown Sacramento and Folsom.",
+    excerpt: "Set along the Sierra foothills and American River Parkway in California's historic Gold Country corridor, our residences pair peaceful trails with quick access to El Dorado Hills, CA and Folsom.",
     coverImage: 'https://easytravellodging.com/wp-content/uploads/2023/01/keys-hotel-board-web-crop.png',
     content: [
-      "Set along California's historic Gold Country corridor, Rancho Cordova offers an inviting blend of outdoor recreation, neighborhood dining, and effortless regional access.",
-      "Just minutes from our residences, the 32-mile American River Parkway invites morning bike rides, riverside walks, and birdwatching beneath native valley oaks. Upstream, Lake Natoma offers calm water for paddleboarding, kayaking, and lakeside picnics.",
-      "In the evening, explore independent craft breweries, cideries, and coffee roasters in the Barrel District, or hop onto Highway 50 to reach Downtown Sacramento, Folsom's historic Sutter Street, or weekend day trips to Lake Tahoe and Napa Valley."
+      "Set along California's historic Gold Country corridor, our Northern California communities offer an inviting blend of outdoor recreation, neighborhood dining, and effortless regional access.",
+      "Just minutes from our residences, the 32-mile American River Parkway invites morning bike rides, riverside walks, and birdwatching beneath native valley oaks. Upstream, Lake Natoma and Folsom Lake offer calm water for paddleboarding, kayaking, and lakeside picnics.",
+      "In the evening, explore independent craft breweries, cideries, and coffee roasters in the Barrel District, or hop onto Highway 50 to reach El Dorado Hills, CA Town Center, Folsom's historic Sutter Street, or weekend day trips to Lake Tahoe and Napa Valley."
     ]
   },
   {
@@ -985,7 +985,7 @@ export const BLOG_POSTS: BlogPost[] = [
   {
     id: 'post-4',
     slug: 'a-home-away-from-home-the-vital-role-of-midterm-rentals-for-medically-fragile-travelers',
-    title: 'Restful Ground-Floor Suites Near Sacramento Medical Centers',
+    title: 'Restful Ground-Floor Suites Near El Dorado Hills, CA Medical Centers',
     category: 'Wellness & Accessibility',
     date: 'August 2025',
     readTime: '5 min read',

@@ -128,16 +128,16 @@ export const AdminCarRentals: React.FC<AdminCarRentalsProps> = ({
 
   return (
     <div className="space-y-6">
-      {/* Primary Modules Bar matching admin/car-rentals/ */}
-      <div className="flex flex-wrap items-center justify-between gap-3 border-b border-[#e6dfd5] pb-4">
+      {/* Primary Modules Bar */}
+      <div className="flex flex-wrap items-center justify-between gap-4 border-b border-slate-200 pb-4">
         <div className="flex flex-wrap gap-2">
           {[
-            { id: 'fleet', label: 'Fleet Inventory (fleet/)', icon: Car },
-            { id: 'bookings', label: 'Fleet Bookings (bookings/)', icon: Calendar },
-            { id: 'availability', label: 'Availability & Calendar (availability/)', icon: Clock },
-            { id: 'pricing', label: 'Pricing & Surcharges (pricing/)', icon: DollarSign },
-            { id: 'fleet-management', label: 'Fleet Management (fleet-management/)', icon: Wrench },
-            { id: 'settings', label: 'Rental Settings (settings/)', icon: Settings },
+            { id: 'fleet', label: 'Fleet Inventory', icon: Car },
+            { id: 'bookings', label: 'Fleet Bookings', icon: Calendar },
+            { id: 'availability', label: 'Availability & Calendar', icon: Clock },
+            { id: 'pricing', label: 'Pricing & Surcharges', icon: DollarSign },
+            { id: 'fleet-management', label: 'Fleet Management', icon: Wrench },
+            { id: 'settings', label: 'Rental Policies', icon: Settings },
           ].map((mod) => {
             const Icon = mod.icon;
             const active = activeModule === mod.id;
@@ -146,13 +146,13 @@ export const AdminCarRentals: React.FC<AdminCarRentalsProps> = ({
                 key={mod.id}
                 type="button"
                 onClick={() => setActiveModule(mod.id as typeof activeModule)}
-                className={`px-3.5 py-2 rounded-xl text-xs font-bold flex items-center gap-1.5 transition-colors cursor-pointer border ${
+                className={`px-3.5 py-2 min-h-[40px] rounded-lg type-nav flex items-center gap-2 transition-colors cursor-pointer border whitespace-nowrap ${
                   active
-                    ? 'bg-[#82634f] text-white border-[#82634f] shadow-xs'
-                    : 'bg-white text-[#5c5046] border-[#e6dfd5] hover:border-[#82634f]/40 hover:text-[#282828]'
+                    ? 'bg-[#14616d] text-white border-[#14616d]'
+                    : 'bg-white text-slate-600 border-slate-200 hover:border-slate-300 hover:text-slate-900'
                 }`}
               >
-                <Icon className="w-3.5 h-3.5" />
+                <Icon className="w-4 h-4 shrink-0" />
                 <span>{mod.label}</span>
               </button>
             );
@@ -161,16 +161,19 @@ export const AdminCarRentals: React.FC<AdminCarRentalsProps> = ({
 
         {/* Selected Vehicle Selector for contextual views */}
         {selectedVehicle && (
-          <div className="flex items-center gap-2 text-xs">
-            <span className="text-[#857568]">Vehicle:</span>
+          <div className="flex items-center gap-2.5">
+            <label htmlFor="admin-active-vehicle-select" className="form-label mb-0 whitespace-nowrap">
+              Vehicle:
+            </label>
             <select
+              id="admin-active-vehicle-select"
               value={selectedVehicleId}
               onChange={(e) => {
                 setSelectedVehicleId(e.target.value);
                 const found = vehicles.find((v) => v.id === e.target.value);
                 if (found) setEditForm({ ...found });
               }}
-              className="bg-white border border-[#dfd6ca] rounded-lg px-2.5 py-1 font-bold text-[#282828] text-xs outline-none focus:border-[#00b7a8]"
+              className="form-select py-1.5 min-h-[40px] w-auto font-semibold"
             >
               {vehicles.map((v) => (
                 <option key={v.id} value={v.id}>
@@ -183,19 +186,19 @@ export const AdminCarRentals: React.FC<AdminCarRentalsProps> = ({
       </div>
 
       {/* ========================================================
-          1. FLEET INVENTORY (admin/car-rentals/fleet/)
+          1. FLEET INVENTORY
          ======================================================== */}
       {activeModule === 'fleet' && (
-        <div className="space-y-5">
+        <div className="space-y-6">
           {/* Sub-tabs for Fleet */}
-          <div className="flex flex-wrap gap-2 border-b border-[#e6dfd5] pb-2.5">
+          <div className="flex flex-wrap gap-2 border-b border-slate-200 pb-3">
             {[
-              { id: 'index', label: 'Vehicles Directory (index.php)' },
-              { id: 'add', label: 'Add Vehicle (add-vehicle.php)' },
-              { id: 'edit', label: 'Edit Vehicle (edit-vehicle.php)' },
-              { id: 'details', label: 'Vehicle Details (vehicle-details.php)' },
-              { id: 'images', label: 'Vehicle Images & 3D (vehicle-images.php)' },
-              { id: 'documents', label: 'Compliance & Docs (vehicle-documents.php)' },
+              { id: 'index', label: 'Vehicles Directory' },
+              { id: 'add', label: 'Add Vehicle' },
+              { id: 'edit', label: 'Edit Vehicle' },
+              { id: 'details', label: 'Vehicle Details' },
+              { id: 'images', label: '3D Studio Asset' },
+              { id: 'documents', label: 'Compliance & Docs' },
             ].map((tab) => {
               const active = fleetSubTab === tab.id;
               return (
@@ -203,8 +206,10 @@ export const AdminCarRentals: React.FC<AdminCarRentalsProps> = ({
                   key={tab.id}
                   type="button"
                   onClick={() => setFleetSubTab(tab.id as typeof fleetSubTab)}
-                  className={`px-2.5 py-1 rounded-md text-xs font-semibold cursor-pointer border ${
-                    active ? 'bg-[#00b7a8] text-white border-[#00b7a8]' : 'bg-white text-[#5c5046] border-[#e6dfd5]'
+                  className={`px-3 py-1.5 min-h-[38px] rounded-lg type-nav cursor-pointer border transition-colors whitespace-nowrap ${
+                    active
+                      ? 'bg-slate-900 text-white border-slate-900'
+                      : 'bg-white text-slate-600 border-slate-200 hover:border-slate-300 hover:text-slate-900'
                   }`}
                 >
                   {tab.label}
@@ -215,87 +220,97 @@ export const AdminCarRentals: React.FC<AdminCarRentalsProps> = ({
 
           {/* 1A. FLEET INDEX TABLE */}
           {fleetSubTab === 'index' && (
-            <div className="bg-white border border-[#e6dfd5] rounded-2xl p-6 shadow-xs space-y-4">
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[#e6dfd5] pb-4">
+            <div className="admin-panel overflow-hidden">
+              <div className="px-6 py-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-200">
                 <div>
-                  <h3 className="font-heading font-bold text-base text-[#282828]">Executive Fleet Directory</h3>
-                  <p className="text-xs text-[#5c5046]">
+                  <h3 className="type-h3 text-slate-900">Executive Fleet Directory</h3>
+                  <p className="type-body text-slate-600 mt-1">
                     Active vehicles stationed across nationwide hubs, airport terminals, and suites.
                   </p>
                 </div>
                 <button
                   type="button"
                   onClick={() => setFleetSubTab('add')}
-                  className="px-3 py-1.5 bg-[#00b7a8] text-white rounded-lg text-xs font-bold flex items-center gap-1.5 cursor-pointer shadow-xs"
+                  className="btn btn-primary btn-sm"
                 >
-                  <Plus className="w-3.5 h-3.5" />
+                  <Plus className="w-4 h-4" />
                   <span>Add New Vehicle</span>
                 </button>
               </div>
 
               <div className="overflow-x-auto">
-                <table className="w-full text-left text-xs">
-                  <thead className="bg-[#faf8f5] text-[#857568] uppercase font-bold tracking-wider border-b border-[#e6dfd5]">
+                <table className="data-table">
+                  <thead>
                     <tr>
-                      <th className="py-3 px-3">Vehicle &amp; Make</th>
-                      <th className="py-3 px-3">License &amp; Hub</th>
-                      <th className="py-3 px-3">Daily Rate</th>
-                      <th className="py-3 px-3">Weekly Rate</th>
-                      <th className="py-3 px-3">Monthly Rate</th>
-                      <th className="py-3 px-3">Status</th>
-                      <th className="py-3 px-3 text-right">Actions</th>
+                      <th>Vehicle &amp; Make</th>
+                      <th>License &amp; Hub</th>
+                      <th>Daily Rate</th>
+                      <th>Weekly Rate</th>
+                      <th>Monthly Rate</th>
+                      <th>Status</th>
+                      <th className="text-right">Actions</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-[#e6dfd5]">
+                  <tbody>
                     {vehicles.map((veh) => (
-                      <tr key={veh.id} className="hover:bg-[#fbf9f6] transition-colors">
-                        <td className="py-3.5 px-3">
-                          <div className="font-bold text-[#282828]">{veh.name}</div>
-                          <div className="text-[11px] text-[#5c5046]">{veh.category} • Year {veh.year}</div>
+                      <tr key={veh.id}>
+                        <td>
+                          <div className="font-semibold text-slate-900">{veh.name}</div>
+                          <div className="type-support text-slate-500">
+                            {veh.category} · {veh.year}
+                          </div>
                         </td>
-                        <td className="py-3 px-3">
-                          <span className="font-mono font-bold text-[#82634f] block">{veh.licensePlate}</span>
-                          <span className="text-[11px] text-[#857568] flex items-center gap-1">
-                            <MapPin className="w-3 h-3 text-[#00b7a8]" />
-                            {veh.hubLocation}
+                        <td>
+                          <span className="font-mono type-support font-semibold text-[#14616d] block">
+                            {veh.licensePlate}
+                          </span>
+                          <span className="type-support text-slate-500 flex items-center gap-1.5 mt-0.5">
+                            <MapPin className="w-3.5 h-3.5 text-[#14616d] shrink-0" />
+                            <span>{veh.hubLocation}</span>
                           </span>
                         </td>
-                        <td className="py-3 px-3 font-bold text-[#00897d] tabular-nums">${veh.dailyRate} / day</td>
-                        <td className="py-3 px-3 font-semibold text-[#282828] tabular-nums">${veh.weeklyRate} / wk</td>
-                        <td className="py-3 px-3 font-semibold text-[#282828] tabular-nums">${veh.monthlyRate} / mo</td>
-                        <td className="py-3 px-3">
+                        <td className="font-semibold text-[#14616d] tabular-nums whitespace-nowrap">
+                          ${veh.dailyRate} / day
+                        </td>
+                        <td className="font-semibold text-slate-900 tabular-nums whitespace-nowrap">
+                          ${veh.weeklyRate} / wk
+                        </td>
+                        <td className="font-semibold text-slate-900 tabular-nums whitespace-nowrap">
+                          ${veh.monthlyRate.toLocaleString()} / mo
+                        </td>
+                        <td>
                           <span
-                            className={`px-2 py-0.5 rounded text-[10px] font-bold uppercase ${
+                            className={`type-support font-semibold capitalize ${
                               veh.inventoryStatus === 'available'
-                                ? 'bg-emerald-50 text-emerald-700 border border-emerald-200'
+                                ? 'text-emerald-700'
                                 : veh.inventoryStatus === 'rented'
-                                ? 'bg-blue-50 text-blue-700 border border-blue-200'
-                                : 'bg-amber-50 text-amber-700 border border-amber-200'
+                                ? 'text-sky-700'
+                                : 'text-amber-700'
                             }`}
                           >
                             {veh.inventoryStatus}
                           </span>
                         </td>
-                        <td className="py-3 px-3 text-right">
-                          <div className="inline-flex items-center gap-1.5">
+                        <td className="text-right">
+                          <div className="inline-flex items-center gap-2">
                             <button
                               type="button"
                               onClick={() => {
                                 setSelectedVehicleId(veh.id);
                                 setFleetSubTab('details');
                               }}
-                              className="p-1.5 bg-white text-[#5c5046] hover:bg-[#faf8f5] rounded border border-[#dfd6ca] cursor-pointer"
+                              className="btn btn-outline btn-sm px-2.5"
                               title="Details"
                             >
-                              <Eye className="w-3.5 h-3.5" />
+                              <Eye className="w-4 h-4" />
                             </button>
                             <button
                               type="button"
                               onClick={() => handleStartEdit(veh)}
-                              className="p-1.5 bg-[#e8f8f6] text-[#00897d] hover:bg-[#d0f2ed] rounded border border-[#bfe8e3] cursor-pointer"
+                              className="btn btn-primary btn-sm px-2.5"
                               title="Edit"
                             >
-                              <Edit3 className="w-3.5 h-3.5" />
+                              <Edit3 className="w-4 h-4" />
                             </button>
                           </div>
                         </td>
@@ -309,91 +324,93 @@ export const AdminCarRentals: React.FC<AdminCarRentalsProps> = ({
 
           {/* 1B. ADD VEHICLE */}
           {fleetSubTab === 'add' && (
-            <div className="bg-white border border-[#e6dfd5] rounded-2xl p-6 sm:p-8 shadow-xs max-w-2xl mx-auto space-y-5">
-              <div className="border-b border-[#e6dfd5] pb-3">
-                <h3 className="font-heading font-bold text-lg text-[#282828]">Add Fleet Vehicle (add-vehicle.php)</h3>
-                <p className="text-xs text-[#5c5046]">Onboard a new vehicle to the nationwide executive rental fleet.</p>
+            <div className="admin-panel p-6 sm:p-8 max-w-2xl mx-auto space-y-6">
+              <div className="border-b border-slate-200 pb-4">
+                <h3 className="type-h3 text-slate-900">Add Fleet Vehicle</h3>
+                <p className="type-body text-slate-600 mt-1">
+                  Onboard a new vehicle to the nationwide executive rental fleet.
+                </p>
               </div>
 
-              <form onSubmit={handleCreateVehicle} className="space-y-4 text-xs">
-                <div className="grid grid-cols-2 gap-4">
+              <form onSubmit={handleCreateVehicle} className="space-y-5">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-[#5c5046] font-bold mb-1">Make &amp; Model Name</label>
+                    <label className="form-label">Make &amp; Model Name</label>
                     <input
                       type="text"
                       required
                       value={newVehicle.name}
                       onChange={(e) => setNewVehicle({ ...newVehicle, name: e.target.value })}
-                      className="w-full px-3 py-2 bg-[#faf8f5] border border-[#dfd6ca] rounded-lg"
+                      className="form-input"
                     />
                   </div>
                   <div>
-                    <label className="block text-[#5c5046] font-bold mb-1">License Plate</label>
+                    <label className="form-label">License Plate</label>
                     <input
                       type="text"
                       required
                       value={newVehicle.licensePlate}
                       onChange={(e) => setNewVehicle({ ...newVehicle, licensePlate: e.target.value })}
-                      className="w-full px-3 py-2 bg-[#faf8f5] border border-[#dfd6ca] rounded-lg font-mono"
+                      className="form-input font-mono"
                     />
                   </div>
                 </div>
 
-                <div className="grid grid-cols-3 gap-3">
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 tabular-nums">
                   <div>
-                    <label className="block text-[#5c5046] font-bold mb-1">Daily Rate ($)</label>
+                    <label className="form-label">Daily Rate ($)</label>
                     <input
                       type="number"
                       required
                       value={newVehicle.dailyRate}
                       onChange={(e) => setNewVehicle({ ...newVehicle, dailyRate: Number(e.target.value) })}
-                      className="w-full px-3 py-2 bg-[#faf8f5] border border-[#dfd6ca] rounded-lg"
+                      className="form-input tabular-nums"
                     />
                   </div>
                   <div>
-                    <label className="block text-[#5c5046] font-bold mb-1">Weekly Rate ($)</label>
+                    <label className="form-label">Weekly Rate ($)</label>
                     <input
                       type="number"
                       required
                       value={newVehicle.weeklyRate}
                       onChange={(e) => setNewVehicle({ ...newVehicle, weeklyRate: Number(e.target.value) })}
-                      className="w-full px-3 py-2 bg-[#faf8f5] border border-[#dfd6ca] rounded-lg"
+                      className="form-input tabular-nums"
                     />
                   </div>
                   <div>
-                    <label className="block text-[#5c5046] font-bold mb-1">Monthly Rate ($)</label>
+                    <label className="form-label">Monthly Rate ($)</label>
                     <input
                       type="number"
                       required
                       value={newVehicle.monthlyRate}
                       onChange={(e) => setNewVehicle({ ...newVehicle, monthlyRate: Number(e.target.value) })}
-                      className="w-full px-3 py-2 bg-[#faf8f5] border border-[#dfd6ca] rounded-lg"
+                      className="form-input tabular-nums"
                     />
                   </div>
                 </div>
 
                 <div>
-                  <label className="block text-[#5c5046] font-bold mb-1">Station Hub Location</label>
+                  <label className="form-label">Station Hub Location</label>
                   <input
                     type="text"
                     required
                     value={newVehicle.hubLocation}
                     onChange={(e) => setNewVehicle({ ...newVehicle, hubLocation: e.target.value })}
-                    className="w-full px-3 py-2 bg-[#faf8f5] border border-[#dfd6ca] rounded-lg"
+                    className="form-input"
                   />
                 </div>
 
-                <div className="flex justify-end gap-2 pt-3">
+                <div className="flex justify-end gap-3 pt-2">
                   <button
                     type="button"
                     onClick={() => setFleetSubTab('index')}
-                    className="px-4 py-2 border border-[#dfd6ca] rounded-lg text-[#5c5046]"
+                    className="btn btn-outline"
                   >
                     Cancel
                   </button>
                   <button
                     type="submit"
-                    className="px-5 py-2 bg-[#00b7a8] text-white rounded-lg font-bold"
+                    className="btn btn-primary"
                   >
                     Save Vehicle
                   </button>
@@ -404,59 +421,64 @@ export const AdminCarRentals: React.FC<AdminCarRentalsProps> = ({
 
           {/* 1C. EDIT VEHICLE */}
           {fleetSubTab === 'edit' && editForm && (
-            <div className="bg-white border border-[#e6dfd5] rounded-2xl p-6 sm:p-8 shadow-xs max-w-2xl mx-auto space-y-5">
-              <div className="flex items-center justify-between border-b border-[#e6dfd5] pb-3">
-                <h3 className="font-heading font-bold text-lg text-[#282828]">
-                  Edit {editForm.name} (edit-vehicle.php)
+            <div className="admin-panel p-6 sm:p-8 max-w-2xl mx-auto space-y-6">
+              <div className="flex items-center justify-between border-b border-slate-200 pb-4">
+                <h3 className="type-h3 text-slate-900">
+                  Edit {editForm.name}
                 </h3>
-                <button onClick={() => setFleetSubTab('index')} className="text-[#857568]">
+                <button
+                  type="button"
+                  onClick={() => setFleetSubTab('index')}
+                  aria-label="Close edit vehicle form"
+                  className="btn btn-ghost btn-sm px-2.5"
+                >
                   <X className="w-4 h-4" />
                 </button>
               </div>
 
-              <form onSubmit={handleSaveEdit} className="space-y-4 text-xs">
-                <div className="grid grid-cols-2 gap-4">
+              <form onSubmit={handleSaveEdit} className="space-y-5">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-[#5c5046] font-bold mb-1">Vehicle Name</label>
+                    <label className="form-label">Vehicle Name</label>
                     <input
                       type="text"
                       value={editForm.name}
                       onChange={(e) => setEditForm({ ...editForm, name: e.target.value })}
-                      className="w-full px-3 py-2 bg-[#faf8f5] border border-[#dfd6ca] rounded-lg"
+                      className="form-input"
                     />
                   </div>
                   <div>
-                    <label className="block text-[#5c5046] font-bold mb-1">License Plate</label>
+                    <label className="form-label">License Plate</label>
                     <input
                       type="text"
                       value={editForm.licensePlate}
                       onChange={(e) => setEditForm({ ...editForm, licensePlate: e.target.value })}
-                      className="w-full px-3 py-2 bg-[#faf8f5] border border-[#dfd6ca] rounded-lg font-mono"
+                      className="form-input font-mono"
                     />
                   </div>
                 </div>
 
-                <div className="grid grid-cols-3 gap-3">
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 tabular-nums">
                   <div>
-                    <label className="block text-[#5c5046] font-bold mb-1">Daily Rate ($)</label>
+                    <label className="form-label">Daily Rate ($)</label>
                     <input
                       type="number"
                       value={editForm.dailyRate}
                       onChange={(e) => setEditForm({ ...editForm, dailyRate: Number(e.target.value) })}
-                      className="w-full px-3 py-2 bg-[#faf8f5] border border-[#dfd6ca] rounded-lg"
+                      className="form-input tabular-nums"
                     />
                   </div>
                   <div>
-                    <label className="block text-[#5c5046] font-bold mb-1">Weekly Rate ($)</label>
+                    <label className="form-label">Weekly Rate ($)</label>
                     <input
                       type="number"
                       value={editForm.weeklyRate}
                       onChange={(e) => setEditForm({ ...editForm, weeklyRate: Number(e.target.value) })}
-                      className="w-full px-3 py-2 bg-[#faf8f5] border border-[#dfd6ca] rounded-lg"
+                      className="form-input tabular-nums"
                     />
                   </div>
                   <div>
-                    <label className="block text-[#5c5046] font-bold mb-1">Inventory Status</label>
+                    <label className="form-label">Inventory Status</label>
                     <select
                       value={editForm.inventoryStatus}
                       onChange={(e) =>
@@ -465,7 +487,7 @@ export const AdminCarRentals: React.FC<AdminCarRentalsProps> = ({
                           inventoryStatus: e.target.value as AdminVehicle['inventoryStatus'],
                         })
                       }
-                      className="w-full px-3 py-2 bg-[#faf8f5] border border-[#dfd6ca] rounded-lg font-bold"
+                      className="form-select font-semibold"
                     >
                       <option value="available">Available</option>
                       <option value="rented">Rented</option>
@@ -475,17 +497,17 @@ export const AdminCarRentals: React.FC<AdminCarRentalsProps> = ({
                   </div>
                 </div>
 
-                <div className="flex justify-end gap-2 pt-3">
+                <div className="flex justify-end gap-3 pt-2">
                   <button
                     type="button"
                     onClick={() => setFleetSubTab('index')}
-                    className="px-4 py-2 border border-[#dfd6ca] rounded-lg text-[#5c5046]"
+                    className="btn btn-outline"
                   >
                     Cancel
                   </button>
                   <button
                     type="submit"
-                    className="px-5 py-2 bg-[#82634f] text-white rounded-lg font-bold"
+                    className="btn btn-primary"
                   >
                     Save Changes
                   </button>
@@ -496,46 +518,56 @@ export const AdminCarRentals: React.FC<AdminCarRentalsProps> = ({
 
           {/* 1D. VEHICLE DETAILS */}
           {fleetSubTab === 'details' && selectedVehicle && (
-            <div className="bg-white border border-[#e6dfd5] rounded-2xl p-6 sm:p-8 shadow-xs space-y-5">
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[#e6dfd5] pb-4">
-                <div>
-                  <span className="font-mono text-xs font-bold text-[#82634f]">{selectedVehicle.licensePlate}</span>
-                  <h3 className="font-heading font-black text-xl text-[#282828]">{selectedVehicle.name}</h3>
-                  <p className="text-xs text-[#5c5046]">{selectedVehicle.category}</p>
+            <div className="admin-panel p-6 sm:p-8 space-y-6">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-200 pb-5">
+                <div className="space-y-1">
+                  <span className="font-mono type-support font-semibold text-[#14616d] block">
+                    {selectedVehicle.licensePlate}
+                  </span>
+                  <h3 className="type-h3 text-slate-900">{selectedVehicle.name}</h3>
+                  <p className="type-body text-slate-600">{selectedVehicle.category}</p>
                 </div>
-                <div className="flex gap-2">
+                <div className="flex flex-wrap gap-2.5">
                   <button
+                    type="button"
                     onClick={() => handleStartEdit(selectedVehicle)}
-                    className="px-3 py-1.5 bg-[#82634f] text-white text-xs font-bold rounded-lg"
+                    className="btn btn-outline btn-sm"
                   >
                     Edit Vehicle
                   </button>
                   <button
+                    type="button"
                     onClick={() => setFleetSubTab('images')}
-                    className="px-3 py-1.5 bg-[#00b7a8] text-white text-xs font-bold rounded-lg"
+                    className="btn btn-primary btn-sm"
                   >
                     View 3D Model
                   </button>
                 </div>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
-                <div className="p-4 bg-[#faf8f5] border border-[#e6dfd5] rounded-xl space-y-2">
-                  <span className="font-bold text-[#857568] uppercase text-[10px]">Rental Pricing</span>
-                  <div className="text-base font-bold text-[#00897d]">${selectedVehicle.dailyRate} / day</div>
-                  <div className="text-[#5c5046]">${selectedVehicle.weeklyRate} / week · ${selectedVehicle.monthlyRate} / mo</div>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6 divide-y md:divide-y-0 md:divide-x divide-slate-200">
+                <div className="space-y-1.5 pt-4 md:pt-0 first:pt-0">
+                  <span className="type-support font-semibold text-slate-500 block">Rental Pricing</span>
+                  <div className="type-h4 text-[#14616d] tabular-nums">${selectedVehicle.dailyRate} / day</div>
+                  <div className="type-support text-slate-600 tabular-nums">
+                    ${selectedVehicle.weeklyRate} / week · ${selectedVehicle.monthlyRate.toLocaleString()} / mo
+                  </div>
                 </div>
 
-                <div className="p-4 bg-[#faf8f5] border border-[#e6dfd5] rounded-xl space-y-2">
-                  <span className="font-bold text-[#857568] uppercase text-[10px]">Station &amp; Mileage</span>
-                  <div className="font-semibold text-[#282828]">{selectedVehicle.hubLocation}</div>
-                  <div className="text-[#5c5046]">{selectedVehicle.mileage.toLocaleString()} total miles</div>
+                <div className="space-y-1.5 pt-4 md:pt-0 md:pl-6">
+                  <span className="type-support font-semibold text-slate-500 block">Station &amp; Mileage</span>
+                  <div className="type-h4 text-slate-900">{selectedVehicle.hubLocation}</div>
+                  <div className="type-support text-slate-600 tabular-nums">
+                    {selectedVehicle.mileage.toLocaleString()} total miles
+                  </div>
                 </div>
 
-                <div className="p-4 bg-[#faf8f5] border border-[#e6dfd5] rounded-xl space-y-2">
-                  <span className="font-bold text-[#857568] uppercase text-[10px]">Fleet Status</span>
-                  <div className="font-bold uppercase text-emerald-700">{selectedVehicle.inventoryStatus}</div>
-                  <div className="text-[#5c5046]">{selectedVehicle.maintenanceLogs?.length || 0} service records</div>
+                <div className="space-y-1.5 pt-4 md:pt-0 md:pl-6">
+                  <span className="type-support font-semibold text-slate-500 block">Fleet Status</span>
+                  <div className="type-h4 text-emerald-700 capitalize">{selectedVehicle.inventoryStatus}</div>
+                  <div className="type-support text-slate-600 tabular-nums">
+                    {selectedVehicle.maintenanceLogs?.length || 0} service records
+                  </div>
                 </div>
               </div>
             </div>
@@ -543,17 +575,17 @@ export const AdminCarRentals: React.FC<AdminCarRentalsProps> = ({
 
           {/* 1E. VEHICLE IMAGES & 3D EMBED */}
           {fleetSubTab === 'images' && selectedVehicle && (
-            <div className="bg-white border border-[#e6dfd5] rounded-2xl p-6 sm:p-8 shadow-xs space-y-5">
-              <div className="border-b border-[#e6dfd5] pb-3">
-                <h3 className="font-heading font-bold text-lg text-[#282828]">
-                  3D Digital Studio Asset: {selectedVehicle.name} (vehicle-images.php)
+            <div className="admin-panel p-6 sm:p-8 space-y-5">
+              <div className="border-b border-slate-200 pb-4">
+                <h3 className="type-h3 text-slate-900">
+                  3D Digital Studio Asset — {selectedVehicle.name}
                 </h3>
-                <p className="text-xs text-[#5c5046]">
+                <p className="type-body text-slate-600 mt-1">
                   Interactive 3D model embed preview used across guest portals and vehicle customizer.
                 </p>
               </div>
 
-              <div className="aspect-16/9 bg-neutral-900 rounded-xl overflow-hidden shadow-inner flex items-center justify-center relative">
+              <div className="aspect-16/9 bg-slate-950 rounded-xl overflow-hidden flex items-center justify-center relative">
                 {selectedVehicle.id === 'nissan-terra-2020' ? (
                   <iframe
                     title="Nissan Terra 2020"
@@ -575,32 +607,35 @@ export const AdminCarRentals: React.FC<AdminCarRentalsProps> = ({
 
           {/* 1F. VEHICLE DOCUMENTS */}
           {fleetSubTab === 'documents' && selectedVehicle && (
-            <div className="bg-white border border-[#e6dfd5] rounded-2xl p-6 sm:p-8 shadow-xs space-y-5">
-              <div className="border-b border-[#e6dfd5] pb-3">
-                <h3 className="font-heading font-bold text-lg text-[#282828]">
-                  Compliance &amp; Documents: {selectedVehicle.name} (vehicle-documents.php)
+            <div className="admin-panel p-6 sm:p-8 space-y-5">
+              <div className="border-b border-slate-200 pb-4">
+                <h3 className="type-h3 text-slate-900">
+                  Compliance &amp; Documents — {selectedVehicle.name}
                 </h3>
-                <p className="text-xs text-[#5c5046]">
+                <p className="type-body text-slate-600 mt-1">
                   California DMV registrations, commercial fleet insurance, and smog certificates.
                 </p>
               </div>
 
-              <div className="space-y-3 text-xs">
+              <div className="divide-y divide-slate-200">
                 {[
                   { title: 'California DMV Registration', type: 'Registration Card', plate: selectedVehicle.licensePlate, expires: '2027-08-31', status: 'Valid' },
                   { title: 'Commercial Fleet Policy #TRAV-CA-9921', type: 'Proof of Insurance', plate: selectedVehicle.licensePlate, expires: '2027-10-15', status: 'Valid' },
                   { title: 'California Annual Smog Certification', type: 'Inspection Certificate', plate: selectedVehicle.licensePlate, expires: '2027-06-30', status: 'Valid' },
                 ].map((doc, idx) => (
-                  <div key={idx} className="p-4 bg-[#faf8f5] border border-[#e6dfd5] rounded-xl flex items-center justify-between">
-                    <div className="flex items-center gap-3">
-                      <FileText className="w-5 h-5 text-[#82634f]" />
+                  <div key={idx} className="py-4 first:pt-0 last:pb-0 flex items-center justify-between gap-4">
+                    <div className="flex items-center gap-3.5">
+                      <FileText className="w-5 h-5 text-[#14616d] shrink-0" />
                       <div>
-                        <span className="font-bold text-[#282828] block">{doc.title}</span>
-                        <span className="text-[#857568] text-[11px]">{doc.type} • Expires {doc.expires}</span>
+                        <span className="font-semibold text-slate-900 block">{doc.title}</span>
+                        <span className="type-support text-slate-500 tabular-nums">
+                          {doc.type} · Expires {doc.expires}
+                        </span>
                       </div>
                     </div>
-                    <span className="px-2 py-0.5 rounded bg-emerald-50 text-emerald-700 font-bold uppercase text-[10px] border border-emerald-200">
-                      {doc.status}
+                    <span className="inline-flex items-center gap-1.5 type-support font-semibold text-emerald-700 shrink-0">
+                      <CheckCircle2 className="w-4 h-4 text-emerald-600" />
+                      <span>{doc.status}</span>
                     </span>
                   </div>
                 ))}
@@ -611,68 +646,70 @@ export const AdminCarRentals: React.FC<AdminCarRentalsProps> = ({
       )}
 
       {/* ========================================================
-          2. FLEET BOOKINGS (admin/car-rentals/bookings/)
+          2. FLEET BOOKINGS
          ======================================================== */}
       {activeModule === 'bookings' && (
-        <div className="bg-white border border-[#e6dfd5] rounded-2xl p-6 shadow-xs space-y-4">
-          <div className="flex items-center justify-between border-b border-[#e6dfd5] pb-3">
+        <div className="admin-panel overflow-hidden">
+          <div className="px-6 py-5 flex items-center justify-between border-b border-slate-200">
             <div>
-              <h3 className="font-heading font-bold text-base text-[#282828]">Fleet Rental Bookings (bookings/)</h3>
-              <p className="text-xs text-[#5c5046]">
+              <h3 className="type-h3 text-slate-900">Fleet Rental Bookings</h3>
+              <p className="type-body text-slate-600 mt-1">
                 Manage pending, confirmed, active rentals, completed, and cancelled bookings.
               </p>
             </div>
           </div>
 
           <div className="overflow-x-auto">
-            <table className="w-full text-left text-xs">
-              <thead className="bg-[#faf8f5] text-[#857568] uppercase font-bold tracking-wider border-b border-[#e6dfd5]">
+            <table className="data-table">
+              <thead>
                 <tr>
-                  <th className="py-3 px-3">Booking ID</th>
-                  <th className="py-3 px-3">Vehicle</th>
-                  <th className="py-3 px-3">Guest &amp; Phone</th>
-                  <th className="py-3 px-3">Dates</th>
-                  <th className="py-3 px-3">Total Amount</th>
-                  <th className="py-3 px-3">Status</th>
-                  <th className="py-3 px-3 text-right">Actions</th>
+                  <th>Booking ID</th>
+                  <th>Vehicle</th>
+                  <th>Guest &amp; Phone</th>
+                  <th>Dates</th>
+                  <th>Total Amount</th>
+                  <th>Status</th>
+                  <th className="text-right">Actions</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-[#e6dfd5]">
+              <tbody>
                 {bookings
                   .filter((b) => b.type === 'car-rental')
                   .map((b) => (
-                    <tr key={b.id} className="hover:bg-[#fbf9f6] transition-colors">
-                      <td className="py-3.5 px-3 font-mono font-bold text-[#82634f]">{b.id}</td>
-                      <td className="py-3 px-3 font-bold text-[#282828]">{b.targetTitle}</td>
-                      <td className="py-3 px-3">
-                        <div className="font-semibold text-[#282828]">{b.guestName}</div>
-                        <div className="text-[11px] text-[#5c5046]">{b.guestPhone || b.guestEmail}</div>
+                    <tr key={b.id}>
+                      <td className="font-mono font-semibold text-[#14616d]">{b.id}</td>
+                      <td className="font-semibold text-slate-900">{b.targetTitle}</td>
+                      <td>
+                        <div className="font-semibold text-slate-900">{b.guestName}</div>
+                        <div className="type-support text-slate-500">{b.guestPhone || b.guestEmail}</div>
                       </td>
-                      <td className="py-3 px-3 text-[#5c5046]">
+                      <td className="text-slate-600 tabular-nums whitespace-nowrap">
                         {b.startDate} → {b.endDate} ({b.totalDays}d)
                       </td>
-                      <td className="py-3 px-3 font-bold text-[#00897d] tabular-nums">
+                      <td className="font-semibold text-[#14616d] tabular-nums whitespace-nowrap">
                         ${b.amountUsd?.toLocaleString()}
                       </td>
-                      <td className="py-3 px-3">
-                        <span className="px-2 py-0.5 rounded text-[10px] font-bold uppercase bg-blue-50 text-blue-700 border border-blue-200">
+                      <td>
+                        <span className="type-support font-semibold text-sky-700 capitalize">
                           {b.status}
                         </span>
                       </td>
-                      <td className="py-3 px-3 text-right">
-                        <div className="inline-flex items-center gap-1">
+                      <td className="text-right">
+                        <div className="inline-flex items-center gap-2">
                           {b.status !== 'confirmed' && (
                             <button
+                              type="button"
                               onClick={() => onUpdateBookingStatus(b.id, 'confirmed')}
-                              className="px-2 py-1 bg-emerald-50 text-emerald-700 rounded text-[11px] font-bold"
+                              className="btn btn-primary btn-sm"
                             >
                               Confirm
                             </button>
                           )}
                           {b.status !== 'completed' && (
                             <button
+                              type="button"
                               onClick={() => onUpdateBookingStatus(b.id, 'completed')}
-                              className="px-2 py-1 bg-purple-50 text-purple-700 rounded text-[11px] font-bold"
+                              className="btn btn-outline btn-sm"
                             >
                               Complete
                             </button>
@@ -688,79 +725,84 @@ export const AdminCarRentals: React.FC<AdminCarRentalsProps> = ({
       )}
 
       {/* ========================================================
-          3. AVAILABILITY & CALENDAR (admin/car-rentals/availability/)
+          3. AVAILABILITY & CALENDAR
          ======================================================== */}
       {activeModule === 'availability' && (
         <div className="space-y-6">
-          <div className="bg-white border border-[#e6dfd5] rounded-2xl p-6 shadow-xs space-y-4">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[#e6dfd5] pb-3">
+          <div className="admin-panel p-6 space-y-5">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-200 pb-4">
               <div>
-                <h3 className="font-heading font-bold text-base text-[#282828]">
-                  Fleet Availability &amp; Dispatch Timeline (calendar.php)
+                <h3 className="type-h3 text-slate-900">
+                  Fleet Availability &amp; Dispatch Timeline
                 </h3>
-                <p className="text-xs text-[#5c5046]">
+                <p className="type-body text-slate-600 mt-1">
                   Real-time status tracking for Airport Terminal and Suite Curbside Deliveries Nationwide.
                 </p>
               </div>
 
               <div className="flex items-center gap-2">
                 <button
+                  type="button"
                   onClick={() => setCurrentMonth('October 2026')}
-                  className="p-1 rounded border border-[#dfd6ca] text-[#5c5046]"
+                  aria-label="Previous month"
+                  className="btn btn-outline btn-sm px-2.5"
                 >
                   <ChevronLeft className="w-4 h-4" />
                 </button>
-                <span className="text-xs font-bold text-[#282828] min-w-[110px] text-center">{currentMonth}</span>
+                <span className="type-nav text-slate-900 min-w-[130px] text-center">{currentMonth}</span>
                 <button
+                  type="button"
                   onClick={() => setCurrentMonth('December 2026')}
-                  className="p-1 rounded border border-[#dfd6ca] text-[#5c5046]"
+                  aria-label="Next month"
+                  className="btn btn-outline btn-sm px-2.5"
                 >
                   <ChevronRight className="w-4 h-4" />
                 </button>
               </div>
             </div>
 
-            {/* Interactive Grid of Vehicle Status */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3 text-xs">
+            {/* Grid of Vehicle Status */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
               {vehicles.map((v) => (
-                <div key={v.id} className="p-4 bg-[#faf8f5] border border-[#e6dfd5] rounded-xl space-y-2">
-                  <div className="flex items-center justify-between">
-                    <span className="font-bold text-[#282828] truncate">{v.name}</span>
+                <div key={v.id} className="p-4 bg-slate-50 border border-slate-200 rounded-xl space-y-1.5">
+                  <div className="flex items-center justify-between gap-2">
+                    <span className="font-semibold text-slate-900 truncate">{v.name}</span>
                     <span
-                      className={`px-1.5 py-0.5 rounded text-[9px] font-black uppercase ${
+                      className={`type-support font-semibold capitalize shrink-0 ${
                         v.inventoryStatus === 'available'
-                          ? 'bg-emerald-100 text-emerald-800'
-                          : 'bg-amber-100 text-amber-800'
+                          ? 'text-emerald-700'
+                          : 'text-amber-700'
                       }`}
                     >
                       {v.inventoryStatus}
                     </span>
                   </div>
-                  <div className="text-[11px] text-[#857568]">{v.hubLocation}</div>
-                  <div className="text-[11px] font-mono text-[#82634f]">{v.licensePlate}</div>
+                  <div className="type-support text-slate-600">{v.hubLocation}</div>
+                  <div className="type-support font-mono font-semibold text-[#14616d]">{v.licensePlate}</div>
                 </div>
               ))}
             </div>
           </div>
 
-          {/* Blocked Dates Manager (blocked-dates.php) */}
-          <div className="bg-white border border-[#e6dfd5] rounded-2xl p-6 shadow-xs space-y-4">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[#e6dfd5] pb-3">
+          {/* Blocked Dates Manager */}
+          <div className="admin-panel p-6 space-y-5">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-200 pb-4">
               <div>
-                <h3 className="font-heading font-bold text-base text-[#282828]">
-                  Maintenance &amp; Blackout Date Blocks (blocked-dates.php)
+                <h3 className="type-h4 text-slate-900">
+                  Maintenance &amp; Blackout Date Blocks
                 </h3>
-                <p className="text-xs text-[#5c5046]">
+                <p className="type-support text-slate-600 mt-1">
                   Prevent bookings during routine servicing, executive holds, or VIP reserve.
                 </p>
               </div>
             </div>
 
-            <form onSubmit={handleAddBlockedDate} className="flex flex-wrap gap-2 text-xs">
+            <form onSubmit={handleAddBlockedDate} className="flex flex-wrap gap-3">
               <select
+                aria-label="Select vehicle for blackout block"
                 value={newBlockVehicleId}
                 onChange={(e) => setNewBlockVehicleId(e.target.value)}
-                className="px-3 py-1.5 bg-[#faf8f5] border border-[#dfd6ca] rounded-lg"
+                className="form-select sm:w-56"
               >
                 {vehicles.map((v) => (
                   <option key={v.id} value={v.id}>
@@ -773,38 +815,42 @@ export const AdminCarRentals: React.FC<AdminCarRentalsProps> = ({
                 placeholder="Dates (e.g. 2026-11-20 to 2026-11-22)"
                 value={newBlockDates}
                 onChange={(e) => setNewBlockDates(e.target.value)}
-                className="px-3 py-1.5 bg-[#faf8f5] border border-[#dfd6ca] rounded-lg w-64"
+                className="form-input sm:w-72 tabular-nums"
               />
               <input
                 type="text"
                 placeholder="Reason (e.g. Brake replacement)"
                 value={newBlockReason}
                 onChange={(e) => setNewBlockReason(e.target.value)}
-                className="px-3 py-1.5 bg-[#faf8f5] border border-[#dfd6ca] rounded-lg flex-1"
+                className="form-input flex-1 min-w-[200px]"
               />
               <button
                 type="submit"
-                className="px-3 py-1.5 bg-[#82634f] text-white rounded-lg font-bold"
+                className="btn btn-primary"
               >
                 Add Block
               </button>
             </form>
 
-            <div className="space-y-2 text-xs">
+            <div className="divide-y divide-slate-200 pt-2 border-t border-slate-200">
               {blockedDates.map((b) => (
-                <div key={b.id} className="p-3 bg-[#faf8f5] border border-[#e6dfd5] rounded-xl flex items-center justify-between">
+                <div key={b.id} className="py-3.5 flex items-center justify-between gap-4 type-support">
                   <div>
-                    <span className="font-bold text-[#282828] mr-2">
-                      {vehicles.find((v) => v.id === b.vehicleId)?.name || b.vehicleId}:
+                    <span className="font-semibold text-slate-900 mr-2">
+                      {vehicles.find((v) => v.id === b.vehicleId)?.name || b.vehicleId}
                     </span>
-                    <span className="font-mono text-[#82634f] mr-2">{b.dates}</span>
-                    <span className="text-[#5c5046]">({b.reason})</span>
+                    <span className="font-mono text-[#14616d] font-semibold mr-2 tabular-nums">
+                      · {b.dates}
+                    </span>
+                    <span className="text-slate-600">({b.reason})</span>
                   </div>
                   <button
+                    type="button"
                     onClick={() => setBlockedDates(blockedDates.filter((x) => x.id !== b.id))}
-                    className="text-rose-600 hover:text-rose-800"
+                    aria-label="Remove blackout block"
+                    className="text-rose-600 hover:text-rose-800 p-1.5 cursor-pointer"
                   >
-                    <Trash2 className="w-3.5 h-3.5" />
+                    <Trash2 className="w-4 h-4" />
                   </button>
                 </div>
               ))}
@@ -814,40 +860,42 @@ export const AdminCarRentals: React.FC<AdminCarRentalsProps> = ({
       )}
 
       {/* ========================================================
-          4. PRICING & SURCHARGES (admin/car-rentals/pricing/)
+          4. PRICING & SURCHARGES
          ======================================================== */}
       {activeModule === 'pricing' && (
         <div className="space-y-6">
-          <div className="bg-white border border-[#e6dfd5] rounded-2xl p-6 shadow-xs space-y-4">
-            <div className="border-b border-[#e6dfd5] pb-3">
-              <h3 className="font-heading font-bold text-base text-[#282828]">
-                Vehicle Rate Matrix (daily-rates.php, weekly-rates.php, monthly-rates.php)
+          <div className="admin-panel overflow-hidden">
+            <div className="px-6 py-5 border-b border-slate-200">
+              <h3 className="type-h3 text-slate-900">
+                Vehicle Rate Matrix
               </h3>
-              <p className="text-xs text-[#5c5046]">Tiered rate cards configured for nationwide guest stays.</p>
+              <p className="type-body text-slate-600 mt-1">
+                Tiered rate cards configured for nationwide guest stays.
+              </p>
             </div>
 
             <div className="overflow-x-auto">
-              <table className="w-full text-left text-xs">
-                <thead className="bg-[#faf8f5] text-[#857568] uppercase font-bold tracking-wider border-b border-[#e6dfd5]">
+              <table className="data-table">
+                <thead>
                   <tr>
-                    <th className="py-3 px-3">Vehicle</th>
-                    <th className="py-3 px-3">Daily (1-6 Days)</th>
-                    <th className="py-3 px-3">Weekly (7-29 Days)</th>
-                    <th className="py-3 px-3">Monthly (30+ Days)</th>
-                    <th className="py-3 px-3">Savings vs Daily</th>
+                    <th>Vehicle</th>
+                    <th>Daily (1–6 Days)</th>
+                    <th>Weekly (7–29 Days)</th>
+                    <th>Monthly (30+ Days)</th>
+                    <th>Savings vs Daily</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-[#e6dfd5]">
+                <tbody>
                   {vehicles.map((v) => {
                     const monthlyDailyEquivalent = Math.round(v.monthlyRate / 30);
                     const savingsPercent = Math.round(((v.dailyRate - monthlyDailyEquivalent) / v.dailyRate) * 100);
                     return (
-                      <tr key={v.id} className="hover:bg-[#fbf9f6] transition-colors">
-                        <td className="py-3 px-3 font-bold text-[#282828]">{v.name}</td>
-                        <td className="py-3 px-3 font-bold text-[#00897d]">${v.dailyRate} / day</td>
-                        <td className="py-3 px-3 font-semibold text-[#282828]">${v.weeklyRate} / week</td>
-                        <td className="py-3 px-3 font-semibold text-[#282828]">${v.monthlyRate} / month</td>
-                        <td className="py-3 px-3 text-emerald-700 font-bold">{savingsPercent}% Corporate Discount</td>
+                      <tr key={v.id}>
+                        <td className="font-semibold text-slate-900">{v.name}</td>
+                        <td className="font-semibold text-[#14616d] tabular-nums">${v.dailyRate} / day</td>
+                        <td className="font-semibold text-slate-900 tabular-nums">${v.weeklyRate} / week</td>
+                        <td className="font-semibold text-slate-900 tabular-nums">${v.monthlyRate.toLocaleString()} / month</td>
+                        <td className="text-emerald-700 font-semibold tabular-nums">{savingsPercent}% Corporate Discount</td>
                       </tr>
                     );
                   })}
@@ -856,32 +904,34 @@ export const AdminCarRentals: React.FC<AdminCarRentalsProps> = ({
             </div>
           </div>
 
-          {/* Additional Fees (additional-fees.php) */}
-          <div className="bg-white border border-[#e6dfd5] rounded-2xl p-6 shadow-xs space-y-4">
-            <div className="border-b border-[#e6dfd5] pb-3">
-              <h3 className="font-heading font-bold text-base text-[#282828]">
-                Additional Fees &amp; Surcharges (additional-fees.php)
+          {/* Additional Fees */}
+          <div className="admin-panel p-6 space-y-4">
+            <div className="border-b border-slate-200 pb-4">
+              <h3 className="type-h4 text-slate-900">
+                Additional Fees &amp; Surcharges
               </h3>
-              <p className="text-xs text-[#5c5046]">Mandatory deposits, doorstep delivery, and optional waivers.</p>
+              <p className="type-support text-slate-600 mt-1">
+                Mandatory deposits, doorstep delivery, and optional waivers.
+              </p>
             </div>
 
-            <div className="space-y-3 text-xs">
+            <div className="divide-y divide-slate-200">
               {pricingFees.map((fee) => (
-                <div key={fee.id} className="p-4 bg-[#faf8f5] border border-[#e6dfd5] rounded-xl flex items-center justify-between">
+                <div key={fee.id} className="py-4 first:pt-0 last:pb-0 flex items-center justify-between gap-4">
                   <div>
                     <div className="flex items-center gap-2">
-                      <span className="font-bold text-[#282828]">{fee.name}</span>
+                      <span className="font-semibold text-slate-900">{fee.name}</span>
                       {fee.isMandatory && (
-                        <span className="px-1.5 py-0.2 rounded bg-amber-100 text-amber-800 text-[9px] font-bold uppercase">
-                          Mandatory
+                        <span className="type-support font-semibold text-amber-700">
+                          · Mandatory
                         </span>
                       )}
                     </div>
-                    <p className="text-[11px] text-[#5c5046] mt-0.5">{fee.description}</p>
+                    <p className="type-support text-slate-600 mt-1">{fee.description}</p>
                   </div>
-                  <div className="text-right">
-                    <span className="text-sm font-bold text-[#00897d]">${fee.amount}</span>
-                    <span className="text-[10px] text-[#857568] block">{fee.type.replace('_', ' ')}</span>
+                  <div className="text-right shrink-0">
+                    <span className="type-h4 text-[#14616d] tabular-nums">${fee.amount}</span>
+                    <span className="type-support text-slate-500 block">{fee.type.replace('_', ' ')}</span>
                   </div>
                 </div>
               ))}
@@ -891,36 +941,40 @@ export const AdminCarRentals: React.FC<AdminCarRentalsProps> = ({
       )}
 
       {/* ========================================================
-          5. FLEET MANAGEMENT (admin/car-rentals/fleet-management/)
+          5. FLEET MANAGEMENT
          ======================================================== */}
       {activeModule === 'fleet-management' && (
         <div className="space-y-6">
-          {/* Multi-point inspections (inspections.php) */}
-          <div className="bg-white border border-[#e6dfd5] rounded-2xl p-6 shadow-xs space-y-4">
-            <div className="border-b border-[#e6dfd5] pb-3">
-              <h3 className="font-heading font-bold text-base text-[#282828]">
-                Multi-Point Safety Inspections (inspections.php)
+          {/* Multi-point inspections */}
+          <div className="admin-panel p-6 space-y-4">
+            <div className="border-b border-slate-200 pb-4">
+              <h3 className="type-h3 text-slate-900">
+                Multi-Point Safety Inspections
               </h3>
-              <p className="text-xs text-[#5c5046]">
+              <p className="type-body text-slate-600 mt-1">
                 Pre-departure and post-return safety checks for brakes, tires, fluids, and interior sanitation.
               </p>
             </div>
 
-            <div className="space-y-3 text-xs">
+            <div className="divide-y divide-slate-200">
               {inspections.map((insp) => (
-                <div key={insp.id} className="p-4 bg-[#faf8f5] border border-[#e6dfd5] rounded-xl flex items-center justify-between">
+                <div key={insp.id} className="py-4 first:pt-0 last:pb-0 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                   <div className="space-y-1">
-                    <div className="flex items-center gap-2">
-                      <CheckCircle2 className="w-4 h-4 text-emerald-600" />
-                      <span className="font-bold text-[#282828]">
+                    <div className="flex flex-wrap items-center gap-2">
+                      <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
+                      <span className="font-semibold text-slate-900">
                         {vehicles.find((v) => v.id === insp.vehicleId)?.name || insp.vehicleId}
                       </span>
-                      <span className="text-[#857568] text-[11px]">• Inspected on {insp.date}</span>
+                      <span className="type-support text-slate-500 tabular-nums">
+                        · Inspected on {insp.date}
+                      </span>
                     </div>
-                    <p className="text-[11px] text-[#5c5046]">Notes: {insp.notes}</p>
-                    <span className="text-[10px] text-[#82634f] font-semibold">Audited by: {insp.inspector}</span>
+                    <p className="type-support text-slate-600">Notes: {insp.notes}</p>
+                    <span className="type-support text-[#14616d] font-medium block">
+                      Audited by: {insp.inspector}
+                    </span>
                   </div>
-                  <span className="px-2.5 py-1 rounded bg-emerald-50 text-emerald-700 font-bold uppercase text-[10px] border border-emerald-200">
+                  <span className="type-support font-semibold text-emerald-700 shrink-0">
                     Passed (100%)
                   </span>
                 </div>
@@ -928,31 +982,33 @@ export const AdminCarRentals: React.FC<AdminCarRentalsProps> = ({
             </div>
           </div>
 
-          {/* Service History & Maintenance (service-history.php & maintenance.php) */}
-          <div className="bg-white border border-[#e6dfd5] rounded-2xl p-6 shadow-xs space-y-4">
-            <div className="border-b border-[#e6dfd5] pb-3">
-              <h3 className="font-heading font-bold text-base text-[#282828]">
-                Service History &amp; Work Orders (service-history.php)
+          {/* Service History & Maintenance */}
+          <div className="admin-panel p-6 space-y-4">
+            <div className="border-b border-slate-200 pb-4">
+              <h3 className="type-h4 text-slate-900">
+                Service History &amp; Work Orders
               </h3>
-              <p className="text-xs text-[#5c5046]">
+              <p className="type-support text-slate-600 mt-1">
                 Itemized maintenance ledger with authorized repair facilities and parts cost.
               </p>
             </div>
 
-            <div className="space-y-3 text-xs">
+            <div className="divide-y divide-slate-200">
               {vehicles.flatMap((v) =>
                 (v.maintenanceLogs || []).map((log) => (
-                  <div key={log.id} className="p-4 bg-[#faf8f5] border border-[#e6dfd5] rounded-xl flex items-center justify-between">
-                    <div>
-                      <span className="font-bold text-[#282828] block">{log.serviceType}</span>
-                      <span className="text-[#857568] text-[11px]">
-                        Vehicle: {v.name} ({v.licensePlate}) • Facility: {log.performedBy}
+                  <div key={log.id} className="py-4 first:pt-0 last:pb-0 flex items-center justify-between gap-4">
+                    <div className="space-y-0.5">
+                      <span className="font-semibold text-slate-900 block">{log.serviceType}</span>
+                      <span className="type-support text-slate-500 block">
+                        Vehicle: {v.name} ({v.licensePlate}) · Facility: {log.performedBy}
                       </span>
-                      <p className="text-[#5c5046] text-[11px] mt-1">{log.notes}</p>
+                      <p className="type-support text-slate-600 mt-1">{log.notes}</p>
                     </div>
-                    <div className="text-right">
-                      <span className="font-bold text-[#00897d] text-sm tabular-nums">${log.costUsd}</span>
-                      <span className="text-[10px] text-[#857568] block">{new Date(log.date).toLocaleDateString()}</span>
+                    <div className="text-right shrink-0">
+                      <span className="type-h4 text-[#14616d] tabular-nums block">${log.costUsd}</span>
+                      <span className="type-support text-slate-500 tabular-nums block">
+                        {new Date(log.date).toLocaleDateString()}
+                      </span>
                     </div>
                   </div>
                 ))
@@ -963,54 +1019,60 @@ export const AdminCarRentals: React.FC<AdminCarRentalsProps> = ({
       )}
 
       {/* ========================================================
-          6. RENTAL SETTINGS (admin/car-rentals/settings/)
+          6. RENTAL SETTINGS
          ======================================================== */}
       {activeModule === 'settings' && (
-        <div className="bg-white border border-[#e6dfd5] rounded-2xl p-6 sm:p-8 shadow-xs max-w-3xl mx-auto space-y-6">
-          <div className="border-b border-[#e6dfd5] pb-3">
-            <h3 className="font-heading font-bold text-lg text-[#282828]">
-              Fleet Rental Policies &amp; Hub Locations (settings/)
+        <div className="admin-panel p-6 sm:p-8 max-w-3xl mx-auto space-y-6">
+          <div className="border-b border-slate-200 pb-4">
+            <h3 className="type-h3 text-slate-900">
+              Fleet Rental Policies &amp; Hub Locations
             </h3>
-            <p className="text-xs text-[#5c5046]">
+            <p className="type-body text-slate-600 mt-1">
               Configure driver age restrictions, delivery radius, and terminal hubs.
             </p>
           </div>
 
-          <div className="space-y-4 text-xs">
-            <div className="p-4 bg-[#faf8f5] border border-[#e6dfd5] rounded-xl space-y-2">
-              <h4 className="font-bold text-sm text-[#282828]">Driver Eligibility &amp; Requirements (rental-settings.php)</h4>
-              <ul className="list-disc pl-5 text-[#5c5046] space-y-1">
-                <li>Minimum driver age: 21+ with verified US/International driver license.</li>
+          <div className="divide-y divide-slate-200">
+            <div className="py-5 first:pt-0 space-y-2.5">
+              <h4 className="type-h4 text-slate-900">Driver Eligibility &amp; Requirements</h4>
+              <ul className="list-disc pl-5 type-body text-slate-600 space-y-1.5">
+                <li>Minimum driver age: 21+ with verified US or International driver license.</li>
                 <li>Complimentary 100 miles/day included; $0.35/mile excess thereafter.</li>
                 <li>Full-to-full fuel policy (returned at same fuel level as dispatched).</li>
-                <li>Non-smoking fleet: $250 sanitization penalty strictly enforced.</li>
+                <li>Non-smoking fleet: $250 sanitization fee strictly enforced.</li>
               </ul>
             </div>
 
-            <div className="p-4 bg-[#faf8f5] border border-[#e6dfd5] rounded-xl space-y-2">
-              <h4 className="font-bold text-sm text-[#282828]">Designated Pickup Locations (pickup-locations.php)</h4>
-              <div className="space-y-2 text-[#5c5046]">
-                <div className="flex items-center gap-2">
-                  <MapPin className="w-4 h-4 text-[#00b7a8]" />
-                  <span className="font-bold text-[#282828]">Major US Airport Hubs (Airport Concierge Delivery)</span>
-                  <span>— Terminals Curbside Handover</span>
+            <div className="py-5 space-y-3">
+              <h4 className="type-h4 text-slate-900">Designated Pickup Locations</h4>
+              <div className="space-y-2.5 type-body text-slate-600">
+                <div className="flex items-start gap-2.5">
+                  <MapPin className="w-4 h-4 text-[#14616d] mt-1 shrink-0" />
+                  <div>
+                    <span className="font-semibold text-slate-900">Major US Airport Hubs (Airport Concierge Delivery)</span>
+                    <span> — Terminals Curbside Handover</span>
+                  </div>
                 </div>
-                <div className="flex items-center gap-2">
-                  <MapPin className="w-4 h-4 text-[#00b7a8]" />
-                  <span className="font-bold text-[#282828]">Direct Residence Curbside Delivery</span>
-                  <span>— Free doorstep parking bay at Reserved Suites</span>
+                <div className="flex items-start gap-2.5">
+                  <MapPin className="w-4 h-4 text-[#14616d] mt-1 shrink-0" />
+                  <div>
+                    <span className="font-semibold text-slate-900">Direct Residence Curbside Delivery</span>
+                    <span> — Complimentary doorstep parking bay at Reserved Suites</span>
+                  </div>
                 </div>
-                <div className="flex items-center gap-2">
-                  <MapPin className="w-4 h-4 text-[#00b7a8]" />
-                  <span className="font-bold text-[#282828]">Regional Transit &amp; Executive FBO Hubs</span>
-                  <span>— VIP Chauffeur Lane &amp; Private Jet Handover</span>
+                <div className="flex items-start gap-2.5">
+                  <MapPin className="w-4 h-4 text-[#14616d] mt-1 shrink-0" />
+                  <div>
+                    <span className="font-semibold text-slate-900">Regional Transit &amp; Executive FBO Hubs</span>
+                    <span> — VIP Chauffeur Lane &amp; Private Jet Handover</span>
+                  </div>
                 </div>
               </div>
             </div>
 
-            <div className="p-4 bg-[#faf8f5] border border-[#e6dfd5] rounded-xl space-y-2">
-              <h4 className="font-bold text-sm text-[#282828]">Doorstep Delivery Parameters (delivery-settings.php)</h4>
-              <p className="text-[#5c5046]">
+            <div className="py-5 last:pb-0 space-y-2">
+              <h4 className="type-h4 text-slate-900">Doorstep Delivery Parameters</h4>
+              <p className="type-body text-slate-600">
                 Vehicles delivered directly to guest suites at no extra charge if reservation exceeds 14 days. Transparent flat delivery fee applies for short-stay or off-hub dispatches.
               </p>
             </div>

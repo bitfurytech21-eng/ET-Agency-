@@ -117,7 +117,7 @@ export const SmartsupChat: React.FC<SmartsupChatProps> = ({ key: propKey }) => {
                 <div>
                   <h4 className="font-heading font-bold text-sm">Guest &amp; Concierge Support</h4>
                   <p className="text-[11px] text-[#4de0d2]">
-                    Local Hosts · Sacramento &amp; Rancho Cordova
+                    Local Hosts · El Dorado Hills, CA
                   </p>
                 </div>
               </div>
@@ -136,7 +136,7 @@ export const SmartsupChat: React.FC<SmartsupChatProps> = ({ key: propKey }) => {
                 Welcome to Easy Travel Lodging
               </span>
               <p className="text-[11px] text-[#5c5046] leading-relaxed">
-                Planning a short or extended furnished stay, 3D fleet rental, or arrival package in Greater Sacramento? Message our local concierge desk below.
+                Planning a short or extended furnished stay, 3D fleet rental, or arrival package in El Dorado Hills, CA? Message our local concierge desk below.
               </p>
             </div>
 
@@ -162,7 +162,7 @@ export const SmartsupChat: React.FC<SmartsupChatProps> = ({ key: propKey }) => {
                 <CheckCircle2 className="w-7 h-7 text-emerald-600 mx-auto" />
                 <div className="font-bold text-emerald-950 text-xs">Message Dispatched!</div>
                 <p className="text-[11px] text-emerald-800">
-                  Reference <strong className="font-mono">{submittedRef}</strong> has been logged for our Sacramento housing team.
+                  Reference <strong className="font-mono">{submittedRef}</strong> has been logged for our El Dorado Hills, CA housing team.
                 </p>
                 <button
                   type="button"

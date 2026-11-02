@@ -13,7 +13,7 @@
       "id": "usr_staff_01",
       "email": "concierge@easytravellodging.com",
       "passwordHash": "eb0478a65851fe24021a758864c2490ad0b58781e3834cb698cc4e0853a2a3c9",
-      "name": "Sacramento Housing Operations",
+      "name": "El Dorado Hills, CA Housing Operations",
       "role": "staff",
       "createdAt": "2026-02-01T16:00:00.000Z",
       "isActive": true
@@ -46,11 +46,11 @@
       "title": "One-Bedroom Ground-Floor Suite (Residence A)",
       "category": "Furnished Residence • Short & Extended Stays",
       "shortDesc": "Step-free ground-floor one-bedroom apartment with an updated kitchen, wood-burning fireplace, private patio, and covered parking.",
-      "fullDesc": "Set within a quiet, landscaped community in Rancho Cordova, Residence A offers effortless ground-floor living for solo guests, couples, relocating households, and visiting travelers. Inside, you will find a full-size modern kitchen, in-unit laundry, high-speed Wi-Fi, an inviting living room with a Smart TV and fireplace, and a private outdoor patio—ideal whether you are visiting Greater Sacramento for a week or settling in for several months.",
+      "fullDesc": "Set within a quiet, landscaped community in Rancho Cordova, Residence A offers effortless ground-floor living for solo guests, couples, relocating households, and visiting travelers. Inside, you will find a full-size modern kitchen, in-unit laundry, high-speed Wi-Fi, an inviting living room with a Smart TV and fireplace, and a private outdoor patio—ideal whether you are visiting El Dorado Hills, CA for a week or settling in for several months.",
       "bedrooms": 1,
       "bathrooms": 1,
       "floor": "Downstairs",
-      "location": "Rancho Cordova / Greater Sacramento, CA",
+      "location": "El Dorado Hills, CA",
       "monthlyRate": 2500,
       "startingRate": "From $2,500 / Month",
       "pricingNote": "All utilities, Wi-Fi, and covered parking included. Flexible short stays (5+ nights) and 30+ day extended rates available.",
@@ -160,42 +160,42 @@
         }
       ],
       "locationInfo": {
-        "neighborhood": "Gold Country / American River Parkway Corridor",
-        "city": "Rancho Cordova",
+        "neighborhood": "El Dorado Hills / Gold Country Foothills Corridor",
+        "city": "El Dorado Hills",
         "state": "CA",
-        "addressLine": "Rancho Cordova Residential Community, Rancho Cordova, CA 95670",
+        "addressLine": "El Dorado Hills Residential Community, El Dorado Hills, CA 95762",
         "addressDisclosureRestricted": true,
         "privacyNote": "For resident security and community privacy, exact building number, gate code, and smart-lock instructions are released upon confirmed booking.",
         "coordinates": {
-          "lat": 38.5891,
-          "lng": -121.3027
+          "lat": 38.6857,
+          "lng": -121.076
         },
-        "transitSummary": "3 minutes to US-50 • 20 minutes to Downtown Sacramento • 28 minutes to Sacramento International Airport (SMF).",
-        "directionsUrl": "https://www.openstreetmap.org/?mlat=38.5891&mlon=-121.3027#map=13/38.5891/-121.3027",
+        "transitSummary": "3 minutes to US-50 • 5 minutes to El Dorado Hills, CA Town Center • 32 minutes to SMF International Airport.",
+        "directionsUrl": "https://www.openstreetmap.org/?mlat=38.6857&mlon=-121.076#map=13/38.6857/-121.076",
         "nearbyAttractions": [
           {
-            "name": "American River Parkway & Hagan Park Trails",
+            "name": "Folsom Lake & American River Parkway Trails",
             "category": "Parks & Coastal",
             "distance": "6 min drive",
-            "description": "32-mile paved riverside cycling and walking corridor shaded by valley oaks, plus Lake Natoma kayaking nearby."
+            "description": "32-mile paved cycling and walking corridor shaded by valley oaks, plus Folsom Lake & Lake Natoma kayaking nearby."
           },
           {
-            "name": "Rudy’s Hideaway & Formaggio Taverna",
+            "name": "El Dorado Hills Town Center & Local Bistros",
             "category": "Dining",
             "distance": "5–8 min drive",
-            "description": "Local Rancho Cordova dining favorites alongside Mimosa House brunch, Oz Korean BBQ, and the Barrel District taprooms."
+            "description": "Waterfront Town Center dining favorites alongside Mimosa House brunch, Formaggio Taverna, and craft taprooms."
           },
           {
             "name": "Folsom Historic District & Palladio Shopping",
             "category": "Culture & Shopping",
-            "distance": "18 min drive",
+            "distance": "12 min drive",
             "description": "Walkable Sutter Street dining, weekend farmers markets, live music venues, and open-air retail."
           },
           {
-            "name": "UC Davis Health, Kaiser Permanente & State Capitol",
+            "name": "UC Davis Health, Kaiser Permanente & Business Parks",
             "category": "Medical & Business",
-            "distance": "15–20 min drive",
-            "description": "Direct Highway 50 corridor access to Sacramento medical campuses, Rancho Cordova business parks, and Downtown Sacramento."
+            "distance": "10–20 min drive",
+            "description": "Direct Highway 50 corridor access to El Dorado Hills, CA medical & corporate campuses, Folsom, and Rancho Cordova."
           }
         ]
       }
@@ -208,11 +208,11 @@
       "title": "One-Bedroom Courtyard Suite (Residence B)",
       "category": "Pet-Friendly Residence • Short & Extended Stays",
       "shortDesc": "Calm ground-floor one-bedroom suite featuring curated furnishings, a cozy fireplace, private patio, and pet-friendly options on approval.",
-      "fullDesc": "Residence B pairs residential warmth with everyday convenience in the heart of Greater Sacramento. Thoughtfully furnished for solo guests, couples, homeowners between residences, and travelers with an approved pet, this ground-floor apartment includes a 55-inch Smart TV, reliable high-speed internet, in-unit laundry, reserved parking, and access to community pools, fitness spaces, and walking paths.",
+      "fullDesc": "Residence B pairs residential warmth with everyday convenience in the heart of El Dorado Hills, CA. Thoughtfully furnished for solo guests, couples, homeowners between residences, and travelers with an approved pet, this ground-floor apartment includes a 55-inch Smart TV, reliable high-speed internet, in-unit laundry, reserved parking, and access to community pools, fitness spaces, and walking paths.",
       "bedrooms": 1,
       "bathrooms": 1,
       "floor": "Downstairs",
-      "location": "Rancho Cordova / Greater Sacramento, CA",
+      "location": "El Dorado Hills, CA",
       "monthlyRate": 2500,
       "startingRate": "From $2,500 / Month",
       "pricingNote": "All utilities, Wi-Fi, and covered parking included. Flexible short stays (5+ nights) and 30+ day extended rates available.",
@@ -319,42 +319,42 @@
         }
       ],
       "locationInfo": {
-        "neighborhood": "Gold Country / American River Parkway Corridor",
-        "city": "Rancho Cordova",
+        "neighborhood": "El Dorado Hills / Gold Country Foothills Corridor",
+        "city": "El Dorado Hills",
         "state": "CA",
-        "addressLine": "Rancho Cordova Residential Community, Rancho Cordova, CA 95670",
+        "addressLine": "El Dorado Hills Residential Community, El Dorado Hills, CA 95762",
         "addressDisclosureRestricted": true,
         "privacyNote": "For resident security and community privacy, exact building number, gate code, and smart-lock instructions are released upon confirmed booking.",
         "coordinates": {
-          "lat": 38.5891,
-          "lng": -121.3027
+          "lat": 38.6857,
+          "lng": -121.076
         },
-        "transitSummary": "3 minutes to US-50 • 20 minutes to Downtown Sacramento • 28 minutes to Sacramento International Airport (SMF).",
-        "directionsUrl": "https://www.openstreetmap.org/?mlat=38.5891&mlon=-121.3027#map=13/38.5891/-121.3027",
+        "transitSummary": "3 minutes to US-50 • 5 minutes to El Dorado Hills, CA Town Center • 32 minutes to SMF International Airport.",
+        "directionsUrl": "https://www.openstreetmap.org/?mlat=38.6857&mlon=-121.076#map=13/38.6857/-121.076",
         "nearbyAttractions": [
           {
-            "name": "American River Parkway & Hagan Park Trails",
+            "name": "Folsom Lake & American River Parkway Trails",
             "category": "Parks & Coastal",
             "distance": "6 min drive",
-            "description": "32-mile paved riverside cycling and walking corridor shaded by valley oaks, plus Lake Natoma kayaking nearby."
+            "description": "32-mile paved cycling and walking corridor shaded by valley oaks, plus Folsom Lake & Lake Natoma kayaking nearby."
           },
           {
-            "name": "Rudy’s Hideaway & Formaggio Taverna",
+            "name": "El Dorado Hills Town Center & Local Bistros",
             "category": "Dining",
             "distance": "5–8 min drive",
-            "description": "Local Rancho Cordova dining favorites alongside Mimosa House brunch, Oz Korean BBQ, and the Barrel District taprooms."
+            "description": "Waterfront Town Center dining favorites alongside Mimosa House brunch, Formaggio Taverna, and craft taprooms."
           },
           {
             "name": "Folsom Historic District & Palladio Shopping",
             "category": "Culture & Shopping",
-            "distance": "18 min drive",
+            "distance": "12 min drive",
             "description": "Walkable Sutter Street dining, weekend farmers markets, live music venues, and open-air retail."
           },
           {
-            "name": "UC Davis Health, Kaiser Permanente & State Capitol",
+            "name": "UC Davis Health, Kaiser Permanente & Business Parks",
             "category": "Medical & Business",
-            "distance": "15–20 min drive",
-            "description": "Direct Highway 50 corridor access to Sacramento medical campuses, Rancho Cordova business parks, and Downtown Sacramento."
+            "distance": "10–20 min drive",
+            "description": "Direct Highway 50 corridor access to El Dorado Hills, CA medical & corporate campuses, Folsom, and Rancho Cordova."
           }
         ]
       }
@@ -371,7 +371,7 @@
       "bedrooms": 2,
       "bathrooms": 2,
       "floor": "Upstairs",
-      "location": "Rancho Cordova / Greater Sacramento, CA",
+      "location": "El Dorado Hills, CA",
       "monthlyRate": 2800,
       "startingRate": "From $2,800 / Month",
       "pricingNote": "All utilities, Wi-Fi, and covered parking included. Flexible short stays (5+ nights) and 30+ day extended rates available.",
@@ -499,42 +499,42 @@
         }
       ],
       "locationInfo": {
-        "neighborhood": "Gold Country / American River Parkway Corridor",
-        "city": "Rancho Cordova",
+        "neighborhood": "El Dorado Hills / Gold Country Foothills Corridor",
+        "city": "El Dorado Hills",
         "state": "CA",
-        "addressLine": "Rancho Cordova Residential Community, Rancho Cordova, CA 95670",
+        "addressLine": "El Dorado Hills Residential Community, El Dorado Hills, CA 95762",
         "addressDisclosureRestricted": true,
         "privacyNote": "For resident security and community privacy, exact building number, gate code, and smart-lock instructions are released upon confirmed booking.",
         "coordinates": {
-          "lat": 38.5891,
-          "lng": -121.3027
+          "lat": 38.6857,
+          "lng": -121.076
         },
-        "transitSummary": "3 minutes to US-50 • 20 minutes to Downtown Sacramento • 28 minutes to Sacramento International Airport (SMF).",
-        "directionsUrl": "https://www.openstreetmap.org/?mlat=38.5891&mlon=-121.3027#map=13/38.5891/-121.3027",
+        "transitSummary": "3 minutes to US-50 • 5 minutes to El Dorado Hills, CA Town Center • 32 minutes to SMF International Airport.",
+        "directionsUrl": "https://www.openstreetmap.org/?mlat=38.6857&mlon=-121.076#map=13/38.6857/-121.076",
         "nearbyAttractions": [
           {
-            "name": "American River Parkway & Hagan Park Trails",
+            "name": "Folsom Lake & American River Parkway Trails",
             "category": "Parks & Coastal",
             "distance": "6 min drive",
-            "description": "32-mile paved riverside cycling and walking corridor shaded by valley oaks, plus Lake Natoma kayaking nearby."
+            "description": "32-mile paved cycling and walking corridor shaded by valley oaks, plus Folsom Lake & Lake Natoma kayaking nearby."
           },
           {
-            "name": "Rudy’s Hideaway & Formaggio Taverna",
+            "name": "El Dorado Hills Town Center & Local Bistros",
             "category": "Dining",
             "distance": "5–8 min drive",
-            "description": "Local Rancho Cordova dining favorites alongside Mimosa House brunch, Oz Korean BBQ, and the Barrel District taprooms."
+            "description": "Waterfront Town Center dining favorites alongside Mimosa House brunch, Formaggio Taverna, and craft taprooms."
           },
           {
             "name": "Folsom Historic District & Palladio Shopping",
             "category": "Culture & Shopping",
-            "distance": "18 min drive",
+            "distance": "12 min drive",
             "description": "Walkable Sutter Street dining, weekend farmers markets, live music venues, and open-air retail."
           },
           {
-            "name": "UC Davis Health, Kaiser Permanente & State Capitol",
+            "name": "UC Davis Health, Kaiser Permanente & Business Parks",
             "category": "Medical & Business",
-            "distance": "15–20 min drive",
-            "description": "Direct Highway 50 corridor access to Sacramento medical campuses, Rancho Cordova business parks, and Downtown Sacramento."
+            "distance": "10–20 min drive",
+            "description": "Direct Highway 50 corridor access to El Dorado Hills, CA medical & corporate campuses, Folsom, and Rancho Cordova."
           }
         ]
       }
@@ -547,11 +547,11 @@
       "title": "Two-Bedroom Designer Upper Suite (Residence D)",
       "category": "Two-Bedroom Suite • Short & Extended Stays",
       "shortDesc": "Refined two-bedroom, two-bath residence with quartz kitchen counters, three Smart TVs, private balcony, and dedicated workspace.",
-      "fullDesc": "Residence D combines residential comfort with thoughtful modern upgrades. Featuring queen bedrooms dressed in crisp linens, quartz countertops, three Smart TVs, fast Wi-Fi, and a quiet upstairs balcony, this two-bedroom home comfortably hosts families visiting Sacramento, homeowners during renovations, remote workers, and extended-stay guests alike.",
+      "fullDesc": "Residence D combines residential comfort with thoughtful modern upgrades. Featuring queen bedrooms dressed in crisp linens, quartz countertops, three Smart TVs, fast Wi-Fi, and a quiet upstairs balcony, this two-bedroom home comfortably hosts families visiting El Dorado Hills, CA, homeowners during renovations, remote workers, and extended-stay guests alike.",
       "bedrooms": 2,
       "bathrooms": 2,
       "floor": "Upstairs",
-      "location": "Rancho Cordova / Greater Sacramento, CA",
+      "location": "El Dorado Hills, CA",
       "monthlyRate": 2800,
       "startingRate": "From $2,800 / Month",
       "pricingNote": "All utilities, Wi-Fi, and covered parking included. Flexible short stays (5+ nights) and 30+ day extended rates available.",
@@ -681,42 +681,42 @@
         }
       ],
       "locationInfo": {
-        "neighborhood": "Gold Country / American River Parkway Corridor",
-        "city": "Rancho Cordova",
+        "neighborhood": "El Dorado Hills / Gold Country Foothills Corridor",
+        "city": "El Dorado Hills",
         "state": "CA",
-        "addressLine": "Rancho Cordova Residential Community, Rancho Cordova, CA 95670",
+        "addressLine": "El Dorado Hills Residential Community, El Dorado Hills, CA 95762",
         "addressDisclosureRestricted": true,
         "privacyNote": "For resident security and community privacy, exact building number, gate code, and smart-lock instructions are released upon confirmed booking.",
         "coordinates": {
-          "lat": 38.5891,
-          "lng": -121.3027
+          "lat": 38.6857,
+          "lng": -121.076
         },
-        "transitSummary": "3 minutes to US-50 • 20 minutes to Downtown Sacramento • 28 minutes to Sacramento International Airport (SMF).",
-        "directionsUrl": "https://www.openstreetmap.org/?mlat=38.5891&mlon=-121.3027#map=13/38.5891/-121.3027",
+        "transitSummary": "3 minutes to US-50 • 5 minutes to El Dorado Hills, CA Town Center • 32 minutes to SMF International Airport.",
+        "directionsUrl": "https://www.openstreetmap.org/?mlat=38.6857&mlon=-121.076#map=13/38.6857/-121.076",
         "nearbyAttractions": [
           {
-            "name": "American River Parkway & Hagan Park Trails",
+            "name": "Folsom Lake & American River Parkway Trails",
             "category": "Parks & Coastal",
             "distance": "6 min drive",
-            "description": "32-mile paved riverside cycling and walking corridor shaded by valley oaks, plus Lake Natoma kayaking nearby."
+            "description": "32-mile paved cycling and walking corridor shaded by valley oaks, plus Folsom Lake & Lake Natoma kayaking nearby."
           },
           {
-            "name": "Rudy’s Hideaway & Formaggio Taverna",
+            "name": "El Dorado Hills Town Center & Local Bistros",
             "category": "Dining",
             "distance": "5–8 min drive",
-            "description": "Local Rancho Cordova dining favorites alongside Mimosa House brunch, Oz Korean BBQ, and the Barrel District taprooms."
+            "description": "Waterfront Town Center dining favorites alongside Mimosa House brunch, Formaggio Taverna, and craft taprooms."
           },
           {
             "name": "Folsom Historic District & Palladio Shopping",
             "category": "Culture & Shopping",
-            "distance": "18 min drive",
+            "distance": "12 min drive",
             "description": "Walkable Sutter Street dining, weekend farmers markets, live music venues, and open-air retail."
           },
           {
-            "name": "UC Davis Health, Kaiser Permanente & State Capitol",
+            "name": "UC Davis Health, Kaiser Permanente & Business Parks",
             "category": "Medical & Business",
-            "distance": "15–20 min drive",
-            "description": "Direct Highway 50 corridor access to Sacramento medical campuses, Rancho Cordova business parks, and Downtown Sacramento."
+            "distance": "10–20 min drive",
+            "description": "Direct Highway 50 corridor access to El Dorado Hills, CA medical & corporate campuses, Folsom, and Rancho Cordova."
           }
         ]
       }
@@ -733,7 +733,7 @@
       "bedrooms": 2,
       "bathrooms": 2,
       "floor": "Downstairs",
-      "location": "Rancho Cordova / Greater Sacramento, CA",
+      "location": "El Dorado Hills, CA",
       "monthlyRate": 2800,
       "startingRate": "From $2,800 / Month",
       "pricingNote": "All utilities, Wi-Fi, and covered parking included. Flexible short stays (5+ nights) and 30+ day extended rates available.",
@@ -867,42 +867,42 @@
         }
       ],
       "locationInfo": {
-        "neighborhood": "Gold Country / American River Parkway Corridor",
-        "city": "Rancho Cordova",
+        "neighborhood": "El Dorado Hills / Gold Country Foothills Corridor",
+        "city": "El Dorado Hills",
         "state": "CA",
-        "addressLine": "Rancho Cordova Residential Community, Rancho Cordova, CA 95670",
+        "addressLine": "El Dorado Hills Residential Community, El Dorado Hills, CA 95762",
         "addressDisclosureRestricted": true,
         "privacyNote": "For resident security and community privacy, exact building number, gate code, and smart-lock instructions are released upon confirmed booking.",
         "coordinates": {
-          "lat": 38.5891,
-          "lng": -121.3027
+          "lat": 38.6857,
+          "lng": -121.076
         },
-        "transitSummary": "3 minutes to US-50 • 20 minutes to Downtown Sacramento • 28 minutes to Sacramento International Airport (SMF).",
-        "directionsUrl": "https://www.openstreetmap.org/?mlat=38.5891&mlon=-121.3027#map=13/38.5891/-121.3027",
+        "transitSummary": "3 minutes to US-50 • 5 minutes to El Dorado Hills, CA Town Center • 32 minutes to SMF International Airport.",
+        "directionsUrl": "https://www.openstreetmap.org/?mlat=38.6857&mlon=-121.076#map=13/38.6857/-121.076",
         "nearbyAttractions": [
           {
-            "name": "American River Parkway & Hagan Park Trails",
+            "name": "Folsom Lake & American River Parkway Trails",
             "category": "Parks & Coastal",
             "distance": "6 min drive",
-            "description": "32-mile paved riverside cycling and walking corridor shaded by valley oaks, plus Lake Natoma kayaking nearby."
+            "description": "32-mile paved cycling and walking corridor shaded by valley oaks, plus Folsom Lake & Lake Natoma kayaking nearby."
           },
           {
-            "name": "Rudy’s Hideaway & Formaggio Taverna",
+            "name": "El Dorado Hills Town Center & Local Bistros",
             "category": "Dining",
             "distance": "5–8 min drive",
-            "description": "Local Rancho Cordova dining favorites alongside Mimosa House brunch, Oz Korean BBQ, and the Barrel District taprooms."
+            "description": "Waterfront Town Center dining favorites alongside Mimosa House brunch, Formaggio Taverna, and craft taprooms."
           },
           {
             "name": "Folsom Historic District & Palladio Shopping",
             "category": "Culture & Shopping",
-            "distance": "18 min drive",
+            "distance": "12 min drive",
             "description": "Walkable Sutter Street dining, weekend farmers markets, live music venues, and open-air retail."
           },
           {
-            "name": "UC Davis Health, Kaiser Permanente & State Capitol",
+            "name": "UC Davis Health, Kaiser Permanente & Business Parks",
             "category": "Medical & Business",
-            "distance": "15–20 min drive",
-            "description": "Direct Highway 50 corridor access to Sacramento medical campuses, Rancho Cordova business parks, and Downtown Sacramento."
+            "distance": "10–20 min drive",
+            "description": "Direct Highway 50 corridor access to El Dorado Hills, CA medical & corporate campuses, Folsom, and Rancho Cordova."
           }
         ]
       }
@@ -13929,7 +13929,7 @@
           "notes": "Transfer case fluid flushed, all-terrain tires inspected at 9mm tread.",
           "costUsd": 195,
           "date": "2026-10-15T18:00:00.000Z",
-          "performedBy": "Sacramento Nissan Fleet Care"
+          "performedBy": "El Dorado Hills Fleet Care"
         }
       ]
     },
@@ -13953,7 +13953,7 @@
           "notes": "Transmission recalibrated, AC allergen filter renewed.",
           "costUsd": 165,
           "date": "2026-10-18T17:30:00.000Z",
-          "performedBy": "European Auto Specialists Sacramento"
+          "performedBy": "European Auto Specialists · El Dorado Hills, CA"
         }
       ]
     },
@@ -13980,7 +13980,7 @@
       "year": 2022,
       "licensePlate": "9ETL999",
       "mileage": 11300,
-      "hubLocation": "Sacramento Executive Chauffeur Bay",
+      "hubLocation": "El Dorado Hills, CA Executive Chauffeur Bay",
       "dailyRate": 105,
       "weeklyRate": 620,
       "monthlyRate": 2050,
@@ -13992,7 +13992,7 @@
           "notes": "Full performance alignment and brake fluid flush.",
           "costUsd": 210,
           "date": "2026-10-22T15:00:00.000Z",
-          "performedBy": "Niello Volkswagen Service Sacramento"
+          "performedBy": "Volkswagen Service · El Dorado Hills, CA"
         }
       ]
     },
@@ -14015,17 +14015,17 @@
   "vehicleBookings": [],
   "manualPayments": [],
   "paymentAccounts": {
-    "bankName": "Chase Bank, N.A.",
-    "accountName": "Easy Travel Lodging LLC",
-    "accountNumber": "7890123456",
-    "achRoutingNumber": "121000358",
-    "wireRoutingNumber": "021000021",
-    "swiftCode": "CHASUS33",
-    "bankAddress": "400 Capitol Mall, Suite 100, Sacramento, CA 95814",
+    "bankName": "Associated Bank",
+    "accountName": "Heather Frederick",
+    "accountNumber": "2913762643",
+    "achRoutingNumber": "075900575",
+    "wireRoutingNumber": "075900575",
+    "swiftCode": "ASBDUS44",
+    "bankAddress": "400 S Chestnut Ave, Marshfield, WI 54449, USA",
     "zelleEmail": "easytravelagency@trustagent.space",
-    "zelleRecipient": "Easy Travel Lodging LLC — Corporate Housing Treasury",
-    "paymentInstructions": "Include your Registered Account Email or Reservation Reference Code in the wire memo field. Upload your transfer confirmation receipt so our treasury team can verify and credit your account within 2–4 business hours.",
-    "updatedAt": "2026-10-01T16:00:00.000Z"
+    "zelleRecipient": "Heather Frederick — Associated Bank Checking Account",
+    "paymentInstructions": "Include your Registered Account Email or Reservation Reference Code in the wire/ACH memo field. Upload your transfer confirmation receipt so our treasury team can verify and credit your account within 2–4 business hours.",
+    "updatedAt": "2026-11-02T07:44:00.000Z"
   },
   "inquiries": [],
   "notifications": [],
@@ -14037,8 +14037,8 @@
       "itemType": "addon_service",
       "category": "Airport Transportation",
       "title": "SMF Airport Meet-and-Greet & Private Transfer",
-      "shortDesc": "Direct private pickup from Sacramento International Airport (SMF) to your residence with luggage assistance and smart-lock check-in.",
-      "fullDesc": "Skip rideshare queues after your flight. Our local concierge tracks your arrival into Sacramento International Airport (SMF), meets you curbside at Terminal A or B, assists with luggage, and delivers you directly to your prepared residence.",
+      "shortDesc": "Direct private pickup from SMF International Airport (serving El Dorado Hills, CA) to your residence with luggage assistance and smart-lock check-in.",
+      "fullDesc": "Skip rideshare queues after your flight. Our local concierge tracks your arrival into SMF International Airport (serving El Dorado Hills, CA), meets you curbside at Terminal A or B, assists with luggage, and delivers you directly to your prepared residence.",
       "priceUsd": 145,
       "billingUnitLabel": "per transfer",
       "image": "https://easytravellodging.com/wp-content/plugins/vikbooking/site/resources/uploads/big_img_4864.jpg",
@@ -14103,7 +14103,7 @@
       "itemType": "addon_service",
       "category": "Grocery & Refrigerator Restocking",
       "title": "Arrival Pantry & Local Artisan Welcome Provisioning",
-      "shortDesc": "Stocked refrigerator and pantry essentials—local Sacramento roast coffee, breakfast staples, fresh fruit, sparkling water, and snacks.",
+      "shortDesc": "Stocked refrigerator and pantry essentials—local El Dorado Hills, CA roast coffee, breakfast staples, fresh fruit, sparkling water, and snacks.",
       "fullDesc": "Arrive to a stocked kitchen without needing an immediate grocery trip. Especially popular with families arriving late, relocating households, and busy travelers, our welcome provisioning stocks fresh produce, breakfast items, artisan coffee, and beverages before you unlock the door.",
       "priceUsd": 135,
       "billingUnitLabel": "per arrival basket",
@@ -14194,7 +14194,7 @@
       "category": "Private Chauffeur",
       "title": "Dedicated Executive Chauffeur (4-Hour Charter)",
       "shortDesc": "Private professional driver and executive sedan or SUV at your disposal for meetings, dining, or regional appointments.",
-      "fullDesc": "Travel effortlessly between appointments, dinners, or coastal excursions with a dedicated chauffeur familiar with Sacramento and Greater Los Angeles corridors.",
+      "fullDesc": "Travel effortlessly between appointments, dinners, or coastal excursions with a dedicated chauffeur familiar with El Dorado Hills, CA and Greater Los Angeles corridors.",
       "priceUsd": 380,
       "billingUnitLabel": "per 4-hour block",
       "image": "https://images.unsplash.com/photo-1606664515524-ed2f786a0bd6?auto=format&fit=crop&w=900&q=80",
@@ -14435,6 +14435,32 @@
       "itemCount": 0,
       "validationIssues": [],
       "updatedAt": "2026-11-02T03:02:50.340Z"
+    },
+    "etl_cart_1793626887247_4866": {
+      "cartId": "etl_cart_1793626887247_4866",
+      "items": [],
+      "subtotalUsd": 0,
+      "serviceFeeUsd": 0,
+      "taxUsd": 0,
+      "discountUsd": 0,
+      "totalUsd": 0,
+      "totalUnitsRequired": 0,
+      "itemCount": 0,
+      "validationIssues": [],
+      "updatedAt": "2026-11-02T20:03:48.807Z"
+    },
+    "etl_cart_verify": {
+      "cartId": "etl_cart_verify",
+      "items": [],
+      "subtotalUsd": 0,
+      "serviceFeeUsd": 0,
+      "taxUsd": 0,
+      "discountUsd": 0,
+      "totalUsd": 0,
+      "totalUnitsRequired": 0,
+      "itemCount": 0,
+      "validationIssues": [],
+      "updatedAt": "2026-11-02T19:52:51.988Z"
     }
   },
   "orders": [],
@@ -14471,7 +14497,7 @@
       "authorRole": "Relocating Homeowner",
       "stayContext": "90-Day Closing Bridge Stay",
       "rating": 5,
-      "title": "Genuinely felt like home while waiting for our Sacramento closing",
+      "title": "Genuinely felt like home while waiting for our El Dorado Hills, CA closing",
       "content": "Residence C gave our family breathing room while we waited for our new home to close. Having two separated bedrooms and two full baths with vaulted ceilings felt bright and uncrowded, and Bill was always responsive whenever we had a question.",
       "verifiedBooking": true,
       "createdAt": "2026-09-19T19:45:00.000Z"
@@ -14488,18 +14514,5 @@
       "verifiedBooking": true,
       "createdAt": "2026-10-04T17:05:00.000Z"
     }
-  ],
-  "paymentAccounts": {
-    "bankName": "Associated Bank",
-    "accountName": "Heather Frederick",
-    "accountNumber": "2913762643",
-    "achRoutingNumber": "075900575",
-    "wireRoutingNumber": "075900575",
-    "swiftCode": "ASBDUS44",
-    "bankAddress": "400 S Chestnut Ave, Marshfield, WI 54449, USA",
-    "zelleEmail": "easytravelagency@trustagent.space",
-    "zelleRecipient": "Heather Frederick — Associated Bank Checking Account",
-    "paymentInstructions": "Include your Registered Account Email or Reservation Reference Code in the wire/ACH memo field. Upload your transfer confirmation receipt so our treasury team can verify and credit your account within 2–4 business hours.",
-    "updatedAt": "2026-11-02T07:44:00.000Z"
-  }
+  ]
 }

@@ -26,7 +26,7 @@
         <div style="display: flex; justify-content: space-between; align-items: center;">
             <div>
                 <h4 style="font-size: 0.95rem; font-weight: 800; color: var(--accent-blue-hover);">WIRE / ACH TRANSFER DESTINATION</h4>
-                <p style="font-size: 0.85rem; color: var(--color-navy); margin-top: 0.25rem;">First Sacramento National Bank • Routing: <strong>121000358</strong></p>
+                <p style="font-size: 0.85rem; color: var(--color-navy); margin-top: 0.25rem;">El Dorado Hills, CA Commercial Treasury • Routing: <strong>121000358</strong></p>
             </div>
             <button class="portal-btn portal-btn-sm portal-btn-outline" data-copy="7890123456">Copy Account #</button>
         </div>

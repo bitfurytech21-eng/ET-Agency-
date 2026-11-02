@@ -15,7 +15,7 @@ export interface PropertyAvailability {
   bookedRanges: DateRange[];
 }
 
-// Booking schedules reflecting authentic mid-term corporate rental cycles in Sacramento
+// Booking schedules reflecting authentic mid-term corporate rental cycles in El Dorado Hills, CA
 export const AVAILABILITY_SCHEDULES: Record<string, PropertyAvailability> = {
   'unit-91': {
     propertyId: 'unit-91',

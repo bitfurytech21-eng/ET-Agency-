@@ -4,7 +4,7 @@
 <div class="welcome-banner" style="background: linear-gradient(135deg, #0b192c 0%, #1c2541 100%); margin-bottom: 2rem;">
     <div class="welcome-content">
         <h1>American Luxury &amp; Executive Vehicle Fleet</h1>
-        <p>Premium US vehicles paired with Sacramento extended stays. Featuring real-time interactive 3D animated viewing, instant reservation, and flexible corporate unit billing.</p>
+        <p>Premium US vehicles paired with El Dorado Hills, CA extended stays. Featuring real-time interactive 3D animated viewing, instant reservation, and flexible corporate unit billing.</p>
     </div>
     <div>
         <span class="grant-badge" style="background: rgba(2, 132, 199, 0.2); color: #38bdf8; border-color: #0284c7;">

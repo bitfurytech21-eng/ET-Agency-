@@ -49,7 +49,7 @@ export const CALIFORNIA_EXPERIENCES: CaliforniaExperienceItem[] = [
     theme: 'teal',
     subtitle: 'California Heritage, Gold Country & Pacific Horizons',
     points: [
-      'Explore the California State Capitol Museum and 40-acre Capitol Park, Old Sacramento State Historic Park, and Gold Country heritage corridors.',
+      'Explore the California State Capitol Museum and 40-acre Capitol Park, El Dorado Hills, CA & Folsom heritage corridors, and Gold Country historic parks.',
       'Iconic historic landmarks along the Pacific Coast, Golden Gate vistas, Spanish mission architecture, and legendary pioneer railroad museums.',
       'Historic state monuments, vintage riverboats, and scenic heritage routes tracing California’s rich path from the 1849 Gold Rush to modern innovation.',
     ],

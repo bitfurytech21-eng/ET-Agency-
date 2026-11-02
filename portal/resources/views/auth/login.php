@@ -4,7 +4,7 @@
     <div style="text-align: center; margin-bottom: 1.75rem;">
         <div class="portal-brand-logo" style="width: 48px; height: 48px; font-size: 1.3rem; margin: 0 auto 0.85rem;">ETL</div>
         <h2 style="font-size: 1.5rem; font-weight: 800; color: var(--color-navy-dark); margin-bottom: 0.25rem;">Client Dashboard Sign In</h2>
-        <p style="font-size: 0.875rem; color: var(--color-slate-muted);">Sacramento Executive &amp; Medical Travel Portal</p>
+        <p style="font-size: 0.875rem; color: var(--color-slate-muted);">El Dorado Hills, CA Executive &amp; Medical Travel Portal</p>
     </div>
 
     <!-- Quick Demo Pill -->

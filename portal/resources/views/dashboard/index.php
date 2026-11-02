@@ -31,7 +31,7 @@
     <div class="stat-card">
         <span class="stat-label">Active Reservations</span>
         <span class="stat-value"><?= count($bookings ?? []) ?></span>
-        <span class="stat-desc">SAC Mid-Term Stay Units</span>
+        <span class="stat-desc">El Dorado Hills, CA Stay Units</span>
     </div>
     <div class="stat-card">
         <span class="stat-label">Account Status</span>
@@ -60,7 +60,7 @@
     <div class="table-toolbar">
         <div>
             <h3 style="font-size: 1.15rem; font-weight: 800;">My Reservation Records</h3>
-            <p style="font-size: 0.8rem; color: var(--color-slate-muted);">SAC Mid-Term Accommodation &amp; Fleet Stays</p>
+            <p style="font-size: 0.8rem; color: var(--color-slate-muted);">El Dorado Hills, CA Mid-Term Accommodation &amp; Fleet Stays</p>
         </div>
         <div style="display: flex; gap: 0.75rem; align-items: center;">
             <div class="table-search">
@@ -95,7 +95,7 @@
                     <?php foreach ($bookings as $b): ?>
                     <tr>
                         <td><strong style="font-family: var(--font-mono); color: var(--accent-blue);"><?= htmlspecialchars($b['booking_reference'] ?? ('BK-' . $b['id'])) ?></strong></td>
-                        <td><?= htmlspecialchars($b['property_id'] ?? 'Executive SAC Suite') ?></td>
+                        <td><?= htmlspecialchars($b['property_id'] ?? 'Executive El Dorado Hills, CA Suite') ?></td>
                         <td>
                             <span style="font-size: 0.825rem; font-weight: 600;"><?= htmlspecialchars($b['check_in'] ?? '') ?></span> 
                             <span style="color: var(--color-slate-muted);">to</span> 
@@ -131,7 +131,7 @@
             <div>
                 <div class="modal-header-category">ACCOMMODATION RESERVATION INQUIRY</div>
                 <h3>Book Your Stay With Bill &amp; Marlena</h3>
-                <p style="font-size: 0.85rem; color: var(--color-slate-muted); margin-top: 0.15rem;">Sacramento Mid-Term Executive &amp; Medical Travel Lodging</p>
+                <p style="font-size: 0.85rem; color: var(--color-slate-muted); margin-top: 0.15rem;">El Dorado Hills, CA Mid-Term Executive &amp; Medical Travel Lodging</p>
             </div>
             <button class="modal-close" onclick="closeModal('reservationModal')">&times;</button>
         </div>
@@ -188,10 +188,10 @@
                     <div class="form-group">
                         <label>Preferred Accommodation Unit</label>
                         <select name="property_id" class="form-control">
-                            <option value="SAC-UNIT-101">SAC Mid-Term Executive Suite #101 (25 Units/30 Days)</option>
-                            <option value="SAC-UNIT-102">SAC Mid-Term Luxury Apartment #102 (30 Units/30 Days)</option>
-                            <option value="SAC-UNIT-103">SAC Medical Center Travel Suite #103 (25 Units/30 Days)</option>
-                            <option value="SAC-UNIT-104">SAC Downtown Corporate Loft #104 (35 Units/30 Days)</option>
+                            <option value="EDH-UNIT-101">El Dorado Hills, CA Mid-Term Executive Suite #101 (25 Units/30 Days)</option>
+                            <option value="EDH-UNIT-102">El Dorado Hills, CA Mid-Term Luxury Apartment #102 (30 Units/30 Days)</option>
+                            <option value="EDH-UNIT-103">El Dorado Hills, CA Medical Center Travel Suite #103 (25 Units/30 Days)</option>
+                            <option value="EDH-UNIT-104">El Dorado Hills, CA Town Center Corporate Loft #104 (35 Units/30 Days)</option>
                         </select>
                     </div>
                     <div class="form-grid-2">
@@ -226,7 +226,7 @@
     <div class="portal-footer-inner">
         <div class="portal-footer-brand">
             <h4>Easy Travel Lodging</h4>
-            <p>Sacramento Executive &amp; Medical Travel Mid-Term Stays with Bill &amp; Marlena. Premium accommodations and American vehicle fleet rentals.</p>
+            <p>El Dorado Hills, CA Executive &amp; Medical Travel Mid-Term Stays with Bill &amp; Marlena. Premium accommodations and American vehicle fleet rentals.</p>
         </div>
         <div class="portal-footer-col">
             <h5>Navigation</h5>
@@ -249,13 +249,13 @@
             <h5>Support &amp; Contact</h5>
             <ul>
                 <li><a href="#">Bill &amp; Marlena Host Direct</a></li>
-                <li><a href="#">SAC Mid-Term Headquarters</a></li>
+                <li><a href="#">El Dorado Hills, CA Headquarters</a></li>
                 <li><a href="/portal/admin/login">Admin Sign In</a></li>
             </ul>
         </div>
     </div>
     <div class="portal-footer-bottom">
-        <div>&copy; <?= date('Y') ?> Easy Travel Lodging (SAC Mid-Term Stays). All rights reserved.</div>
+        <div>&copy; <?= date('Y') ?> Easy Travel Lodging (El Dorado Hills, CA Stays). All rights reserved.</div>
         <div>25 Corporate Grant Units Program Active</div>
     </div>
 </footer>

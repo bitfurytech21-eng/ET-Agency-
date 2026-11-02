@@ -34,12 +34,12 @@ export interface CaliforniaLocation {
 
 export const CALIFORNIA_LOCATIONS: CaliforniaLocation[] = [
   {
-    id: 'sacramento',
-    name: 'Sacramento & Rancho Cordova',
+    id: 'el-dorado-hills',
+    name: 'El Dorado Hills, CA',
     region: 'Primary Residence Hub',
-    lat: 38.5816,
-    lng: -121.4944,
-    travelTip: 'Ideal weather for American River Parkway bike rides, outdoor dining, & Old Sacramento visits.',
+    lat: 38.6857,
+    lng: -121.076,
+    travelTip: 'Ideal weather for Folsom Lake overlooks, El Dorado Hills Town Center dining, & Sierra foothills trails.',
   },
   {
     id: 'tahoe',
@@ -136,7 +136,7 @@ function getWeatherMeta(code: number) {
 }
 
 const FALLBACK_WEATHER: Record<string, WeatherData> = {
-  sacramento: {
+  'el-dorado-hills': {
     temperature: 73,
     temperatureUnit: 'F',
     tempMax: 78,
@@ -212,7 +212,7 @@ export const WeatherWidget: React.FC<WeatherWidgetProps> = ({
   className = '',
 }) => {
   const [selectedLoc, setSelectedLoc] = useState<CaliforniaLocation>(CALIFORNIA_LOCATIONS[0]);
-  const [weather, setWeather] = useState<WeatherData>(FALLBACK_WEATHER['sacramento']);
+  const [weather, setWeather] = useState<WeatherData>(FALLBACK_WEATHER['el-dorado-hills']);
   const [loading, setLoading] = useState<boolean>(false);
   const [unit, setUnit] = useState<'F' | 'C'>('F');
   const [dropdownOpen, setDropdownOpen] = useState<boolean>(false);
@@ -271,12 +271,12 @@ export const WeatherWidget: React.FC<WeatherWidgetProps> = ({
             humidity: Math.round(hum),
             windSpeed: Math.round(cw.windspeed || 6),
             source: 'Open-Meteo Weather API',
-            dailyForecast: days.length > 0 ? days : (FALLBACK_WEATHER[activeLoc.id]?.dailyForecast || FALLBACK_WEATHER['sacramento'].dailyForecast),
+            dailyForecast: days.length > 0 ? days : (FALLBACK_WEATHER[activeLoc.id]?.dailyForecast || FALLBACK_WEATHER['el-dorado-hills'].dailyForecast),
           });
         }
       } catch {
         if (isMounted) {
-          setWeather(FALLBACK_WEATHER[activeLoc.id] || FALLBACK_WEATHER['sacramento']);
+          setWeather(FALLBACK_WEATHER[activeLoc.id] || FALLBACK_WEATHER['el-dorado-hills']);
         }
       } finally {
         if (isMounted) setLoading(false);

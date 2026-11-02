@@ -94,7 +94,7 @@ if ($action === 'register') {
             [
                 'id' => 'pch_' . time(),
                 'description' => 'Account Activation Welcome Allotment (25 Units)',
-                'unit_number' => 'Sacramento Flex Allotment',
+                'unit_number' => 'El Dorado Hills, CA Flex Allotment',
                 'units_purchased' => $initialUnits,
                 'amount_usd' => $initialBalance,
                 'status' => 'active',

@@ -37,17 +37,17 @@ export const NotificationCard: React.FC<NotificationCardProps> = ({
           {getIcon()}
         </div>
         <div className="space-y-1">
-          <div className="flex flex-wrap items-center gap-2 text-xs">
-            <h5 className="font-heading font-bold text-sm text-[#0f172a]">{notification.title}</h5>
+          <div className="flex flex-wrap items-center gap-2">
+            <h5 className="type-h4 text-[#0f172a]">{notification.title}</h5>
             {!notification.isRead && (
               <>
                 <span className="text-slate-300" aria-hidden="true">·</span>
-                <span className="text-[11px] font-semibold text-[#14616d]">Unread</span>
+                <span className="type-support font-semibold text-[#14616d]">Unread</span>
               </>
             )}
           </div>
-          <p className="text-xs text-slate-600 leading-relaxed">{notification.message}</p>
-          <div className="text-[11px] text-slate-400 tabular-nums">
+          <p className="type-body text-slate-600">{notification.message}</p>
+          <div className="type-support text-slate-500 tabular-nums">
             {notification.timestamp}
           </div>
         </div>
@@ -58,9 +58,9 @@ export const NotificationCard: React.FC<NotificationCardProps> = ({
           <button
             type="button"
             onClick={() => onMarkAsRead(notification.id)}
-            className="px-3 py-1.5 rounded-lg border border-slate-200 bg-white hover:bg-slate-50 text-xs font-semibold text-slate-700 flex items-center gap-1 cursor-pointer whitespace-nowrap"
+            className="btn btn-outline btn-sm"
           >
-            <Check className="w-3.5 h-3.5 text-[#14616d]" />
+            <Check className="w-4 h-4 text-[#14616d]" />
             <span>Mark Read</span>
           </button>
         )}

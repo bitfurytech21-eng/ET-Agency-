@@ -28,25 +28,25 @@ export const PaymentCard: React.FC<PaymentCardProps> = ({
             <Landmark className="w-5 h-5" />
           </div>
           <div>
-            <div className="flex flex-wrap items-center gap-2 text-xs">
+            <div className="flex flex-wrap items-center gap-2 type-support">
               <span className="font-mono font-bold text-[#0f172a] tabular-nums">{payment.referenceCode}</span>
               <span className="text-slate-300" aria-hidden="true">·</span>
               <StatusBadge status={payment.status} size="sm" />
             </div>
-            <p className="text-xs text-slate-600 font-medium mt-0.5">{payment.description}</p>
+            <p className="type-body text-slate-600 font-medium mt-0.5">{payment.description}</p>
           </div>
         </div>
 
         <div className="sm:text-right shrink-0">
-          <span className="text-base font-bold text-[#0f172a] tabular-nums">
+          <span className="type-h4 text-[#0f172a] tabular-nums">
             ${payment.amountUsd.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} USD
           </span>
-          <span className="text-[11px] text-slate-500 block">{payment.paymentMethod}</span>
+          <span className="type-support text-slate-500 block">{payment.paymentMethod}</span>
         </div>
       </div>
 
       {isPending && (
-        <div className="p-2.5 bg-amber-50 border border-amber-200 rounded-xl text-amber-900 text-xs flex items-center gap-2">
+        <div className="p-3 bg-amber-50 border border-amber-200 rounded-xl text-amber-900 type-support flex items-center gap-2">
           <Clock className="w-4 h-4 text-amber-700 shrink-0" />
           <span>
             <strong>Pending Verification:</strong> Transfer notice received and queued for accounting reconciliation.
@@ -54,7 +54,7 @@ export const PaymentCard: React.FC<PaymentCardProps> = ({
         </div>
       )}
 
-      <div className="flex flex-wrap items-center justify-between gap-2 text-xs text-slate-600 tabular-nums">
+      <div className="flex flex-wrap items-center justify-between gap-2 type-support text-slate-600 tabular-nums">
         <div className="flex flex-wrap items-center gap-2">
           <span>Date: <strong className="text-[#0f172a]">{payment.date}</strong></span>
           <span className="text-slate-300" aria-hidden="true">·</span>
@@ -66,9 +66,9 @@ export const PaymentCard: React.FC<PaymentCardProps> = ({
             <button
               type="button"
               onClick={() => onViewInvoice(payment)}
-              className="px-3 py-1.5 rounded-lg border border-slate-200 hover:bg-slate-50 text-xs font-semibold text-slate-700 flex items-center gap-1.5 cursor-pointer whitespace-nowrap"
+              className="btn btn-outline btn-sm"
             >
-              <FileText className="w-3.5 h-3.5 text-slate-500" />
+              <FileText className="w-4 h-4 text-slate-500" />
               <span>Invoice</span>
             </button>
           )}
@@ -76,9 +76,9 @@ export const PaymentCard: React.FC<PaymentCardProps> = ({
             <button
               type="button"
               onClick={() => onViewReceipt(payment)}
-              className="px-3 py-1.5 rounded-lg bg-slate-50 border border-slate-200 hover:border-[#14616d] text-[#0f172a] text-xs font-semibold flex items-center gap-1.5 cursor-pointer whitespace-nowrap"
+              className="btn btn-outline btn-sm"
             >
-              <ArrowDownToLine className="w-3.5 h-3.5 text-[#14616d]" />
+              <ArrowDownToLine className="w-4 h-4 text-[#14616d]" />
               <span>Receipt</span>
             </button>
           )}

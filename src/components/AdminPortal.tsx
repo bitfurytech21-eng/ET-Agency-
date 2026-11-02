@@ -1105,36 +1105,36 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ onNavigateTab }) => {
   };
 
   return (
-    <div className="bg-[#f7f3ed] text-[#282828] min-h-[820px] pb-16 text-left">
+    <div className="bg-slate-50 text-slate-900 min-h-[820px] pb-16 text-left">
       {/* Live Realistic Photography Control Center Header */}
       <LivePhotoBackground
         scene="twilight"
         secondaryScene="courtyard"
         overlay="espresso"
-        className="border-b border-[#e6dfd5]"
+        className="border-b border-slate-200"
       >
         <div className="max-w-[1320px] mx-auto px-4 sm:px-8 py-9 sm:py-11">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-            <div className="space-y-1.5">
-              <div className="inline-flex items-center gap-2 text-[#7ef0e5] text-xs font-bold uppercase tracking-wider">
-                <ShieldCheck className="w-4 h-4" />
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-5">
+            <div className="space-y-2">
+              <div className="inline-flex items-center gap-2 text-[#7ef0e5] type-support font-semibold">
+                <ShieldCheck className="w-4 h-4 shrink-0" />
                 <span>Administrative Operations, Storefront &amp; Treasury</span>
               </div>
-              <h1 className="text-2xl sm:text-3xl font-heading font-black tracking-tight text-white">
+              <h1 className="type-h2 text-white">
                 Easy Travel Lodging — Admin Control Center
               </h1>
-              <p className="text-xs sm:text-sm text-[#f0e9e1]/90 max-w-2xl">
+              <p className="type-body text-slate-200 max-w-2xl">
                 Manage storefront orders, residences, concierge services, promotions, 3D fleet inventory, wire verification, and client accounts.
               </p>
             </div>
 
-            <div className="flex flex-wrap items-center gap-2.5">
+            <div className="flex flex-wrap items-center gap-2.5 shrink-0">
               <button
                 type="button"
                 onClick={() => onNavigateTab('portal')}
-                className="px-3.5 py-2 rounded-xl bg-white/15 hover:bg-white/25 backdrop-blur-xs border border-white/25 text-white text-xs font-semibold flex items-center gap-1.5 transition-colors cursor-pointer"
+                className="btn btn-sm bg-white/15 hover:bg-white/25 backdrop-blur-xs border border-white/25 text-white"
               >
-                <ArrowLeft className="w-3.5 h-3.5" />
+                <ArrowLeft className="w-4 h-4" />
                 <span>Client Portal</span>
               </button>
 
@@ -1143,17 +1143,17 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ onNavigateTab }) => {
                   <button
                     type="button"
                     onClick={() => fetchAdminDashboard(adminToken)}
-                    className="px-3.5 py-2 rounded-xl bg-white/15 hover:bg-white/25 backdrop-blur-xs border border-white/25 text-white text-xs font-semibold flex items-center gap-1.5 transition-colors cursor-pointer"
+                    className="btn btn-sm bg-white/15 hover:bg-white/25 backdrop-blur-xs border border-white/25 text-white"
                   >
-                    <RefreshCw className={`w-3.5 h-3.5 ${isLoading ? 'animate-spin' : ''}`} />
+                    <RefreshCw className={`w-4 h-4 ${isLoading ? 'animate-spin' : ''}`} />
                     <span>Sync</span>
                   </button>
                   <button
                     type="button"
                     onClick={handleLogout}
-                    className="px-3.5 py-2 rounded-xl bg-[#82634f] hover:bg-[#6e5240] border border-white/20 text-white text-xs font-bold flex items-center gap-1.5 transition-colors cursor-pointer"
+                    className="btn btn-sm bg-[#14616d] hover:bg-[#0f4952] border border-white/20 text-white"
                   >
-                    <LogOut className="w-3.5 h-3.5" />
+                    <LogOut className="w-4 h-4" />
                     <span>Sign Out{adminProfile ? ` (${adminProfile.name.split(' ')[0]})` : ''}</span>
                   </button>
                 </>
@@ -1166,24 +1166,24 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ onNavigateTab }) => {
       <div className="max-w-[1320px] mx-auto px-4 sm:px-8 pt-7 space-y-7">
         {/* Feedback */}
         {errorMsg && (
-          <div className="p-4 rounded-xl bg-rose-50 border border-rose-200 text-rose-800 text-xs flex items-center justify-between gap-3">
-            <div className="flex items-center gap-2">
+          <div className="p-4 rounded-xl bg-rose-50 border border-rose-200 text-rose-800 type-support flex items-center justify-between gap-3">
+            <div className="flex items-center gap-2.5">
               <AlertCircle className="w-4 h-4 text-rose-600 shrink-0" />
               <span>{errorMsg}</span>
             </div>
-            <button onClick={() => setErrorMsg(null)} className="text-rose-700 hover:text-rose-950 font-semibold cursor-pointer">
+            <button onClick={() => setErrorMsg(null)} className="type-btn text-rose-700 hover:text-rose-950 cursor-pointer">
               Dismiss
             </button>
           </div>
         )}
 
         {successMsg && (
-          <div className="p-4 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs flex items-center justify-between gap-3">
-            <div className="flex items-center gap-2">
+          <div className="p-4 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-800 type-support flex items-center justify-between gap-3">
+            <div className="flex items-center gap-2.5">
               <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
               <span>{successMsg}</span>
             </div>
-            <button onClick={() => setSuccessMsg(null)} className="text-emerald-700 hover:text-emerald-950 font-semibold cursor-pointer">
+            <button onClick={() => setSuccessMsg(null)} className="type-btn text-emerald-700 hover:text-emerald-950 cursor-pointer">
               Dismiss
             </button>
           </div>
@@ -1197,64 +1197,64 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ onNavigateTab }) => {
             scene="twilight"
             secondaryScene="interior"
             overlay="espresso"
-            className="rounded-3xl overflow-hidden border border-[#e6dfd5] shadow-md"
+            className="rounded-2xl overflow-hidden border border-slate-200 shadow-md"
           >
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center p-6 sm:p-10 lg:p-12">
               <div className="lg:col-span-6 text-white space-y-4">
-                <span className="text-xs font-bold uppercase tracking-widest text-[#7ef0e5] block">
+                <span className="type-support font-semibold text-[#7ef0e5] block">
                   Role-Protected JWT Gateway
                 </span>
-                <h2 className="text-2xl sm:text-3xl font-heading font-black tracking-tight leading-tight text-white">
+                <h2 className="type-h2 text-white">
                   Executive Host, Concierge &amp; Treasury Administration
                 </h2>
-                <p className="text-sm text-[#f2ece4]/90 leading-relaxed">
+                <p className="type-body text-slate-200">
                   Verify incoming bank wires, update residence rates and seasonal packages, review 3D fleet reservations, and audit prepaid Lodging Unit balances from a unified operations workspace.
                 </p>
-                <div className="grid grid-cols-2 gap-3 pt-2 text-xs">
-                  <div className="p-3.5 rounded-xl bg-white/10 backdrop-blur-xs border border-white/15">
-                    <span className="font-bold text-white block">Immutable Ledger</span>
-                    <span className="text-[#e8dfd5]/85">Full actor &amp; timestamp audit trail</span>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2 type-support">
+                  <div className="p-4 rounded-xl bg-white/10 backdrop-blur-xs border border-white/15 space-y-0.5">
+                    <span className="font-semibold text-white block">Immutable Ledger</span>
+                    <span className="text-slate-200/90 block">Full actor &amp; timestamp audit trail</span>
                   </div>
-                  <div className="p-3.5 rounded-xl bg-white/10 backdrop-blur-xs border border-white/15">
-                    <span className="font-bold text-white block">Live Storefront Sync</span>
-                    <span className="text-[#e8dfd5]/85">Instant rate, catalog &amp; promo updates</span>
+                  <div className="p-4 rounded-xl bg-white/10 backdrop-blur-xs border border-white/15 space-y-0.5">
+                    <span className="font-semibold text-white block">Live Storefront Sync</span>
+                    <span className="text-slate-200/90 block">Instant rate, catalog &amp; promo updates</span>
                   </div>
                 </div>
               </div>
 
               <div className="lg:col-span-6">
-                <div className="bg-white border border-[#e6dfd5] rounded-2xl p-6 sm:p-8 shadow-xl space-y-6 text-[#282828]">
-                  <div className="space-y-1">
-                    <span className="text-xs font-bold uppercase tracking-wider text-[#00897d]">
+                <div className="admin-panel p-6 sm:p-8 space-y-6 text-slate-900">
+                  <div className="space-y-1.5">
+                    <span className="type-support font-semibold text-[#14616d] block">
                       Authorized Personnel Only
                     </span>
-                    <h3 className="text-xl font-heading font-black text-[#282828]">
+                    <h3 className="type-h3 text-slate-900">
                       Executive &amp; Concierge Staff Sign In
                     </h3>
-                    <p className="text-xs text-[#5c5046]">
+                    <p className="type-support text-slate-600">
                       Authorized hosts and treasury staff only. Every action is recorded in the immutable audit log.
                     </p>
                   </div>
 
-                  <div className="p-4 bg-[#faf8f5] border border-[#e6dfd5] rounded-xl space-y-2 text-xs">
-                    <div className="flex items-center justify-between text-[#00897d] font-bold">
+                  <div className="p-4 bg-slate-50 border border-slate-200 rounded-xl space-y-2.5 type-support">
+                    <div className="flex flex-wrap items-center justify-between gap-2 text-[#14616d] font-semibold">
                       <span className="flex items-center gap-1.5">
-                        <Sparkles className="w-3.5 h-3.5" /> Pre-Seeded Admin Credentials
+                        <Sparkles className="w-4 h-4 shrink-0" /> Pre-Seeded Admin Credentials
                       </span>
-                      <span className="text-[10px] font-mono text-[#857568]">RBAC: admin / staff</span>
+                      <span className="font-mono text-slate-500">RBAC: admin / staff</span>
                     </div>
-                    <div className="font-mono text-[11px] text-[#5c5046] space-y-1">
-                      <div><strong className="text-[#282828]">Admin:</strong> easytravelagency@trustagent.space / admin12345</div>
-                      <div><strong className="text-[#282828]">Staff:</strong> easytravelagency@trustagent.space / staff12345</div>
+                    <div className="font-mono text-slate-600 space-y-1">
+                      <div><strong className="text-slate-900">Admin:</strong> easytravelagency@trustagent.space / admin12345</div>
+                      <div><strong className="text-slate-900">Staff:</strong> easytravelagency@trustagent.space / staff12345</div>
                     </div>
-                    <div className="flex gap-2 pt-1">
+                    <div className="flex flex-wrap sm:flex-nowrap gap-2 pt-1.5">
                       <button
                         type="button"
                         onClick={() => {
                           setLoginEmail('easytravelagency@trustagent.space');
                           setLoginPassword('admin12345');
                         }}
-                        className="flex-1 py-1.5 bg-[#82634f] hover:bg-[#6e5240] rounded-lg text-[11px] font-bold text-white transition-colors cursor-pointer"
+                        className="btn btn-sm btn-secondary flex-1"
                       >
                         Load Host Admin
                       </button>
@@ -1264,7 +1264,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ onNavigateTab }) => {
                           setLoginEmail('easytravelagency@trustagent.space');
                           setLoginPassword('staff12345');
                         }}
-                        className="flex-1 py-1.5 bg-white hover:bg-[#f4efe9] border border-[#dfd6ca] rounded-lg text-[11px] font-bold text-[#5c5046] transition-colors cursor-pointer"
+                        className="btn btn-sm btn-outline flex-1"
                       >
                         Load Concierge Staff
                       </button>
@@ -1273,29 +1273,29 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ onNavigateTab }) => {
 
                   <form onSubmit={handleLogin} className="space-y-4">
                     <div>
-                      <label className="block text-xs font-bold text-[#5c5046] mb-1.5">Staff Email</label>
+                      <label className="form-label">Staff Email</label>
                       <div className="relative">
-                        <Mail className="w-4 h-4 absolute left-3.5 top-3.5 text-[#857568]" />
+                        <Mail className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
                         <input
                           type="email"
                           required
                           value={loginEmail}
                           onChange={(e) => setLoginEmail(e.target.value)}
-                          className="w-full pl-10 pr-4 h-11 bg-[#faf8f5] border border-[#dfd6ca] rounded-xl text-sm text-[#282828] focus:border-[#00b7a8] focus:bg-white outline-none transition-colors"
+                          className="form-input pl-10"
                         />
                       </div>
                     </div>
 
                     <div>
-                      <label className="block text-xs font-bold text-[#5c5046] mb-1.5">Password</label>
+                      <label className="form-label">Password</label>
                       <div className="relative">
-                        <Lock className="w-4 h-4 absolute left-3.5 top-3.5 text-[#857568]" />
+                        <Lock className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
                         <input
                           type="password"
                           required
                           value={loginPassword}
                           onChange={(e) => setLoginPassword(e.target.value)}
-                          className="w-full pl-10 pr-4 h-11 bg-[#faf8f5] border border-[#dfd6ca] rounded-xl text-sm text-[#282828] focus:border-[#00b7a8] focus:bg-white outline-none transition-colors"
+                          className="form-input pl-10"
                         />
                       </div>
                     </div>
@@ -1303,7 +1303,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ onNavigateTab }) => {
                     <button
                       type="submit"
                       disabled={isLoading}
-                      className="w-full py-3.5 bg-[#00b7a8] hover:bg-[#009e91] text-white font-black text-xs uppercase tracking-wider rounded-xl flex items-center justify-center gap-2 transition-colors cursor-pointer"
+                      className="btn btn-primary w-full"
                     >
                       {isLoading ? (
                         <>
@@ -1329,77 +1329,77 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ onNavigateTab }) => {
           <div className="space-y-7">
             {/* 6 KPI Summary Strip */}
             <div className="grid grid-cols-2 lg:grid-cols-6 gap-4">
-              <div className="p-4 bg-white border border-[#e6dfd5] rounded-2xl shadow-xs">
-                <span className="text-[11px] font-bold uppercase tracking-wider text-[#857568] block">
+              <div className="admin-panel p-5 space-y-1">
+                <span className="type-support font-semibold text-slate-500 block">
                   Settled Revenue
                 </span>
-                <div className="text-2xl font-heading font-black text-[#00897d] mt-1 tabular-nums">
+                <div className="type-h3 font-bold text-[#14616d] tabular-nums">
                   ${overview.totalRevenue.toLocaleString()}
                 </div>
-                <span className="text-[11px] text-[#857568]">Verified ledger total</span>
+                <span className="type-support text-slate-500 block">Verified ledger total</span>
               </div>
 
-              <div className="p-4 bg-white border border-[#bfe8e3] rounded-2xl shadow-xs">
-                <span className="text-[11px] font-bold uppercase tracking-wider text-[#00897d] block">
+              <div className="admin-panel p-5 space-y-1">
+                <span className="type-support font-semibold text-[#14616d] block">
                   Storefront Orders
                 </span>
-                <div className="text-2xl font-heading font-black text-[#282828] mt-1 tabular-nums">
+                <div className="type-h3 font-bold text-slate-900 tabular-nums">
                   {overview.totalOrders ?? orders.length}
                 </div>
-                <span className="text-[11px] text-[#00897d] font-medium tabular-nums">
+                <span className="type-support text-[#14616d] font-medium tabular-nums block">
                   {overview.paidOrdersCount ?? 0} paid · {overview.pendingOrdersCount ?? 0} pending
                 </span>
               </div>
 
-              <div className="p-4 bg-white border border-[#e5d2bc] rounded-2xl shadow-xs">
-                <span className="text-[11px] font-bold uppercase tracking-wider text-[#82634f] block">
+              <div className="admin-panel p-5 space-y-1">
+                <span className="type-support font-semibold text-amber-700 block">
                   Pending Wire Queue
                 </span>
-                <div className="text-2xl font-heading font-black text-[#282828] mt-1 tabular-nums">
+                <div className="type-h3 font-bold text-slate-900 tabular-nums">
                   ${overview.pendingWireAmount.toLocaleString()}
                 </div>
-                <span className="text-[11px] text-[#82634f] font-medium tabular-nums">
+                <span className="type-support text-amber-700 font-medium tabular-nums block">
                   {overview.pendingWireCount} transfer(s) awaiting review
                 </span>
               </div>
 
-              <div className="p-4 bg-white border border-[#e6dfd5] rounded-2xl shadow-xs">
-                <span className="text-[11px] font-bold uppercase tracking-wider text-[#857568] block">
+              <div className="admin-panel p-5 space-y-1">
+                <span className="type-support font-semibold text-slate-500 block">
                   Residence Stays
                 </span>
-                <div className="text-2xl font-heading font-black text-[#282828] mt-1 tabular-nums">
+                <div className="type-h3 font-bold text-slate-900 tabular-nums">
                   {overview.activeBookings} / {overview.totalBookings}
                 </div>
-                <span className="text-[11px] text-[#857568] tabular-nums">
+                <span className="type-support text-slate-500 tabular-nums block">
                   {overview.confirmedBookings} confirmed · {overview.pendingBookings} pending
                 </span>
               </div>
 
-              <div className="p-4 bg-white border border-[#e6dfd5] rounded-2xl shadow-xs">
-                <span className="text-[11px] font-bold uppercase tracking-wider text-[#857568] block">
+              <div className="admin-panel p-5 space-y-1">
+                <span className="type-support font-semibold text-slate-500 block">
                   3D Fleet Rentals
                 </span>
-                <div className="text-2xl font-heading font-black text-[#82634f] mt-1 tabular-nums">
+                <div className="type-h3 font-bold text-slate-900 tabular-nums">
                   {overview.activeVehicleBookings} / {overview.totalVehicleBookings}
                 </div>
-                <span className="text-[11px] text-[#857568] tabular-nums">{vehicles.length} vehicles in fleet</span>
+                <span className="type-support text-slate-500 tabular-nums block">{vehicles.length} vehicles in fleet</span>
               </div>
 
-              <div className="p-4 bg-white border border-[#e6dfd5] rounded-2xl shadow-xs">
-                <span className="text-[11px] font-bold uppercase tracking-wider text-[#857568] block">
+              <div className="admin-panel p-5 space-y-1">
+                <span className="type-support font-semibold text-slate-500 block">
                   Catalog &amp; Promos
                 </span>
-                <div className="text-2xl font-heading font-black text-[#00897d] mt-1 tabular-nums">
+                <div className="type-h3 font-bold text-[#14616d] tabular-nums">
                   {overview.activeCatalogCount ?? catalogItems.length} Items
                 </div>
-                <span className="text-[11px] text-[#857568] tabular-nums">
+                <span className="type-support text-slate-500 tabular-nums block">
                   {overview.activePromoCount ?? promoCodes.length} active promo(s)
                 </span>
               </div>
             </div>
 
             {/* Admin Navigation Tabs */}
-            <div className="flex flex-wrap gap-2 border-b border-[#e6dfd5] pb-3">
+            <div className="flex flex-wrap gap-2 border-b border-slate-200 pb-3.5">
               {[
                 { id: 'properties', label: 'Properties', icon: Building2, badge: properties.length },
                 { id: 'reservations', label: 'Reservations', icon: FileSpreadsheet, badge: overview.pendingBookings },
@@ -1419,18 +1419,18 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ onNavigateTab }) => {
                     key={t.id}
                     type="button"
                     onClick={() => setActiveTab(t.id as AdminTab)}
-                    className={`px-3.5 py-2 rounded-xl text-xs font-bold flex items-center gap-2 transition-colors cursor-pointer border ${
+                    className={`type-nav px-3.5 py-2 min-h-[40px] rounded-lg flex items-center gap-2 transition-colors cursor-pointer border whitespace-nowrap shrink-0 ${
                       active
                         ? 'bg-[#14616d] text-white border-[#14616d] shadow-xs'
-                        : 'bg-white text-[#5c5046] border-[#e6dfd5] hover:border-[#82634f]/40 hover:text-[#282828]'
+                        : 'bg-white text-slate-600 border-slate-200 hover:border-slate-300 hover:text-slate-900'
                     }`}
                   >
-                    <Icon className="w-3.5 h-3.5" />
+                    <Icon className="w-4 h-4 shrink-0" />
                     <span>{t.label}</span>
                     {typeof t.badge === 'number' && t.badge > 0 && (
                       <span
-                        className={`px-1.5 py-0.2 rounded text-[10px] font-black tabular-nums ${
-                          active ? 'bg-white/25 text-white' : 'bg-[#f5efe8] text-[#82634f]'
+                        className={`px-1.5 py-0.5 rounded-md type-support font-mono font-semibold tabular-nums ${
+                          active ? 'bg-white/20 text-white' : 'bg-slate-100 text-slate-700'
                         }`}
                       >
                         {t.badge}
@@ -1441,7 +1441,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ onNavigateTab }) => {
               })}
             </div>
 
-            {/* 1. PROPERTIES (admin/properties/) */}
+            {/* 1. PROPERTIES */}
             {activeTab === 'properties' && (
               <AdminProperties
                 properties={unifiedProperties}
@@ -1450,7 +1450,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ onNavigateTab }) => {
               />
             )}
 
-            {/* 2. RESERVATIONS (admin/reservations/) */}
+            {/* 2. RESERVATIONS */}
             {activeTab === 'reservations' && (
               <AdminReservations
                 reservations={unifiedReservations}
@@ -1458,7 +1458,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ onNavigateTab }) => {
               />
             )}
 
-            {/* 3. CAR RENTALS (admin/car-rentals/) */}
+            {/* 3. CAR RENTALS */}
             {activeTab === 'car-rentals' && (
               <AdminCarRentals
                 vehicles={unifiedVehicles}
@@ -1469,7 +1469,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ onNavigateTab }) => {
               />
             )}
 
-            {/* 4. PAYMENTS (admin/payments/) */}
+            {/* 4. PAYMENTS */}
             {activeTab === 'payments' && (
               <AdminPayments
                 manualPayments={manualPayments}
@@ -1478,7 +1478,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ onNavigateTab }) => {
               />
             )}
 
-            {/* 5. GUESTS (admin/guests/) */}
+            {/* 5. GUESTS */}
             {activeTab === 'guests' && (
               <AdminGuests
                 guests={unifiedGuests}
@@ -1486,13 +1486,13 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ onNavigateTab }) => {
               />
             )}
 
-            {/* 6. HOSTS (admin/hosts/) */}
+            {/* 6. HOSTS */}
             {activeTab === 'hosts' && <AdminHosts />}
 
-            {/* 7. HOUSEKEEPING (admin/housekeeping/) */}
+            {/* 7. HOUSEKEEPING */}
             {activeTab === 'housekeeping' && <AdminHousekeeping />}
 
-            {/* 8. REPORTS (admin/reports/) */}
+            {/* 8. REPORTS */}
             {activeTab === 'reports' && (
               <AdminReports
                 totalRevenue={overview.totalRevenue}
@@ -1502,62 +1502,64 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ onNavigateTab }) => {
               />
             )}
 
-            {/* 9. SETTINGS (admin/settings/) */}
+            {/* 9. SETTINGS */}
             {activeTab === 'settings' && <AdminSettings auditLogs={auditLogs} />}
 
             {/* TAB 1: OVERVIEW — INQUIRIES & AUDIT TRAIL */}
             {activeTab === 'overview' && (
               <div className="grid grid-cols-1 lg:grid-cols-12 gap-7">
-                <div className="lg:col-span-7 bg-white border border-[#e6dfd5] rounded-2xl p-6 shadow-xs space-y-4">
-                  <div className="flex items-center justify-between border-b border-[#e6dfd5] pb-3">
-                    <div>
-                      <h3 className="font-heading font-bold text-base text-[#282828]">
+                <div className="lg:col-span-7 admin-panel p-6 space-y-4">
+                  <div className="flex items-center justify-between border-b border-slate-200 pb-3.5">
+                    <div className="space-y-1">
+                      <h3 className="type-h3 text-slate-900">
                         Inbound Guest Inquiries, Brochure &amp; Live Chat Leads
                       </h3>
-                      <p className="text-xs text-[#5c5046]">
+                      <p className="type-support text-slate-600">
                         Captured in real time from Contact Us, Brochure Downloads, Host Design Guide, and Live Housing Chat.
                       </p>
                     </div>
                   </div>
 
                   {inquiries.length === 0 ? (
-                    <p className="text-xs text-[#857568] py-6 text-center">No inquiries logged yet.</p>
+                    <p className="type-body text-slate-500 py-8 text-center">No inquiries logged yet.</p>
                   ) : (
                     <div className="space-y-3">
                       {inquiries.map((inq) => (
-                        <div key={inq.id} className="p-4 bg-[#faf8f5] border border-[#e6dfd5] rounded-xl space-y-2 text-xs">
+                        <div key={inq.id} className="p-4 bg-slate-50 border border-slate-200 rounded-xl space-y-2.5 type-support">
                           <div className="flex flex-wrap items-center justify-between gap-2">
-                            <div className="flex items-center gap-2">
-                              <span className="font-mono font-bold text-[#00897d]">{inq.referenceCode}</span>
-                              <span className="px-2 py-0.5 rounded bg-white border border-[#dfd6ca] text-[10px] uppercase font-bold text-[#82634f]">
-                                {inq.type.replace('_', ' ')}
+                            <div className="flex flex-wrap items-center gap-2">
+                              <span className="font-mono font-semibold text-[#14616d]">{inq.referenceCode}</span>
+                              <span aria-hidden="true" className="text-slate-300">·</span>
+                              <span className="font-medium text-slate-600 capitalize">
+                                {inq.type.replace(/_/g, ' ')}
                               </span>
-                              <span className="font-bold text-[#282828]">{inq.name}</span>
+                              <span aria-hidden="true" className="text-slate-300">·</span>
+                              <span className="font-semibold text-slate-900">{inq.name}</span>
                             </div>
                             <span
-                              className={`px-2 py-0.5 rounded text-[10px] uppercase font-bold ${
+                              className={`font-semibold capitalize ${
                                 inq.status === 'new'
-                                  ? 'bg-[#e8f8f6] text-[#00897d] border border-[#bfe8e3]'
-                                  : 'bg-white text-[#857568] border border-[#e6dfd5]'
+                                  ? 'text-[#14616d]'
+                                  : 'text-slate-500'
                               }`}
                             >
                               {inq.status}
                             </span>
                           </div>
 
-                          <div className="text-[#5c5046]">
-                            {inq.email} {inq.phone ? `• ${inq.phone}` : ''} {inq.company ? `• ${inq.company}` : ''}
-                            {inq.propertyId ? ` • Unit: ${inq.propertyId}` : ''}
+                          <div className="text-slate-600">
+                            {inq.email} {inq.phone ? `· ${inq.phone}` : ''} {inq.company ? `· ${inq.company}` : ''}
+                            {inq.propertyId ? ` · Unit: ${inq.propertyId}` : ''}
                           </div>
 
                           {inq.message && (
-                            <p className="text-[#282828] bg-white p-2.5 rounded-lg border border-[#e6dfd5]">
+                            <p className="type-body text-slate-800 bg-white p-3 rounded-lg border border-slate-200">
                               {inq.message}
                             </p>
                           )}
 
-                          <div className="flex items-center justify-between pt-1">
-                            <span className="text-[10px] text-[#857568]">
+                          <div className="flex flex-wrap items-center justify-between gap-2 pt-1">
+                            <span className="type-support text-slate-500 tabular-nums">
                               {new Date(inq.createdAt).toLocaleString()}
                             </span>
                             <div className="flex gap-2">
@@ -1565,7 +1567,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ onNavigateTab }) => {
                                 <button
                                   type="button"
                                   onClick={() => handleUpdateInquiryStatus(inq.id, 'reviewed')}
-                                  className="px-2.5 py-1 bg-[#e8f8f6] hover:bg-[#d3f2ee] text-[#00897d] border border-[#bfe8e3] rounded text-[11px] font-bold cursor-pointer"
+                                  className="btn btn-sm btn-primary"
                                 >
                                   Mark Reviewed
                                 </button>
@@ -1574,7 +1576,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ onNavigateTab }) => {
                                 <button
                                   type="button"
                                   onClick={() => handleUpdateInquiryStatus(inq.id, 'archived')}
-                                  className="px-2.5 py-1 bg-white hover:bg-[#f4efe9] text-[#5c5046] border border-[#dfd6ca] rounded text-[11px] cursor-pointer"
+                                  className="btn btn-sm btn-outline"
                                 >
                                   Archive
                                 </button>
@@ -1588,23 +1590,23 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ onNavigateTab }) => {
                 </div>
 
                 {/* Recent Audit Logs */}
-                <div className="lg:col-span-5 bg-white border border-[#e6dfd5] rounded-2xl p-6 shadow-xs space-y-4">
-                  <div className="border-b border-[#e6dfd5] pb-3">
-                    <h3 className="font-heading font-bold text-base text-[#282828]">Immutable Audit Log</h3>
-                    <p className="text-xs text-[#5c5046]">Every settlement, verification, and status update.</p>
+                <div className="lg:col-span-5 admin-panel p-6 space-y-4">
+                  <div className="border-b border-slate-200 pb-3.5 space-y-1">
+                    <h3 className="type-h3 text-slate-900">Immutable Audit Log</h3>
+                    <p className="type-support text-slate-600">Every settlement, verification, and status update.</p>
                   </div>
-                  <div className="space-y-2.5 max-h-[540px] overflow-y-auto pr-1 text-xs">
+                  <div className="space-y-2.5 max-h-[540px] overflow-y-auto pr-1">
                     {auditLogs.slice(0, 25).map((log) => (
-                      <div key={log.id} className="p-3 bg-[#faf8f5] border border-[#e6dfd5] rounded-xl space-y-1">
+                      <div key={log.id} className="p-3.5 bg-slate-50 border border-slate-200 rounded-xl space-y-1 type-support">
                         <div className="flex items-center justify-between gap-2">
-                          <span className="font-mono font-bold text-[11px] text-[#82634f]">{log.action}</span>
-                          <span className="text-[10px] text-[#857568]">
+                          <span className="font-mono font-semibold text-[#14616d]">{log.action}</span>
+                          <span className="text-slate-500 tabular-nums">
                             {new Date(log.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                           </span>
                         </div>
-                        <p className="text-[11px] text-[#282828]">{log.details}</p>
-                        <div className="text-[10px] text-[#857568] font-mono">
-                          Actor: {log.actorEmail} • Target: {log.targetId}
+                        <p className="type-support text-slate-800">{log.details}</p>
+                        <div className="text-slate-500 font-mono">
+                          Actor: {log.actorEmail} · Target: {log.targetId}
                         </div>
                       </div>
                     ))}
@@ -1618,67 +1620,67 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ onNavigateTab }) => {
               <div className="space-y-6">
                 {/* Sales Analytics Strip */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                  <div className="p-4 bg-white border border-[#e6dfd5] rounded-2xl shadow-xs">
-                    <span className="text-[11px] font-bold uppercase tracking-wider text-[#857568] block">
+                  <div className="admin-panel p-5 space-y-1">
+                    <span className="type-support font-semibold text-slate-500 block">
                       Total Cart Orders
                     </span>
-                    <div className="text-2xl font-heading font-black text-[#282828] mt-1 tabular-nums">
+                    <div className="type-h3 font-bold text-slate-900 tabular-nums">
                       {overview.totalOrders ?? orders.length}
                     </div>
-                    <span className="text-[11px] text-[#857568]">All online checkout submissions</span>
+                    <span className="type-support text-slate-500 block">All online checkout submissions</span>
                   </div>
-                  <div className="p-4 bg-white border border-[#e6dfd5] rounded-2xl shadow-xs">
-                    <span className="text-[11px] font-bold uppercase tracking-wider text-[#857568] block">
+                  <div className="admin-panel p-5 space-y-1">
+                    <span className="type-support font-semibold text-slate-500 block">
                       Verified Order Revenue
                     </span>
-                    <div className="text-2xl font-heading font-black text-[#00897d] mt-1 tabular-nums">
+                    <div className="type-h3 font-bold text-[#14616d] tabular-nums">
                       ${(overview.orderRevenueUsd ?? 0).toLocaleString()}
                     </div>
-                    <span className="text-[11px] text-[#857568] tabular-nums">
+                    <span className="type-support text-slate-500 tabular-nums block">
                       {overview.paidOrdersCount ?? 0} verified paid order(s)
                     </span>
                   </div>
-                  <div className="p-4 bg-white border border-[#e6dfd5] rounded-2xl shadow-xs">
-                    <span className="text-[11px] font-bold uppercase tracking-wider text-[#857568] block">
+                  <div className="admin-panel p-5 space-y-1">
+                    <span className="type-support font-semibold text-amber-700 block">
                       Awaiting Verification
                     </span>
-                    <div className="text-2xl font-heading font-black text-[#82634f] mt-1 tabular-nums">
+                    <div className="type-h3 font-bold text-slate-900 tabular-nums">
                       {overview.pendingOrdersCount ?? 0}
                     </div>
-                    <span className="text-[11px] text-[#857568]">Pending wire, ACH, or Zelle review</span>
+                    <span className="type-support text-slate-500 block">Pending wire, ACH, or Zelle review</span>
                   </div>
-                  <div className="p-4 bg-white border border-[#e6dfd5] rounded-2xl shadow-xs">
-                    <span className="text-[11px] font-bold uppercase tracking-wider text-[#857568] block">
+                  <div className="admin-panel p-5 space-y-1">
+                    <span className="type-support font-semibold text-slate-500 block">
                       Average Paid Order
                     </span>
-                    <div className="text-2xl font-heading font-black text-[#00897d] mt-1 tabular-nums">
+                    <div className="type-h3 font-bold text-[#14616d] tabular-nums">
                       ${(overview.averageOrderValueUsd ?? 0).toLocaleString()}
                     </div>
-                    <span className="text-[11px] text-[#857568]">Per verified transaction</span>
+                    <span className="type-support text-slate-500 block">Per verified transaction</span>
                   </div>
                 </div>
 
                 {/* Orders Table / List */}
-                <div className="bg-white border border-[#e6dfd5] rounded-2xl p-6 shadow-xs space-y-5">
-                  <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 border-b border-[#e6dfd5] pb-4">
-                    <div>
-                      <h3 className="font-heading font-bold text-lg text-[#282828]">
+                <div className="admin-panel p-6 space-y-5">
+                  <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 border-b border-slate-200 pb-4">
+                    <div className="space-y-1">
+                      <h3 className="type-h3 text-slate-900">
                         Storefront Orders &amp; Payment Verification
                       </h3>
-                      <p className="text-xs text-[#5c5046]">
+                      <p className="type-support text-slate-600">
                         Verify incoming transfers to mark orders Paid—automatically confirming linked suite/vehicle bookings and crediting Unit Packages.
                       </p>
                     </div>
 
-                    <div className="flex flex-wrap items-center gap-2">
+                    <div className="flex flex-wrap items-center gap-2.5">
                       <div className="relative">
-                        <Search className="w-3.5 h-3.5 text-[#857568] absolute left-3 top-2.5" />
+                        <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
                         <input
                           type="text"
                           value={orderSearch}
                           onChange={(e) => setOrderSearch(e.target.value)}
                           placeholder="Search ORD-ETL, guest, email..."
-                          className="h-9 pl-8 pr-3 bg-[#faf8f5] border border-[#dfd6ca] rounded-lg text-xs text-[#282828] outline-none focus:border-[#00b7a8] focus:bg-white"
+                          className="form-input pl-10 sm:w-64"
                         />
                       </div>
 
@@ -1695,7 +1697,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ onNavigateTab }) => {
                               | 'cancelled',
                           )
                         }
-                        className="h-9 px-3 bg-[#faf8f5] border border-[#dfd6ca] rounded-lg text-xs font-bold text-[#282828] outline-none focus:border-[#00b7a8]"
+                        className="form-select sm:w-52"
                       >
                         <option value="all">All Payment States</option>
                         <option value="paid">Paid &amp; Verified</option>
@@ -1725,16 +1727,16 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ onNavigateTab }) => {
                             ]),
                           )
                         }
-                        className="h-9 px-3 bg-[#faf8f5] hover:bg-[#f4efe9] border border-[#dfd6ca] rounded-lg text-xs font-bold text-[#282828] inline-flex items-center gap-1.5 cursor-pointer"
+                        className="btn btn-sm btn-outline"
                       >
-                        <Download className="w-3.5 h-3.5 text-[#00897d]" />
+                        <Download className="w-4 h-4 text-[#14616d]" />
                         <span>Export CSV</span>
                       </button>
                     </div>
                   </div>
 
                   {filteredOrders.length === 0 ? (
-                    <p className="text-xs text-[#857568] py-8 text-center">No storefront orders match your current filter.</p>
+                    <p className="type-body text-slate-500 py-8 text-center">No storefront orders match your current filter.</p>
                   ) : (
                     <div className="space-y-4">
                       {filteredOrders.map((ord) => {
@@ -1742,37 +1744,37 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ onNavigateTab }) => {
                         const noteValue =
                           orderNotesMap[ord.id] !== undefined ? orderNotesMap[ord.id] : ord.adminNotes || '';
                         return (
-                          <div key={ord.id} className="p-5 bg-[#faf8f5] border border-[#e6dfd5] rounded-xl space-y-4 text-xs">
-                            <div className="flex flex-wrap items-center justify-between gap-3 border-b border-[#e6dfd5] pb-3">
-                              <div className="space-y-0.5">
+                          <div key={ord.id} className="p-5 bg-slate-50 border border-slate-200 rounded-xl space-y-4 type-support">
+                            <div className="flex flex-wrap items-center justify-between gap-3 border-b border-slate-200 pb-3">
+                              <div className="space-y-1">
                                 <div className="flex flex-wrap items-center gap-2">
-                                  <span className="font-mono font-bold text-sm text-[#00897d]">
+                                  <span className="font-mono font-semibold text-[#14616d]">
                                     {ord.orderReference}
                                   </span>
-                                  <span className="text-[#c8bdb0]">·</span>
-                                  <span className="font-bold text-[#282828]">{ord.customerName}</span>
-                                  <span className="text-[#5c5046]">({ord.customerEmail})</span>
+                                  <span aria-hidden="true" className="text-slate-300">·</span>
+                                  <span className="font-semibold text-slate-900">{ord.customerName}</span>
+                                  <span className="text-slate-600">({ord.customerEmail})</span>
                                   {ord.customerPhone && (
-                                    <span className="text-[#857568]">· {ord.customerPhone}</span>
+                                    <span className="text-slate-500">· {ord.customerPhone}</span>
                                   )}
                                 </div>
-                                <div className="text-[11px] text-[#5c5046]">
+                                <div className="text-slate-600">
                                   Billing: {ord.billingAddress.line1}, {ord.billingAddress.city}, {ord.billingAddress.state}{' '}
                                   {ord.billingAddress.postalCode} · Placed {new Date(ord.createdAt).toLocaleString()}
                                 </div>
                               </div>
 
                               <div className="flex flex-wrap items-center gap-3 tabular-nums">
-                                <span className="text-base font-black text-[#282828]">
+                                <span className="type-h4 font-bold text-slate-900">
                                   ${ord.totalUsd.toLocaleString()} USD
                                 </span>
                                 <span
-                                  className={`px-2.5 py-0.5 rounded-md font-bold text-[11px] uppercase border ${
+                                  className={`font-semibold capitalize ${
                                     isPaid
-                                      ? 'bg-emerald-50 text-emerald-700 border-emerald-200'
+                                      ? 'text-emerald-700'
                                       : ord.paymentStatus === 'failed' || ord.paymentStatus === 'cancelled'
-                                      ? 'bg-rose-50 text-rose-700 border-rose-200'
-                                      : 'bg-[#f5efe8] text-[#82634f] border-[#e2d3c1]'
+                                      ? 'text-rose-700'
+                                      : 'text-amber-700'
                                   }`}
                                 >
                                   {isPaid ? 'Payment Verified' : ord.paymentStatus.replace(/_/g, ' ')}
@@ -1783,31 +1785,31 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ onNavigateTab }) => {
                             {/* Order Line Items */}
                             <div className="space-y-1.5">
                               {ord.items.map((item) => (
-                                <div key={item.id} className="flex items-center justify-between gap-2 text-[#5c5046]">
+                                <div key={item.id} className="flex items-center justify-between gap-2 text-slate-600">
                                   <span>
-                                    <strong className="text-[#282828]">{item.title}</strong> ({item.category}) —{' '}
+                                    <strong className="text-slate-900">{item.title}</strong> ({item.category}) —{' '}
                                     <span className="tabular-nums">
                                       {item.quantity} {item.quantityLabel} × ${item.unitPriceUsd.toLocaleString()}
                                     </span>
                                   </span>
-                                  <span className="font-mono font-semibold text-[#282828] tabular-nums">
+                                  <span className="font-mono font-semibold text-slate-900 tabular-nums">
                                     ${item.lineSubtotalUsd.toLocaleString()}
                                   </span>
                                 </div>
                               ))}
                             </div>
 
-                            <div className="flex flex-wrap items-center justify-between gap-2 text-[11px] text-[#5c5046] bg-white p-3 rounded-lg border border-[#e6dfd5] tabular-nums">
+                            <div className="flex flex-wrap items-center justify-between gap-2 text-slate-600 bg-white p-3.5 rounded-lg border border-slate-200 tabular-nums">
                               <div className="flex flex-wrap items-center gap-x-4 gap-y-1">
-                                <span>Method: <strong className="text-[#282828] uppercase">{ord.paymentMethod.replace(/_/g, ' ')}</strong></span>
+                                <span>Method: <strong className="text-slate-900 capitalize">{ord.paymentMethod.replace(/_/g, ' ')}</strong></span>
                                 {ord.paymentReference && (
-                                  <span>Ref: <strong className="font-mono text-[#82634f]">{ord.paymentReference}</strong></span>
+                                  <span>Ref: <strong className="font-mono text-slate-800">{ord.paymentReference}</strong></span>
                                 )}
                                 <span>Subtotal: ${ord.subtotalUsd.toLocaleString()}</span>
                                 <span>Fee: ${ord.serviceFeeUsd.toLocaleString()}</span>
                                 <span>Tax: ${ord.taxUsd.toLocaleString()}</span>
                                 {ord.discountUsd > 0 && (
-                                  <span className="text-[#00897d] font-semibold">
+                                  <span className="text-[#14616d] font-semibold">
                                     Promo{ord.promoCode ? ` (${ord.promoCode})` : ''}: -${ord.discountUsd.toLocaleString()}
                                   </span>
                                 )}
@@ -1820,13 +1822,13 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ onNavigateTab }) => {
                             </div>
 
                             {ord.guestNotes && (
-                              <div className="text-[11px] text-[#282828]">
-                                <span className="text-[#857568] font-semibold">Guest Notes:</span> {ord.guestNotes}
+                              <div className="text-slate-800">
+                                <span className="text-slate-500 font-semibold">Guest Notes:</span> {ord.guestNotes}
                               </div>
                             )}
 
                             {/* Admin Controls */}
-                            <div className="pt-2 border-t border-[#e6dfd5] flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-3">
+                            <div className="pt-3 border-t border-slate-200 flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-3">
                               <div className="flex-1 flex items-center gap-2">
                                 <input
                                   type="text"
@@ -1835,12 +1837,12 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ onNavigateTab }) => {
                                     setOrderNotesMap((prev) => ({ ...prev, [ord.id]: e.target.value }))
                                   }
                                   placeholder="Internal reconciliation or fulfillment note..."
-                                  className="flex-1 h-9 px-3 bg-white border border-[#dfd6ca] rounded-lg text-[#282828] outline-none focus:border-[#00b7a8]"
+                                  className="form-input flex-1"
                                 />
                                 <button
                                   type="button"
                                   onClick={() => handleUpdateOrder(ord.id, { adminNotes: noteValue })}
-                                  className="h-9 px-3 bg-white hover:bg-[#f4efe9] text-[#5c5046] font-semibold rounded-lg border border-[#dfd6ca] cursor-pointer"
+                                  className="btn btn-sm btn-outline"
                                 >
                                   Save Note
                                 </button>
@@ -1854,7 +1856,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ onNavigateTab }) => {
                                       orderStatus: e.target.value as AdminOrderRecord['orderStatus'],
                                     })
                                   }
-                                  className="h-9 px-3 bg-white border border-[#dfd6ca] rounded-lg text-xs font-bold text-[#282828] outline-none focus:border-[#00b7a8]"
+                                  className="form-select sm:w-48"
                                 >
                                   <option value="pending">Order: Pending</option>
                                   <option value="confirmed">Order: Confirmed</option>
@@ -1873,9 +1875,9 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ onNavigateTab }) => {
                                         adminNotes: noteValue || 'Verified & settled by Treasury.',
                                       })
                                     }
-                                    className="px-3.5 py-2 bg-[#00b7a8] hover:bg-[#009e91] text-white font-bold rounded-lg inline-flex items-center gap-1.5 cursor-pointer"
+                                    className="btn btn-sm btn-primary"
                                   >
-                                    <CheckCircle2 className="w-3.5 h-3.5" />
+                                    <CheckCircle2 className="w-4 h-4" />
                                     <span>Verify &amp; Mark Paid</span>
                                   </button>
                                 )}
@@ -1889,7 +1891,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ onNavigateTab }) => {
                                         adminNotes: noteValue || 'Payment transfer could not be verified.',
                                       })
                                     }
-                                    className="px-3 py-2 bg-rose-50 hover:bg-rose-100 border border-rose-200 text-rose-700 font-bold rounded-lg cursor-pointer"
+                                    className="btn btn-sm btn-danger"
                                   >
                                     Mark Failed
                                   </button>
@@ -1904,7 +1906,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ onNavigateTab }) => {
                                         orderStatus: 'cancelled',
                                       })
                                     }
-                                    className="px-3 py-2 bg-white hover:bg-[#f4efe9] border border-[#dfd6ca] text-[#5c5046] font-semibold rounded-lg cursor-pointer"
+                                    className="btn btn-sm btn-outline"
                                   >
                                     {isPaid ? 'Refund & Cancel' : 'Cancel'}
                                   </button>
@@ -1937,13 +1939,13 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ onNavigateTab }) => {
                         key={sub.id}
                         type="button"
                         onClick={() => setCatalogSection(sub.id as 'suites' | 'services' | 'promos')}
-                        className={`px-4 py-2 rounded-xl text-xs font-bold flex items-center gap-2 cursor-pointer border transition-colors ${
+                        className={`type-nav px-4 py-2 min-h-[40px] rounded-lg flex items-center gap-2 cursor-pointer border transition-colors whitespace-nowrap shrink-0 ${
                           isSubActive
-                            ? 'bg-[#82634f] text-white border-[#82634f] shadow-xs'
-                            : 'bg-white text-[#5c5046] border-[#e6dfd5] hover:border-[#82634f]/40 hover:text-[#282828]'
+                            ? 'bg-[#14616d] text-white border-[#14616d] shadow-xs'
+                            : 'bg-white text-slate-600 border-slate-200 hover:border-slate-300 hover:text-slate-900'
                         }`}
                       >
-                        <SubIcon className="w-3.5 h-3.5" />
+                        <SubIcon className="w-4 h-4 shrink-0" />
                         <span>{sub.label}</span>
                       </button>
                     );
@@ -1952,12 +1954,12 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ onNavigateTab }) => {
 
                 {/* 1. Residences & Suites Editor */}
                 {catalogSection === 'suites' && (
-                  <div className="bg-white border border-[#e6dfd5] rounded-2xl p-6 shadow-xs space-y-4">
-                    <div className="border-b border-[#e6dfd5] pb-3">
-                      <h3 className="font-heading font-bold text-lg text-[#282828]">
+                  <div className="admin-panel p-6 space-y-4">
+                    <div className="border-b border-slate-200 pb-3.5 space-y-1">
+                      <h3 className="type-h3 text-slate-900">
                         Furnished Residences &amp; Suites Listing Manager
                       </h3>
-                      <p className="text-xs text-[#5c5046]">
+                      <p className="type-support text-slate-600">
                         Update residence titles, categories, monthly rates, minimum stay rules, primary photography, and real-time cart availability.
                       </p>
                     </div>
@@ -1966,24 +1968,25 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ onNavigateTab }) => {
                       {properties.map((prop, idx) => (
                         <div
                           key={prop.id}
-                          className="p-4 bg-[#faf8f5] border border-[#e6dfd5] rounded-xl flex gap-4 text-xs"
+                          className="p-4 bg-slate-50 border border-slate-200 rounded-xl flex gap-4 type-support"
                         >
                           <img
                             src={prop.images?.[0] || getFallbackPropertyImage(idx)}
                             alt={prop.title}
+                            referrerPolicy="no-referrer"
                             onError={(e) => {
                               e.currentTarget.onerror = null;
                               e.currentTarget.src = getFallbackPropertyImage(idx);
                             }}
-                            className="w-24 h-24 rounded-xl object-cover bg-[#f4efe9] border border-[#e6dfd5] shrink-0"
+                            className="w-24 h-24 rounded-xl object-cover bg-slate-100 border border-slate-200 shrink-0"
                           />
                           <div className="flex-1 min-w-0 space-y-2">
                             <div className="flex items-start justify-between gap-2">
                               <div className="min-w-0">
-                                <span className="text-[11px] text-[#00897d] font-bold block truncate">
+                                <span className="type-support text-[#14616d] font-semibold block truncate">
                                   {prop.category}
                                 </span>
-                                <h4 className="font-heading font-bold text-sm text-[#282828] truncate">
+                                <h4 className="type-h4 text-slate-900 truncate">
                                   {prop.title}
                                 </h4>
                               </div>
@@ -1995,7 +1998,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ onNavigateTab }) => {
                                     e.target.value as 'Available' | 'Inquired' | 'Reserved',
                                   )
                                 }
-                                className="h-8 px-2 bg-white border border-[#dfd6ca] rounded-lg text-[11px] font-bold text-[#282828] shrink-0"
+                                className="form-select w-auto shrink-0 py-1.5 px-2.5 min-h-[38px]"
                               >
                                 <option value="Available">Available</option>
                                 <option value="Inquired">Inquired</option>
@@ -2003,10 +2006,10 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ onNavigateTab }) => {
                               </select>
                             </div>
 
-                            <p className="text-[11px] text-[#5c5046] line-clamp-2">{prop.shortDesc}</p>
+                            <p className="type-support text-slate-600 line-clamp-2">{prop.shortDesc}</p>
 
-                            <div className="flex items-center justify-between pt-1">
-                              <span className="font-mono font-bold text-[#282828] tabular-nums">
+                            <div className="flex flex-wrap items-center justify-between gap-2 pt-1">
+                              <span className="font-mono font-semibold text-slate-900 tabular-nums">
                                 ${prop.monthlyRate.toLocaleString()}/mo · Min {prop.minimumStayDays}d · {prop.images?.length || 0} Photos
                               </span>
                               <button
@@ -2015,9 +2018,9 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ onNavigateTab }) => {
                                   setEditingProperty({ ...prop });
                                   setPropPrimaryImage(prop.images?.[0] || '');
                                 }}
-                                className="px-3 py-1.5 bg-white hover:bg-[#f4efe9] border border-[#dfd6ca] rounded-lg text-[#282828] font-semibold inline-flex items-center gap-1.5 cursor-pointer"
+                                className="btn btn-sm btn-outline"
                               >
-                                <Edit3 className="w-3 h-3 text-[#00897d]" />
+                                <Edit3 className="w-3.5 h-3.5 text-[#14616d]" />
                                 <span>Edit Listing</span>
                               </button>
                             </div>
@@ -2031,131 +2034,131 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ onNavigateTab }) => {
                 {/* 2. Services & Unit Packages Manager */}
                 {catalogSection === 'services' && (
                   <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-                    <div className="lg:col-span-5 bg-white border border-[#e6dfd5] rounded-2xl p-6 shadow-xs space-y-4 h-fit">
-                      <div className="border-b border-[#e6dfd5] pb-3">
-                        <h3 className="font-heading font-bold text-base text-[#282828] flex items-center gap-2">
-                          <Plus className="w-4 h-4 text-[#00897d]" />
+                    <div className="lg:col-span-5 admin-panel p-6 space-y-4 h-fit">
+                      <div className="border-b border-slate-200 pb-3.5 space-y-1">
+                        <h3 className="type-h3 text-slate-900 flex items-center gap-2">
+                          <Plus className="w-5 h-5 text-[#14616d] shrink-0" />
                           <span>Add Storefront Service or Package</span>
                         </h3>
-                        <p className="text-xs text-[#5c5046]">
+                        <p className="type-support text-slate-600">
                           New items appear immediately in the Services &amp; Packages storefront and cart.
                         </p>
                       </div>
 
-                      <form onSubmit={handleCreateCatalogItem} className="space-y-3 text-xs">
-                        <div className="grid grid-cols-2 gap-3">
+                      <form onSubmit={handleCreateCatalogItem} className="space-y-4">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                           <div>
-                            <label className="block font-bold text-[#5c5046] mb-1">Item Type</label>
+                            <label className="form-label">Item Type</label>
                             <select
                               value={newItemType}
                               onChange={(e) => setNewItemType(e.target.value as 'addon_service' | 'unit_package')}
-                              className="w-full h-10 px-3 bg-[#faf8f5] border border-[#dfd6ca] rounded-xl text-[#282828] outline-none focus:border-[#00b7a8] focus:bg-white"
+                              className="form-select"
                             >
                               <option value="addon_service">Concierge / Add-On</option>
                               <option value="unit_package">Lodging Unit Package</option>
                             </select>
                           </div>
                           <div>
-                            <label className="block font-bold text-[#5c5046] mb-1">Category</label>
+                            <label className="form-label">Category</label>
                             <input
                               type="text"
                               required
                               value={newItemCategory}
                               onChange={(e) => setNewItemCategory(e.target.value)}
                               placeholder="Arrival & Concierge"
-                              className="w-full h-10 px-3 bg-[#faf8f5] border border-[#dfd6ca] rounded-xl text-[#282828] outline-none focus:border-[#00b7a8] focus:bg-white"
+                              className="form-input"
                             />
                           </div>
                         </div>
 
                         <div>
-                          <label className="block font-bold text-[#5c5046] mb-1">Listing Title *</label>
+                          <label className="form-label">Listing Title *</label>
                           <input
                             type="text"
                             required
                             value={newItemTitle}
                             onChange={(e) => setNewItemTitle(e.target.value)}
                             placeholder="e.g. Private SMF Chauffeur Greeting"
-                            className="w-full h-10 px-3 bg-[#faf8f5] border border-[#dfd6ca] rounded-xl text-[#282828] outline-none focus:border-[#00b7a8] focus:bg-white"
+                            className="form-input"
                           />
                         </div>
 
-                        <div className="grid grid-cols-2 gap-3">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                           <div>
-                            <label className="block font-bold text-[#5c5046] mb-1">Price (USD) *</label>
+                            <label className="form-label">Price (USD) *</label>
                             <input
                               type="number"
                               min={1}
                               required
                               value={newItemPrice}
                               onChange={(e) => setNewItemPrice(e.target.value)}
-                              className="w-full h-10 px-3 bg-[#faf8f5] border border-[#dfd6ca] rounded-xl text-[#282828] tabular-nums outline-none focus:border-[#00b7a8] focus:bg-white"
+                              className="form-input tabular-nums"
                             />
                           </div>
                           {newItemType === 'unit_package' ? (
                             <div>
-                              <label className="block font-bold text-[#5c5046] mb-1">Units Credited *</label>
+                              <label className="form-label">Units Credited *</label>
                               <input
                                 type="number"
                                 min={1}
                                 required
                                 value={newItemUnitsIncluded}
                                 onChange={(e) => setNewItemUnitsIncluded(e.target.value)}
-                                className="w-full h-10 px-3 bg-[#faf8f5] border border-[#dfd6ca] rounded-xl text-[#282828] tabular-nums outline-none focus:border-[#00b7a8] focus:bg-white"
+                                className="form-input tabular-nums"
                               />
                             </div>
                           ) : (
                             <div>
-                              <label className="block font-bold text-[#5c5046] mb-1">Billing Label</label>
+                              <label className="form-label">Billing Label</label>
                               <input
                                 type="text"
                                 value={newItemBillingLabel}
                                 onChange={(e) => setNewItemBillingLabel(e.target.value)}
                                 placeholder="per service / per stay"
-                                className="w-full h-10 px-3 bg-[#faf8f5] border border-[#dfd6ca] rounded-xl text-[#282828] outline-none focus:border-[#00b7a8] focus:bg-white"
+                                className="form-input"
                               />
                             </div>
                           )}
                         </div>
 
                         <div>
-                          <label className="block font-bold text-[#5c5046] mb-1">Image URL (Optional)</label>
+                          <label className="form-label">Image URL (Optional)</label>
                           <input
                             type="url"
                             value={newItemImage}
                             onChange={(e) => setNewItemImage(e.target.value)}
                             placeholder="https://easytravellodging.com/..."
-                            className="w-full h-10 px-3 bg-[#faf8f5] border border-[#dfd6ca] rounded-xl text-[#282828] outline-none focus:border-[#00b7a8] focus:bg-white"
+                            className="form-input"
                           />
                         </div>
 
                         <div>
-                          <label className="block font-bold text-[#5c5046] mb-1">Description *</label>
+                          <label className="form-label">Description *</label>
                           <textarea
                             rows={2}
                             required
                             value={newItemShortDesc}
                             onChange={(e) => setNewItemShortDesc(e.target.value)}
                             placeholder="Clear summary of what is included for the guest..."
-                            className="w-full p-3 bg-[#faf8f5] border border-[#dfd6ca] rounded-xl text-[#282828] outline-none focus:border-[#00b7a8] focus:bg-white"
+                            className="form-textarea"
                           />
                         </div>
 
                         <button
                           type="submit"
-                          className="w-full py-2.5 bg-[#00b7a8] hover:bg-[#009e91] text-white font-black uppercase tracking-wider rounded-xl transition-colors cursor-pointer"
+                          className="btn btn-primary w-full"
                         >
                           Publish Storefront Listing
                         </button>
                       </form>
                     </div>
 
-                    <div className="lg:col-span-7 bg-white border border-[#e6dfd5] rounded-2xl p-6 shadow-xs space-y-4">
-                      <div className="border-b border-[#e6dfd5] pb-3">
-                        <h3 className="font-heading font-bold text-base text-[#282828]">
+                    <div className="lg:col-span-7 admin-panel p-6 space-y-4">
+                      <div className="border-b border-slate-200 pb-3.5 space-y-1">
+                        <h3 className="type-h3 text-slate-900">
                           Active Services &amp; Unit Packages ({catalogItems.length})
                         </h3>
-                        <p className="text-xs text-[#5c5046]">
+                        <p className="type-support text-slate-600">
                           Toggle availability to pause cart additions or edit pricing and descriptions.
                         </p>
                       </div>
@@ -2164,27 +2167,28 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ onNavigateTab }) => {
                         {catalogItems.map((item, idx) => (
                           <div
                             key={item.id}
-                            className="p-4 bg-[#faf8f5] border border-[#e6dfd5] rounded-xl flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs"
+                            className="p-4 bg-slate-50 border border-slate-200 rounded-xl flex flex-col sm:flex-row sm:items-center justify-between gap-3 type-support"
                           >
-                            <div className="flex items-center gap-3 min-w-0">
+                            <div className="flex items-center gap-3.5 min-w-0">
                               <img
                                 src={item.image || getFallbackPropertyImage(idx)}
                                 alt={item.title}
+                                referrerPolicy="no-referrer"
                                 onError={(e) => {
                                   e.currentTarget.onerror = null;
                                   e.currentTarget.src = getFallbackPropertyImage(idx);
                                 }}
-                                className="w-14 h-14 rounded-lg object-cover bg-[#f4efe9] border border-[#e6dfd5] shrink-0"
+                                className="w-14 h-14 rounded-lg object-cover bg-slate-100 border border-slate-200 shrink-0"
                               />
                               <div className="min-w-0 space-y-0.5">
-                                <div className="flex items-center gap-2 text-[11px] text-[#5c5046]">
-                                  <span className="font-mono font-semibold text-[#00897d]">{item.sku}</span>
-                                  <span>·</span>
+                                <div className="flex items-center gap-2 text-slate-500">
+                                  <span className="font-mono font-semibold text-[#14616d]">{item.sku}</span>
+                                  <span aria-hidden="true">·</span>
                                   <span>{item.category}</span>
                                 </div>
-                                <div className="font-bold text-sm text-[#282828] truncate">{item.title}</div>
-                                <div className="text-[11px] text-[#5c5046] tabular-nums">
-                                  <strong className="text-[#282828]">${item.priceUsd.toLocaleString()}</strong>{' '}
+                                <div className="type-h4 text-slate-900 truncate">{item.title}</div>
+                                <div className="text-slate-600 tabular-nums">
+                                  <strong className="text-slate-900">${item.priceUsd.toLocaleString()}</strong>{' '}
                                   {item.billingUnitLabel}
                                   {item.unitsIncluded ? ` · Credits ${item.unitsIncluded} Units` : ''}
                                 </div>
@@ -2195,10 +2199,10 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ onNavigateTab }) => {
                               <button
                                 type="button"
                                 onClick={() => handleToggleCatalogAvailability(item)}
-                                className={`px-3 py-1.5 rounded-lg font-bold cursor-pointer border ${
+                                className={`btn btn-sm ${
                                   item.available
-                                    ? 'bg-[#e8f8f6] text-[#00897d] border-[#bfe8e3]'
-                                    : 'bg-white text-[#857568] border-[#dfd6ca]'
+                                    ? 'btn-primary'
+                                    : 'btn-outline'
                                 }`}
                               >
                                 {item.available ? 'Available' : 'Paused'}
@@ -2206,18 +2210,18 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ onNavigateTab }) => {
                               <button
                                 type="button"
                                 onClick={() => setEditingCatalogItem({ ...item })}
-                                className="px-2.5 py-1.5 bg-white hover:bg-[#f4efe9] border border-[#dfd6ca] rounded-lg text-[#5c5046] cursor-pointer"
+                                className="btn btn-sm btn-outline px-2.5"
                                 title="Edit listing"
                               >
-                                <Edit3 className="w-3.5 h-3.5" />
+                                <Edit3 className="w-4 h-4" />
                               </button>
                               <button
                                 type="button"
                                 onClick={() => handleDeleteCatalogItem(item)}
-                                className="px-2.5 py-1.5 bg-rose-50 hover:bg-rose-100 border border-rose-200 rounded-lg text-rose-700 cursor-pointer"
+                                className="btn btn-sm btn-outline px-2.5 text-rose-700 hover:text-rose-800"
                                 title="Delete listing"
                               >
-                                <Trash2 className="w-3.5 h-3.5" />
+                                <Trash2 className="w-4 h-4" />
                               </button>
                             </div>
                           </div>
@@ -2230,44 +2234,44 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ onNavigateTab }) => {
                 {/* 3. Promotions & Discount Codes Manager */}
                 {catalogSection === 'promos' && (
                   <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-                    <div className="lg:col-span-5 bg-white border border-[#e6dfd5] rounded-2xl p-6 shadow-xs space-y-4 h-fit">
-                      <div className="border-b border-[#e6dfd5] pb-3">
-                        <h3 className="font-heading font-bold text-base text-[#282828] flex items-center gap-2">
-                          <Tag className="w-4 h-4 text-[#00897d]" />
+                    <div className="lg:col-span-5 admin-panel p-6 space-y-4 h-fit">
+                      <div className="border-b border-slate-200 pb-3.5 space-y-1">
+                        <h3 className="type-h3 text-slate-900 flex items-center gap-2">
+                          <Tag className="w-5 h-5 text-[#14616d] shrink-0" />
                           <span>Create Promotional Code</span>
                         </h3>
-                        <p className="text-xs text-[#5c5046]">
+                        <p className="type-support text-slate-600">
                           Discounts are validated server-side against cart subtotals before checkout.
                         </p>
                       </div>
 
-                      <form onSubmit={handleCreatePromo} className="space-y-3 text-xs">
+                      <form onSubmit={handleCreatePromo} className="space-y-4">
                         <div>
-                          <label className="block font-bold text-[#5c5046] mb-1">Promo Code *</label>
+                          <label className="form-label">Promo Code *</label>
                           <input
                             type="text"
                             required
                             value={newPromoCode}
                             onChange={(e) => setNewPromoCode(e.target.value.toUpperCase())}
                             placeholder="e.g. SPRING15"
-                            className="w-full h-10 px-3 bg-[#faf8f5] border border-[#dfd6ca] rounded-xl text-[#282828] font-mono uppercase outline-none focus:border-[#00b7a8] focus:bg-white"
+                            className="form-input font-mono uppercase"
                           />
                         </div>
 
-                        <div className="grid grid-cols-2 gap-3">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                           <div>
-                            <label className="block font-bold text-[#5c5046] mb-1">Discount Type</label>
+                            <label className="form-label">Discount Type</label>
                             <select
                               value={newPromoType}
                               onChange={(e) => setNewPromoType(e.target.value as 'percentage' | 'fixed')}
-                              className="w-full h-10 px-3 bg-[#faf8f5] border border-[#dfd6ca] rounded-xl text-[#282828] outline-none focus:border-[#00b7a8] focus:bg-white"
+                              className="form-select"
                             >
                               <option value="percentage">Percentage (%)</option>
                               <option value="fixed">Fixed USD ($)</option>
                             </select>
                           </div>
                           <div>
-                            <label className="block font-bold text-[#5c5046] mb-1">
+                            <label className="form-label">
                               {newPromoType === 'percentage' ? 'Percent Off *' : 'USD Off *'}
                             </label>
                             <input
@@ -2276,46 +2280,46 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ onNavigateTab }) => {
                               required
                               value={newPromoValue}
                               onChange={(e) => setNewPromoValue(e.target.value)}
-                              className="w-full h-10 px-3 bg-[#faf8f5] border border-[#dfd6ca] rounded-xl text-[#282828] tabular-nums outline-none focus:border-[#00b7a8] focus:bg-white"
+                              className="form-input tabular-nums"
                             />
                           </div>
                         </div>
 
                         <div>
-                          <label className="block font-bold text-[#5c5046] mb-1">Minimum Cart Subtotal (USD)</label>
+                          <label className="form-label">Minimum Cart Subtotal (USD)</label>
                           <input
                             type="number"
                             min={0}
                             value={newPromoMinSubtotal}
                             onChange={(e) => setNewPromoMinSubtotal(e.target.value)}
-                            className="w-full h-10 px-3 bg-[#faf8f5] border border-[#dfd6ca] rounded-xl text-[#282828] tabular-nums outline-none focus:border-[#00b7a8] focus:bg-white"
+                            className="form-input tabular-nums"
                           />
                         </div>
 
                         <div>
-                          <label className="block font-bold text-[#5c5046] mb-1">Public Description *</label>
+                          <label className="form-label">Public Description *</label>
                           <input
                             type="text"
                             required
                             value={newPromoDesc}
                             onChange={(e) => setNewPromoDesc(e.target.value)}
                             placeholder="e.g. 15% off spring stays & concierge bundles"
-                            className="w-full h-10 px-3 bg-[#faf8f5] border border-[#dfd6ca] rounded-xl text-[#282828] outline-none focus:border-[#00b7a8] focus:bg-white"
+                            className="form-input"
                           />
                         </div>
 
                         <button
                           type="submit"
-                          className="w-full py-2.5 bg-[#00b7a8] hover:bg-[#009e91] text-white font-black uppercase tracking-wider rounded-xl transition-colors cursor-pointer"
+                          className="btn btn-primary w-full"
                         >
                           Save Promo Code
                         </button>
                       </form>
                     </div>
 
-                    <div className="lg:col-span-7 bg-white border border-[#e6dfd5] rounded-2xl p-6 shadow-xs space-y-4">
-                      <div className="border-b border-[#e6dfd5] pb-3">
-                        <h3 className="font-heading font-bold text-base text-[#282828]">
+                    <div className="lg:col-span-7 admin-panel p-6 space-y-4">
+                      <div className="border-b border-slate-200 pb-3.5">
+                        <h3 className="type-h3 text-slate-900">
                           Configured Promotions ({promoCodes.length})
                         </h3>
                       </div>
@@ -2324,24 +2328,24 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ onNavigateTab }) => {
                         {promoCodes.map((promo) => (
                           <div
                             key={promo.id}
-                            className="p-4 bg-[#faf8f5] border border-[#e6dfd5] rounded-xl flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs"
+                            className="p-4 bg-slate-50 border border-slate-200 rounded-xl flex flex-col sm:flex-row sm:items-center justify-between gap-3 type-support"
                           >
                             <div className="space-y-1">
-                              <div className="flex items-center gap-2">
-                                <span className="font-mono font-black text-sm text-[#00897d]">{promo.code}</span>
-                                <span className="text-[#c8bdb0]">·</span>
-                                <span className="font-bold text-[#282828] tabular-nums">
+                              <div className="flex flex-wrap items-center gap-2">
+                                <span className="font-mono font-bold text-[#14616d]">{promo.code}</span>
+                                <span aria-hidden="true" className="text-slate-300">·</span>
+                                <span className="font-semibold text-slate-900 tabular-nums">
                                   {promo.discountType === 'percentage'
-                                    ? `${promo.discountValue}% OFF`
-                                    : `$${promo.discountValue.toLocaleString()} OFF`}
+                                    ? `${promo.discountValue}% off`
+                                    : `$${promo.discountValue.toLocaleString()} off`}
                                 </span>
-                                <span className="text-[#c8bdb0]">·</span>
-                                <span className="text-[#5c5046] tabular-nums">
+                                <span aria-hidden="true" className="text-slate-300">·</span>
+                                <span className="text-slate-600 tabular-nums">
                                   Min ${promo.minSubtotalUsd.toLocaleString()}
                                 </span>
                               </div>
-                              <p className="text-[#5c5046]">{promo.description}</p>
-                              <div className="text-[11px] text-[#857568] tabular-nums">
+                              <p className="type-support text-slate-600">{promo.description}</p>
+                              <div className="text-slate-500 tabular-nums">
                                 Redeemed {promo.usageCount} time(s)
                               </div>
                             </div>
@@ -2350,10 +2354,10 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ onNavigateTab }) => {
                               <button
                                 type="button"
                                 onClick={() => handleTogglePromo(promo)}
-                                className={`px-3 py-1.5 rounded-lg font-bold cursor-pointer border ${
+                                className={`btn btn-sm ${
                                   promo.active
-                                    ? 'bg-[#e8f8f6] text-[#00897d] border-[#bfe8e3]'
-                                    : 'bg-white text-[#857568] border-[#dfd6ca]'
+                                    ? 'btn-primary'
+                                    : 'btn-outline'
                                 }`}
                               >
                                 {promo.active ? 'Active' : 'Paused'}
@@ -2361,10 +2365,10 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ onNavigateTab }) => {
                               <button
                                 type="button"
                                 onClick={() => handleDeletePromo(promo)}
-                                className="px-2.5 py-1.5 bg-rose-50 hover:bg-rose-100 border border-rose-200 rounded-lg text-rose-700 cursor-pointer"
+                                className="btn btn-sm btn-outline px-2.5 text-rose-700 hover:text-rose-800"
                                 title="Delete promo code"
                               >
-                                <Trash2 className="w-3.5 h-3.5" />
+                                <Trash2 className="w-4 h-4" />
                               </button>
                             </div>
                           </div>
@@ -2378,13 +2382,13 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ onNavigateTab }) => {
 
             {/* TAB 2: WIRE & ACH VERIFICATION QUEUE */}
             {activeTab === 'wires' && (
-              <div className="bg-white border border-[#e6dfd5] rounded-2xl p-6 shadow-xs space-y-5">
-                <div className="flex flex-wrap items-center justify-between gap-3 border-b border-[#e6dfd5] pb-4">
-                  <div>
-                    <h3 className="font-heading font-bold text-lg text-[#282828]">
+              <div className="admin-panel p-6 space-y-5">
+                <div className="flex flex-wrap items-center justify-between gap-3 border-b border-slate-200 pb-4">
+                  <div className="space-y-1">
+                    <h3 className="type-h3 text-slate-900">
                       Manual Wire, ACH &amp; Zelle Verification Queue
                     </h3>
-                    <p className="text-xs text-[#5c5046]">
+                    <p className="type-support text-slate-600">
                       Approving a transfer automatically posts a succeeded ledger entry and credits client units or confirms the target booking.
                     </p>
                   </div>
@@ -2395,62 +2399,64 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ onNavigateTab }) => {
                         key={st}
                         type="button"
                         onClick={() => setWireFilter(st)}
-                        className={`px-3 py-1.5 rounded-lg text-xs font-bold capitalize transition-colors cursor-pointer ${
+                        className={`type-nav px-3.5 py-2 min-h-[40px] rounded-lg capitalize transition-colors cursor-pointer border whitespace-nowrap shrink-0 ${
                           wireFilter === st
-                            ? 'bg-[#00b7a8] text-white'
-                            : 'bg-[#faf8f5] text-[#5c5046] border border-[#e6dfd5] hover:border-[#82634f]/40'
+                            ? 'bg-[#14616d] text-white border-[#14616d]'
+                            : 'bg-slate-50 text-slate-600 border-slate-200 hover:border-slate-300 hover:text-slate-900'
                         }`}
                       >
-                        {st.replace('_', ' ')}
+                        {st.replace(/_/g, ' ')}
                       </button>
                     ))}
                   </div>
                 </div>
 
                 {filteredWires.length === 0 ? (
-                  <p className="text-xs text-[#857568] py-8 text-center">No transfer records match this filter.</p>
+                  <p className="type-body text-slate-500 py-8 text-center">No transfer records match this filter.</p>
                 ) : (
                   <div className="space-y-4">
                     {filteredWires.map((mp) => (
-                      <div key={mp.id} className="p-5 bg-[#faf8f5] border border-[#e6dfd5] rounded-xl space-y-3 text-xs">
+                      <div key={mp.id} className="p-5 bg-slate-50 border border-slate-200 rounded-xl space-y-3.5 type-support">
                         <div className="flex flex-wrap items-center justify-between gap-2">
                           <div className="flex flex-wrap items-center gap-2">
-                            <span className="font-mono font-bold text-sm text-[#282828]">{mp.referenceCode}</span>
-                            <span className="px-2 py-0.5 rounded bg-white border border-[#dfd6ca] text-[#5c5046] font-semibold">
+                            <span className="font-mono font-semibold text-slate-900">{mp.referenceCode}</span>
+                            <span aria-hidden="true" className="text-slate-300">·</span>
+                            <span className="text-slate-600 font-medium capitalize">
                               {mp.paymentMethod}
                             </span>
-                            <span className="font-mono font-semibold text-[#82634f]">Trace: {mp.wireReference}</span>
+                            <span aria-hidden="true" className="text-slate-300">·</span>
+                            <span className="font-mono font-semibold text-[#14616d]">Trace: {mp.wireReference}</span>
                           </div>
                           <div className="flex items-center gap-3 tabular-nums">
-                            <span className="text-base font-black text-[#282828]">
+                            <span className="type-h4 font-bold text-slate-900">
                               ${mp.amountUsd.toLocaleString()} USD ({mp.unitsRequested}u)
                             </span>
                             <span
-                              className={`px-2.5 py-0.5 rounded text-[10px] font-bold uppercase ${
+                              className={`font-semibold capitalize ${
                                 mp.status === 'verified'
-                                  ? 'bg-emerald-50 text-emerald-700 border border-emerald-200'
+                                  ? 'text-emerald-700'
                                   : mp.status === 'rejected'
-                                  ? 'bg-rose-50 text-rose-700 border border-rose-200'
-                                  : 'bg-[#f5efe8] text-[#82634f] border border-[#e2d3c1]'
+                                  ? 'text-rose-700'
+                                  : 'text-amber-700'
                               }`}
                             >
-                              {mp.status.replace('_', ' ')}
+                              {mp.status.replace(/_/g, ' ')}
                             </span>
                           </div>
                         </div>
 
-                        <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 text-[#282828]">
+                        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-slate-800">
                           <div>
-                            <span className="text-[#857568] font-semibold block text-[10px] uppercase">Client</span>
-                            {mp.customerName} ({mp.customerEmail})
+                            <span className="text-slate-500 font-semibold block">Client</span>
+                            <span>{mp.customerName} ({mp.customerEmail})</span>
                           </div>
                           <div>
-                            <span className="text-[#857568] font-semibold block text-[10px] uppercase">Originating Bank</span>
-                            {mp.senderName} • {mp.originatingBank} ({mp.transferDate})
+                            <span className="text-slate-500 font-semibold block">Originating Bank</span>
+                            <span>{mp.senderName} · {mp.originatingBank} ({mp.transferDate})</span>
                           </div>
                           <div>
-                            <span className="text-[#857568] font-semibold block text-[10px] uppercase">Target Allocation</span>
-                            {mp.targetType} {mp.targetId ? `(${mp.targetId})` : `(+${mp.unitsRequested} Units)`}
+                            <span className="text-slate-500 font-semibold block">Target Allocation</span>
+                            <span>{mp.targetType} {mp.targetId ? `(${mp.targetId})` : `(+${mp.unitsRequested} Units)`}</span>
                           </div>
                         </div>
 
@@ -2464,45 +2470,45 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ onNavigateTab }) => {
                                   dataUrl: mp.receiptDataUrl!,
                                 })
                               }
-                              className="px-3 py-1.5 bg-white hover:bg-[#f4efe9] border border-[#dfd6ca] rounded-lg text-[#00897d] font-semibold inline-flex items-center gap-1.5 cursor-pointer"
+                              className="btn btn-sm btn-outline text-[#14616d]"
                             >
-                              <Eye className="w-3.5 h-3.5" />
+                              <Eye className="w-4 h-4" />
                               <span>Inspect Uploaded Receipt ({mp.receiptFileName || 'Attachment'})</span>
                             </button>
                           </div>
                         )}
 
                         {mp.status === 'pending_verification' ? (
-                          <div className="pt-2 border-t border-[#e6dfd5] flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5">
+                          <div className="pt-3 border-t border-slate-200 flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5">
                             <input
                               type="text"
                               placeholder="Optional treasury reconciliation note (e.g. Matched Chase Fedwire #)..."
                               value={wireNotesMap[mp.id] || ''}
                               onChange={(e) => setWireNotesMap((prev) => ({ ...prev, [mp.id]: e.target.value }))}
-                              className="flex-1 h-9 px-3 bg-white border border-[#dfd6ca] rounded-lg text-[#282828] outline-none focus:border-[#00b7a8]"
+                              className="form-input flex-1"
                             />
                             <div className="flex gap-2">
                               <button
                                 type="button"
                                 onClick={() => handleVerifyWire(mp.id, 'verified')}
-                                className="px-4 py-2 bg-[#00b7a8] hover:bg-[#009e91] text-white font-bold rounded-lg flex items-center gap-1.5 cursor-pointer"
+                                className="btn btn-sm btn-primary"
                               >
-                                <CheckCircle2 className="w-3.5 h-3.5" />
+                                <CheckCircle2 className="w-4 h-4" />
                                 <span>Approve &amp; Credit</span>
                               </button>
                               <button
                                 type="button"
                                 onClick={() => handleVerifyWire(mp.id, 'rejected')}
-                                className="px-3.5 py-2 bg-rose-50 hover:bg-rose-100 border border-rose-200 text-rose-700 font-bold rounded-lg flex items-center gap-1.5 cursor-pointer"
+                                className="btn btn-sm btn-danger"
                               >
-                                <XCircle className="w-3.5 h-3.5" />
+                                <XCircle className="w-4 h-4" />
                                 <span>Reject</span>
                               </button>
                             </div>
                           </div>
                         ) : (
-                          <div className="text-[11px] text-[#5c5046] pt-1 border-t border-[#e6dfd5]">
-                            Reviewed by {mp.verifiedBy || 'Treasury'} • {mp.adminNotes}
+                          <div className="type-support text-slate-600 pt-2 border-t border-slate-200">
+                            Reviewed by {mp.verifiedBy || 'Treasury'} · {mp.adminNotes}
                           </div>
                         )}
                       </div>
@@ -2514,12 +2520,12 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ onNavigateTab }) => {
 
             {/* TAB 3: HOUSING BOOKINGS */}
             {activeTab === 'bookings' && (
-              <div className="bg-white border border-[#e6dfd5] rounded-2xl p-6 shadow-xs space-y-4">
-                <div className="border-b border-[#e6dfd5] pb-3">
-                  <h3 className="font-heading font-bold text-lg text-[#282828]">
+              <div className="admin-panel p-6 space-y-4">
+                <div className="border-b border-slate-200 pb-3.5 space-y-1">
+                  <h3 className="type-h3 text-slate-900">
                     Nationwide Furnished Residence Reservations
                   </h3>
-                  <p className="text-xs text-[#5c5046]">
+                  <p className="type-support text-slate-600">
                     Manage short-stay and 30+ day extended reservation statuses or record manual payment clearance.
                   </p>
                 </div>
@@ -2528,27 +2534,28 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ onNavigateTab }) => {
                   {bookings.map((b) => (
                     <div
                       key={b.id}
-                      className="p-4 bg-[#faf8f5] border border-[#e6dfd5] rounded-xl flex flex-col lg:flex-row lg:items-center justify-between gap-4 text-xs"
+                      className="p-4 bg-slate-50 border border-slate-200 rounded-xl flex flex-col lg:flex-row lg:items-center justify-between gap-4 type-support"
                     >
                       <div className="space-y-1">
                         <div className="flex flex-wrap items-center gap-2">
-                          <span className="font-mono font-bold text-[#00897d]">{b.id}</span>
-                          <span className="font-bold text-[#282828] uppercase">{b.propertyId}</span>
-                          <span className="text-[#c8bdb0]">•</span>
-                          <span className="font-semibold text-[#282828]">{b.guestName}</span>
-                          <span className="text-[#5c5046]">({b.guestEmail})</span>
+                          <span className="font-mono font-semibold text-[#14616d]">{b.id}</span>
+                          <span aria-hidden="true" className="text-slate-300">·</span>
+                          <span className="font-semibold text-slate-900 uppercase">{b.propertyId}</span>
+                          <span aria-hidden="true" className="text-slate-300">·</span>
+                          <span className="font-semibold text-slate-900">{b.guestName}</span>
+                          <span className="text-slate-600">({b.guestEmail})</span>
                         </div>
-                        <div className="text-[#5c5046] tabular-nums">
-                          {b.checkIn} → {b.checkOut} ({b.totalNights} nights) • {b.employer || 'Individual Stay'}
+                        <div className="text-slate-600 tabular-nums">
+                          {b.checkIn} → {b.checkOut} ({b.totalNights} nights) · {b.employer || 'Individual Stay'}
                         </div>
-                        {b.notes && <div className="text-[11px] text-[#857568]">{b.notes}</div>}
+                        {b.notes && <div className="text-slate-500">{b.notes}</div>}
                       </div>
 
-                      <div className="flex flex-wrap items-center gap-2 shrink-0">
+                      <div className="flex flex-wrap items-center gap-2.5 shrink-0">
                         <select
                           value={b.status}
                           onChange={(e) => handleHousingStatusChange(b.id, e.target.value)}
-                          className="h-9 px-3 bg-white border border-[#dfd6ca] rounded-lg text-xs font-bold text-[#282828] outline-none focus:border-[#00b7a8]"
+                          className="form-select sm:w-48"
                         >
                           <option value="awaiting_payment">Awaiting Payment</option>
                           <option value="confirmed">Confirmed</option>
@@ -2560,7 +2567,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ onNavigateTab }) => {
                           <button
                             type="button"
                             onClick={() => handleConfirmHousingPayment(b)}
-                            className="px-3 py-2 bg-[#00b7a8] hover:bg-[#009e91] text-white font-bold rounded-lg transition-colors cursor-pointer"
+                            className="btn btn-sm btn-primary"
                           >
                             Confirm Payment
                           </button>
@@ -2576,33 +2583,34 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ onNavigateTab }) => {
             {activeTab === 'fleet' && (
               <div className="space-y-7">
                 {/* Vehicle Bookings */}
-                <div className="bg-white border border-[#e6dfd5] rounded-2xl p-6 shadow-xs space-y-4">
-                  <h3 className="font-heading font-bold text-lg text-[#282828] border-b border-[#e6dfd5] pb-3">
+                <div className="admin-panel p-6 space-y-4">
+                  <h3 className="type-h3 text-slate-900 border-b border-slate-200 pb-3.5">
                     Client Fleet Reservations ({vehicleBookings.length})
                   </h3>
                   <div className="space-y-3">
                     {vehicleBookings.map((vb) => (
                       <div
                         key={vb.id}
-                        className="p-4 bg-[#faf8f5] border border-[#e6dfd5] rounded-xl flex flex-col lg:flex-row lg:items-center justify-between gap-3 text-xs"
+                        className="p-4 bg-slate-50 border border-slate-200 rounded-xl flex flex-col lg:flex-row lg:items-center justify-between gap-3 type-support"
                       >
                         <div className="space-y-1">
                           <div className="flex flex-wrap items-center gap-2">
-                            <span className="font-mono font-bold text-[#82634f]">{vb.id}</span>
-                            <span className="font-bold text-[#282828]">{vb.vehicleName}</span>
-                            <span className="text-[#5c5046]">({vb.exteriorColorName})</span>
+                            <span className="font-mono font-semibold text-[#14616d]">{vb.id}</span>
+                            <span aria-hidden="true" className="text-slate-300">·</span>
+                            <span className="font-semibold text-slate-900">{vb.vehicleName}</span>
+                            <span className="text-slate-600">({vb.exteriorColorName})</span>
                           </div>
-                          <div className="text-[#5c5046] tabular-nums">
-                            {vb.customerName} ({vb.customerEmail}) • {vb.pickupDate} → {vb.returnDate} ({vb.totalDays}d) •{' '}
-                            <strong className="text-[#282828]">${vb.totalUsd.toLocaleString()}</strong>
+                          <div className="text-slate-600 tabular-nums">
+                            {vb.customerName} ({vb.customerEmail}) · {vb.pickupDate} → {vb.returnDate} ({vb.totalDays}d) ·{' '}
+                            <strong className="text-slate-900">${vb.totalUsd.toLocaleString()}</strong>
                           </div>
-                          <div className="text-[11px] text-[#857568]">Hub: {vb.pickupLocation}</div>
+                          <div className="text-slate-500">Hub: {vb.pickupLocation}</div>
                         </div>
 
                         <select
                           value={vb.status}
                           onChange={(e) => handleVehicleBookingStatus(vb.id, e.target.value)}
-                          className="h-9 px-3 bg-white border border-[#dfd6ca] rounded-lg text-xs font-bold text-[#282828] outline-none focus:border-[#00b7a8] self-start lg:self-center"
+                          className="form-select sm:w-48 self-start lg:self-center"
                         >
                           <option value="awaiting_payment">Awaiting Payment</option>
                           <option value="confirmed">Confirmed</option>
@@ -2616,18 +2624,18 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ onNavigateTab }) => {
                 </div>
 
                 {/* Fleet Inventory & Maintenance */}
-                <div className="bg-white border border-[#e6dfd5] rounded-2xl p-6 shadow-xs space-y-4">
-                  <h3 className="font-heading font-bold text-lg text-[#282828] border-b border-[#e6dfd5] pb-3">
+                <div className="admin-panel p-6 space-y-4">
+                  <h3 className="type-h3 text-slate-900 border-b border-slate-200 pb-3.5">
                     American Fleet Inventory &amp; Service Logs
                   </h3>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     {vehicles.map((v) => (
-                      <div key={v.id} className="p-4 bg-[#faf8f5] border border-[#e6dfd5] rounded-xl space-y-3 text-xs">
-                        <div className="flex items-start justify-between gap-2">
-                          <div>
-                            <h4 className="font-heading font-bold text-sm text-[#282828]">{v.name}</h4>
-                            <span className="text-[11px] text-[#5c5046] font-mono tabular-nums">
-                              Plate: {v.licensePlate} • {v.mileage.toLocaleString()} mi • ${v.dailyRate}/day (${v.monthlyRate}/mo)
+                      <div key={v.id} className="p-4 bg-slate-50 border border-slate-200 rounded-xl space-y-3 type-support">
+                        <div className="flex items-start justify-between gap-3">
+                          <div className="space-y-0.5">
+                            <h4 className="type-h4 text-slate-900">{v.name}</h4>
+                            <span className="text-slate-600 font-mono tabular-nums block">
+                              Plate: {v.licensePlate} · {v.mileage.toLocaleString()} mi · ${v.dailyRate}/day (${v.monthlyRate}/mo)
                             </span>
                           </div>
                           <select
@@ -2638,7 +2646,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ onNavigateTab }) => {
                                 e.target.value as 'available' | 'rented' | 'maintenance',
                               )
                             }
-                            className="h-8 px-2.5 bg-white border border-[#dfd6ca] rounded-lg text-[11px] font-bold text-[#282828]"
+                            className="form-select w-auto shrink-0 py-1.5 px-2.5 min-h-[38px]"
                           >
                             <option value="available">Available</option>
                             <option value="rented">Rented</option>
@@ -2646,16 +2654,16 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ onNavigateTab }) => {
                           </select>
                         </div>
 
-                        <div className="flex items-center justify-between pt-2 border-t border-[#e6dfd5]">
-                          <span className="text-[11px] text-[#857568] tabular-nums">
+                        <div className="flex items-center justify-between pt-2.5 border-t border-slate-200">
+                          <span className="text-slate-500 tabular-nums">
                             {v.maintenanceLogs?.length || 0} service record(s)
                           </span>
                           <button
                             type="button"
                             onClick={() => setMaintVehicle(v)}
-                            className="px-3 py-1 bg-white hover:bg-[#f4efe9] border border-[#dfd6ca] rounded-lg text-[#282828] font-semibold flex items-center gap-1.5 cursor-pointer"
+                            className="btn btn-sm btn-outline"
                           >
-                            <Wrench className="w-3 h-3 text-[#00897d]" />
+                            <Wrench className="w-4 h-4 text-[#14616d]" />
                             <span>Log Service</span>
                           </button>
                         </div>
@@ -2668,12 +2676,12 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ onNavigateTab }) => {
 
             {/* TAB 5: CORPORATE CLIENTS & UNIT ALLOCATION */}
             {activeTab === 'clients' && (
-              <div className="bg-white border border-[#e6dfd5] rounded-2xl p-6 shadow-xs space-y-4">
-                <div className="border-b border-[#e6dfd5] pb-3">
-                  <h3 className="font-heading font-bold text-lg text-[#282828]">
+              <div className="admin-panel p-6 space-y-4">
+                <div className="border-b border-slate-200 pb-3.5 space-y-1">
+                  <h3 className="type-h3 text-slate-900">
                     Registered Guests, Households &amp; Client Accounts
                   </h3>
-                  <p className="text-xs text-[#5c5046]">
+                  <p className="type-support text-slate-600">
                     Issue prepaid Lodging Unit allotments or adjust client balances with full audit logging.
                   </p>
                 </div>
@@ -2682,21 +2690,21 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ onNavigateTab }) => {
                   {customers.map((c) => (
                     <div
                       key={c.id}
-                      className="p-4 bg-[#faf8f5] border border-[#e6dfd5] rounded-xl flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs"
+                      className="p-4 bg-slate-50 border border-slate-200 rounded-xl flex flex-col sm:flex-row sm:items-center justify-between gap-3 type-support"
                     >
                       <div className="space-y-0.5">
-                        <div className="font-bold text-sm text-[#282828]">
-                          {c.name} <span className="text-xs font-normal text-[#5c5046]">({c.email})</span>
+                        <div className="type-h4 text-slate-900">
+                          {c.name} <span className="type-support font-normal text-slate-500">({c.email})</span>
                         </div>
-                        <div className="text-[#5c5046]">
-                          {c.company} • {c.role} • {c.phone}
+                        <div className="text-slate-600">
+                          {c.company} · {c.role} · {c.phone}
                         </div>
                       </div>
 
                       <div className="flex items-center gap-4 tabular-nums">
                         <div className="text-right">
-                          <span className="font-black text-base text-[#00897d] block">{c.units_balance} Units</span>
-                          <span className="text-[11px] text-[#857568]">${c.balance_usd?.toLocaleString()} USD</span>
+                          <span className="type-h4 font-bold text-[#14616d] block">{c.units_balance} Units</span>
+                          <span className="type-support text-slate-500">${c.balance_usd?.toLocaleString()} USD</span>
                         </div>
                         <button
                           type="button"
@@ -2704,9 +2712,9 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ onNavigateTab }) => {
                             setAllocModalCustomer(c);
                             setAllocDelta('25');
                           }}
-                          className="px-3.5 py-2 bg-[#00b7a8] hover:bg-[#009e91] text-white font-bold rounded-xl flex items-center gap-1.5 transition-colors cursor-pointer"
+                          className="btn btn-sm btn-primary"
                         >
-                          <Coins className="w-3.5 h-3.5" />
+                          <Coins className="w-4 h-4" />
                           <span>Adjust Units</span>
                         </button>
                       </div>
@@ -2719,107 +2727,107 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ onNavigateTab }) => {
             {/* TAB 6: BANK ACCOUNTS & CSV EXPORTS */}
             {activeTab === 'settings' && paymentAccounts && (
               <div className="grid grid-cols-1 lg:grid-cols-12 gap-7">
-                <div className="lg:col-span-7 bg-white border border-[#e6dfd5] rounded-2xl p-6 shadow-xs space-y-4">
-                  <h3 className="font-heading font-bold text-lg text-[#282828] border-b border-[#e6dfd5] pb-3">
+                <div className="lg:col-span-7 admin-panel p-6 space-y-5">
+                  <h3 className="type-h3 text-slate-900 border-b border-slate-200 pb-3.5">
                     Official Receiving Bank &amp; Zelle Configuration
                   </h3>
-                  <form onSubmit={handleSaveBankSettings} className="space-y-3.5 text-xs">
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <form onSubmit={handleSaveBankSettings} className="space-y-4">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                       <div>
-                        <label className="block font-bold text-[#5c5046] mb-1">Bank Name</label>
+                        <label className="form-label">Bank Name</label>
                         <input
                           type="text"
                           value={paymentAccounts.bankName}
                           onChange={(e) => setPaymentAccounts({ ...paymentAccounts, bankName: e.target.value })}
-                          className="w-full h-10 px-3 bg-[#faf8f5] border border-[#dfd6ca] rounded-xl text-[#282828] outline-none focus:border-[#00b7a8] focus:bg-white"
+                          className="form-input"
                         />
                       </div>
                       <div>
-                        <label className="block font-bold text-[#5c5046] mb-1">Beneficiary Account Name</label>
+                        <label className="form-label">Beneficiary Account Name</label>
                         <input
                           type="text"
                           value={paymentAccounts.accountName}
                           onChange={(e) => setPaymentAccounts({ ...paymentAccounts, accountName: e.target.value })}
-                          className="w-full h-10 px-3 bg-[#faf8f5] border border-[#dfd6ca] rounded-xl text-[#282828] outline-none focus:border-[#00b7a8] focus:bg-white"
+                          className="form-input"
                         />
                       </div>
                     </div>
 
-                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                       <div>
-                        <label className="block font-bold text-[#5c5046] mb-1">Account Number</label>
+                        <label className="form-label">Account Number</label>
                         <input
                           type="text"
                           value={paymentAccounts.accountNumber}
                           onChange={(e) => setPaymentAccounts({ ...paymentAccounts, accountNumber: e.target.value })}
-                          className="w-full h-10 px-3 bg-[#faf8f5] border border-[#dfd6ca] rounded-xl text-[#282828] font-mono outline-none focus:border-[#00b7a8] focus:bg-white"
+                          className="form-input font-mono tabular-nums"
                         />
                       </div>
                       <div>
-                        <label className="block font-bold text-[#5c5046] mb-1">ACH Routing</label>
+                        <label className="form-label">ACH Routing</label>
                         <input
                           type="text"
                           value={paymentAccounts.achRoutingNumber}
                           onChange={(e) => setPaymentAccounts({ ...paymentAccounts, achRoutingNumber: e.target.value })}
-                          className="w-full h-10 px-3 bg-[#faf8f5] border border-[#dfd6ca] rounded-xl text-[#282828] font-mono outline-none focus:border-[#00b7a8] focus:bg-white"
+                          className="form-input font-mono tabular-nums"
                         />
                       </div>
                       <div>
-                        <label className="block font-bold text-[#5c5046] mb-1">Wire Routing ABA</label>
+                        <label className="form-label">Wire Routing ABA</label>
                         <input
                           type="text"
                           value={paymentAccounts.wireRoutingNumber}
                           onChange={(e) => setPaymentAccounts({ ...paymentAccounts, wireRoutingNumber: e.target.value })}
-                          className="w-full h-10 px-3 bg-[#faf8f5] border border-[#dfd6ca] rounded-xl text-[#282828] font-mono outline-none focus:border-[#00b7a8] focus:bg-white"
+                          className="form-input font-mono tabular-nums"
                         />
                       </div>
                     </div>
 
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                       <div>
-                        <label className="block font-bold text-[#5c5046] mb-1">SWIFT Code</label>
+                        <label className="form-label">SWIFT Code</label>
                         <input
                           type="text"
                           value={paymentAccounts.swiftCode}
                           onChange={(e) => setPaymentAccounts({ ...paymentAccounts, swiftCode: e.target.value })}
-                          className="w-full h-10 px-3 bg-[#faf8f5] border border-[#dfd6ca] rounded-xl text-[#282828] font-mono outline-none focus:border-[#00b7a8] focus:bg-white"
+                          className="form-input font-mono"
                         />
                       </div>
                       <div>
-                        <label className="block font-bold text-[#5c5046] mb-1">Corporate Zelle Email</label>
+                        <label className="form-label">Corporate Zelle Email</label>
                         <input
                           type="text"
                           value={paymentAccounts.zelleEmail}
                           onChange={(e) => setPaymentAccounts({ ...paymentAccounts, zelleEmail: e.target.value })}
-                          className="w-full h-10 px-3 bg-[#faf8f5] border border-[#dfd6ca] rounded-xl text-[#282828] outline-none focus:border-[#00b7a8] focus:bg-white"
+                          className="form-input"
                         />
                       </div>
                     </div>
 
                     <div>
-                      <label className="block font-bold text-[#5c5046] mb-1">Client Remittance Instructions</label>
+                      <label className="form-label">Client Remittance Instructions</label>
                       <textarea
                         rows={3}
                         value={paymentAccounts.paymentInstructions}
                         onChange={(e) => setPaymentAccounts({ ...paymentAccounts, paymentInstructions: e.target.value })}
-                        className="w-full p-3 bg-[#faf8f5] border border-[#dfd6ca] rounded-xl text-[#282828] outline-none focus:border-[#00b7a8] focus:bg-white"
+                        className="form-textarea"
                       />
                     </div>
 
                     <button
                       type="submit"
-                      className="px-5 py-2.5 bg-[#00b7a8] hover:bg-[#009e91] text-white font-black uppercase tracking-wider rounded-xl transition-colors cursor-pointer"
+                      className="btn btn-primary"
                     >
                       Save Receiving Bank Settings
                     </button>
                   </form>
                 </div>
 
-                <div className="lg:col-span-5 bg-white border border-[#e6dfd5] rounded-2xl p-6 shadow-xs space-y-4 h-fit">
-                  <h3 className="font-heading font-bold text-lg text-[#282828] border-b border-[#e6dfd5] pb-3">
+                <div className="lg:col-span-5 admin-panel p-6 space-y-4 h-fit">
+                  <h3 className="type-h3 text-slate-900 border-b border-slate-200 pb-3.5">
                     Reconciliation &amp; Accounting Exports (CSV)
                   </h3>
-                  <p className="text-xs text-[#5c5046]">
+                  <p className="type-support text-slate-600">
                     Download instant CSV snapshots for CPA bookkeeping, corporate housing tax reporting, and wire reconciliation.
                   </p>
 
@@ -2842,10 +2850,10 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ onNavigateTab }) => {
                           ]),
                         )
                       }
-                      className="w-full p-3.5 bg-[#faf8f5] hover:bg-[#f4efe9] border border-[#e6dfd5] rounded-xl text-xs font-bold text-[#282828] flex items-center justify-between transition-colors cursor-pointer"
+                      className="btn btn-outline w-full justify-between"
                     >
                       <span>Export Housing Bookings Ledger (.CSV)</span>
-                      <Download className="w-4 h-4 text-[#00897d]" />
+                      <Download className="w-4 h-4 text-[#14616d] shrink-0" />
                     </button>
 
                     <button
@@ -2866,10 +2874,10 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ onNavigateTab }) => {
                           ]),
                         )
                       }
-                      className="w-full p-3.5 bg-[#faf8f5] hover:bg-[#f4efe9] border border-[#e6dfd5] rounded-xl text-xs font-bold text-[#282828] flex items-center justify-between transition-colors cursor-pointer"
+                      className="btn btn-outline w-full justify-between"
                     >
                       <span>Export Wire &amp; ACH Verification Log (.CSV)</span>
-                      <Download className="w-4 h-4 text-[#00897d]" />
+                      <Download className="w-4 h-4 text-[#14616d] shrink-0" />
                     </button>
 
                     <button
@@ -2888,10 +2896,10 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ onNavigateTab }) => {
                           ]),
                         )
                       }
-                      className="w-full p-3.5 bg-[#faf8f5] hover:bg-[#f4efe9] border border-[#e6dfd5] rounded-xl text-xs font-bold text-[#282828] flex items-center justify-between transition-colors cursor-pointer"
+                      className="btn btn-outline w-full justify-between"
                     >
                       <span>Export Registered Client Unit Balances (.CSV)</span>
-                      <Download className="w-4 h-4 text-[#00897d]" />
+                      <Download className="w-4 h-4 text-[#14616d] shrink-0" />
                     </button>
 
                     <button
@@ -2912,10 +2920,10 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ onNavigateTab }) => {
                           ]),
                         )
                       }
-                      className="w-full p-3.5 bg-[#faf8f5] hover:bg-[#f4efe9] border border-[#e6dfd5] rounded-xl text-xs font-bold text-[#282828] flex items-center justify-between transition-colors cursor-pointer"
+                      className="btn btn-outline w-full justify-between"
                     >
                       <span>Export Storefront Orders &amp; Sales (.CSV)</span>
-                      <Download className="w-4 h-4 text-[#00897d]" />
+                      <Download className="w-4 h-4 text-[#14616d] shrink-0" />
                     </button>
                   </div>
                 </div>
@@ -2926,42 +2934,46 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ onNavigateTab }) => {
 
         {/* Modal: Edit Residence / Suite Listing */}
         {editingProperty && (
-          <div className="fixed inset-0 z-50 bg-[#1c1613]/65 backdrop-blur-xs flex items-center justify-center p-4 overflow-y-auto">
-            <div className="bg-white border border-[#e6dfd5] rounded-2xl max-w-lg w-full overflow-hidden shadow-2xl">
-              <LivePhotoBackground scene="interior" overlay="espresso" className="px-6 py-4 border-b border-[#e6dfd5]">
-                <div className="flex items-center justify-between">
-                  <h3 className="font-heading font-bold text-lg text-white">
+          <div className="fixed inset-0 z-50 bg-slate-950/65 backdrop-blur-xs flex items-center justify-center p-4 overflow-y-auto">
+            <div className="bg-white border border-slate-200 rounded-2xl max-w-lg w-full overflow-hidden shadow-xl">
+              <LivePhotoBackground scene="interior" overlay="espresso" className="px-6 py-4 border-b border-slate-200">
+                <div className="flex items-center justify-between gap-3">
+                  <h3 className="type-h3 text-white">
                     Edit Residence — Unit {editingProperty.unitNumber}
                   </h3>
-                  <button onClick={() => setEditingProperty(null)} className="text-white/80 hover:text-white cursor-pointer">
+                  <button
+                    type="button"
+                    onClick={() => setEditingProperty(null)}
+                    className="p-1.5 rounded-lg text-white/80 hover:text-white hover:bg-white/10 cursor-pointer"
+                  >
                     <X className="w-5 h-5" />
                   </button>
                 </div>
               </LivePhotoBackground>
-              <form onSubmit={handleSaveProperty} className="p-6 space-y-3 text-xs">
+              <form onSubmit={handleSaveProperty} className="p-6 space-y-4">
                 <div>
-                  <label className="block font-bold text-[#5c5046] mb-1">Listing Title</label>
+                  <label className="form-label">Listing Title</label>
                   <input
                     type="text"
                     required
                     value={editingProperty.title}
                     onChange={(e) => setEditingProperty({ ...editingProperty, title: e.target.value })}
-                    className="w-full h-10 px-3 bg-[#faf8f5] border border-[#dfd6ca] rounded-xl text-[#282828] outline-none focus:border-[#00b7a8] focus:bg-white"
+                    className="form-input"
                   />
                 </div>
-                <div className="grid grid-cols-2 gap-3">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   <div>
-                    <label className="block font-bold text-[#5c5046] mb-1">Category</label>
+                    <label className="form-label">Category</label>
                     <input
                       type="text"
                       required
                       value={editingProperty.category}
                       onChange={(e) => setEditingProperty({ ...editingProperty, category: e.target.value })}
-                      className="w-full h-10 px-3 bg-[#faf8f5] border border-[#dfd6ca] rounded-xl text-[#282828] outline-none focus:border-[#00b7a8] focus:bg-white"
+                      className="form-input"
                     />
                   </div>
                   <div>
-                    <label className="block font-bold text-[#5c5046] mb-1">Availability</label>
+                    <label className="form-label">Availability</label>
                     <select
                       value={editingProperty.status}
                       onChange={(e) =>
@@ -2970,7 +2982,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ onNavigateTab }) => {
                           status: e.target.value as 'Available' | 'Inquired' | 'Reserved',
                         })
                       }
-                      className="w-full h-10 px-3 bg-[#faf8f5] border border-[#dfd6ca] rounded-xl text-[#282828] outline-none focus:border-[#00b7a8] focus:bg-white"
+                      className="form-select"
                     >
                       <option value="Available">Available</option>
                       <option value="Inquired">Inquired</option>
@@ -2978,9 +2990,9 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ onNavigateTab }) => {
                     </select>
                   </div>
                 </div>
-                <div className="grid grid-cols-2 gap-3">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   <div>
-                    <label className="block font-bold text-[#5c5046] mb-1">Monthly Rate (USD)</label>
+                    <label className="form-label">Monthly Rate (USD)</label>
                     <input
                       type="number"
                       min={500}
@@ -2989,11 +3001,11 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ onNavigateTab }) => {
                       onChange={(e) =>
                         setEditingProperty({ ...editingProperty, monthlyRate: Number(e.target.value) })
                       }
-                      className="w-full h-10 px-3 bg-[#faf8f5] border border-[#dfd6ca] rounded-xl text-[#282828] tabular-nums outline-none focus:border-[#00b7a8] focus:bg-white"
+                      className="form-input tabular-nums"
                     />
                   </div>
                   <div>
-                    <label className="block font-bold text-[#5c5046] mb-1">Minimum Stay (Nights)</label>
+                    <label className="form-label">Minimum Stay (Nights)</label>
                     <input
                       type="number"
                       min={1}
@@ -3002,14 +3014,14 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ onNavigateTab }) => {
                       onChange={(e) =>
                         setEditingProperty({ ...editingProperty, minimumStayDays: Number(e.target.value) })
                       }
-                      className="w-full h-10 px-3 bg-[#faf8f5] border border-[#dfd6ca] rounded-xl text-[#282828] tabular-nums outline-none focus:border-[#00b7a8] focus:bg-white"
+                      className="form-input tabular-nums"
                     />
                   </div>
                 </div>
                 <div>
-                  <div className="flex items-center justify-between mb-1">
-                    <label className="block font-bold text-[#5c5046]">Primary Cover Image URL</label>
-                    <span className="text-[11px] text-[#00897d] font-bold">
+                  <div className="flex items-center justify-between gap-2 mb-1.5">
+                    <label className="form-label mb-0">Primary Cover Image URL</label>
+                    <span className="type-support text-[#14616d] font-semibold tabular-nums">
                       {editingProperty.images?.length || 0} Total Photos in Gallery
                     </span>
                   </div>
@@ -3017,48 +3029,49 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ onNavigateTab }) => {
                     type="url"
                     value={propPrimaryImage}
                     onChange={(e) => setPropPrimaryImage(e.target.value)}
-                    className="w-full h-10 px-3 bg-[#faf8f5] border border-[#dfd6ca] rounded-xl text-[#282828] outline-none focus:border-[#00b7a8] focus:bg-white"
+                    className="form-input"
                   />
                   {editingProperty.images && editingProperty.images.length > 0 && (
-                    <div className="mt-2 flex gap-1.5 overflow-x-auto pb-1 scrollbar-thin">
+                    <div className="mt-2.5 flex gap-2 overflow-x-auto pb-1">
                       {editingProperty.images.map((img, i) => (
-                        <div
+                        <button
                           key={i}
+                          type="button"
                           onClick={() => setPropPrimaryImage(img)}
                           title={`Click to set as primary (Photo ${i + 1})`}
                           className={`w-14 h-10 shrink-0 rounded-lg overflow-hidden border cursor-pointer ${
                             propPrimaryImage === img
-                              ? 'border-[#00b7a8] ring-1 ring-[#00b7a8]'
-                              : 'border-[#dfd6ca] opacity-70 hover:opacity-100'
+                              ? 'border-[#14616d] ring-2 ring-[#14616d]/30'
+                              : 'border-slate-200 opacity-75 hover:opacity-100'
                           }`}
                         >
-                          <img src={img} alt="" className="w-full h-full object-cover" />
-                        </div>
+                          <img src={img} alt={`Residence gallery preview ${i + 1}`} referrerPolicy="no-referrer" className="w-full h-full object-cover" />
+                        </button>
                       ))}
                     </div>
                   )}
                 </div>
                 <div>
-                  <label className="block font-bold text-[#5c5046] mb-1">Short Description</label>
+                  <label className="form-label">Short Description</label>
                   <textarea
                     rows={3}
                     required
                     value={editingProperty.shortDesc}
                     onChange={(e) => setEditingProperty({ ...editingProperty, shortDesc: e.target.value })}
-                    className="w-full p-3 bg-[#faf8f5] border border-[#dfd6ca] rounded-xl text-[#282828] outline-none focus:border-[#00b7a8] focus:bg-white"
+                    className="form-textarea"
                   />
                 </div>
-                <div className="flex gap-2 pt-2">
+                <div className="flex gap-2.5 pt-2">
                   <button
                     type="button"
                     onClick={() => setEditingProperty(null)}
-                    className="flex-1 py-2.5 bg-[#faf8f5] hover:bg-[#f4efe9] border border-[#dfd6ca] rounded-xl font-bold text-[#5c5046] cursor-pointer"
+                    className="btn btn-outline flex-1"
                   >
                     Cancel
                   </button>
                   <button
                     type="submit"
-                    className="flex-1 py-2.5 bg-[#00b7a8] hover:bg-[#009e91] text-white rounded-xl font-black uppercase cursor-pointer"
+                    className="btn btn-primary flex-1"
                   >
                     Save Residence
                   </button>
@@ -3070,45 +3083,46 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ onNavigateTab }) => {
 
         {/* Modal: Edit Storefront Catalog Item */}
         {editingCatalogItem && (
-          <div className="fixed inset-0 z-50 bg-[#1c1613]/65 backdrop-blur-xs flex items-center justify-center p-4 overflow-y-auto">
-            <div className="bg-white border border-[#e6dfd5] rounded-2xl max-w-lg w-full overflow-hidden shadow-2xl">
-              <LivePhotoBackground scene="courtyard" overlay="espresso" className="px-6 py-4 border-b border-[#e6dfd5]">
-                <div className="flex items-center justify-between">
-                  <h3 className="font-heading font-bold text-lg text-white">
+          <div className="fixed inset-0 z-50 bg-slate-950/65 backdrop-blur-xs flex items-center justify-center p-4 overflow-y-auto">
+            <div className="bg-white border border-slate-200 rounded-2xl max-w-lg w-full overflow-hidden shadow-xl">
+              <LivePhotoBackground scene="courtyard" overlay="espresso" className="px-6 py-4 border-b border-slate-200">
+                <div className="flex items-center justify-between gap-3">
+                  <h3 className="type-h3 text-white">
                     Edit Catalog Item — {editingCatalogItem.sku}
                   </h3>
                   <button
+                    type="button"
                     onClick={() => setEditingCatalogItem(null)}
-                    className="text-white/80 hover:text-white cursor-pointer"
+                    className="p-1.5 rounded-lg text-white/80 hover:text-white hover:bg-white/10 cursor-pointer"
                   >
                     <X className="w-5 h-5" />
                   </button>
                 </div>
               </LivePhotoBackground>
-              <form onSubmit={handleSaveCatalogItem} className="p-6 space-y-3 text-xs">
+              <form onSubmit={handleSaveCatalogItem} className="p-6 space-y-4">
                 <div>
-                  <label className="block font-bold text-[#5c5046] mb-1">Title</label>
+                  <label className="form-label">Title</label>
                   <input
                     type="text"
                     required
                     value={editingCatalogItem.title}
                     onChange={(e) => setEditingCatalogItem({ ...editingCatalogItem, title: e.target.value })}
-                    className="w-full h-10 px-3 bg-[#faf8f5] border border-[#dfd6ca] rounded-xl text-[#282828] outline-none focus:border-[#00b7a8] focus:bg-white"
+                    className="form-input"
                   />
                 </div>
-                <div className="grid grid-cols-2 gap-3">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   <div>
-                    <label className="block font-bold text-[#5c5046] mb-1">Category</label>
+                    <label className="form-label">Category</label>
                     <input
                       type="text"
                       required
                       value={editingCatalogItem.category}
                       onChange={(e) => setEditingCatalogItem({ ...editingCatalogItem, category: e.target.value })}
-                      className="w-full h-10 px-3 bg-[#faf8f5] border border-[#dfd6ca] rounded-xl text-[#282828] outline-none focus:border-[#00b7a8] focus:bg-white"
+                      className="form-input"
                     />
                   </div>
                   <div>
-                    <label className="block font-bold text-[#5c5046] mb-1">Price (USD)</label>
+                    <label className="form-label">Price (USD)</label>
                     <input
                       type="number"
                       min={1}
@@ -3117,24 +3131,24 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ onNavigateTab }) => {
                       onChange={(e) =>
                         setEditingCatalogItem({ ...editingCatalogItem, priceUsd: Number(e.target.value) })
                       }
-                      className="w-full h-10 px-3 bg-[#faf8f5] border border-[#dfd6ca] rounded-xl text-[#282828] tabular-nums outline-none focus:border-[#00b7a8] focus:bg-white"
+                      className="form-input tabular-nums"
                     />
                   </div>
                 </div>
-                <div className="grid grid-cols-2 gap-3">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   <div>
-                    <label className="block font-bold text-[#5c5046] mb-1">Billing Label</label>
+                    <label className="form-label">Billing Label</label>
                     <input
                       type="text"
                       value={editingCatalogItem.billingUnitLabel}
                       onChange={(e) =>
                         setEditingCatalogItem({ ...editingCatalogItem, billingUnitLabel: e.target.value })
                       }
-                      className="w-full h-10 px-3 bg-[#faf8f5] border border-[#dfd6ca] rounded-xl text-[#282828] outline-none focus:border-[#00b7a8] focus:bg-white"
+                      className="form-input"
                     />
                   </div>
                   <div>
-                    <label className="block font-bold text-[#5c5046] mb-1">Max Cart Qty</label>
+                    <label className="form-label">Max Cart Qty</label>
                     <input
                       type="number"
                       min={1}
@@ -3143,40 +3157,40 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ onNavigateTab }) => {
                       onChange={(e) =>
                         setEditingCatalogItem({ ...editingCatalogItem, maxQuantity: Number(e.target.value) })
                       }
-                      className="w-full h-10 px-3 bg-[#faf8f5] border border-[#dfd6ca] rounded-xl text-[#282828] tabular-nums outline-none focus:border-[#00b7a8] focus:bg-white"
+                      className="form-input tabular-nums"
                     />
                   </div>
                 </div>
                 <div>
-                  <label className="block font-bold text-[#5c5046] mb-1">Image URL</label>
+                  <label className="form-label">Image URL</label>
                   <input
                     type="url"
                     value={editingCatalogItem.image}
                     onChange={(e) => setEditingCatalogItem({ ...editingCatalogItem, image: e.target.value })}
-                    className="w-full h-10 px-3 bg-[#faf8f5] border border-[#dfd6ca] rounded-xl text-[#282828] outline-none focus:border-[#00b7a8] focus:bg-white"
+                    className="form-input"
                   />
                 </div>
                 <div>
-                  <label className="block font-bold text-[#5c5046] mb-1">Description</label>
+                  <label className="form-label">Description</label>
                   <textarea
                     rows={3}
                     required
                     value={editingCatalogItem.shortDesc}
                     onChange={(e) => setEditingCatalogItem({ ...editingCatalogItem, shortDesc: e.target.value })}
-                    className="w-full p-3 bg-[#faf8f5] border border-[#dfd6ca] rounded-xl text-[#282828] outline-none focus:border-[#00b7a8] focus:bg-white"
+                    className="form-textarea"
                   />
                 </div>
-                <div className="flex gap-2 pt-2">
+                <div className="flex gap-2.5 pt-2">
                   <button
                     type="button"
                     onClick={() => setEditingCatalogItem(null)}
-                    className="flex-1 py-2.5 bg-[#faf8f5] hover:bg-[#f4efe9] border border-[#dfd6ca] rounded-xl font-bold text-[#5c5046] cursor-pointer"
+                    className="btn btn-outline flex-1"
                   >
                     Cancel
                   </button>
                   <button
                     type="submit"
-                    className="flex-1 py-2.5 bg-[#00b7a8] hover:bg-[#009e91] text-white rounded-xl font-black uppercase cursor-pointer"
+                    className="btn btn-primary flex-1"
                   >
                     Save Listing
                   </button>
@@ -3188,21 +3202,25 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ onNavigateTab }) => {
 
         {/* Modal: Allocate / Adjust Client Units */}
         {allocModalCustomer && (
-          <div className="fixed inset-0 z-50 bg-[#1c1613]/65 backdrop-blur-xs flex items-center justify-center p-4">
-            <div className="bg-white border border-[#e6dfd5] rounded-2xl max-w-md w-full overflow-hidden shadow-2xl">
-              <LivePhotoBackground scene="courtyard" overlay="espresso" className="px-6 py-4 border-b border-[#e6dfd5]">
-                <div className="flex items-center justify-between">
-                  <h3 className="font-heading font-bold text-lg text-white">
+          <div className="fixed inset-0 z-50 bg-slate-950/65 backdrop-blur-xs flex items-center justify-center p-4">
+            <div className="bg-white border border-slate-200 rounded-2xl max-w-md w-full overflow-hidden shadow-xl">
+              <LivePhotoBackground scene="courtyard" overlay="espresso" className="px-6 py-4 border-b border-slate-200">
+                <div className="flex items-center justify-between gap-3">
+                  <h3 className="type-h3 text-white">
                     Adjust Units — {allocModalCustomer.name}
                   </h3>
-                  <button onClick={() => setAllocModalCustomer(null)} className="text-white/80 hover:text-white cursor-pointer">
+                  <button
+                    type="button"
+                    onClick={() => setAllocModalCustomer(null)}
+                    className="p-1.5 rounded-lg text-white/80 hover:text-white hover:bg-white/10 cursor-pointer"
+                  >
                     <X className="w-5 h-5" />
                   </button>
                 </div>
               </LivePhotoBackground>
-              <form onSubmit={handleAllocateUnits} className="p-6 space-y-3.5 text-xs">
+              <form onSubmit={handleAllocateUnits} className="p-6 space-y-4">
                 <div>
-                  <label className="block font-bold text-[#5c5046] mb-1">
+                  <label className="form-label">
                     Units Delta (Positive to credit, negative to deduct)
                   </label>
                   <input
@@ -3210,30 +3228,30 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ onNavigateTab }) => {
                     required
                     value={allocDelta}
                     onChange={(e) => setAllocDelta(e.target.value)}
-                    className="w-full h-10 px-3 bg-[#faf8f5] border border-[#dfd6ca] rounded-xl text-[#282828] tabular-nums outline-none focus:border-[#00b7a8] focus:bg-white"
+                    className="form-input tabular-nums"
                   />
                 </div>
                 <div>
-                  <label className="block font-bold text-[#5c5046] mb-1">Audit Reason / Memo</label>
+                  <label className="form-label">Audit Reason / Memo</label>
                   <input
                     type="text"
                     required
                     value={allocReason}
                     onChange={(e) => setAllocReason(e.target.value)}
-                    className="w-full h-10 px-3 bg-[#faf8f5] border border-[#dfd6ca] rounded-xl text-[#282828] outline-none focus:border-[#00b7a8] focus:bg-white"
+                    className="form-input"
                   />
                 </div>
-                <div className="flex gap-2 pt-2">
+                <div className="flex gap-2.5 pt-2">
                   <button
                     type="button"
                     onClick={() => setAllocModalCustomer(null)}
-                    className="flex-1 py-2.5 bg-[#faf8f5] hover:bg-[#f4efe9] border border-[#dfd6ca] rounded-xl font-bold text-[#5c5046] cursor-pointer"
+                    className="btn btn-outline flex-1"
                   >
                     Cancel
                   </button>
                   <button
                     type="submit"
-                    className="flex-1 py-2.5 bg-[#00b7a8] hover:bg-[#009e91] text-white rounded-xl font-black uppercase cursor-pointer"
+                    className="btn btn-primary flex-1"
                   >
                     Apply Adjustment
                   </button>
@@ -3245,60 +3263,64 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ onNavigateTab }) => {
 
         {/* Modal: Log Vehicle Maintenance */}
         {maintVehicle && (
-          <div className="fixed inset-0 z-50 bg-[#1c1613]/65 backdrop-blur-xs flex items-center justify-center p-4">
-            <div className="bg-white border border-[#e6dfd5] rounded-2xl max-w-md w-full overflow-hidden shadow-2xl">
-              <LivePhotoBackground scene="twilight" overlay="espresso" className="px-6 py-4 border-b border-[#e6dfd5]">
-                <div className="flex items-center justify-between">
-                  <h3 className="font-heading font-bold text-lg text-white">
+          <div className="fixed inset-0 z-50 bg-slate-950/65 backdrop-blur-xs flex items-center justify-center p-4">
+            <div className="bg-white border border-slate-200 rounded-2xl max-w-md w-full overflow-hidden shadow-xl">
+              <LivePhotoBackground scene="twilight" overlay="espresso" className="px-6 py-4 border-b border-slate-200">
+                <div className="flex items-center justify-between gap-3">
+                  <h3 className="type-h3 text-white">
                     Log Fleet Service — {maintVehicle.name}
                   </h3>
-                  <button onClick={() => setMaintVehicle(null)} className="text-white/80 hover:text-white cursor-pointer">
+                  <button
+                    type="button"
+                    onClick={() => setMaintVehicle(null)}
+                    className="p-1.5 rounded-lg text-white/80 hover:text-white hover:bg-white/10 cursor-pointer"
+                  >
                     <X className="w-5 h-5" />
                   </button>
                 </div>
               </LivePhotoBackground>
-              <form onSubmit={handleLogMaintenance} className="p-6 space-y-3.5 text-xs">
+              <form onSubmit={handleLogMaintenance} className="p-6 space-y-4">
                 <div>
-                  <label className="block font-bold text-[#5c5046] mb-1">Service Type</label>
+                  <label className="form-label">Service Type</label>
                   <input
                     type="text"
                     required
                     value={maintType}
                     onChange={(e) => setMaintType(e.target.value)}
-                    className="w-full h-10 px-3 bg-[#faf8f5] border border-[#dfd6ca] rounded-xl text-[#282828] outline-none focus:border-[#00b7a8] focus:bg-white"
+                    className="form-input"
                   />
                 </div>
                 <div>
-                  <label className="block font-bold text-[#5c5046] mb-1">Cost (USD)</label>
+                  <label className="form-label">Cost (USD)</label>
                   <input
                     type="number"
                     min={0}
                     value={maintCost}
                     onChange={(e) => setMaintCost(e.target.value)}
-                    className="w-full h-10 px-3 bg-[#faf8f5] border border-[#dfd6ca] rounded-xl text-[#282828] tabular-nums outline-none focus:border-[#00b7a8] focus:bg-white"
+                    className="form-input tabular-nums"
                   />
                 </div>
                 <div>
-                  <label className="block font-bold text-[#5c5046] mb-1">Technician Notes</label>
+                  <label className="form-label">Technician Notes</label>
                   <textarea
                     rows={2}
                     value={maintNotes}
                     onChange={(e) => setMaintNotes(e.target.value)}
                     placeholder="Brake pad check, synthetic oil, interior ozone sanitization..."
-                    className="w-full p-3 bg-[#faf8f5] border border-[#dfd6ca] rounded-xl text-[#282828] outline-none focus:border-[#00b7a8] focus:bg-white"
+                    className="form-textarea"
                   />
                 </div>
-                <div className="flex gap-2 pt-2">
+                <div className="flex gap-2.5 pt-2">
                   <button
                     type="button"
                     onClick={() => setMaintVehicle(null)}
-                    className="flex-1 py-2.5 bg-[#faf8f5] hover:bg-[#f4efe9] border border-[#dfd6ca] rounded-xl font-bold text-[#5c5046] cursor-pointer"
+                    className="btn btn-outline flex-1"
                   >
                     Cancel
                   </button>
                   <button
                     type="submit"
-                    className="flex-1 py-2.5 bg-[#00b7a8] hover:bg-[#009e91] text-white rounded-xl font-black uppercase cursor-pointer"
+                    className="btn btn-primary flex-1"
                   >
                     Record Service
                   </button>
@@ -3311,30 +3333,34 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ onNavigateTab }) => {
         {/* Modal: Receipt Attachment Preview */}
         {receiptPreview && (
           <div
-            className="fixed inset-0 z-50 bg-[#1c1613]/75 backdrop-blur-xs flex items-center justify-center p-4"
+            className="fixed inset-0 z-50 bg-slate-950/75 backdrop-blur-xs flex items-center justify-center p-4"
             onClick={() => setReceiptPreview(null)}
           >
             <div
-              className="bg-white border border-[#e6dfd5] rounded-2xl max-w-2xl w-full overflow-hidden shadow-2xl"
+              className="bg-white border border-slate-200 rounded-2xl max-w-2xl w-full overflow-hidden shadow-xl"
               onClick={(e) => e.stopPropagation()}
             >
-              <LivePhotoBackground scene="twilight" overlay="espresso" className="px-6 py-4 border-b border-[#e6dfd5]">
-                <div className="flex items-center justify-between">
-                  <h4 className="font-heading font-bold text-sm text-white">{receiptPreview.title}</h4>
-                  <button onClick={() => setReceiptPreview(null)} className="text-white/80 hover:text-white cursor-pointer">
+              <LivePhotoBackground scene="twilight" overlay="espresso" className="px-6 py-4 border-b border-slate-200">
+                <div className="flex items-center justify-between gap-3">
+                  <h4 className="type-h4 text-white">{receiptPreview.title}</h4>
+                  <button
+                    type="button"
+                    onClick={() => setReceiptPreview(null)}
+                    className="p-1.5 rounded-lg text-white/80 hover:text-white hover:bg-white/10 cursor-pointer"
+                  >
                     <X className="w-5 h-5" />
                   </button>
                 </div>
               </LivePhotoBackground>
               <div className="p-5">
-                <div className="bg-[#faf8f5] border border-[#e6dfd5] rounded-xl p-4 flex items-center justify-center max-h-[70vh] overflow-auto">
+                <div className="bg-slate-50 border border-slate-200 rounded-xl p-4 flex items-center justify-center max-h-[70vh] overflow-auto">
                   {receiptPreview.dataUrl.startsWith('data:image') ? (
                     <img src={receiptPreview.dataUrl} alt="Wire Receipt" className="max-h-[62vh] w-auto object-contain rounded" />
                   ) : (
                     <a
                       href={receiptPreview.dataUrl}
                       download={receiptPreview.title}
-                      className="px-4 py-2.5 bg-[#00b7a8] hover:bg-[#009e91] text-white font-bold text-xs rounded-xl"
+                      className="btn btn-primary"
                     >
                       Download Attached PDF Receipt
                     </a>

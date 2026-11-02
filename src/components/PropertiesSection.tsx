@@ -66,7 +66,7 @@ export const PropertiesSection: React.FC<PropertiesSectionProps> = ({
   const [expandedCalendarId, setExpandedCalendarId] = useState<string | null>(null);
   const [selectedMainImages, setSelectedMainImages] = useState<Record<string, number>>({});
   const [unitFilter, setUnitFilter] = useState<
-    'all' | 'saved' | 'sacramento' | 'los-angeles' | '1bed' | '2bed' | 'downstairs' | 'upstairs'
+    'all' | 'saved' | 'el-dorado-hills' | 'los-angeles' | '1bed' | '2bed' | 'downstairs' | 'upstairs'
   >('all');
   const [localQuery, setLocalQuery] = useState<string>('');
 
@@ -80,14 +80,14 @@ export const PropertiesSection: React.FC<PropertiesSectionProps> = ({
   const filteredProperties = useMemo(() => {
     return sourceProperties.filter((prop) => {
       if (unitFilter === 'saved' && !wishlistIds.includes(prop.id)) return false;
-      if (unitFilter === 'sacramento' && prop.id.startsWith('la-')) return false;
+      if (unitFilter === 'el-dorado-hills' && prop.id.startsWith('la-')) return false;
       if (unitFilter === 'los-angeles' && !prop.id.startsWith('la-')) return false;
       if (unitFilter === '1bed' && prop.bedrooms !== 1) return false;
       if (unitFilter === '2bed' && prop.bedrooms !== 2) return false;
       if (unitFilter === 'downstairs' && prop.floor !== 'Downstairs') return false;
       if (unitFilter === 'upstairs' && prop.floor !== 'Upstairs') return false;
       if (effectiveQuery) {
-        const hay = `${prop.title} ${prop.unitNumber} ${prop.code} ${prop.floor} ${prop.fullDesc} ${prop.amenities.join(' ')}`.toLowerCase();
+        const hay = `${prop.title} ${prop.unitNumber} ${prop.code} ${prop.floor} ${prop.location} ${prop.fullDesc} ${prop.amenities.join(' ')}`.toLowerCase();
         if (!hay.includes(effectiveQuery)) return false;
       }
       return true;
@@ -175,7 +175,7 @@ export const PropertiesSection: React.FC<PropertiesSectionProps> = ({
               ...(wishlistIds.length > 0
                 ? [{ id: 'saved', label: `Saved (${wishlistIds.length})` }]
                 : []),
-              { id: 'sacramento', label: 'Corporate Stays' },
+              { id: 'el-dorado-hills', label: 'El Dorado Hills, CA Stays' },
               { id: 'los-angeles', label: 'Los Angeles Suites' },
               { id: '1bed', label: '1 Bed / 1 Bath' },
               { id: '2bed', label: '2 Bed / 2 Bath' },

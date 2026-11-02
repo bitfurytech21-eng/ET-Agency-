@@ -51,7 +51,7 @@ export type SecuritySubView =
   | 'active-sessions'
   | 'login-history';
 
-export type SupportSubView = 'index' | 'my-tickets' | 'submit-request' | 'faq' | 'contact-support';
+export type SupportSubView = 'index' | 'my-tickets' | 'submit-request' | 'faq' | 'help-center' | 'contact-support';
 
 export interface UserPreferences {
   thermostat: string;

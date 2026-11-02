@@ -117,29 +117,29 @@ export const SecurityModule: React.FC<SecurityModuleProps> = ({
         }}
       />
 
-      <div className="px-4 sm:px-8 pb-6 space-y-6">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[#e6dfd5] pb-4">
-          <div>
-            <h3 className="font-heading font-bold text-lg text-[#282828]">
+      <div className="px-4 sm:px-8 pb-8 space-y-6">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-200 pb-5">
+          <div className="space-y-1">
+            <h3 className="type-h3 text-slate-900">
               Security &amp; Password Management
             </h3>
-            <p className="text-xs text-[#6e5d50]">
-              Manage your account password, two-factor verification, and active browser sessions
+            <p className="type-body text-slate-600">
+              Manage your account password, two-factor verification, and active browser sessions.
             </p>
           </div>
           <button
             type="button"
             onClick={onSignOut}
-            className="px-4 py-2 rounded-xl border border-rose-200 hover:bg-rose-50 text-xs font-bold text-rose-700 flex items-center gap-1.5 cursor-pointer whitespace-nowrap shrink-0 w-fit"
+            className="btn btn-sm border border-rose-200 bg-white hover:bg-rose-50 text-rose-700 w-fit"
           >
-            <LogOut className="w-3.5 h-3.5" />
+            <LogOut className="w-4 h-4" />
             <span>Sign Out Current Session</span>
           </button>
         </div>
 
         {feedback && (
           <div
-            className={`p-4 rounded-xl border text-xs flex items-start gap-2.5 ${
+            className={`p-4 rounded-xl border type-support flex items-start gap-2.5 ${
               feedback.type === 'success'
                 ? 'bg-emerald-50 border-emerald-200 text-emerald-900'
                 : 'bg-rose-50 border-rose-200 text-rose-900'
@@ -156,14 +156,14 @@ export const SecurityModule: React.FC<SecurityModuleProps> = ({
 
         {/* Security Overview */}
         {subView === 'index' && (
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-5 text-xs">
-            <div className="p-5 rounded-2xl border border-[#e6dfd5] bg-[#faf8f5] flex flex-col justify-between space-y-4">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+            <div className="p-6 rounded-2xl border border-slate-200 bg-white flex flex-col justify-between space-y-5 shadow-xs">
               <div className="space-y-2">
-                <div className="flex items-center gap-2 font-bold text-sm text-[#282828]">
-                  <Key className="w-4 h-4 text-[#00897d]" />
-                  <span>Account Password</span>
+                <div className="flex items-center gap-2.5">
+                  <Key className="w-4 h-4 text-[#14616d]" />
+                  <h4 className="type-h4 text-slate-900">Account Password</h4>
                 </div>
-                <p className="text-[#5c5046]">
+                <p className="type-support text-slate-600">
                   Encrypted with bcrypt hashing.{' '}
                   {passwordUpdatedAt
                     ? `Last updated ${passwordUpdatedAt.split('T')[0]}.`
@@ -173,21 +173,21 @@ export const SecurityModule: React.FC<SecurityModuleProps> = ({
               <button
                 type="button"
                 onClick={() => setSubView('change-password')}
-                className="px-3.5 py-2 rounded-xl bg-white border border-[#d8cfc3] hover:border-[#00b7a8] font-bold text-[#282828] cursor-pointer w-fit whitespace-nowrap"
+                className="btn btn-outline btn-sm w-fit"
               >
                 Update Password
               </button>
             </div>
 
-            <div className="p-5 rounded-2xl border border-[#e6dfd5] bg-[#faf8f5] flex flex-col justify-between space-y-4">
+            <div className="p-6 rounded-2xl border border-slate-200 bg-white flex flex-col justify-between space-y-5 shadow-xs">
               <div className="space-y-2">
-                <div className="flex items-center gap-2 font-bold text-sm text-[#282828]">
-                  <Smartphone className="w-4 h-4 text-[#82634f]" />
-                  <span>Two-Factor Verification</span>
+                <div className="flex items-center gap-2.5">
+                  <Smartphone className="w-4 h-4 text-[#8c6a4a]" />
+                  <h4 className="type-h4 text-slate-900">Two-Factor Verification</h4>
                 </div>
-                <p className="text-[#5c5046]">
+                <p className="type-support text-slate-600">
                   Current status:{' '}
-                  <strong className={twoFactorEnabled ? 'text-emerald-700' : 'text-[#282828]'}>
+                  <strong className={twoFactorEnabled ? 'text-emerald-700 font-semibold' : 'text-slate-900 font-semibold'}>
                     {twoFactorEnabled ? 'Enabled' : 'Disabled'}
                   </strong>
                 </p>
@@ -195,26 +195,26 @@ export const SecurityModule: React.FC<SecurityModuleProps> = ({
               <button
                 type="button"
                 onClick={() => setSubView('two-factor')}
-                className="px-3.5 py-2 rounded-xl bg-white border border-[#d8cfc3] hover:border-[#00b7a8] font-bold text-[#282828] cursor-pointer w-fit whitespace-nowrap"
+                className="btn btn-outline btn-sm w-fit"
               >
                 Configure 2FA
               </button>
             </div>
 
-            <div className="p-5 rounded-2xl border border-[#e6dfd5] bg-[#faf8f5] flex flex-col justify-between space-y-4 tabular-nums">
+            <div className="p-6 rounded-2xl border border-slate-200 bg-white flex flex-col justify-between space-y-5 shadow-xs tabular-nums">
               <div className="space-y-2">
-                <div className="flex items-center gap-2 font-bold text-sm text-[#282828]">
-                  <Laptop className="w-4 h-4 text-[#00897d]" />
-                  <span>Active Sessions ({activeSessions.length})</span>
+                <div className="flex items-center gap-2.5">
+                  <Laptop className="w-4 h-4 text-[#14616d]" />
+                  <h4 className="type-h4 text-slate-900">Active Sessions ({activeSessions.length})</h4>
                 </div>
-                <p className="text-[#5c5046]">
+                <p className="type-support text-slate-600">
                   Review authorized devices signed into your personal dashboard.
                 </p>
               </div>
               <button
                 type="button"
                 onClick={() => setSubView('active-sessions')}
-                className="px-3.5 py-2 rounded-xl bg-white border border-[#d8cfc3] hover:border-[#00b7a8] font-bold text-[#282828] cursor-pointer w-fit whitespace-nowrap"
+                className="btn btn-outline btn-sm w-fit"
               >
                 Inspect Sessions
               </button>
@@ -226,14 +226,14 @@ export const SecurityModule: React.FC<SecurityModuleProps> = ({
         {subView === 'change-password' && (
           <form
             onSubmit={handlePasswordSubmit}
-            className="max-w-lg p-6 rounded-2xl border border-[#e6dfd5] bg-[#faf8f5] space-y-4"
+            className="max-w-lg p-6 sm:p-7 rounded-2xl border border-slate-200 bg-white space-y-5 shadow-xs"
           >
-            <h4 className="font-heading font-bold text-base text-[#282828]">
+            <h4 className="type-h4 text-slate-900">
               Update Account Password
             </h4>
 
             <div>
-              <label className="block text-xs font-bold text-[#282828] mb-1">
+              <label className="form-label">
                 Current Password *
               </label>
               <input
@@ -241,12 +241,12 @@ export const SecurityModule: React.FC<SecurityModuleProps> = ({
                 required
                 value={currentPass}
                 onChange={(e) => setCurrentPass(e.target.value)}
-                className="w-full h-10 px-3 bg-white border border-[#d8cfc3] rounded-xl text-xs text-[#282828] outline-none focus:border-[#00b7a8]"
+                className="form-input"
               />
             </div>
 
             <div>
-              <label className="block text-xs font-bold text-[#282828] mb-1">
+              <label className="form-label">
                 New Password (Minimum 6 characters) *
               </label>
               <input
@@ -254,12 +254,12 @@ export const SecurityModule: React.FC<SecurityModuleProps> = ({
                 required
                 value={newPass}
                 onChange={(e) => setNewPass(e.target.value)}
-                className="w-full h-10 px-3 bg-white border border-[#d8cfc3] rounded-xl text-xs text-[#282828] outline-none focus:border-[#00b7a8]"
+                className="form-input"
               />
             </div>
 
             <div>
-              <label className="block text-xs font-bold text-[#282828] mb-1">
+              <label className="form-label">
                 Confirm New Password *
               </label>
               <input
@@ -267,14 +267,14 @@ export const SecurityModule: React.FC<SecurityModuleProps> = ({
                 required
                 value={confirmPass}
                 onChange={(e) => setConfirmPass(e.target.value)}
-                className="w-full h-10 px-3 bg-white border border-[#d8cfc3] rounded-xl text-xs text-[#282828] outline-none focus:border-[#00b7a8]"
+                className="form-input"
               />
             </div>
 
             <button
               type="submit"
               disabled={submitting}
-              className="px-5 py-2.5 rounded-xl bg-[#00b7a8] hover:bg-[#009e91] disabled:opacity-50 text-white text-xs font-bold flex items-center gap-2 cursor-pointer whitespace-nowrap"
+              className="btn btn-primary"
             >
               {submitting && <Loader2 className="w-4 h-4 animate-spin" />}
               <span>Save New Password</span>
@@ -284,22 +284,22 @@ export const SecurityModule: React.FC<SecurityModuleProps> = ({
 
         {/* Two-Factor */}
         {subView === 'two-factor' && (
-          <div className="max-w-xl p-6 rounded-2xl border border-[#e6dfd5] bg-[#faf8f5] space-y-4">
-            <div className="flex items-center gap-2">
-              <Shield className="w-5 h-5 text-[#00897d]" />
-              <h4 className="font-heading font-bold text-base text-[#282828]">
+          <div className="max-w-xl p-6 sm:p-7 rounded-2xl border border-slate-200 bg-white space-y-5 shadow-xs">
+            <div className="flex items-center gap-2.5">
+              <Shield className="w-5 h-5 text-[#14616d]" />
+              <h4 className="type-h4 text-slate-900">
                 Two-Factor Account Protection
               </h4>
             </div>
-            <p className="text-xs text-[#5c5046] leading-relaxed">
+            <p className="type-body text-slate-600">
               Enable secondary verification alerts on your account to protect reservation changes and payment settlements.
             </p>
-            <div className="p-4 bg-white rounded-xl border border-[#efe9e0] flex items-center justify-between gap-4">
-              <div className="text-xs">
-                <span className="font-bold text-[#282828] block">
+            <div className="p-4 bg-slate-50 rounded-xl border border-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+              <div className="space-y-0.5">
+                <span className="type-label text-slate-900 block">
                   Status: {twoFactorEnabled ? 'Enabled' : 'Disabled'}
                 </span>
-                <span className="text-[#6e5d50]">
+                <span className="type-support text-slate-500 block">
                   {twoFactorEnabled
                     ? 'Enhanced verification is active on your account.'
                     : 'Click to activate two-factor verification on your profile.'}
@@ -309,10 +309,10 @@ export const SecurityModule: React.FC<SecurityModuleProps> = ({
                 type="button"
                 disabled={submitting}
                 onClick={handleToggle2FA}
-                className={`px-4 py-2 rounded-xl text-xs font-bold cursor-pointer whitespace-nowrap shrink-0 ${
+                className={`btn btn-sm ${
                   twoFactorEnabled
                     ? 'border border-rose-200 text-rose-700 hover:bg-rose-50 bg-white'
-                    : 'bg-[#00b7a8] hover:bg-[#009e91] text-white'
+                    : 'btn-primary'
                 }`}
               >
                 {submitting
@@ -338,23 +338,23 @@ export const SecurityModule: React.FC<SecurityModuleProps> = ({
               {activeSessions.map((sess) => (
                 <div
                   key={sess.id}
-                  className="p-4 rounded-2xl border border-[#e6dfd5] bg-[#faf8f5] flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs tabular-nums"
+                  className="p-5 rounded-2xl border border-slate-200 bg-white flex flex-col sm:flex-row sm:items-center justify-between gap-3 type-support tabular-nums shadow-xs"
                 >
                   <div className="space-y-1">
                     <div className="flex flex-wrap items-center gap-2">
-                      <span className="font-bold text-[#282828]">{sess.device}</span>
+                      <span className="font-semibold text-slate-900">{sess.device}</span>
                       {sess.isCurrent && (
                         <>
-                          <span aria-hidden="true">·</span>
-                          <span className="text-[#00897d] font-bold">Current Session</span>
+                          <span className="text-slate-300" aria-hidden="true">·</span>
+                          <span className="text-[#14616d] font-semibold">Current Session</span>
                         </>
                       )}
                     </div>
-                    <div className="text-[#5c5046]">
+                    <div className="text-slate-500">
                       Network: {sess.ip} · Signed in {sess.createdAt.replace('T', ' ').slice(0, 16)}
                     </div>
                   </div>
-                  <div className="text-[#857568] sm:text-right">
+                  <div className="text-slate-500 sm:text-right">
                     Expires {sess.expiresAt.split('T')[0]}
                   </div>
                 </div>
@@ -371,18 +371,18 @@ export const SecurityModule: React.FC<SecurityModuleProps> = ({
               description="Recent authentication timestamps for your account will appear here."
             />
           ) : (
-            <div className="divide-y divide-[#e6dfd5] border border-[#e6dfd5] rounded-2xl bg-[#faf8f5] px-5 text-xs tabular-nums">
+            <div className="divide-y divide-slate-200 border border-slate-200 rounded-2xl bg-white px-5 type-support tabular-nums shadow-xs">
               {loginHistory.map((item) => (
                 <div
                   key={item.id}
-                  className="py-3.5 flex flex-col sm:flex-row sm:items-center justify-between gap-2"
+                  className="py-4 flex flex-col sm:flex-row sm:items-center justify-between gap-2"
                 >
                   <div>
-                    <span className="font-bold text-[#282828]">{item.device}</span>
-                    <span className="mx-2 text-[#857568]" aria-hidden="true">·</span>
-                    <span className="text-[#5c5046]">{item.ip}</span>
+                    <span className="font-semibold text-slate-900">{item.device}</span>
+                    <span className="mx-2 text-slate-300" aria-hidden="true">·</span>
+                    <span className="text-slate-600">{item.ip}</span>
                   </div>
-                  <div className="text-[#6e5d50]">
+                  <div className="text-slate-500">
                     {item.timestamp.replace('T', ' ').slice(0, 19)} UTC
                   </div>
                 </div>

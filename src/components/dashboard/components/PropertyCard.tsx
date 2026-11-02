@@ -33,7 +33,7 @@ export const PropertyCard: React.FC<PropertyCardProps> = ({
             <Building2 className="w-8 h-8" />
           </div>
         )}
-        <div className="absolute top-3 left-3 bg-[#0f172a]/85 backdrop-blur-xs text-white text-[11px] font-semibold px-2.5 py-1 rounded-lg">
+        <div className="absolute top-3 left-3 bg-[#0f172a]/85 backdrop-blur-xs text-white type-support font-semibold px-2.5 py-1 rounded-lg">
           Unit {property.unitNumber}
         </div>
         {onToggleSave && (
@@ -41,7 +41,7 @@ export const PropertyCard: React.FC<PropertyCardProps> = ({
             type="button"
             onClick={() => onToggleSave(property.id)}
             title={isSaved ? 'Remove from saved' : 'Save property'}
-            className="absolute top-3 right-3 w-8 h-8 rounded-full bg-white/95 flex items-center justify-center text-rose-500 hover:scale-105 transition-transform cursor-pointer shadow-xs"
+            className="absolute top-3 right-3 w-9 h-9 rounded-full bg-white/95 flex items-center justify-center text-rose-500 hover:scale-105 transition-transform cursor-pointer shadow-xs"
           >
             <Heart className={`w-4 h-4 ${isSaved ? 'fill-rose-500' : ''}`} />
           </button>
@@ -50,15 +50,15 @@ export const PropertyCard: React.FC<PropertyCardProps> = ({
 
       <div className="p-4 space-y-3 flex-1 flex flex-col justify-between">
         <div className="space-y-1.5">
-          <h4 className="font-heading font-bold text-base text-[#0f172a] leading-snug line-clamp-1">
+          <h4 className="type-h4 text-[#0f172a] line-clamp-1">
             {property.title}
           </h4>
-          <div className="flex items-center gap-1.5 text-xs text-slate-600">
+          <div className="flex items-center gap-1.5 type-support text-slate-600">
             <MapPin className="w-3.5 h-3.5 text-[#14616d] shrink-0" />
             <span className="truncate">{property.location}</span>
           </div>
 
-          <div className="flex items-center gap-2 pt-1 text-xs text-slate-500 tabular-nums">
+          <div className="flex items-center gap-2 pt-1 type-support text-slate-500 tabular-nums">
             <span className="flex items-center gap-1">
               <Users className="w-3.5 h-3.5" /> {property.bedrooms} Bed · {property.bathrooms} Bath
             </span>
@@ -71,8 +71,8 @@ export const PropertyCard: React.FC<PropertyCardProps> = ({
 
         <div className="pt-3 border-t border-slate-100 flex items-center justify-between gap-2">
           <div>
-            <span className="text-[11px] font-medium text-slate-500 block">Monthly Rate</span>
-            <span className="text-sm font-bold text-[#0f172a] tabular-nums">
+            <span className="type-support font-medium text-slate-500 block">Monthly Rate</span>
+            <span className="type-h4 text-[#0f172a] tabular-nums">
               ${property.monthlyRate.toLocaleString()} / mo
             </span>
           </div>
@@ -83,7 +83,7 @@ export const PropertyCard: React.FC<PropertyCardProps> = ({
             className="btn btn-primary btn-sm"
           >
             <span>Book Stay</span>
-            <ArrowRight className="w-3.5 h-3.5" />
+            <ArrowRight className="w-4 h-4" />
           </button>
         </div>
       </div>

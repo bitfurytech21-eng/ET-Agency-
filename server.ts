@@ -203,14 +203,20 @@ app.set('trust proxy', 1);
 app.use(
   helmet({
     contentSecurityPolicy: false,
+    frameguard: false,
+    crossOriginEmbedderPolicy: false,
+    crossOriginOpenerPolicy: false,
+    crossOriginResourcePolicy: false,
+    referrerPolicy: { policy: 'strict-origin-when-cross-origin' },
   }),
 );
 app.use(cors({ origin: true, credentials: true }));
 app.use(express.json({ limit: '6mb' }));
 app.use(
+  '/api',
   rateLimit({
     windowMs: 15 * 60 * 1000,
-    max: 600,
+    max: 5000,
     validate: { xForwardedForHeader: false },
   }),
 );
@@ -672,7 +678,7 @@ app.post('/api/vehicle-bookings', async (req: Request, res: Response) => {
       employer,
       pickupDate,
       returnDate,
-      pickupLocation: pickupLocation || 'SMF Sacramento Int’l Airport Concierge Delivery',
+      pickupLocation: pickupLocation || 'El Dorado Hills, CA / SMF Airport Concierge Delivery',
       protectionPlan: protectionPlan === 'executive_shield' ? 'executive_shield' : 'standard',
       paymentMethod: paymentMethod === 'unit_balance' ? 'unit_balance' : 'manual_wire',
       notes,
@@ -785,6 +791,18 @@ app.get('/api/catalog', async (_req: Request, res: Response) => {
     return res.json({ success: true, ...catalog });
   } catch (error) {
     return res.status(500).json({ message: 'Failed to load catalog', error: (error as Error).message });
+  }
+});
+
+app.get('/api/cart', async (req: Request, res: Response) => {
+  try {
+    const cartId = typeof req.query.cartId === 'string' && req.query.cartId.trim()
+      ? req.query.cartId.trim()
+      : 'etl_cart_default';
+    const cart = await getOrCreateCart(cartId);
+    return res.json({ success: true, cart });
+  } catch (error) {
+    return res.status(400).json({ message: (error as Error).message });
   }
 });
 
@@ -1482,6 +1500,10 @@ app.delete('/api/admin/promos/:id', requireAdmin, async (req: Request, res: Resp
   }
 });
 
+app.use('/api', (_req: Request, res: Response) => {
+  res.status(404).json({ success: false, message: 'API endpoint not found' });
+});
+
 app.all('/portal*', (req: Request, res: Response) => {
   const urlLower = req.originalUrl.toLowerCase();
   if (urlLower.includes('/admin')) {
@@ -1501,7 +1523,7 @@ app.use((error: Error, _req: Request, res: Response, _next: NextFunction) => {
 async function startServer() {
   if (process.env.NODE_ENV !== 'production') {
     const viteServer = await createViteServer({
-      server: { middlewareMode: true, hmr: process.env.DISABLE_HMR !== 'true' },
+      server: { middlewareMode: true, hmr: false, watch: null },
       appType: 'spa',
     });
     app.use(viteServer.middlewares);

@@ -183,10 +183,10 @@ export const AccommodationModule: React.FC<AccommodationModuleProps> = ({
       <div className="space-y-6">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-200 pb-4">
           <div>
-            <h3 className="font-heading font-bold text-lg text-[#0f172a]">
+            <h3 className="type-h3 text-[#0f172a]">
               Accommodation Reservations
             </h3>
-            <p className="text-xs text-slate-500">
+            <p className="type-body text-slate-500 mt-1">
               View active stays, previous booking history, digital entry instructions, and date changes
             </p>
           </div>
@@ -202,7 +202,7 @@ export const AccommodationModule: React.FC<AccommodationModuleProps> = ({
 
         {feedback && (
           <div
-            className={`p-4 rounded-xl border text-xs flex items-start gap-2.5 ${
+            className={`p-4 rounded-xl border type-support flex items-start gap-2.5 ${
               feedback.type === 'success'
                 ? 'bg-emerald-50 border-emerald-200 text-emerald-900'
                 : 'bg-rose-50 border-rose-200 text-rose-900'
@@ -295,13 +295,13 @@ export const AccommodationModule: React.FC<AccommodationModuleProps> = ({
             <div className="space-y-5">
               {reservations.length > 1 && (
                 <div className="flex flex-wrap items-center gap-2">
-                  <span className="text-xs font-semibold text-slate-500">Select Reservation:</span>
+                  <span className="type-support font-semibold text-slate-500">Select Reservation:</span>
                   {reservations.map((b) => (
                     <button
                       key={b.id}
                       type="button"
                       onClick={() => setSelectedBookingId(b.id)}
-                      className={`px-3 py-1.5 rounded-lg text-xs font-mono font-semibold cursor-pointer whitespace-nowrap tabular-nums ${
+                      className={`px-3.5 py-2 rounded-lg type-btn font-mono cursor-pointer whitespace-nowrap tabular-nums ${
                         b.id === selectedBooking.id
                           ? 'bg-[#0f172a] text-white'
                           : 'bg-white border border-slate-200 text-slate-600 hover:text-[#0f172a]'
@@ -316,17 +316,17 @@ export const AccommodationModule: React.FC<AccommodationModuleProps> = ({
               <div className="bg-white border border-slate-200 rounded-2xl p-6 space-y-6">
                 <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4 border-b border-slate-100 pb-4">
                   <div className="space-y-1">
-                    <div className="flex flex-wrap items-center gap-2 text-xs tabular-nums">
+                    <div className="flex flex-wrap items-center gap-2 type-support tabular-nums">
                       <span className="font-mono font-semibold text-slate-600">{selectedBooking.id}</span>
                       <span aria-hidden="true">·</span>
                       <StatusBadge status={selectedBooking.status} size="sm" />
                       <span aria-hidden="true">·</span>
                       <span className="text-slate-500">Booked {selectedBooking.bookedAt}</span>
                     </div>
-                    <h4 className="font-heading font-bold text-xl text-[#0f172a]">
+                    <h4 className="type-h3 text-[#0f172a]">
                       {selectedBooking.propertyTitle} ({selectedBooking.unitNumber})
                     </h4>
-                    <div className="flex items-center gap-1.5 text-xs text-slate-600">
+                    <div className="flex items-center gap-1.5 type-support text-slate-600">
                       <MapPin className="w-3.5 h-3.5 text-[#14616d]" />
                       <span>{selectedBooking.location}</span>
                     </div>
@@ -337,53 +337,53 @@ export const AccommodationModule: React.FC<AccommodationModuleProps> = ({
                     onClick={() => window.print()}
                     className="btn btn-outline btn-sm shrink-0"
                   >
-                    <Printer className="w-3.5 h-3.5" />
+                    <Printer className="w-4 h-4" />
                     <span>Print Summary</span>
                   </button>
                 </div>
 
-                <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 text-xs tabular-nums">
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 type-support tabular-nums">
                   <div className="p-3.5 bg-slate-50 rounded-xl border border-slate-200">
                     <span className="text-slate-500 block">Check-In Date</span>
-                    <strong className="text-sm text-[#0f172a] mt-0.5 block">
+                    <strong className="type-h4 text-[#0f172a] mt-0.5 block">
                       {selectedBooking.checkIn}
                     </strong>
                   </div>
                   <div className="p-3.5 bg-slate-50 rounded-xl border border-slate-200">
                     <span className="text-slate-500 block">Check-Out Date</span>
-                    <strong className="text-sm text-[#0f172a] mt-0.5 block">
+                    <strong className="type-h4 text-[#0f172a] mt-0.5 block">
                       {selectedBooking.checkOut}
                     </strong>
                   </div>
                   <div className="p-3.5 bg-slate-50 rounded-xl border border-slate-200">
                     <span className="text-slate-500 block">Total Length</span>
-                    <strong className="text-sm text-[#0f172a] mt-0.5 block">
+                    <strong className="type-h4 text-[#0f172a] mt-0.5 block">
                       {selectedBooking.totalNights} Nights ({selectedBooking.guestsCount} Guest
                       {selectedBooking.guestsCount > 1 ? 's' : ''})
                     </strong>
                   </div>
                   <div className="p-3.5 bg-slate-50 rounded-xl border border-slate-200">
                     <span className="text-slate-500 block">Estimated Total</span>
-                    <strong className="text-sm text-[#14616d] mt-0.5 block">
+                    <strong className="type-h4 text-[#14616d] mt-0.5 block">
                       ${selectedBooking.totalUsd.toLocaleString()} USD
                     </strong>
                   </div>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 type-support">
                   <div className="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-1">
-                    <div className="flex items-center gap-1.5 font-bold text-[#0f172a]">
+                    <div className="flex items-center gap-1.5 font-semibold text-[#0f172a]">
                       <Key className="w-4 h-4 text-amber-600" />
                       <span>Smart Lock Entry</span>
                     </div>
-                    <p className="font-mono text-xs text-slate-600 tabular-nums">
+                    <p className="font-mono type-support text-slate-600 tabular-nums">
                       {selectedBooking.status === 'confirmed' || selectedBooking.status === 'active'
                         ? selectedBooking.accessCode
                         : 'Issued 24 hours prior to confirmed check-in'}
                     </p>
                   </div>
                   <div className="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-1">
-                    <div className="flex items-center gap-1.5 font-bold text-[#0f172a]">
+                    <div className="flex items-center gap-1.5 font-semibold text-[#0f172a]">
                       <Wifi className="w-4 h-4 text-[#14616d]" />
                       <span>Dedicated Suite Wi-Fi</span>
                     </div>
@@ -395,7 +395,7 @@ export const AccommodationModule: React.FC<AccommodationModuleProps> = ({
                     </p>
                   </div>
                   <div className="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-1">
-                    <div className="flex items-center gap-1.5 font-bold text-[#0f172a]">
+                    <div className="flex items-center gap-1.5 font-semibold text-[#0f172a]">
                       <MapPin className="w-4 h-4 text-[#14616d]" />
                       <span>Assigned Parking</span>
                     </div>
@@ -404,9 +404,9 @@ export const AccommodationModule: React.FC<AccommodationModuleProps> = ({
                 </div>
 
                 {selectedBooking.notes && (
-                  <div className="p-4 bg-slate-50 rounded-xl border border-slate-200 text-xs space-y-1">
-                    <span className="font-bold text-[#0f172a] block">Reservation Notes</span>
-                    <p className="text-slate-600">{selectedBooking.notes}</p>
+                  <div className="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-1">
+                    <span className="type-support font-semibold text-[#0f172a] block">Reservation Notes</span>
+                    <p className="type-body text-slate-600">{selectedBooking.notes}</p>
                   </div>
                 )}
 
@@ -433,16 +433,16 @@ export const AccommodationModule: React.FC<AccommodationModuleProps> = ({
           ))}
 
         {subView === 'check-in-details' && (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-xs">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="p-6 rounded-2xl border border-slate-200 bg-white space-y-3">
-              <h4 className="font-heading font-bold text-base text-[#0f172a]">
+              <h4 className="type-h4 text-[#0f172a]">
                 Arrival &amp; Contactless Check-In (After 3:00 PM)
               </h4>
-              <p className="text-slate-600 leading-relaxed">
+              <p className="type-body text-slate-600">
                 {selectedBooking?.checkInInstructions ||
                   'All Easy Travel Lodging residences feature contactless smart-keypad entry. Your personal keypad code activates at 3:00 PM on your scheduled arrival date.'}
               </p>
-              <ul className="space-y-2 text-slate-600 pt-1">
+              <ul className="space-y-2 type-body text-slate-600 pt-1">
                 <li>1. Park in your assigned stall listed on your reservation details.</li>
                 <li>2. Enter your 4-digit keypad code followed by # on the residence door lock.</li>
                 <li>3. High-speed Wi-Fi credentials and welcome packet are on the kitchen counter.</li>
@@ -450,15 +450,15 @@ export const AccommodationModule: React.FC<AccommodationModuleProps> = ({
             </div>
 
             <div className="p-6 rounded-2xl border border-slate-200 bg-white space-y-3">
-              <h4 className="font-heading font-bold text-base text-[#0f172a]">
+              <h4 className="type-h4 text-[#0f172a]">
                 Departure &amp; Check-Out Procedure (By 11:00 AM)
               </h4>
-              <p className="text-slate-600 leading-relaxed">
+              <p className="type-body text-slate-600">
                 {selectedBooking?.checkOutInstructions ||
                   'Before 11:00 AM on departure day, ensure personal belongings are packed, start the dishwasher if needed, and lock the smart deadbolt upon exit.'}
               </p>
-              <div className="pt-3 border-t border-slate-100 flex items-center gap-2 text-[#0f172a]">
-                <Phone className="w-4 h-4 text-[#14616d]" />
+              <div className="pt-3 border-t border-slate-100 flex items-center gap-2 type-support text-[#0f172a]">
+                <Phone className="w-4 h-4 text-[#14616d] shrink-0" />
                 <span>
                   Need late check-out or stay extension? Call{' '}
                   <strong className="tabular-nums">916-800-3295</strong> or email{' '}
@@ -482,10 +482,10 @@ export const AccommodationModule: React.FC<AccommodationModuleProps> = ({
               className="max-w-xl p-6 rounded-2xl border border-slate-200 bg-white space-y-4"
             >
               <div>
-                <h4 className="font-heading font-bold text-base text-[#0f172a]">
+                <h4 className="type-h4 text-[#0f172a]">
                   Modify Dates — {selectedBooking.propertyTitle} ({selectedBooking.id})
                 </h4>
-                <p className="text-xs text-slate-500 mt-0.5">
+                <p className="type-body text-slate-600 mt-1">
                   Updated stay dates recalculate nightly or monthly totals automatically on your account.
                 </p>
               </div>
@@ -557,10 +557,10 @@ export const AccommodationModule: React.FC<AccommodationModuleProps> = ({
               className="max-w-xl p-6 rounded-2xl border border-rose-200 bg-white space-y-4"
             >
               <div>
-                <h4 className="font-heading font-bold text-base text-[#0f172a]">
+                <h4 className="type-h4 text-[#0f172a]">
                   Cancel Reservation — {selectedBooking.propertyTitle} ({selectedBooking.id})
                 </h4>
-                <p className="text-xs text-slate-600 mt-0.5">
+                <p className="type-body text-slate-600 mt-1">
                   Cancelling releases {selectedBooking.unitNumber} for {selectedBooking.checkIn} to{' '}
                   {selectedBooking.checkOut}.
                 </p>
@@ -581,7 +581,7 @@ export const AccommodationModule: React.FC<AccommodationModuleProps> = ({
                 <button
                   type="submit"
                   disabled={isMutating}
-                  className="px-5 py-2.5 rounded-lg bg-rose-600 hover:bg-rose-700 disabled:opacity-50 text-white text-xs font-semibold flex items-center gap-2 cursor-pointer whitespace-nowrap"
+                  className="btn btn-danger btn-sm disabled:opacity-50"
                 >
                   {isMutating && <Loader2 className="w-4 h-4 animate-spin" />}
                   <span>Confirm Cancellation</span>

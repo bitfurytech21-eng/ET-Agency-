@@ -73,14 +73,13 @@ export const AdminReservations: React.FC<AdminReservationsProps> = ({
 
   return (
     <div className="space-y-6">
-      {/* Sub-Navigation matching admin/reservations/ hierarchy */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-[#e6dfd5] pb-4">
-        {/* Type tabs (index, accommodation, car-rentals) */}
+      {/* Sub-Navigation */}
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-200 pb-4">
         <div className="flex flex-wrap gap-2">
           {[
-            { id: 'all', label: 'All Reservations (index.php)', icon: Calendar },
-            { id: 'accommodation', label: 'Accommodation Stays (accommodation.php)', icon: Building2 },
-            { id: 'car-rentals', label: '3D Fleet Rentals (car-rentals.php)', icon: Car },
+            { id: 'all', label: 'All Reservations', icon: Calendar },
+            { id: 'accommodation', label: 'Accommodation Stays', icon: Building2 },
+            { id: 'car-rentals', label: 'Fleet Rentals', icon: Car },
           ].map((tab) => {
             const Icon = tab.icon;
             const active = typeFilter === tab.id;
@@ -89,13 +88,13 @@ export const AdminReservations: React.FC<AdminReservationsProps> = ({
                 key={tab.id}
                 type="button"
                 onClick={() => setTypeFilter(tab.id as typeof typeFilter)}
-                className={`px-3 py-1.5 rounded-lg text-xs font-bold flex items-center gap-1.5 transition-colors cursor-pointer border ${
+                className={`px-3.5 py-2 rounded-xl type-nav flex items-center gap-2 transition-colors cursor-pointer border whitespace-nowrap ${
                   active
-                    ? 'bg-[#00b7a8] text-white border-[#00b7a8] shadow-xs'
-                    : 'bg-white text-[#5c5046] border-[#e6dfd5] hover:border-[#00b7a8]/40 hover:text-[#282828]'
+                    ? 'bg-[#14616d] text-white border-[#14616d] shadow-xs'
+                    : 'bg-white text-slate-600 border-slate-200 hover:border-slate-300 hover:text-slate-900'
                 }`}
               >
-                <Icon className="w-3.5 h-3.5" />
+                <Icon className="w-4 h-4" />
                 <span>{tab.label}</span>
               </button>
             );
@@ -103,28 +102,28 @@ export const AdminReservations: React.FC<AdminReservationsProps> = ({
         </div>
 
         {/* Search */}
-        <div className="relative">
-          <Search className="w-3.5 h-3.5 text-[#857568] absolute left-3 top-2.5" />
+        <div className="relative w-full md:w-72">
+          <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
           <input
             type="text"
-            placeholder="Search guest, unit, or hospital..."
+            placeholder="Search guest, unit, or organization..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="pl-8 pr-3 py-1.5 bg-white border border-[#dfd6ca] rounded-lg text-xs outline-none focus:border-[#00b7a8] w-64"
+            className="form-input pl-10"
           />
         </div>
       </div>
 
-      {/* Status Filter Tabs (pending, confirmed, active, completed, cancelled) */}
+      {/* Status Filter Tabs */}
       <div className="flex flex-wrap items-center gap-2">
-        <span className="text-xs font-bold text-[#857568] mr-1">Status View:</span>
+        <span className="type-label text-slate-600 mr-1">Status View:</span>
         {[
           { id: 'all', label: 'All Statuses' },
-          { id: 'pending', label: 'Pending Review (pending.php)', count: reservations.filter((r) => r.status === 'pending').length },
-          { id: 'confirmed', label: 'Confirmed (confirmed.php)', count: reservations.filter((r) => r.status === 'confirmed').length },
-          { id: 'active', label: 'Active / Checked In (active.php)', count: reservations.filter((r) => r.status === 'active').length },
-          { id: 'completed', label: 'Completed (completed.php)', count: reservations.filter((r) => r.status === 'completed').length },
-          { id: 'cancelled', label: 'Cancelled (cancelled.php)', count: reservations.filter((r) => r.status === 'cancelled').length },
+          { id: 'pending', label: 'Pending Review', count: reservations.filter((r) => r.status === 'pending').length },
+          { id: 'confirmed', label: 'Confirmed', count: reservations.filter((r) => r.status === 'confirmed').length },
+          { id: 'active', label: 'Active / Checked In', count: reservations.filter((r) => r.status === 'active').length },
+          { id: 'completed', label: 'Completed', count: reservations.filter((r) => r.status === 'completed').length },
+          { id: 'cancelled', label: 'Cancelled', count: reservations.filter((r) => r.status === 'cancelled').length },
         ].map((tab) => {
           const active = statusFilter === tab.id;
           return (
@@ -132,20 +131,20 @@ export const AdminReservations: React.FC<AdminReservationsProps> = ({
               key={tab.id}
               type="button"
               onClick={() => setStatusFilter(tab.id as typeof statusFilter)}
-              className={`px-2.5 py-1 rounded-md text-xs font-semibold cursor-pointer border transition-colors flex items-center gap-1.5 ${
+              className={`px-3 py-1.5 rounded-lg type-btn cursor-pointer border transition-colors flex items-center gap-1.5 whitespace-nowrap tabular-nums ${
                 active
-                  ? 'bg-[#82634f] text-white border-[#82634f]'
-                  : 'bg-white text-[#5c5046] border-[#e6dfd5] hover:bg-[#faf8f5]'
+                  ? 'bg-slate-900 text-white border-slate-900'
+                  : 'bg-white text-slate-600 border-slate-200 hover:bg-slate-50 hover:text-slate-900'
               }`}
             >
               <span>{tab.label}</span>
               {typeof tab.count === 'number' && (
                 <span
-                  className={`px-1.5 py-0.2 rounded text-[10px] font-bold ${
-                    active ? 'bg-white/20 text-white' : 'bg-[#faf8f5] text-[#82634f]'
+                  className={`type-support font-semibold ${
+                    active ? 'text-slate-300' : 'text-slate-400'
                   }`}
                 >
-                  {tab.count}
+                  ({tab.count})
                 </span>
               )}
             </button>
@@ -154,102 +153,102 @@ export const AdminReservations: React.FC<AdminReservationsProps> = ({
       </div>
 
       {/* Main Reservations Table */}
-      <div className="bg-white border border-[#e6dfd5] rounded-2xl p-6 shadow-xs space-y-4">
-        <div className="flex items-center justify-between border-b border-[#e6dfd5] pb-3">
-          <div>
-            <h3 className="font-heading font-bold text-base text-[#282828]">
+      <div className="bg-white border border-slate-200 rounded-2xl p-6 shadow-xs space-y-5">
+        <div className="flex items-center justify-between border-b border-slate-200 pb-4">
+          <div className="space-y-1">
+            <h3 className="type-h3 text-slate-900">
               {typeFilter === 'all'
                 ? 'All Guest & Fleet Reservations'
                 : typeFilter === 'accommodation'
-                ? 'Nationwide Suites & Residences Stays'
-                : '3D Studio Fleet Rentals'}
+                ? 'Suites & Residences Stays'
+                : 'Executive Fleet Rentals'}
             </h3>
-            <p className="text-xs text-[#5c5046]">
+            <p className="type-support text-slate-500 tabular-nums">
               Showing {filteredReservations.length} of {reservations.length} total bookings
             </p>
           </div>
         </div>
 
         {filteredReservations.length === 0 ? (
-          <div className="text-center py-12 text-[#857568] space-y-2">
-            <Calendar className="w-8 h-8 mx-auto text-[#dfd6ca]" />
-            <p className="text-sm font-semibold">No reservations found in this view.</p>
-            <p className="text-xs">Adjust your search query or status filter.</p>
+          <div className="text-center py-12 text-slate-500 space-y-2">
+            <Calendar className="w-8 h-8 mx-auto text-slate-300" />
+            <p className="type-h4 text-slate-700">No reservations found in this view.</p>
+            <p className="type-support text-slate-500">Adjust your search query or status filter.</p>
           </div>
         ) : (
           <div className="overflow-x-auto">
-            <table className="w-full text-left text-xs">
-              <thead className="bg-[#faf8f5] text-[#857568] uppercase font-bold tracking-wider border-b border-[#e6dfd5]">
+            <table className="data-table">
+              <thead>
                 <tr>
-                  <th className="py-3 px-3">Booking ID</th>
-                  <th className="py-3 px-3">Type</th>
-                  <th className="py-3 px-3">Guest &amp; Affiliation</th>
-                  <th className="py-3 px-3">Reserved Asset</th>
-                  <th className="py-3 px-3">Dates &amp; Duration</th>
-                  <th className="py-3 px-3">Total ($ / Units)</th>
-                  <th className="py-3 px-3">Status</th>
-                  <th className="py-3 px-3 text-right">Quick Actions</th>
+                  <th>Booking ID</th>
+                  <th>Category</th>
+                  <th>Guest &amp; Affiliation</th>
+                  <th>Reserved Asset</th>
+                  <th>Dates &amp; Duration</th>
+                  <th>Total ($ / Units)</th>
+                  <th>Status</th>
+                  <th className="text-right">Quick Actions</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-[#e6dfd5]">
+              <tbody>
                 {filteredReservations.map((res) => (
-                  <tr key={res.id} className="hover:bg-[#fbf9f6] transition-colors">
-                    <td className="py-3.5 px-3 font-mono font-bold text-[#82634f]">{res.id}</td>
-                    <td className="py-3 px-3">
+                  <tr key={res.id}>
+                    <td className="font-mono font-semibold text-[#8c6a4a] type-support">{res.id}</td>
+                    <td>
                       <span
-                        className={`inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-bold uppercase ${
+                        className={`inline-flex items-center gap-1.5 type-support font-semibold ${
                           res.type === 'accommodation'
-                            ? 'bg-[#e8f8f6] text-[#00897d] border border-[#bfe8e3]'
-                            : 'bg-[#fbf5ee] text-[#82634f] border border-[#ebdccb]'
+                            ? 'text-[#14616d]'
+                            : 'text-[#8c6a4a]'
                         }`}
                       >
-                        {res.type === 'accommodation' ? <Building2 className="w-3 h-3" /> : <Car className="w-3 h-3" />}
+                        {res.type === 'accommodation' ? <Building2 className="w-3.5 h-3.5" /> : <Car className="w-3.5 h-3.5" />}
                         <span>{res.type === 'accommodation' ? 'Residence' : 'Vehicle'}</span>
                       </span>
                     </td>
-                    <td className="py-3 px-3">
-                      <div className="font-bold text-[#282828]">{res.guestName}</div>
-                      <div className="text-[11px] text-[#5c5046]">{res.guestEmail}</div>
+                    <td>
+                      <div className="font-semibold text-slate-900">{res.guestName}</div>
+                      <div className="type-support text-slate-500">{res.guestEmail}</div>
                       {res.employer && (
-                        <div className="text-[10px] text-[#00897d] font-semibold">{res.employer}</div>
+                        <div className="type-support text-[#14616d] font-medium">{res.employer}</div>
                       )}
                     </td>
-                    <td className="py-3 px-3">
-                      <span className="font-semibold text-[#282828] block line-clamp-1">{res.targetTitle}</span>
-                      <span className="text-[11px] text-[#857568]">{res.targetId}</span>
+                    <td>
+                      <span className="font-semibold text-slate-900 block line-clamp-1">{res.targetTitle}</span>
+                      <span className="type-support text-slate-500 font-mono">{res.targetId}</span>
                     </td>
-                    <td className="py-3 px-3">
-                      <span className="font-semibold text-[#282828] block">
+                    <td className="tabular-nums">
+                      <span className="font-semibold text-slate-900 block">
                         {res.startDate} → {res.endDate}
                       </span>
-                      <span className="text-[11px] text-[#857568]">{res.totalDays} days / nights</span>
+                      <span className="type-support text-slate-500">{res.totalDays} days / nights</span>
                     </td>
-                    <td className="py-3 px-3">
-                      <span className="font-bold text-[#00897d] block tabular-nums">
+                    <td className="tabular-nums">
+                      <span className="font-semibold text-[#14616d] block">
                         ${res.amountUsd?.toLocaleString()}
                       </span>
                       {res.unitsCost && (
-                        <span className="text-[10px] text-[#82634f] font-mono">{res.unitsCost} Units</span>
+                        <span className="type-support text-[#8c6a4a] font-mono">{res.unitsCost} Units</span>
                       )}
                     </td>
-                    <td className="py-3 px-3">
+                    <td>
                       <span
-                        className={`px-2 py-0.5 rounded text-[10px] font-bold uppercase border ${getStatusBadge(
+                        className={`px-2.5 py-1 rounded-md type-support font-semibold capitalize border inline-block ${getStatusBadge(
                           res.status
                         )}`}
                       >
                         {res.status}
                       </span>
                     </td>
-                    <td className="py-3 px-3 text-right">
+                    <td className="text-right">
                       <div className="inline-flex items-center gap-1.5">
                         <button
                           type="button"
                           onClick={() => setSelectedReservation(res)}
                           title="View Details"
-                          className="p-1.5 rounded bg-white hover:bg-[#faf8f5] text-[#5c5046] border border-[#dfd6ca] cursor-pointer"
+                          className="p-2 rounded-lg bg-white hover:bg-slate-50 text-slate-600 border border-slate-200 cursor-pointer"
                         >
-                          <Eye className="w-3.5 h-3.5" />
+                          <Eye className="w-4 h-4" />
                         </button>
 
                         {res.status === 'pending' && (
@@ -257,9 +256,9 @@ export const AdminReservations: React.FC<AdminReservationsProps> = ({
                             type="button"
                             onClick={() => onUpdateStatus(res.id, 'confirmed')}
                             title="Confirm Booking"
-                            className="p-1.5 rounded bg-emerald-50 hover:bg-emerald-100 text-emerald-700 border border-emerald-200 cursor-pointer"
+                            className="p-2 rounded-lg bg-emerald-50 hover:bg-emerald-100 text-emerald-700 border border-emerald-200 cursor-pointer"
                           >
-                            <Check className="w-3.5 h-3.5" />
+                            <Check className="w-4 h-4" />
                           </button>
                         )}
 
@@ -268,9 +267,9 @@ export const AdminReservations: React.FC<AdminReservationsProps> = ({
                             type="button"
                             onClick={() => onUpdateStatus(res.id, 'active')}
                             title="Check In / Activate"
-                            className="p-1.5 rounded bg-blue-50 hover:bg-blue-100 text-blue-700 border border-blue-200 cursor-pointer"
+                            className="p-2 rounded-lg bg-blue-50 hover:bg-blue-100 text-blue-700 border border-blue-200 cursor-pointer"
                           >
-                            <CheckCircle2 className="w-3.5 h-3.5" />
+                            <CheckCircle2 className="w-4 h-4" />
                           </button>
                         )}
 
@@ -279,9 +278,9 @@ export const AdminReservations: React.FC<AdminReservationsProps> = ({
                             type="button"
                             onClick={() => onUpdateStatus(res.id, 'completed')}
                             title="Complete Stay"
-                            className="p-1.5 rounded bg-purple-50 hover:bg-purple-100 text-purple-700 border border-purple-200 cursor-pointer"
+                            className="p-2 rounded-lg bg-purple-50 hover:bg-purple-100 text-purple-700 border border-purple-200 cursor-pointer"
                           >
-                            <Clock className="w-3.5 h-3.5" />
+                            <Clock className="w-4 h-4" />
                           </button>
                         )}
 
@@ -290,9 +289,9 @@ export const AdminReservations: React.FC<AdminReservationsProps> = ({
                             type="button"
                             onClick={() => onUpdateStatus(res.id, 'cancelled')}
                             title="Cancel Booking"
-                            className="p-1.5 rounded bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 cursor-pointer"
+                            className="p-2 rounded-lg bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 cursor-pointer"
                           >
-                            <X className="w-3.5 h-3.5" />
+                            <X className="w-4 h-4" />
                           </button>
                         )}
                       </div>
@@ -307,63 +306,63 @@ export const AdminReservations: React.FC<AdminReservationsProps> = ({
 
       {/* Reservation Details Modal */}
       {selectedReservation && (
-        <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-xs flex items-center justify-center p-4">
-          <div className="bg-white rounded-2xl max-w-lg w-full p-6 shadow-xl space-y-5 text-xs text-[#282828] border border-[#e6dfd5]">
-            <div className="flex items-center justify-between border-b border-[#e6dfd5] pb-3">
+        <div className="fixed inset-0 z-50 bg-slate-900/50 backdrop-blur-xs flex items-center justify-center p-4">
+          <div className="bg-white rounded-2xl max-w-lg w-full p-6 sm:p-7 shadow-xl space-y-5 text-slate-900 border border-slate-200">
+            <div className="flex items-center justify-between border-b border-slate-200 pb-4">
               <div>
-                <span className="font-mono text-[10px] text-[#82634f] font-bold block">
+                <span className="font-mono type-support text-[#8c6a4a] font-semibold block">
                   {selectedReservation.id}
                 </span>
-                <h3 className="font-heading font-bold text-base text-[#282828]">Reservation Details</h3>
+                <h3 className="type-h4 text-slate-900">Reservation Details</h3>
               </div>
               <button
                 type="button"
                 onClick={() => setSelectedReservation(null)}
-                className="p-1.5 text-[#857568] hover:text-[#282828] cursor-pointer"
+                className="p-2 text-slate-400 hover:text-slate-700 cursor-pointer"
               >
                 <X className="w-4 h-4" />
               </button>
             </div>
 
-            <div className="space-y-3">
-              <div className="p-3 bg-[#faf8f5] rounded-xl border border-[#e6dfd5] space-y-1.5">
-                <span className="font-bold text-[#82634f] text-[11px] block uppercase tracking-wider">
+            <div className="space-y-3.5">
+              <div className="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-1">
+                <span className="type-support font-semibold text-slate-500 block">
                   Target Asset &amp; Category
                 </span>
-                <p className="font-bold text-sm text-[#282828]">{selectedReservation.targetTitle}</p>
-                <p className="text-[11px] text-[#5c5046]">Asset ID: {selectedReservation.targetId}</p>
+                <p className="type-h4 text-slate-900">{selectedReservation.targetTitle}</p>
+                <p className="type-support text-slate-500 font-mono">Asset ID: {selectedReservation.targetId}</p>
               </div>
 
-              <div className="grid grid-cols-2 gap-3">
-                <div className="p-3 bg-[#faf8f5] rounded-xl border border-[#e6dfd5]">
-                  <span className="text-[10px] text-[#857568] uppercase font-bold block">Guest Name</span>
-                  <span className="font-bold text-[#282828] text-xs">{selectedReservation.guestName}</span>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+                <div className="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-0.5">
+                  <span className="type-support text-slate-500 font-medium block">Guest Name</span>
+                  <span className="type-label text-slate-900">{selectedReservation.guestName}</span>
                 </div>
-                <div className="p-3 bg-[#faf8f5] rounded-xl border border-[#e6dfd5]">
-                  <span className="text-[10px] text-[#857568] uppercase font-bold block">Corporate Sponsor</span>
-                  <span className="font-bold text-[#00897d] text-xs">
+                <div className="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-0.5">
+                  <span className="type-support text-slate-500 font-medium block">Corporate Sponsor</span>
+                  <span className="type-label text-[#14616d]">
                     {selectedReservation.employer || 'Self-Sponsored'}
                   </span>
                 </div>
               </div>
 
-              <div className="p-3 bg-[#faf8f5] rounded-xl border border-[#e6dfd5] space-y-1 text-[11px]">
-                <div className="flex justify-between">
-                  <span className="text-[#857568]">Stay Dates:</span>
-                  <span className="font-bold text-[#282828]">
+              <div className="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-2 type-support tabular-nums">
+                <div className="flex justify-between gap-4">
+                  <span className="text-slate-500">Stay Dates:</span>
+                  <span className="font-semibold text-slate-900 text-right">
                     {selectedReservation.startDate} to {selectedReservation.endDate} ({selectedReservation.totalDays} days)
                   </span>
                 </div>
-                <div className="flex justify-between">
-                  <span className="text-[#857568]">Financial Settlement:</span>
-                  <span className="font-bold text-[#00897d] tabular-nums">
+                <div className="flex justify-between gap-4">
+                  <span className="text-slate-500">Financial Settlement:</span>
+                  <span className="font-semibold text-[#14616d]">
                     ${selectedReservation.amountUsd?.toLocaleString()}
                   </span>
                 </div>
-                <div className="flex justify-between">
-                  <span className="text-[#857568]">Current Status:</span>
+                <div className="flex justify-between items-center gap-4">
+                  <span className="text-slate-500">Current Status:</span>
                   <span
-                    className={`px-2 py-0.5 rounded text-[10px] font-bold uppercase ${getStatusBadge(
+                    className={`px-2.5 py-0.5 rounded-md type-support font-semibold capitalize border ${getStatusBadge(
                       selectedReservation.status
                     )}`}
                   >
@@ -373,15 +372,15 @@ export const AdminReservations: React.FC<AdminReservationsProps> = ({
               </div>
 
               {selectedReservation.notes && (
-                <div className="p-3 bg-[#faf8f5] rounded-xl border border-[#e6dfd5]">
-                  <span className="text-[10px] text-[#857568] uppercase font-bold block mb-1">Guest Notes:</span>
-                  <p className="text-xs text-[#282828]">{selectedReservation.notes}</p>
+                <div className="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-1">
+                  <span className="type-support text-slate-500 font-semibold block">Guest Notes:</span>
+                  <p className="type-body text-slate-700">{selectedReservation.notes}</p>
                 </div>
               )}
             </div>
 
-            <div className="flex justify-between items-center pt-2 border-t border-[#e6dfd5]">
-              <div className="flex gap-2">
+            <div className="flex flex-wrap justify-between items-center gap-3 pt-3 border-t border-slate-200">
+              <div className="flex flex-wrap gap-2">
                 {selectedReservation.status !== 'confirmed' && (
                   <button
                     type="button"
@@ -389,7 +388,7 @@ export const AdminReservations: React.FC<AdminReservationsProps> = ({
                       onUpdateStatus(selectedReservation.id, 'confirmed');
                       setSelectedReservation(null);
                     }}
-                    className="px-3 py-1.5 bg-emerald-600 text-white rounded-lg font-bold text-xs cursor-pointer hover:bg-emerald-700"
+                    className="btn btn-sm bg-emerald-600 hover:bg-emerald-700 text-white"
                   >
                     Set Confirmed
                   </button>
@@ -401,7 +400,7 @@ export const AdminReservations: React.FC<AdminReservationsProps> = ({
                       onUpdateStatus(selectedReservation.id, 'active');
                       setSelectedReservation(null);
                     }}
-                    className="px-3 py-1.5 bg-blue-600 text-white rounded-lg font-bold text-xs cursor-pointer hover:bg-blue-700"
+                    className="btn btn-sm bg-[#14616d] hover:bg-[#0f4952] text-white"
                   >
                     Set Active
                   </button>
@@ -411,7 +410,7 @@ export const AdminReservations: React.FC<AdminReservationsProps> = ({
               <button
                 type="button"
                 onClick={() => setSelectedReservation(null)}
-                className="px-4 py-1.5 border border-[#dfd6ca] rounded-lg text-[#5c5046] hover:bg-[#faf8f5] font-semibold cursor-pointer"
+                className="btn btn-outline btn-sm"
               >
                 Close
               </button>

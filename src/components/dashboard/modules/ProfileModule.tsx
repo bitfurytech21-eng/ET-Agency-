@@ -156,21 +156,21 @@ export const ProfileModule: React.FC<ProfileModuleProps> = ({ user, onSaveProfil
         }}
       />
 
-      <div className="px-4 sm:px-8 pb-6 space-y-6">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[#e6dfd5] pb-4">
-          <div>
-            <h3 className="font-heading font-bold text-lg text-[#282828]">
+      <div className="px-4 sm:px-8 pb-8 space-y-6">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-200 pb-5">
+          <div className="space-y-1">
+            <h3 className="type-h3 text-slate-900">
               Profile Information &amp; Account Settings
             </h3>
-            <p className="text-xs text-[#6e5d50]">
-              Update your personal contact details, billing address, and residence stay preferences
+            <p className="type-body text-slate-600">
+              Update your personal contact details, billing address, and residence stay preferences.
             </p>
           </div>
           {subView === 'index' && (
             <button
               type="button"
               onClick={() => setSubView('personal-information')}
-              className="px-4 py-2 rounded-xl bg-[#00b7a8] hover:bg-[#009e91] text-white text-xs font-bold cursor-pointer whitespace-nowrap shrink-0 w-fit"
+              className="btn btn-primary btn-sm w-fit"
             >
               Edit Profile Details
             </button>
@@ -179,7 +179,7 @@ export const ProfileModule: React.FC<ProfileModuleProps> = ({ user, onSaveProfil
 
         {feedback && (
           <div
-            className={`p-4 rounded-xl border text-xs flex items-start gap-2.5 ${
+            className={`p-4 rounded-xl border type-support flex items-start gap-2.5 ${
               feedback.type === 'success'
                 ? 'bg-emerald-50 border-emerald-200 text-emerald-900'
                 : 'bg-rose-50 border-rose-200 text-rose-900'
@@ -196,87 +196,87 @@ export const ProfileModule: React.FC<ProfileModuleProps> = ({ user, onSaveProfil
 
         {/* Profile Overview */}
         {subView === 'index' && (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-xs">
-            <div className="p-6 rounded-2xl border border-[#e6dfd5] bg-[#faf8f5] space-y-4">
-              <div className="flex items-center gap-2">
-                <User className="w-4 h-4 text-[#00897d]" />
-                <h4 className="font-heading font-bold text-base text-[#282828]">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="p-6 rounded-2xl border border-slate-200 bg-white space-y-5 shadow-xs">
+              <div className="flex items-center gap-2.5">
+                <User className="w-4 h-4 text-[#14616d]" />
+                <h4 className="type-h4 text-slate-900">
                   Registered Account Profile
                 </h4>
               </div>
 
-              <dl className="space-y-3 tabular-nums">
-                <div className="flex justify-between gap-4 border-b border-[#efe9e0] pb-2.5">
-                  <dt className="text-[#6e5d50]">Full Name</dt>
-                  <dd className="font-bold text-[#282828] text-right">{user.name}</dd>
+              <dl className="space-y-3.5 tabular-nums type-support">
+                <div className="flex justify-between gap-4 border-b border-slate-100 pb-3">
+                  <dt className="text-slate-500">Full Name</dt>
+                  <dd className="font-semibold text-slate-900 text-right">{user.name}</dd>
                 </div>
-                <div className="flex justify-between gap-4 border-b border-[#efe9e0] pb-2.5">
-                  <dt className="text-[#6e5d50]">Email Address</dt>
-                  <dd className="font-semibold text-[#282828] text-right">{user.email}</dd>
+                <div className="flex justify-between gap-4 border-b border-slate-100 pb-3">
+                  <dt className="text-slate-500">Email Address</dt>
+                  <dd className="font-semibold text-slate-900 text-right">{user.email}</dd>
                 </div>
-                <div className="flex justify-between gap-4 border-b border-[#efe9e0] pb-2.5">
-                  <dt className="text-[#6e5d50]">Phone Number</dt>
-                  <dd className="font-semibold text-[#282828] text-right">
+                <div className="flex justify-between gap-4 border-b border-slate-100 pb-3">
+                  <dt className="text-slate-500">Phone Number</dt>
+                  <dd className="font-semibold text-slate-900 text-right">
                     {user.phone || 'Not provided'}
                   </dd>
                 </div>
-                <div className="flex justify-between gap-4 border-b border-[#efe9e0] pb-2.5">
-                  <dt className="text-[#6e5d50]">Company / Organization</dt>
-                  <dd className="font-semibold text-[#282828] text-right">
+                <div className="flex justify-between gap-4 border-b border-slate-100 pb-3">
+                  <dt className="text-slate-500">Company / Organization</dt>
+                  <dd className="font-semibold text-slate-900 text-right">
                     {user.company || 'Not specified'}
                   </dd>
                 </div>
-                <div className="flex justify-between gap-4 border-b border-[#efe9e0] pb-2.5">
-                  <dt className="text-[#6e5d50]">Role / Title</dt>
-                  <dd className="font-semibold text-[#282828] text-right">
+                <div className="flex justify-between gap-4 border-b border-slate-100 pb-3">
+                  <dt className="text-slate-500">Role / Title</dt>
+                  <dd className="font-semibold text-slate-900 text-right">
                     {user.role || 'Not specified'}
                   </dd>
                 </div>
                 <div className="flex justify-between gap-4">
-                  <dt className="text-[#6e5d50]">User ID</dt>
-                  <dd className="font-mono font-bold text-[#282828] text-right">{user.id}</dd>
+                  <dt className="text-slate-500">User ID</dt>
+                  <dd className="font-mono font-semibold text-slate-900 text-right">{user.id}</dd>
                 </div>
               </dl>
             </div>
 
-            <div className="p-6 rounded-2xl border border-[#e6dfd5] bg-[#faf8f5] space-y-4">
-              <div className="flex items-center gap-2">
-                <MapPin className="w-4 h-4 text-[#82634f]" />
-                <h4 className="font-heading font-bold text-base text-[#282828]">
+            <div className="p-6 rounded-2xl border border-slate-200 bg-white space-y-5 shadow-xs">
+              <div className="flex items-center gap-2.5">
+                <MapPin className="w-4 h-4 text-[#8c6a4a]" />
+                <h4 className="type-h4 text-slate-900">
                   Billing Address &amp; Stay Preferences
                 </h4>
               </div>
 
-              <dl className="space-y-3">
-                <div className="flex justify-between gap-4 border-b border-[#efe9e0] pb-2.5">
-                  <dt className="text-[#6e5d50]">Billing Address</dt>
-                  <dd className="font-semibold text-[#282828] text-right">
+              <dl className="space-y-3.5 type-support">
+                <div className="flex justify-between gap-4 border-b border-slate-100 pb-3">
+                  <dt className="text-slate-500">Billing Address</dt>
+                  <dd className="font-semibold text-slate-900 text-right">
                     {user.address?.street
                       ? `${user.address.street}, ${user.address.city}, ${user.address.state} ${user.address.zip}`
                       : 'No billing street saved yet'}
                   </dd>
                 </div>
-                <div className="flex justify-between gap-4 border-b border-[#efe9e0] pb-2.5">
-                  <dt className="text-[#6e5d50]">Arrival Thermostat</dt>
-                  <dd className="font-semibold text-[#282828] text-right">
+                <div className="flex justify-between gap-4 border-b border-slate-100 pb-3 tabular-nums">
+                  <dt className="text-slate-500">Arrival Thermostat</dt>
+                  <dd className="font-semibold text-slate-900 text-right">
                     {user.preferences?.thermostat || '70°F'}
                   </dd>
                 </div>
-                <div className="flex justify-between gap-4 border-b border-[#efe9e0] pb-2.5">
-                  <dt className="text-[#6e5d50]">Bedding / Pillows</dt>
-                  <dd className="font-semibold text-[#282828] text-right">
+                <div className="flex justify-between gap-4 border-b border-slate-100 pb-3">
+                  <dt className="text-slate-500">Bedding / Pillows</dt>
+                  <dd className="font-semibold text-slate-900 text-right">
                     {user.preferences?.pillows || 'Standard Luxury'}
                   </dd>
                 </div>
-                <div className="flex justify-between gap-4 border-b border-[#efe9e0] pb-2.5">
-                  <dt className="text-[#6e5d50]">Email Alerts</dt>
-                  <dd className="font-semibold text-[#282828] text-right">
+                <div className="flex justify-between gap-4 border-b border-slate-100 pb-3">
+                  <dt className="text-slate-500">Email Alerts</dt>
+                  <dd className="font-semibold text-slate-900 text-right">
                     {user.preferences?.emailNotifications ? 'Enabled' : 'Paused'}
                   </dd>
                 </div>
                 <div className="flex justify-between gap-4">
-                  <dt className="text-[#6e5d50]">Timezone</dt>
-                  <dd className="font-semibold text-[#282828] text-right">
+                  <dt className="text-slate-500">Timezone</dt>
+                  <dd className="font-semibold text-slate-900 text-right">
                     {user.preferences?.timezone || user.timezone || 'Pacific (PST)'}
                   </dd>
                 </div>
@@ -289,34 +289,34 @@ export const ProfileModule: React.FC<ProfileModuleProps> = ({ user, onSaveProfil
         {subView === 'personal-information' && (
           <form
             onSubmit={handleSavePersonal}
-            className="max-w-2xl p-6 rounded-2xl border border-[#e6dfd5] bg-[#faf8f5] space-y-5"
+            className="max-w-2xl p-6 sm:p-7 rounded-2xl border border-slate-200 bg-white space-y-5 shadow-xs"
           >
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <label className="block text-xs font-bold text-[#282828] mb-1">Full Name *</label>
+                <label className="form-label">Full Name *</label>
                 <div className="relative">
-                  <User className="w-4 h-4 absolute left-3 top-3 text-[#857568] pointer-events-none" />
+                  <User className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" />
                   <input
                     type="text"
                     required
                     value={name}
                     onChange={(e) => setName(e.target.value)}
-                    className="w-full pl-9 pr-3 h-10 bg-white border border-[#d8cfc3] rounded-xl text-xs text-[#282828] outline-none focus:border-[#00b7a8]"
+                    className="form-input pl-10"
                   />
                 </div>
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-[#282828] mb-1">
+                <label className="form-label">
                   Registered Email (Account Login)
                 </label>
                 <div className="relative">
-                  <Mail className="w-4 h-4 absolute left-3 top-3 text-[#857568] pointer-events-none" />
+                  <Mail className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" />
                   <input
                     type="email"
                     disabled
                     value={user.email}
-                    className="w-full pl-9 pr-3 h-10 bg-[#efe9e0]/60 border border-[#d8cfc3] rounded-xl text-xs text-[#6e5d50] cursor-not-allowed"
+                    className="form-input pl-10 bg-slate-100 text-slate-500 cursor-not-allowed"
                   />
                 </div>
               </div>
@@ -324,95 +324,95 @@ export const ProfileModule: React.FC<ProfileModuleProps> = ({ user, onSaveProfil
 
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
               <div>
-                <label className="block text-xs font-bold text-[#282828] mb-1">Phone Number</label>
+                <label className="form-label">Phone Number</label>
                 <div className="relative">
-                  <Phone className="w-4 h-4 absolute left-3 top-3 text-[#857568] pointer-events-none" />
+                  <Phone className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" />
                   <input
                     type="tel"
                     value={phone}
                     onChange={(e) => setPhone(e.target.value)}
                     placeholder="(916) 555-0100"
-                    className="w-full pl-9 pr-3 h-10 bg-white border border-[#d8cfc3] rounded-xl text-xs text-[#282828] outline-none focus:border-[#00b7a8] tabular-nums"
+                    className="form-input pl-10 tabular-nums"
                   />
                 </div>
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-[#282828] mb-1">
+                <label className="form-label">
                   Company / Organization
                 </label>
                 <div className="relative">
-                  <Building2 className="w-4 h-4 absolute left-3 top-3 text-[#857568] pointer-events-none" />
+                  <Building2 className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" />
                   <input
                     type="text"
                     value={company}
                     onChange={(e) => setCompany(e.target.value)}
                     placeholder="Optional organization"
-                    className="w-full pl-9 pr-3 h-10 bg-white border border-[#d8cfc3] rounded-xl text-xs text-[#282828] outline-none focus:border-[#00b7a8]"
+                    className="form-input pl-10"
                   />
                 </div>
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-[#282828] mb-1">Role / Title</label>
+                <label className="form-label">Role / Title</label>
                 <input
                   type="text"
                   value={role}
                   onChange={(e) => setRole(e.target.value)}
                   placeholder="Optional title"
-                  className="w-full px-3 h-10 bg-white border border-[#d8cfc3] rounded-xl text-xs text-[#282828] outline-none focus:border-[#00b7a8]"
+                  className="form-input"
                 />
               </div>
             </div>
 
-            <div className="pt-3 border-t border-[#e6dfd5] space-y-4">
-              <h4 className="font-heading font-bold text-sm text-[#282828]">Billing Address</h4>
+            <div className="pt-4 border-t border-slate-200 space-y-4">
+              <h4 className="type-h4 text-slate-900">Billing Address</h4>
               <div>
-                <label className="block text-xs font-bold text-[#282828] mb-1">Street Address</label>
+                <label className="form-label">Street Address</label>
                 <input
                   type="text"
                   value={street}
                   onChange={(e) => setStreet(e.target.value)}
                   placeholder="Street address, suite or apartment"
-                  className="w-full px-3 h-10 bg-white border border-[#d8cfc3] rounded-xl text-xs text-[#282828] outline-none focus:border-[#00b7a8]"
+                  className="form-input"
                 />
               </div>
 
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3.5">
                 <div className="col-span-2 sm:col-span-1">
-                  <label className="block text-xs font-bold text-[#282828] mb-1">City</label>
+                  <label className="form-label">City</label>
                   <input
                     type="text"
                     value={city}
                     onChange={(e) => setCity(e.target.value)}
-                    className="w-full px-3 h-10 bg-white border border-[#d8cfc3] rounded-xl text-xs text-[#282828] outline-none focus:border-[#00b7a8]"
+                    className="form-input"
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-bold text-[#282828] mb-1">State</label>
+                  <label className="form-label">State</label>
                   <input
                     type="text"
                     value={stateCode}
                     onChange={(e) => setStateCode(e.target.value)}
-                    className="w-full px-3 h-10 bg-white border border-[#d8cfc3] rounded-xl text-xs text-[#282828] outline-none focus:border-[#00b7a8]"
+                    className="form-input"
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-bold text-[#282828] mb-1">ZIP Code</label>
+                  <label className="form-label">ZIP Code</label>
                   <input
                     type="text"
                     value={zip}
                     onChange={(e) => setZip(e.target.value)}
-                    className="w-full px-3 h-10 bg-white border border-[#d8cfc3] rounded-xl text-xs text-[#282828] outline-none focus:border-[#00b7a8] tabular-nums"
+                    className="form-input tabular-nums"
                   />
                 </div>
                 <div className="col-span-2 sm:col-span-1">
-                  <label className="block text-xs font-bold text-[#282828] mb-1">Country</label>
+                  <label className="form-label">Country</label>
                   <input
                     type="text"
                     value={country}
                     onChange={(e) => setCountry(e.target.value)}
-                    className="w-full px-3 h-10 bg-white border border-[#d8cfc3] rounded-xl text-xs text-[#282828] outline-none focus:border-[#00b7a8]"
+                    className="form-input"
                   />
                 </div>
               </div>
@@ -421,7 +421,7 @@ export const ProfileModule: React.FC<ProfileModuleProps> = ({ user, onSaveProfil
             <button
               type="submit"
               disabled={saving}
-              className="px-5 py-2.5 rounded-xl bg-[#00b7a8] hover:bg-[#009e91] disabled:opacity-50 text-white text-xs font-bold flex items-center gap-2 cursor-pointer whitespace-nowrap"
+              className="btn btn-primary"
             >
               {saving && <Loader2 className="w-4 h-4 animate-spin" />}
               <span>Save Profile Changes</span>
@@ -433,24 +433,24 @@ export const ProfileModule: React.FC<ProfileModuleProps> = ({ user, onSaveProfil
         {subView === 'preferences' && (
           <form
             onSubmit={handleSavePreferences}
-            className="max-w-2xl p-6 rounded-2xl border border-[#e6dfd5] bg-[#faf8f5] space-y-5"
+            className="max-w-2xl p-6 sm:p-7 rounded-2xl border border-slate-200 bg-white space-y-5 shadow-xs"
           >
-            <div className="flex items-center gap-2">
-              <Sliders className="w-4 h-4 text-[#00897d]" />
-              <h4 className="font-heading font-bold text-base text-[#282828]">
+            <div className="flex items-center gap-2.5">
+              <Sliders className="w-4 h-4 text-[#14616d]" />
+              <h4 className="type-h4 text-slate-900">
                 Residence Stay &amp; Notification Settings
               </h4>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <label className="block text-xs font-bold text-[#282828] mb-1">
+                <label className="form-label">
                   Preferred Arrival Thermostat
                 </label>
                 <select
                   value={thermostat}
                   onChange={(e) => setThermostat(e.target.value)}
-                  className="w-full h-10 px-3 bg-white border border-[#d8cfc3] rounded-xl text-xs text-[#282828] outline-none focus:border-[#00b7a8]"
+                  className="form-select tabular-nums"
                 >
                   <option value="68°F (20°C)">68°F (20°C)</option>
                   <option value="70°F (21°C)">70°F (21°C)</option>
@@ -460,13 +460,13 @@ export const ProfileModule: React.FC<ProfileModuleProps> = ({ user, onSaveProfil
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-[#282828] mb-1">
+                <label className="form-label">
                   Pillow &amp; Bedding Preference
                 </label>
                 <select
                   value={pillows}
                   onChange={(e) => setPillows(e.target.value)}
-                  className="w-full h-10 px-3 bg-white border border-[#d8cfc3] rounded-xl text-xs text-[#282828] outline-none focus:border-[#00b7a8]"
+                  className="form-select"
                 >
                   <option value="Hypoallergenic Medium-Firm">Hypoallergenic Medium-Firm</option>
                   <option value="Plush Down-Alternative">Plush Down-Alternative</option>
@@ -477,13 +477,13 @@ export const ProfileModule: React.FC<ProfileModuleProps> = ({ user, onSaveProfil
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <label className="block text-xs font-bold text-[#282828] mb-1">
+                <label className="form-label">
                   Housekeeping &amp; Quiet Schedule
                 </label>
                 <select
                   value={quietHours}
                   onChange={(e) => setQuietHours(e.target.value)}
-                  className="w-full h-10 px-3 bg-white border border-[#d8cfc3] rounded-xl text-xs text-[#282828] outline-none focus:border-[#00b7a8]"
+                  className="form-select"
                 >
                   <option value="Standard (10:00 PM – 7:00 AM)">Standard (10:00 PM – 7:00 AM)</option>
                   <option value="Daytime Sleeper / Night Shift">Daytime Sleeper / Night Shift</option>
@@ -492,11 +492,11 @@ export const ProfileModule: React.FC<ProfileModuleProps> = ({ user, onSaveProfil
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-[#282828] mb-1">Timezone</label>
+                <label className="form-label">Timezone</label>
                 <select
                   value={timezone}
                   onChange={(e) => setTimezone(e.target.value)}
-                  className="w-full h-10 px-3 bg-white border border-[#d8cfc3] rounded-xl text-xs text-[#282828] outline-none focus:border-[#00b7a8]"
+                  className="form-select"
                 >
                   <option value="America/Los_Angeles (PT)">America/Los_Angeles (PT)</option>
                   <option value="America/Denver (MT)">America/Denver (MT)</option>
@@ -506,13 +506,13 @@ export const ProfileModule: React.FC<ProfileModuleProps> = ({ user, onSaveProfil
               </div>
             </div>
 
-            <div className="space-y-3 pt-2 border-t border-[#e6dfd5]">
-              <label className="flex items-center justify-between gap-3 p-3 bg-white rounded-xl border border-[#efe9e0] cursor-pointer">
-                <div>
-                  <span className="text-xs font-bold text-[#282828] block">
+            <div className="space-y-3 pt-3 border-t border-slate-200">
+              <label className="flex items-center justify-between gap-4 p-4 bg-slate-50 rounded-xl border border-slate-200 cursor-pointer">
+                <div className="space-y-0.5">
+                  <span className="type-label text-slate-900 block">
                     Email Confirmation &amp; Invoice Alerts
                   </span>
-                  <span className="text-[11px] text-[#6e5d50]">
+                  <span className="type-support text-slate-500 block font-normal">
                     Receive booking confirmations and receipt statements at {user.email}
                   </span>
                 </div>
@@ -520,16 +520,16 @@ export const ProfileModule: React.FC<ProfileModuleProps> = ({ user, onSaveProfil
                   type="checkbox"
                   checked={emailNotifications}
                   onChange={(e) => setEmailNotifications(e.target.checked)}
-                  className="w-4 h-4 accent-[#00b7a8]"
+                  className="w-4 h-4 accent-[#14616d] shrink-0"
                 />
               </label>
 
-              <label className="flex items-center justify-between gap-3 p-3 bg-white rounded-xl border border-[#efe9e0] cursor-pointer">
-                <div>
-                  <span className="text-xs font-bold text-[#282828] block">
+              <label className="flex items-center justify-between gap-4 p-4 bg-slate-50 rounded-xl border border-slate-200 cursor-pointer">
+                <div className="space-y-0.5">
+                  <span className="type-label text-slate-900 block">
                     SMS Arrival &amp; Fleet Delivery Updates
                   </span>
-                  <span className="text-[11px] text-[#6e5d50]">
+                  <span className="type-support text-slate-500 block font-normal">
                     Receive check-in keypad activation and vehicle delivery timing updates
                   </span>
                 </div>
@@ -537,7 +537,7 @@ export const ProfileModule: React.FC<ProfileModuleProps> = ({ user, onSaveProfil
                   type="checkbox"
                   checked={smsNotifications}
                   onChange={(e) => setSmsNotifications(e.target.checked)}
-                  className="w-4 h-4 accent-[#00b7a8]"
+                  className="w-4 h-4 accent-[#14616d] shrink-0"
                 />
               </label>
             </div>
@@ -545,7 +545,7 @@ export const ProfileModule: React.FC<ProfileModuleProps> = ({ user, onSaveProfil
             <button
               type="submit"
               disabled={saving}
-              className="px-5 py-2.5 rounded-xl bg-[#00b7a8] hover:bg-[#009e91] disabled:opacity-50 text-white text-xs font-bold flex items-center gap-2 cursor-pointer whitespace-nowrap"
+              className="btn btn-primary"
             >
               {saving && <Loader2 className="w-4 h-4 animate-spin" />}
               <span>Save Preferences</span>

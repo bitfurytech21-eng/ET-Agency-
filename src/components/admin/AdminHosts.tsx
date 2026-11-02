@@ -51,11 +51,10 @@ export const AdminHosts: React.FC<AdminHostsProps> = () => {
 
   return (
     <div className="space-y-6">
-      {/* Header matching admin/hosts/ */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[#e6dfd5] pb-4">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-200 pb-5">
         <div>
-          <h3 className="font-heading font-bold text-lg text-[#282828]">Nationwide Host &amp; Partner Directory (hosts/)</h3>
-          <p className="text-xs text-[#5c5046]">
+          <h3 className="type-h3 text-slate-900">Nationwide Host &amp; Partner Directory</h3>
+          <p className="type-body text-slate-600 mt-1">
             Manage residence ownership agreements, revenue share contracts, and monthly payout disbursements.
           </p>
         </div>
@@ -63,47 +62,50 @@ export const AdminHosts: React.FC<AdminHostsProps> = () => {
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {hostsList.map((h) => (
-          <div key={h.id} className="p-6 bg-white border border-[#e6dfd5] rounded-2xl shadow-xs space-y-4 text-xs">
-            <div className="flex items-start justify-between border-b border-[#e6dfd5] pb-3">
-              <div>
-                <span className="font-mono text-[10px] text-[#82634f] font-bold block">{h.id}</span>
-                <h4 className="font-heading font-bold text-base text-[#282828]">{h.name}</h4>
-                <p className="text-[#857568] text-[11px]">{h.title}</p>
+          <div key={h.id} className="admin-panel p-6 space-y-5">
+            <div className="flex items-start justify-between gap-4 border-b border-slate-200 pb-4">
+              <div className="space-y-1">
+                <span className="font-mono type-support font-semibold text-[#14616d] block">{h.id}</span>
+                <h4 className="type-h4 text-slate-900">{h.name}</h4>
+                <p className="type-support text-slate-500">{h.title}</p>
               </div>
-              <span className="px-2 py-0.5 rounded bg-emerald-50 text-emerald-700 font-bold uppercase text-[10px] border border-emerald-200">
-                {h.status}
+              <span className="inline-flex items-center gap-1.5 type-support font-semibold text-emerald-700 shrink-0 capitalize">
+                <CheckCircle2 className="w-4 h-4 text-emerald-600" />
+                <span>{h.status}</span>
               </span>
             </div>
 
-            <div className="space-y-2 text-[#5c5046]">
-              <div className="flex items-center gap-2">
-                <Mail className="w-3.5 h-3.5 text-[#00b7a8]" />
+            <div className="space-y-2.5 type-support text-slate-600">
+              <div className="flex items-center gap-2.5">
+                <Mail className="w-4 h-4 text-[#14616d] shrink-0" />
                 <span>{h.email}</span>
               </div>
-              <div className="flex items-center gap-2">
-                <Phone className="w-3.5 h-3.5 text-[#00b7a8]" />
-                <span>{h.phone}</span>
+              <div className="flex items-center gap-2.5">
+                <Phone className="w-4 h-4 text-[#14616d] shrink-0" />
+                <span className="tabular-nums">{h.phone}</span>
               </div>
-              <div className="flex items-center gap-2">
-                <Building2 className="w-3.5 h-3.5 text-[#82634f]" />
-                <span className="font-semibold text-[#282828]">
+              <div className="flex items-center gap-2.5">
+                <Building2 className="w-4 h-4 text-slate-500 shrink-0" />
+                <span className="font-semibold text-slate-800">
                   {h.assignedPropertyIds.length} Assigned Residences ({h.assignedPropertyIds.join(', ')})
                 </span>
               </div>
             </div>
 
-            <div className="p-3 bg-[#faf8f5] border border-[#e6dfd5] rounded-xl space-y-1.5">
-              <div className="flex justify-between">
-                <span className="text-[#857568]">Contract Split:</span>
-                <span className="font-bold text-[#282828]">{h.commissionSplit}</span>
+            <div className="pt-4 border-t border-slate-200 space-y-2 type-support">
+              <div className="flex items-center justify-between gap-4">
+                <span className="text-slate-500">Contract Split</span>
+                <span className="font-semibold text-slate-900 text-right">{h.commissionSplit}</span>
               </div>
-              <div className="flex justify-between">
-                <span className="text-[#857568]">Payout Method:</span>
-                <span className="font-medium text-[#282828]">{h.payoutMethod}</span>
+              <div className="flex items-center justify-between gap-4">
+                <span className="text-slate-500">Payout Method</span>
+                <span className="font-medium text-slate-800 text-right">{h.payoutMethod}</span>
               </div>
-              <div className="flex justify-between">
-                <span className="text-[#857568]">YTD Disbursed:</span>
-                <span className="font-bold text-[#00897d] tabular-nums">${h.ytdPayoutUsd?.toLocaleString()} USD</span>
+              <div className="flex items-center justify-between gap-4">
+                <span className="text-slate-500">YTD Disbursed</span>
+                <span className="font-semibold text-[#14616d] tabular-nums">
+                  ${h.ytdPayoutUsd?.toLocaleString()} USD
+                </span>
               </div>
             </div>
           </div>

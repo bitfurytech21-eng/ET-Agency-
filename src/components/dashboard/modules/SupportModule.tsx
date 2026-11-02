@@ -25,11 +25,11 @@ export const SupportModule: React.FC = () => {
   const [requestSubmitted, setRequestSubmitted] = useState(false);
 
   const subTabOptions: SubTabOption[] = [
-    { id: 'index', label: 'Help Center', fileName: 'index.php' },
-    { id: 'help-center', label: 'Guides & Manuals', fileName: 'help-center.php' },
-    { id: 'faq', label: 'Stay FAQs', fileName: 'faq.php' },
-    { id: 'contact-support', label: 'Direct Hotline', fileName: 'contact-support.php' },
-    { id: 'submit-request', label: 'Submit Ticket', fileName: 'submit-request.php' },
+    { id: 'index', label: 'Help Center' },
+    { id: 'help-center', label: 'Guides & Manuals' },
+    { id: 'faq', label: 'Stay FAQs' },
+    { id: 'contact-support', label: 'Direct Hotline' },
+    { id: 'submit-request', label: 'Submit Ticket' },
   ];
 
   const faqs = [
@@ -51,6 +51,34 @@ export const SupportModule: React.FC = () => {
     },
   ];
 
+  const guides = [
+    {
+      title: 'Smart-Lock & Digital Check-In Guide',
+      summary: 'Step-by-step instructions for activating keypad entry, garage access remotes, and perimeter security settings upon arrival.',
+      category: 'Residence Access · 3 min read',
+    },
+    {
+      title: 'Appliance, Fiber Wi-Fi & Climate Manual',
+      summary: 'Operating reference for dual-zone HVAC thermostats, enterprise Wi-Fi mesh credentials, washer/dryer cycles, and kitchen equipment.',
+      category: 'In-Residence Operations · 4 min read',
+    },
+    {
+      title: 'Airport Curbside Fleet Delivery & Return',
+      summary: 'Terminal staging & concierge handover in El Dorado Hills, CA and SMF Airport, inspection checklists, EV charging, and return procedures.',
+      category: 'Executive Fleet · 3 min read',
+    },
+    {
+      title: 'Corporate Billing, Per-Diem & Extension Protocol',
+      summary: 'How to download tax-exempt folio statements, submit wire confirmations, and request lease extensions without re-papering.',
+      category: 'Commercial Accounting · 2 min read',
+    },
+  ].filter(
+    (g) =>
+      !searchQuery.trim() ||
+      g.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      g.summary.toLowerCase().includes(searchQuery.toLowerCase()),
+  );
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setRequestSubmitted(true);
@@ -65,88 +93,134 @@ export const SupportModule: React.FC = () => {
   return (
     <div className="space-y-6">
       <DashboardNav
-        currentFolder="UserDashboard/Support/"
         activeSubTab={subView}
         options={subTabOptions}
         onSelectSubTab={(id) => setSubView(id as SupportSubView)}
       />
 
-      <div className="px-4 sm:px-8 space-y-6 max-w-4xl">
-        {/* 1. Help Center Hub (index.php) */}
+      <div className="px-4 sm:px-8 pb-8 space-y-6 max-w-4xl">
+        {/* 1. Help Center Hub */}
         {subView === 'index' && (
           <div className="space-y-6">
-            <div className="border-b border-[#e6dfd5] pb-4">
-              <h3 className="font-heading font-bold text-lg text-[#282828]">
-                24/7 Concierge &amp; Guest Support (Support/)
+            <div className="border-b border-slate-200 pb-5 space-y-1">
+              <h3 className="type-h3 text-slate-900">
+                24/7 Concierge &amp; Guest Support
               </h3>
-              <p className="text-xs text-[#5c5046]">
+              <p className="type-body text-slate-600">
                 Fast answers, direct founding host lines, and maintenance service requests.
               </p>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-xs">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
               <div
                 onClick={() => setSubView('contact-support')}
-                className="p-5 bg-white border border-[#e6dfd5] hover:border-[#00b7a8] rounded-2xl cursor-pointer transition-all shadow-2xs space-y-2"
+                className="p-6 bg-white border border-slate-200 hover:border-[#14616d] rounded-2xl cursor-pointer transition-colors shadow-xs space-y-2.5"
               >
-                <div className="w-9 h-9 rounded-xl bg-emerald-50 text-emerald-700 flex items-center justify-center">
+                <div className="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-700 flex items-center justify-center">
                   <Phone className="w-4 h-4" />
                 </div>
-                <h4 className="font-bold text-sm text-[#282828]">Immediate Phone Support</h4>
-                <p className="text-[#5c5046]">916-800-3295 • 7 days a week for immediate guest assistance.</p>
+                <h4 className="type-h4 text-slate-900">Immediate Phone Support</h4>
+                <p className="type-support text-slate-600 tabular-nums">
+                  916-800-3295 · 7 days a week for immediate guest assistance.
+                </p>
               </div>
 
               <div
                 onClick={() => setSubView('faq')}
-                className="p-5 bg-white border border-[#e6dfd5] hover:border-[#00b7a8] rounded-2xl cursor-pointer transition-all shadow-2xs space-y-2"
+                className="p-6 bg-white border border-slate-200 hover:border-[#14616d] rounded-2xl cursor-pointer transition-colors shadow-xs space-y-2.5"
               >
-                <div className="w-9 h-9 rounded-xl bg-[#faf8f5] text-[#00b7a8] flex items-center justify-center">
+                <div className="w-10 h-10 rounded-xl bg-slate-100 text-[#14616d] flex items-center justify-center">
                   <HelpCircle className="w-4 h-4" />
                 </div>
-                <h4 className="font-bold text-sm text-[#282828]">Searchable Stay FAQs</h4>
-                <p className="text-[#5c5046]">Answers on Wi-Fi, HVAC, appliances, and check-out procedures.</p>
+                <h4 className="type-h4 text-slate-900">Searchable Stay FAQs</h4>
+                <p className="type-support text-slate-600">
+                  Answers on Wi-Fi, HVAC, appliances, and check-out procedures.
+                </p>
               </div>
 
               <div
                 onClick={() => setSubView('submit-request')}
-                className="p-5 bg-white border border-[#e6dfd5] hover:border-[#00b7a8] rounded-2xl cursor-pointer transition-all shadow-2xs space-y-2"
+                className="p-6 bg-white border border-slate-200 hover:border-[#14616d] rounded-2xl cursor-pointer transition-colors shadow-xs space-y-2.5"
               >
-                <div className="w-9 h-9 rounded-xl bg-[#faf8f5] text-[#82634f] flex items-center justify-center">
+                <div className="w-10 h-10 rounded-xl bg-slate-100 text-[#8c6a4a] flex items-center justify-center">
                   <Send className="w-4 h-4" />
                 </div>
-                <h4 className="font-bold text-sm text-[#282828]">Submit Support Ticket</h4>
-                <p className="text-[#5c5046]">File a ticket for extra linens, maintenance, or vehicle logistics.</p>
+                <h4 className="type-h4 text-slate-900">Submit Support Ticket</h4>
+                <p className="type-support text-slate-600">
+                  File a ticket for extra linens, maintenance, or vehicle logistics.
+                </p>
               </div>
             </div>
           </div>
         )}
 
-        {/* 2. FAQs (faq.php) */}
+        {/* 1b. Guides & Manuals */}
+        {subView === 'help-center' && (
+          <div className="space-y-6">
+            <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 border-b border-slate-200 pb-5">
+              <div className="space-y-1">
+                <h3 className="type-h3 text-slate-900">
+                  Residence &amp; Fleet Operating Manuals
+                </h3>
+                <p className="type-body text-slate-600">
+                  Reference documentation for check-in access, home systems, and corporate invoicing.
+                </p>
+              </div>
+              <div className="relative w-full sm:w-64">
+                <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+                <input
+                  type="search"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  placeholder="Filter manuals..."
+                  className="form-input pl-10"
+                />
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+              {guides.map((guide, i) => (
+                <div
+                  key={i}
+                  className="p-6 bg-white border border-slate-200 rounded-2xl space-y-2.5 shadow-xs"
+                >
+                  <div className="type-support text-[#14616d] font-semibold">
+                    {guide.category}
+                  </div>
+                  <h4 className="type-h4 text-slate-900">{guide.title}</h4>
+                  <p className="type-support text-slate-600">{guide.summary}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* 2. FAQs */}
         {(subView === 'index' || subView === 'faq') && (
-          <div className="bg-white border border-[#e6dfd5] rounded-3xl p-6 sm:p-8 space-y-5 shadow-xs">
-            <h4 className="font-heading font-bold text-base text-[#282828]">
-              Frequently Asked Questions (faq.php)
+          <div className="bg-white border border-slate-200 rounded-2xl p-6 sm:p-8 space-y-5 shadow-xs">
+            <h4 className="type-h4 text-slate-900">
+              Frequently Asked Questions
             </h4>
 
-            <div className="divide-y divide-[#efe9e0] text-xs">
+            <div className="divide-y divide-slate-200">
               {faqs.map((f, idx) => {
                 const isOpen = expandedFaqIndex === idx;
                 return (
-                  <div key={idx} className="py-3.5 space-y-2">
+                  <div key={idx} className="py-4 space-y-2">
                     <button
                       type="button"
                       onClick={() => setExpandedFaqIndex(isOpen ? null : idx)}
-                      className="w-full text-left font-bold text-sm text-[#282828] flex items-center justify-between gap-3 cursor-pointer"
+                      className="w-full text-left type-btn text-slate-900 flex items-center justify-between gap-4 cursor-pointer"
                     >
                       <span>{f.q}</span>
                       <ChevronDown
-                        className={`w-4 h-4 text-[#00b7a8] transition-transform ${
+                        className={`w-4 h-4 text-[#14616d] shrink-0 transition-transform ${
                           isOpen ? 'rotate-180' : ''
                         }`}
                       />
                     </button>
                     {isOpen && (
-                      <p className="text-[#5c5046] leading-relaxed pt-1 text-xs">
+                      <p className="type-body text-slate-600 pt-1">
                         {f.a}
                       </p>
                     )}
@@ -157,65 +231,67 @@ export const SupportModule: React.FC = () => {
           </div>
         )}
 
-        {/* 3. Direct Contact (contact-support.php) */}
+        {/* 3. Direct Contact */}
         {subView === 'contact-support' && (
-          <div className="bg-white border border-[#e6dfd5] rounded-3xl p-6 sm:p-8 space-y-6">
-            <div className="border-b border-[#e6dfd5] pb-4">
-              <h3 className="font-heading font-bold text-lg text-[#282828]">
-                Direct Founder &amp; Concierge Hotline (contact-support.php)
+          <div className="bg-white border border-slate-200 rounded-2xl p-6 sm:p-8 space-y-6 shadow-xs">
+            <div className="border-b border-slate-200 pb-5 space-y-1">
+              <h3 className="type-h3 text-slate-900">
+                Direct Founder &amp; Concierge Hotline
               </h3>
-              <p className="text-xs text-[#5c5046]">
-                Talk with agency founders Bill Wheelock and Dr. Marlena Uhrik directly.
+              <p className="type-body text-slate-600">
+                Speak directly with agency founders Bill Wheelock and Dr. Marlena Uhrik.
               </p>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
-              <div className="p-5 bg-[#faf8f5] rounded-2xl border border-[#efe9e0] space-y-2">
-                <span className="font-bold text-sm text-[#282828] block flex items-center gap-2">
-                  <Phone className="w-4 h-4 text-[#00b7a8]" /> Telephone &amp; SMS
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+              <div className="p-6 bg-slate-50 rounded-2xl border border-slate-200 space-y-2">
+                <span className="type-label text-slate-900 flex items-center gap-2">
+                  <Phone className="w-4 h-4 text-[#14616d]" /> Telephone &amp; SMS
                 </span>
-                <p className="text-base font-extrabold text-[#282828]">916-800-3295</p>
-                <p className="text-[#857568]">Available 7 days a week for immediate assistance.</p>
+                <p className="type-h4 text-slate-900 tabular-nums">916-800-3295</p>
+                <p className="type-support text-slate-500">Available 7 days a week for immediate assistance.</p>
               </div>
 
-              <div className="p-5 bg-[#faf8f5] rounded-2xl border border-[#efe9e0] space-y-2">
-                <span className="font-bold text-sm text-[#282828] block flex items-center gap-2">
-                  <Mail className="w-4 h-4 text-[#82634f]" /> Concierge Email Desk
+              <div className="p-6 bg-slate-50 rounded-2xl border border-slate-200 space-y-2">
+                <span className="type-label text-slate-900 flex items-center gap-2">
+                  <Mail className="w-4 h-4 text-[#8c6a4a]" /> Concierge Email Desk
                 </span>
-                <p className="text-sm font-extrabold text-[#282828] break-all">easytravelagency@trustagent.space</p>
-                <p className="text-[#857568]">Response guaranteed within 2 hours during daytime hours.</p>
+                <p className="type-body font-semibold text-slate-900 break-all">
+                  easytravelagency@trustagent.space
+                </p>
+                <p className="type-support text-slate-500">Response guaranteed within 2 hours during daytime hours.</p>
               </div>
             </div>
           </div>
         )}
 
-        {/* 4. Submit Ticket (submit-request.php) */}
+        {/* 4. Submit Ticket */}
         {subView === 'submit-request' && (
-          <div className="bg-white border border-[#e6dfd5] rounded-3xl p-6 sm:p-8 space-y-6 shadow-xs">
-            <div className="border-b border-[#e6dfd5] pb-4">
-              <h3 className="font-heading font-bold text-lg text-[#282828]">
-                Submit Guest or Fleet Request (submit-request.php)
+          <div className="bg-white border border-slate-200 rounded-2xl p-6 sm:p-8 space-y-6 shadow-xs">
+            <div className="border-b border-slate-200 pb-5 space-y-1">
+              <h3 className="type-h3 text-slate-900">
+                Submit Guest or Fleet Request
               </h3>
-              <p className="text-xs text-[#5c5046]">
-                Dispatches a high-priority ticket directly to our on-call operations team.
+              <p className="type-body text-slate-600">
+                Dispatches a priority ticket directly to our on-call operations team.
               </p>
             </div>
 
             {requestSubmitted && (
-              <div className="p-4 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs flex items-center gap-2">
+              <div className="p-4 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-800 type-support font-medium flex items-center gap-2">
                 <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
                 <span>Ticket submitted. Dispatch reference assigned.</span>
               </div>
             )}
 
-            <form onSubmit={handleSubmit} className="space-y-4 text-xs">
-              <div className="grid grid-cols-2 gap-4">
+            <form onSubmit={handleSubmit} className="space-y-5">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-[#5c5046] font-bold mb-1">Category</label>
+                  <label className="form-label">Category</label>
                   <select
                     value={reqCategory}
                     onChange={(e) => setReqCategory(e.target.value)}
-                    className="w-full h-10 px-3 bg-white border border-[#d8cfc3] rounded-xl font-semibold text-[#282828]"
+                    className="form-select"
                   >
                     <option value="Housing Amenities">Housing Amenities &amp; Supplies</option>
                     <option value="Keyless Access">Keyless Smart-Lock Access</option>
@@ -224,11 +300,11 @@ export const SupportModule: React.FC = () => {
                   </select>
                 </div>
                 <div>
-                  <label className="block text-[#5c5046] font-bold mb-1">Priority</label>
+                  <label className="form-label">Priority</label>
                   <select
                     value={reqPriority}
                     onChange={(e) => setReqPriority(e.target.value)}
-                    className="w-full h-10 px-3 bg-white border border-[#d8cfc3] rounded-xl font-semibold text-[#282828]"
+                    className="form-select"
                   >
                     <option value="normal">Normal (Routine Inquiry)</option>
                     <option value="urgent">Urgent (In-Stay Access / Immediate)</option>
@@ -237,33 +313,33 @@ export const SupportModule: React.FC = () => {
               </div>
 
               <div>
-                <label className="block text-[#5c5046] font-bold mb-1">Subject *</label>
+                <label className="form-label">Subject *</label>
                 <input
                   type="text"
                   required
                   placeholder="e.g. Requesting extra bath linens or flight delay update"
                   value={reqSubject}
                   onChange={(e) => setReqSubject(e.target.value)}
-                  className="w-full h-10 px-3 bg-white border border-[#d8cfc3] rounded-xl text-xs text-[#282828]"
+                  className="form-input"
                 />
               </div>
 
               <div>
-                <label className="block text-[#5c5046] font-bold mb-1">Details &amp; Notes *</label>
+                <label className="form-label">Details &amp; Notes *</label>
                 <textarea
                   required
                   rows={4}
                   placeholder="Please provide specifics so our team can immediately take action..."
                   value={reqDesc}
                   onChange={(e) => setReqDesc(e.target.value)}
-                  className="w-full p-3 bg-white border border-[#d8cfc3] rounded-xl text-xs text-[#282828] outline-none"
+                  className="form-textarea"
                 />
               </div>
 
               <div className="flex justify-end gap-3 pt-2">
                 <button
                   type="submit"
-                  className="px-5 py-2 bg-[#00b7a8] hover:bg-[#009e91] text-white font-bold rounded-xl shadow-2xs"
+                  className="btn btn-primary"
                 >
                   Submit Ticket
                 </button>

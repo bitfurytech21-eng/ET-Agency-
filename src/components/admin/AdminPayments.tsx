@@ -77,8 +77,8 @@ export const AdminPayments: React.FC<AdminPaymentsProps> = ({
 
   return (
     <div className="space-y-6">
-      {/* Sub-Navigation matching admin/payments/ */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[#e6dfd5] pb-4">
+      {/* Sub-Navigation */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-200 pb-4">
         <div className="flex flex-wrap gap-2">
           {[
             { id: 'wires', label: 'Wire / ACH Verification Queue', icon: Landmark, count: manualPayments.filter((p) => p.status === 'pending_verification').length },
@@ -92,21 +92,21 @@ export const AdminPayments: React.FC<AdminPaymentsProps> = ({
                 key={tab.id}
                 type="button"
                 onClick={() => setActiveTab(tab.id as typeof activeTab)}
-                className={`px-3.5 py-2 rounded-xl text-xs font-bold flex items-center gap-1.5 transition-colors cursor-pointer border ${
+                className={`px-3.5 py-2 rounded-xl type-nav flex items-center gap-2 transition-colors cursor-pointer border whitespace-nowrap tabular-nums ${
                   active
-                    ? 'bg-[#00b7a8] text-white border-[#00b7a8] shadow-xs'
-                    : 'bg-white text-[#5c5046] border-[#e6dfd5] hover:border-[#00b7a8]/40 hover:text-[#282828]'
+                    ? 'bg-[#14616d] text-white border-[#14616d] shadow-xs'
+                    : 'bg-white text-slate-600 border-slate-200 hover:border-slate-300 hover:text-slate-900'
                 }`}
               >
-                <Icon className="w-3.5 h-3.5" />
+                <Icon className="w-4 h-4" />
                 <span>{tab.label}</span>
                 {typeof tab.count === 'number' && tab.count > 0 && (
                   <span
-                    className={`px-1.5 py-0.2 rounded text-[10px] font-black ${
-                      active ? 'bg-white/20 text-white' : 'bg-[#e8f8f6] text-[#00897d]'
+                    className={`type-support font-semibold ${
+                      active ? 'text-white/85' : 'text-[#14616d]'
                     }`}
                   >
-                    {tab.count}
+                    ({tab.count})
                   </span>
                 )}
               </button>
@@ -115,13 +115,14 @@ export const AdminPayments: React.FC<AdminPaymentsProps> = ({
         </div>
 
         {activeTab === 'wires' && (
-          <div className="flex items-center gap-2">
+          <div className="relative w-full sm:w-64">
+            <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
             <input
               type="text"
               placeholder="Search wire ref or sender..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="px-3 py-1.5 bg-white border border-[#dfd6ca] rounded-lg text-xs outline-none focus:border-[#00b7a8]"
+              className="form-input pl-10"
             />
           </div>
         )}
@@ -129,23 +130,25 @@ export const AdminPayments: React.FC<AdminPaymentsProps> = ({
 
       {/* 1. WIRES & ACH QUEUE */}
       {activeTab === 'wires' && (
-        <div className="bg-white border border-[#e6dfd5] rounded-2xl p-6 shadow-xs space-y-4">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[#e6dfd5] pb-3">
-            <div>
-              <h3 className="font-heading font-bold text-base text-[#282828]">Bank Wire &amp; Direct ACH Settlements</h3>
-              <p className="text-xs text-[#5c5046]">
+        <div className="bg-white border border-slate-200 rounded-2xl p-6 shadow-xs space-y-5">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-200 pb-4">
+            <div className="space-y-1">
+              <h3 className="type-h3 text-slate-900">Bank Wire &amp; Direct ACH Settlements</h3>
+              <p className="type-support text-slate-500">
                 Verify incoming funds before releasing prepaid Lodging Units, confirming suites, or dispatching fleet.
               </p>
             </div>
 
-            <div className="flex gap-1.5 text-xs">
+            <div className="flex flex-wrap gap-1.5">
               {(['all', 'pending_verification', 'verified', 'rejected'] as const).map((st) => (
                 <button
                   key={st}
                   type="button"
                   onClick={() => setStatusFilter(st)}
-                  className={`px-2.5 py-1 rounded-md capitalize font-semibold cursor-pointer border ${
-                    statusFilter === st ? 'bg-[#82634f] text-white border-[#82634f]' : 'bg-white text-[#5c5046] border-[#e6dfd5]'
+                  className={`px-3 py-1.5 rounded-lg capitalize type-btn cursor-pointer border whitespace-nowrap ${
+                    statusFilter === st
+                      ? 'bg-slate-900 text-white border-slate-900'
+                      : 'bg-white text-slate-600 border-slate-200 hover:bg-slate-50'
                   }`}
                 >
                   {st.replace('_', ' ')}
@@ -155,39 +158,39 @@ export const AdminPayments: React.FC<AdminPaymentsProps> = ({
           </div>
 
           <div className="overflow-x-auto">
-            <table className="w-full text-left text-xs">
-              <thead className="bg-[#faf8f5] text-[#857568] uppercase font-bold tracking-wider border-b border-[#e6dfd5]">
+            <table className="data-table">
+              <thead>
                 <tr>
-                  <th className="py-3 px-3">Notice Ref</th>
-                  <th className="py-3 px-3">Sender &amp; Client</th>
-                  <th className="py-3 px-3">Bank &amp; Wire Ref</th>
-                  <th className="py-3 px-3">Target</th>
-                  <th className="py-3 px-3">Amount ($ USD)</th>
-                  <th className="py-3 px-3">Status</th>
-                  <th className="py-3 px-3 text-right">Verification Action</th>
+                  <th>Notice Ref</th>
+                  <th>Sender &amp; Client</th>
+                  <th>Bank &amp; Wire Ref</th>
+                  <th>Target</th>
+                  <th>Amount ($ USD)</th>
+                  <th>Status</th>
+                  <th className="text-right">Verification Action</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-[#e6dfd5]">
+              <tbody>
                 {filteredWires.map((w) => (
-                  <tr key={w.id} className="hover:bg-[#fbf9f6] transition-colors">
-                    <td className="py-3.5 px-3 font-mono font-bold text-[#82634f]">{w.referenceCode}</td>
-                    <td className="py-3 px-3">
-                      <div className="font-bold text-[#282828]">{w.customerName}</div>
-                      <div className="text-[11px] text-[#5c5046]">{w.customerEmail}</div>
+                  <tr key={w.id}>
+                    <td className="font-mono font-semibold text-[#8c6a4a] type-support">{w.referenceCode}</td>
+                    <td>
+                      <div className="font-semibold text-slate-900">{w.customerName}</div>
+                      <div className="type-support text-slate-500">{w.customerEmail}</div>
                     </td>
-                    <td className="py-3 px-3">
-                      <div className="font-semibold text-[#282828]">{w.originatingBank || 'Direct Wire'}</div>
-                      <div className="font-mono text-[10px] text-[#857568]">Ref: {w.wireReference}</div>
+                    <td>
+                      <div className="font-semibold text-slate-900">{w.originatingBank || 'Direct Wire'}</div>
+                      <div className="font-mono type-support text-slate-500">Ref: {w.wireReference}</div>
                     </td>
-                    <td className="py-3 px-3 capitalize font-medium text-[#5c5046]">
+                    <td className="capitalize font-medium text-slate-600">
                       {w.targetType.replace('_', ' ')}
                     </td>
-                    <td className="py-3 px-3 font-bold text-[#00897d] tabular-nums text-sm">
+                    <td className="font-semibold text-[#14616d] tabular-nums">
                       ${w.amountUsd?.toLocaleString()}
                     </td>
-                    <td className="py-3 px-3">
+                    <td>
                       <span
-                        className={`px-2 py-0.5 rounded text-[10px] font-bold uppercase border ${
+                        className={`px-2.5 py-1 rounded-md type-support font-semibold capitalize border inline-block ${
                           w.status === 'verified'
                             ? 'bg-emerald-50 text-emerald-700 border-emerald-200'
                             : w.status === 'pending_verification'
@@ -198,26 +201,26 @@ export const AdminPayments: React.FC<AdminPaymentsProps> = ({
                         {w.status.replace('_', ' ')}
                       </span>
                     </td>
-                    <td className="py-3 px-3 text-right">
+                    <td className="text-right">
                       {w.status === 'pending_verification' ? (
-                        <div className="inline-flex items-center gap-1.5">
+                        <div className="inline-flex items-center gap-2">
                           <button
                             type="button"
                             onClick={() => onVerifyPayment(w.id, 'verify', 'Bank settlement confirmed in treasury')}
-                            className="px-2.5 py-1 bg-emerald-600 hover:bg-emerald-700 text-white rounded font-bold text-[11px] cursor-pointer"
+                            className="btn btn-sm bg-emerald-600 hover:bg-emerald-700 text-white"
                           >
                             Approve
                           </button>
                           <button
                             type="button"
                             onClick={() => onVerifyPayment(w.id, 'reject', 'Wire not located in bank ledger')}
-                            className="px-2.5 py-1 bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 rounded font-bold text-[11px] cursor-pointer"
+                            className="btn btn-sm bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200"
                           >
                             Reject
                           </button>
                         </div>
                       ) : (
-                        <span className="text-[11px] text-[#857568]">Settled</span>
+                        <span className="type-support text-slate-500">Settled</span>
                       )}
                     </td>
                   </tr>
@@ -230,53 +233,53 @@ export const AdminPayments: React.FC<AdminPaymentsProps> = ({
 
       {/* 2. ORDERS LEDGER */}
       {activeTab === 'orders' && (
-        <div className="bg-white border border-[#e6dfd5] rounded-2xl p-6 shadow-xs space-y-4">
-          <div className="border-b border-[#e6dfd5] pb-3">
-            <h3 className="font-heading font-bold text-base text-[#282828]">Storefront Orders &amp; Invoices</h3>
-            <p className="text-xs text-[#5c5046]">Complete ledger of packages, add-on services, and lodging reservations.</p>
+        <div className="bg-white border border-slate-200 rounded-2xl p-6 shadow-xs space-y-5">
+          <div className="border-b border-slate-200 pb-4 space-y-1">
+            <h3 className="type-h3 text-slate-900">Storefront Orders &amp; Invoices</h3>
+            <p className="type-support text-slate-500">Complete ledger of packages, add-on services, and lodging reservations.</p>
           </div>
 
           <div className="overflow-x-auto">
-            <table className="w-full text-left text-xs">
-              <thead className="bg-[#faf8f5] text-[#857568] uppercase font-bold tracking-wider border-b border-[#e6dfd5]">
+            <table className="data-table">
+              <thead>
                 <tr>
-                  <th className="py-3 px-3">Order Ref</th>
-                  <th className="py-3 px-3">Customer</th>
-                  <th className="py-3 px-3">Items</th>
-                  <th className="py-3 px-3">Total Amount</th>
-                  <th className="py-3 px-3">Payment Method</th>
-                  <th className="py-3 px-3">Payment Status</th>
-                  <th className="py-3 px-3">Order Status</th>
+                  <th>Order Ref</th>
+                  <th>Customer</th>
+                  <th>Items</th>
+                  <th>Total Amount</th>
+                  <th>Payment Method</th>
+                  <th>Payment Status</th>
+                  <th>Order Status</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-[#e6dfd5]">
+              <tbody>
                 {orders.map((ord) => (
-                  <tr key={ord.id} className="hover:bg-[#fbf9f6] transition-colors">
-                    <td className="py-3.5 px-3 font-mono font-bold text-[#82634f]">{ord.orderReference}</td>
-                    <td className="py-3 px-3">
-                      <div className="font-bold text-[#282828]">{ord.customerName}</div>
-                      <div className="text-[11px] text-[#5c5046]">{ord.customerEmail}</div>
+                  <tr key={ord.id}>
+                    <td className="font-mono font-semibold text-[#8c6a4a] type-support">{ord.orderReference}</td>
+                    <td>
+                      <div className="font-semibold text-slate-900">{ord.customerName}</div>
+                      <div className="type-support text-slate-500">{ord.customerEmail}</div>
                     </td>
-                    <td className="py-3 px-3">
+                    <td>
                       {ord.items?.map((item, idx) => (
-                        <div key={idx} className="text-[#5c5046] line-clamp-1">
+                        <div key={idx} className="type-support text-slate-600 line-clamp-1">
                           {item.quantity}x {item.title}
                         </div>
                       ))}
                     </td>
-                    <td className="py-3 px-3 font-bold text-[#00897d] tabular-nums">
+                    <td className="font-semibold text-[#14616d] tabular-nums">
                       ${ord.totalUsd?.toLocaleString()}
                     </td>
-                    <td className="py-3 px-3 capitalize text-[#5c5046]">
+                    <td className="capitalize text-slate-600">
                       {ord.paymentMethod?.replace('_', ' ')}
                     </td>
-                    <td className="py-3 px-3">
-                      <span className="px-2 py-0.5 rounded text-[10px] font-bold uppercase bg-emerald-50 text-emerald-700 border border-emerald-200">
+                    <td>
+                      <span className="px-2.5 py-1 rounded-md type-support font-semibold capitalize bg-emerald-50 text-emerald-700 border border-emerald-200 inline-block">
                         {ord.paymentStatus}
                       </span>
                     </td>
-                    <td className="py-3 px-3">
-                      <span className="px-2 py-0.5 rounded text-[10px] font-bold uppercase bg-blue-50 text-blue-700 border border-blue-200">
+                    <td>
+                      <span className="px-2.5 py-1 rounded-md type-support font-semibold capitalize bg-blue-50 text-blue-700 border border-blue-200 inline-block">
                         {ord.orderStatus}
                       </span>
                     </td>
@@ -290,40 +293,38 @@ export const AdminPayments: React.FC<AdminPaymentsProps> = ({
 
       {/* 3. PAYMENT ACCOUNTS & ROUTING CONFIG */}
       {activeTab === 'config' && (
-        <div className="bg-white border border-[#e6dfd5] rounded-2xl p-6 sm:p-8 shadow-xs max-w-2xl mx-auto space-y-6">
-          <div className="border-b border-[#e6dfd5] pb-3">
-            <h3 className="font-heading font-bold text-lg text-[#282828]">Associated Bank Company Account</h3>
-            <p className="text-xs text-[#5c5046]">
+        <div className="bg-white border border-slate-200 rounded-2xl p-6 sm:p-8 shadow-xs max-w-2xl mx-auto space-y-6">
+          <div className="border-b border-slate-200 pb-4 space-y-1">
+            <h3 className="type-h3 text-slate-900">Associated Bank Company Account</h3>
+            <p className="type-body text-slate-600">
               Configured wire, ACH, and checking details shown to clients upon checkout.
             </p>
           </div>
 
-          <div className="space-y-3 text-xs">
-            <div className="p-4 bg-[#faf8f5] border border-[#e6dfd5] rounded-xl space-y-2.5">
-              <div className="flex justify-between">
-                <span className="text-[#857568]">Financial Institution:</span>
-                <span className="font-bold text-[#282828]">Associated Bank</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-[#857568]">Account Name:</span>
-                <span className="font-bold text-[#282828]">Heather Frederick</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-[#857568]">Routing Number:</span>
-                <span className="font-mono font-bold text-[#82634f]">075900575</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-[#857568]">Account Number:</span>
-                <span className="font-mono font-bold text-[#00897d]">2913762643</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-[#857568]">Account Type:</span>
-                <span className="font-bold text-[#282828]">Checking</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-[#857568]">Bank Address:</span>
-                <span className="font-bold text-[#282828]">400 S Chestnut Ave, Marshfield, WI 54449, USA</span>
-              </div>
+          <div className="p-5 bg-slate-50 border border-slate-200 rounded-xl space-y-3 type-support tabular-nums">
+            <div className="flex justify-between gap-4 border-b border-slate-200/70 pb-2.5">
+              <span className="text-slate-500">Financial Institution:</span>
+              <span className="font-semibold text-slate-900 text-right">Associated Bank</span>
+            </div>
+            <div className="flex justify-between gap-4 border-b border-slate-200/70 pb-2.5">
+              <span className="text-slate-500">Account Name:</span>
+              <span className="font-semibold text-slate-900 text-right">Heather Frederick</span>
+            </div>
+            <div className="flex justify-between gap-4 border-b border-slate-200/70 pb-2.5">
+              <span className="text-slate-500">Routing Number:</span>
+              <span className="font-mono font-semibold text-[#8c6a4a] text-right">075900575</span>
+            </div>
+            <div className="flex justify-between gap-4 border-b border-slate-200/70 pb-2.5">
+              <span className="text-slate-500">Account Number:</span>
+              <span className="font-mono font-semibold text-[#14616d] text-right">2913762643</span>
+            </div>
+            <div className="flex justify-between gap-4 border-b border-slate-200/70 pb-2.5">
+              <span className="text-slate-500">Account Type:</span>
+              <span className="font-semibold text-slate-900 text-right">Checking</span>
+            </div>
+            <div className="flex justify-between gap-4">
+              <span className="text-slate-500">Bank Address:</span>
+              <span className="font-semibold text-slate-900 text-right">400 S Chestnut Ave, Marshfield, WI 54449, USA</span>
             </div>
           </div>
         </div>

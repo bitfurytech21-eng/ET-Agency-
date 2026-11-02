@@ -205,10 +205,10 @@ export const CarRentalsModule: React.FC<CarRentalsModuleProps> = ({
       <div className="space-y-6">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-200 pb-4">
           <div>
-            <h3 className="font-heading font-bold text-lg text-[#0f172a]">
+            <h3 className="type-h3 text-[#0f172a]">
               Car Rental Reservations
             </h3>
-            <p className="text-xs text-slate-500">
+            <p className="type-body text-slate-500 mt-1">
               Manage vehicle reservations, airport or residence delivery, and primary driver credentials
             </p>
           </div>
@@ -224,7 +224,7 @@ export const CarRentalsModule: React.FC<CarRentalsModuleProps> = ({
 
         {feedback && (
           <div
-            className={`p-4 rounded-xl border text-xs flex items-start gap-2.5 ${
+            className={`p-4 rounded-xl border type-support flex items-start gap-2.5 ${
               feedback.type === 'success'
                 ? 'bg-emerald-50 border-emerald-200 text-emerald-900'
                 : 'bg-rose-50 border-rose-200 text-rose-900'
@@ -317,16 +317,16 @@ export const CarRentalsModule: React.FC<CarRentalsModuleProps> = ({
             <div className="space-y-5">
               {rentals.length > 1 && (
                 <div className="flex flex-wrap items-center gap-2">
-                  <span className="text-xs font-semibold text-slate-500">Select Reservation:</span>
+                  <span className="type-support font-semibold text-slate-500">Select Reservation:</span>
                   {rentals.map((r) => (
                     <button
                       key={r.id}
                       type="button"
                       onClick={() => setSelectedRentalId(r.id)}
-                      className={`px-3 py-1.5 rounded-lg text-xs font-mono font-semibold cursor-pointer whitespace-nowrap tabular-nums ${
+                      className={`px-3.5 py-2 rounded-lg type-btn font-mono cursor-pointer whitespace-nowrap tabular-nums ${
                         r.id === selectedRental.id
                           ? 'bg-[#0f172a] text-white'
-                          : 'bg-white border border-slate-200 text-slate-600'
+                          : 'bg-white border border-slate-200 text-slate-600 hover:text-[#0f172a]'
                       }`}
                     >
                       {r.id} ({r.vehicleName})
@@ -338,15 +338,15 @@ export const CarRentalsModule: React.FC<CarRentalsModuleProps> = ({
               <div className="p-6 rounded-2xl border border-slate-200 bg-white space-y-6">
                 <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4 border-b border-slate-100 pb-4">
                   <div className="space-y-1">
-                    <div className="flex flex-wrap items-center gap-2 text-xs tabular-nums">
+                    <div className="flex flex-wrap items-center gap-2 type-support tabular-nums">
                       <span className="font-mono font-semibold text-slate-600">{selectedRental.id}</span>
                       <span aria-hidden="true">·</span>
                       <StatusBadge status={selectedRental.status} size="sm" />
                     </div>
-                    <h4 className="font-heading font-bold text-xl text-[#0f172a]">
+                    <h4 className="type-h3 text-[#0f172a]">
                       {selectedRental.year} {selectedRental.vehicleName}
                     </h4>
-                    <p className="text-xs text-slate-600">
+                    <p className="type-support text-slate-600">
                       {selectedRental.category} · Exterior Finish: {selectedRental.colorName}
                     </p>
                   </div>
@@ -356,41 +356,41 @@ export const CarRentalsModule: React.FC<CarRentalsModuleProps> = ({
                     onClick={() => window.print()}
                     className="btn btn-outline btn-sm shrink-0"
                   >
-                    <Printer className="w-3.5 h-3.5" />
+                    <Printer className="w-4 h-4" />
                     <span>Print Voucher</span>
                   </button>
                 </div>
 
-                <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 text-xs tabular-nums">
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 type-support tabular-nums">
                   <div className="p-3.5 bg-slate-50 rounded-xl border border-slate-200">
                     <span className="text-slate-500 block">Pickup Date</span>
-                    <strong className="text-sm text-[#0f172a] mt-0.5 block">
+                    <strong className="type-h4 text-[#0f172a] mt-0.5 block">
                       {selectedRental.pickupDate}
                     </strong>
                   </div>
                   <div className="p-3.5 bg-slate-50 rounded-xl border border-slate-200">
                     <span className="text-slate-500 block">Return Date</span>
-                    <strong className="text-sm text-[#0f172a] mt-0.5 block">
+                    <strong className="type-h4 text-[#0f172a] mt-0.5 block">
                       {selectedRental.returnDate}
                     </strong>
                   </div>
                   <div className="p-3.5 bg-slate-50 rounded-xl border border-slate-200">
                     <span className="text-slate-500 block">Rental Duration</span>
-                    <strong className="text-sm text-[#0f172a] mt-0.5 block">
+                    <strong className="type-h4 text-[#0f172a] mt-0.5 block">
                       {selectedRental.totalDays} Days
                     </strong>
                   </div>
                   <div className="p-3.5 bg-slate-50 rounded-xl border border-slate-200">
                     <span className="text-slate-500 block">Total Amount</span>
-                    <strong className="text-sm text-[#14616d] mt-0.5 block">
+                    <strong className="type-h4 text-[#14616d] mt-0.5 block">
                       ${selectedRental.totalUsd.toLocaleString()} USD
                     </strong>
                   </div>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 type-support">
                   <div className="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-1">
-                    <div className="flex items-center gap-1.5 font-bold text-[#0f172a]">
+                    <div className="flex items-center gap-1.5 font-semibold text-[#0f172a]">
                       <MapPin className="w-4 h-4 text-[#14616d]" />
                       <span>Delivery &amp; Return Location</span>
                     </div>
@@ -398,7 +398,7 @@ export const CarRentalsModule: React.FC<CarRentalsModuleProps> = ({
                   </div>
 
                   <div className="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-1">
-                    <div className="flex items-center gap-1.5 font-bold text-[#0f172a]">
+                    <div className="flex items-center gap-1.5 font-semibold text-[#0f172a]">
                       <ShieldCheck className="w-4 h-4 text-emerald-600" />
                       <span>Coverage Plan</span>
                     </div>
@@ -410,7 +410,7 @@ export const CarRentalsModule: React.FC<CarRentalsModuleProps> = ({
                   </div>
 
                   <div className="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-1">
-                    <div className="flex items-center gap-1.5 font-bold text-[#0f172a]">
+                    <div className="flex items-center gap-1.5 font-semibold text-[#0f172a]">
                       <Key className="w-4 h-4 text-amber-600" />
                       <span>Handover Reference</span>
                     </div>
@@ -443,15 +443,15 @@ export const CarRentalsModule: React.FC<CarRentalsModuleProps> = ({
           ))}
 
         {subView === 'pickup-details' && (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-xs">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="p-6 rounded-2xl border border-slate-200 bg-white space-y-3">
-              <h4 className="font-heading font-bold text-base text-[#0f172a]">
+              <h4 className="type-h4 text-[#0f172a]">
                 Concierge Vehicle Delivery &amp; Handover
               </h4>
-              <p className="text-slate-600 leading-relaxed">
-                Vehicles can be delivered directly to your Easy Travel Lodging residence stall or Sacramento International Airport (SMF) terminal arrival curb.
+              <p className="type-body text-slate-600">
+                Vehicles can be delivered directly to your Easy Travel Lodging residence stall in El Dorado Hills, CA or SMF International Airport terminal arrival curb.
               </p>
-              <ul className="space-y-2 text-slate-600">
+              <ul className="space-y-2 type-body text-slate-600">
                 <li>1. Have your valid driver&apos;s license ready for handover verification.</li>
                 <li>2. Vehicles are delivered detailed and fueled at 100% capacity.</li>
                 <li>3. Keep your handover code accessible inside your dashboard.</li>
@@ -459,10 +459,10 @@ export const CarRentalsModule: React.FC<CarRentalsModuleProps> = ({
             </div>
 
             <div className="p-6 rounded-2xl border border-slate-200 bg-white space-y-3">
-              <h4 className="font-heading font-bold text-base text-[#0f172a]">
+              <h4 className="type-h4 text-[#0f172a]">
                 Return &amp; Inspection Protocol
               </h4>
-              <p className="text-slate-600 leading-relaxed">
+              <p className="type-body text-slate-600">
                 Park the vehicle in your residence&apos;s assigned space or coordinate terminal drop-off with our fleet desk at{' '}
                 <strong className="text-[#0f172a] tabular-nums">916-800-3295</strong> or{' '}
                 <strong className="text-[#0f172a]">easytravelagency@trustagent.space</strong>.
@@ -478,11 +478,11 @@ export const CarRentalsModule: React.FC<CarRentalsModuleProps> = ({
           >
             <div className="flex items-center gap-2">
               <User className="w-4 h-4 text-[#14616d]" />
-              <h4 className="font-heading font-bold text-base text-[#0f172a]">
+              <h4 className="type-h4 text-[#0f172a]">
                 Primary Driver Credentials
               </h4>
             </div>
-            <p className="text-xs text-slate-500">
+            <p className="type-body text-slate-600">
               Saved to your profile to streamline future fleet handovers.
             </p>
 
@@ -544,10 +544,10 @@ export const CarRentalsModule: React.FC<CarRentalsModuleProps> = ({
               className="max-w-xl p-6 rounded-2xl border border-slate-200 bg-white space-y-4"
             >
               <div>
-                <h4 className="font-heading font-bold text-base text-[#0f172a]">
+                <h4 className="type-h4 text-[#0f172a]">
                   Modify Rental — {selectedRental.vehicleName} ({selectedRental.id})
                 </h4>
-                <p className="text-xs text-slate-500 mt-0.5">
+                <p className="type-body text-slate-600 mt-1">
                   Adjust pickup/return dates or delivery location. Rates automatically recalculate.
                 </p>
               </div>
@@ -629,10 +629,10 @@ export const CarRentalsModule: React.FC<CarRentalsModuleProps> = ({
               className="max-w-xl p-6 rounded-2xl border border-rose-200 bg-white space-y-4"
             >
               <div>
-                <h4 className="font-heading font-bold text-base text-[#0f172a]">
+                <h4 className="type-h4 text-[#0f172a]">
                   Cancel Vehicle Reservation — {selectedRental.vehicleName} ({selectedRental.id})
                 </h4>
-                <p className="text-xs text-slate-600 mt-0.5">
+                <p className="type-body text-slate-600 mt-1">
                   Cancelling releases the vehicle from {selectedRental.pickupDate} to{' '}
                   {selectedRental.returnDate}.
                 </p>
@@ -653,7 +653,7 @@ export const CarRentalsModule: React.FC<CarRentalsModuleProps> = ({
                 <button
                   type="submit"
                   disabled={isMutating}
-                  className="px-5 py-2.5 rounded-lg bg-rose-600 hover:bg-rose-700 disabled:opacity-50 text-white text-xs font-semibold flex items-center gap-2 cursor-pointer whitespace-nowrap"
+                  className="btn btn-danger btn-sm disabled:opacity-50"
                 >
                   {isMutating && <Loader2 className="w-4 h-4 animate-spin" />}
                   <span>Confirm Cancellation</span>

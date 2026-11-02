@@ -119,11 +119,10 @@ export const AdminHousekeeping: React.FC<AdminHousekeepingProps> = () => {
 
   return (
     <div className="space-y-6">
-      {/* Header matching admin/housekeeping/ */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[#e6dfd5] pb-4">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-200 pb-5">
         <div>
-          <h3 className="font-heading font-bold text-lg text-[#282828]">Turnover &amp; Housekeeping Operations (housekeeping/)</h3>
-          <p className="text-xs text-[#5c5046]">
+          <h3 className="type-h3 text-slate-900">Turnover &amp; Housekeeping Operations</h3>
+          <p className="type-body text-slate-600 mt-1">
             Deep sanitization, linen swap schedules, smart lock passcode resets, and executive inspection checklists.
           </p>
         </div>
@@ -131,28 +130,29 @@ export const AdminHousekeeping: React.FC<AdminHousekeepingProps> = () => {
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {tasks.map((task) => (
-          <div key={task.id} className="p-6 bg-white border border-[#e6dfd5] rounded-2xl shadow-xs space-y-4 text-xs">
-            <div className="flex items-start justify-between border-b border-[#e6dfd5] pb-3">
-              <div>
-                <span className="font-mono text-[10px] text-[#82634f] font-bold block">{task.unitNumber}</span>
-                <h4 className="font-heading font-bold text-base text-[#282828]">{task.unitTitle}</h4>
-                <p className="text-[#857568] text-[11px] flex items-center gap-1 mt-0.5">
-                  <UserCheck className="w-3.5 h-3.5 text-[#00b7a8]" />
+          <div key={task.id} className="admin-panel p-6 space-y-5">
+            <div className="flex items-start justify-between gap-4 border-b border-slate-200 pb-4">
+              <div className="space-y-1">
+                <span className="font-mono type-support font-semibold text-[#14616d] block">{task.unitNumber}</span>
+                <h4 className="type-h4 text-slate-900">{task.unitTitle}</h4>
+                <p className="type-support text-slate-600 flex items-center gap-1.5">
+                  <UserCheck className="w-4 h-4 text-[#14616d] shrink-0" />
                   <span>{task.assignedStaff}</span>
                 </p>
               </div>
 
               <select
+                aria-label={`Turnover status for ${task.unitNumber}`}
                 value={task.status}
                 onChange={(e) => setTaskStatus(task.id, e.target.value as AdminHousekeepingTask['status'])}
-                className={`px-2.5 py-1 rounded font-bold uppercase text-[10px] border outline-none cursor-pointer ${
+                className={`px-3 py-2 min-h-[40px] rounded-lg type-support font-semibold border outline-none cursor-pointer shrink-0 ${
                   task.status === 'ready'
-                    ? 'bg-emerald-50 text-emerald-700 border-emerald-200'
+                    ? 'bg-emerald-50 text-emerald-800 border-emerald-200'
                     : task.status === 'inspected'
-                    ? 'bg-blue-50 text-blue-700 border-blue-200'
+                    ? 'bg-sky-50 text-sky-800 border-sky-200'
                     : task.status === 'cleaning'
-                    ? 'bg-amber-50 text-amber-700 border-amber-200'
-                    : 'bg-rose-50 text-rose-700 border-rose-200'
+                    ? 'bg-amber-50 text-amber-800 border-amber-200'
+                    : 'bg-rose-50 text-rose-800 border-rose-200'
                 }`}
               >
                 <option value="dirty">Dirty / Turnover Due</option>
@@ -162,21 +162,20 @@ export const AdminHousekeeping: React.FC<AdminHousekeepingProps> = () => {
               </select>
             </div>
 
-            <div className="p-3 bg-[#faf8f5] rounded-xl border border-[#e6dfd5] space-y-1 text-[11px]">
-              <div className="flex justify-between">
-                <span className="text-[#857568]">Prior Check-Out:</span>
-                <span className="font-semibold text-[#282828]">{task.lastGuestCheckOut}</span>
+            <div className="py-3 border-b border-slate-200 space-y-2 type-support tabular-nums">
+              <div className="flex items-center justify-between gap-4">
+                <span className="text-slate-500">Prior Check-Out</span>
+                <span className="font-semibold text-slate-800">{task.lastGuestCheckOut}</span>
               </div>
-              <div className="flex justify-between">
-                <span className="text-[#857568]">Incoming Check-In:</span>
-                <span className="font-semibold text-[#00897d]">{task.nextGuestCheckIn}</span>
+              <div className="flex items-center justify-between gap-4">
+                <span className="text-slate-500">Incoming Check-In</span>
+                <span className="font-semibold text-[#14616d]">{task.nextGuestCheckIn}</span>
               </div>
             </div>
 
-            {/* Turnover Checklist */}
-            <div className="space-y-2">
-              <span className="font-bold text-[#282828] block">Turnover Checklist:</span>
-              <div className="grid grid-cols-2 gap-2 text-[11px]">
+            <div className="space-y-2.5">
+              <span className="form-label mb-0">Turnover Checklist</span>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
                 {[
                   { key: 'linensChanged', label: 'Linens & Bedding Swapped' },
                   { key: 'bathroomsSanitized', label: 'Bathrooms Disinfected' },
@@ -191,14 +190,18 @@ export const AdminHousekeeping: React.FC<AdminHousekeepingProps> = () => {
                       key={key}
                       type="button"
                       onClick={() => toggleChecklist(task.id, key as keyof AdminHousekeepingTask['checklist'])}
-                      className={`p-2 rounded-lg border text-left flex items-center gap-2 cursor-pointer transition-colors ${
+                      className={`px-3 py-2.5 min-h-[42px] rounded-lg border text-left flex items-center gap-2.5 type-support cursor-pointer transition-colors ${
                         isChecked
-                          ? 'bg-[#e8f8f6] border-[#bfe8e3] text-[#00897d] font-bold'
-                          : 'bg-[#faf8f5] border-[#dfd6ca] text-[#857568]'
+                          ? 'bg-[#edf6f8] border-[#14616d]/30 text-[#0f4952] font-semibold'
+                          : 'bg-slate-50 border-slate-200 text-slate-600 hover:border-slate-300'
                       }`}
                     >
-                      {isChecked ? <CheckSquare className="w-3.5 h-3.5 text-[#00b7a8]" /> : <Square className="w-3.5 h-3.5" />}
-                      <span className="line-clamp-1">{label}</span>
+                      {isChecked ? (
+                        <CheckSquare className="w-4 h-4 text-[#14616d] shrink-0" />
+                      ) : (
+                        <Square className="w-4 h-4 text-slate-400 shrink-0" />
+                      )}
+                      <span className="truncate">{label}</span>
                     </button>
                   );
                 })}

@@ -237,30 +237,30 @@ const INITIAL_BLOCKED_SCHEDULES: Record<string, BlockedDateRange[]> = {
   ],
 };
 
-const SACRAMENTO_ATTRACTIONS: NearbyPlaceItem[] = [
+const EL_DORADO_HILLS_ATTRACTIONS: NearbyPlaceItem[] = [
   {
-    name: 'American River Parkway & Hagan Park Trails',
+    name: 'Folsom Lake & American River Parkway Trails',
     category: 'Parks & Coastal',
     distance: '6 min drive',
-    description: '32-mile paved riverside cycling and walking corridor shaded by valley oaks, plus Lake Natoma kayaking nearby.',
+    description: '32-mile paved cycling and walking corridor shaded by valley oaks, plus Folsom Lake & Lake Natoma kayaking nearby.',
   },
   {
-    name: 'Rudy’s Hideaway & Formaggio Taverna',
+    name: 'El Dorado Hills Town Center & Local Bistros',
     category: 'Dining',
     distance: '5–8 min drive',
-    description: 'Local Rancho Cordova dining favorites alongside Mimosa House brunch, Oz Korean BBQ, and the Barrel District taprooms.',
+    description: 'Waterfront Town Center dining favorites alongside Mimosa House brunch, Formaggio Taverna, and craft taprooms.',
   },
   {
     name: 'Folsom Historic District & Palladio Shopping',
     category: 'Culture & Shopping',
-    distance: '18 min drive',
+    distance: '12 min drive',
     description: 'Walkable Sutter Street dining, weekend farmers markets, live music venues, and open-air retail.',
   },
   {
-    name: 'UC Davis Health, Kaiser Permanente & State Capitol',
+    name: 'UC Davis Health, Kaiser Permanente & Business Parks',
     category: 'Medical & Business',
-    distance: '15–20 min drive',
-    description: 'Direct Highway 50 corridor access to Sacramento medical campuses, Rancho Cordova business parks, and Downtown Sacramento.',
+    distance: '10–20 min drive',
+    description: 'Direct Highway 50 corridor access to El Dorado Hills, CA medical & corporate campuses, Folsom, and Rancho Cordova.',
   },
 ];
 
@@ -532,23 +532,23 @@ function buildDefaultLocationInfo(prop: EnrichablePropertyShape): PropertyLocati
   if (prop.locationInfo) {
     return prop.locationInfo;
   }
-  const isSac = prop.id.startsWith('unit-');
-  if (isSac) {
-    const lat = 38.5891;
-    const lng = -121.3027;
+  const isEdh = prop.id.startsWith('unit-');
+  if (isEdh) {
+    const lat = 38.6857;
+    const lng = -121.076;
     return {
-      neighborhood: 'Gold Country / American River Parkway Corridor',
-      city: 'Rancho Cordova',
+      neighborhood: 'El Dorado Hills / Gold Country Foothills Corridor',
+      city: 'El Dorado Hills',
       state: 'CA',
-      addressLine: 'Rancho Cordova Residential Community, Rancho Cordova, CA 95670',
+      addressLine: 'El Dorado Hills Residential Community, El Dorado Hills, CA 95762',
       addressDisclosureRestricted: true,
       privacyNote:
         'For resident security and community privacy, exact building number, gate code, and smart-lock instructions are released upon confirmed booking.',
       coordinates: { lat, lng },
       transitSummary:
-        '3 minutes to US-50 • 20 minutes to Downtown Sacramento • 28 minutes to Sacramento International Airport (SMF).',
+        '3 minutes to US-50 • 5 minutes to El Dorado Hills, CA Town Center • 32 minutes to SMF International Airport.',
       directionsUrl: `https://www.openstreetmap.org/?mlat=${lat}&mlon=${lng}#map=13/${lat}/${lng}`,
-      nearbyAttractions: SACRAMENTO_ATTRACTIONS,
+      nearbyAttractions: EL_DORADO_HILLS_ATTRACTIONS,
     };
   }
 

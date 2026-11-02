@@ -219,14 +219,14 @@ export const PaymentsModule: React.FC<PaymentsModuleProps> = ({
       <div className="space-y-6">
         <div className="bg-[#0f172a] text-white rounded-2xl p-6 border border-slate-800 flex flex-col sm:flex-row sm:items-center justify-between gap-4 tabular-nums">
           <div className="space-y-1">
-            <div className="flex items-center gap-2 text-xs text-slate-300">
+            <div className="flex items-center gap-2 type-support text-slate-300">
               <Wallet className="w-4 h-4 text-[#5eead4]" />
               <span>Account Treasury Balance</span>
             </div>
-            <div className="text-2xl sm:text-3xl font-heading font-bold text-white">
+            <div className="type-h2 text-white">
               ${balanceUsd.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} USD
             </div>
-            <div className="text-xs text-slate-400">
+            <div className="type-support text-slate-400">
               {unitsBalance} Lodging Units · {settledPayments.length} settled · {pendingPayments.length} pending verification
             </div>
           </div>
@@ -243,7 +243,7 @@ export const PaymentsModule: React.FC<PaymentsModuleProps> = ({
             <button
               type="button"
               onClick={() => setSubView('upload-payment-proof')}
-              className="px-4 py-2 rounded-lg bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-200 text-xs font-semibold flex items-center gap-2 cursor-pointer whitespace-nowrap"
+              className="min-h-[40px] px-4 py-2 rounded-lg bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-200 type-btn flex items-center gap-2 cursor-pointer whitespace-nowrap"
             >
               <Upload className="w-4 h-4 text-[#5eead4]" />
               <span>Submit Transfer Proof</span>
@@ -253,7 +253,7 @@ export const PaymentsModule: React.FC<PaymentsModuleProps> = ({
 
         {feedback && (
           <div
-            className={`p-4 rounded-xl border text-xs flex items-start gap-2.5 ${
+            className={`p-4 rounded-xl border type-support flex items-start gap-2.5 ${
               feedback.type === 'success'
                 ? 'bg-emerald-50 border-emerald-200 text-emerald-900'
                 : 'bg-rose-50 border-rose-200 text-rose-900'
@@ -335,13 +335,13 @@ export const PaymentsModule: React.FC<PaymentsModuleProps> = ({
         {subView === 'payment-details' && (
           <div className="p-6 rounded-2xl border border-slate-200 bg-white space-y-5">
             <div>
-              <h4 className="font-heading font-bold text-base text-[#0f172a]">
+              <h3 className="type-h3 text-[#0f172a]">
                 Official Receiving Bank &amp; Remittance Instructions
-              </h4>
-              <p className="text-xs text-slate-500 mt-0.5">{bank.paymentInstructions}</p>
+              </h3>
+              <p className="type-body text-slate-500 mt-1">{bank.paymentInstructions}</p>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs tabular-nums">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 type-support tabular-nums">
               {[
                 { label: 'Beneficiary Institution', value: bank.bankName },
                 { label: 'Beneficiary Account Name', value: bank.accountName },
@@ -357,8 +357,8 @@ export const PaymentsModule: React.FC<PaymentsModuleProps> = ({
                   className="p-3.5 bg-slate-50 rounded-xl border border-slate-200 flex items-center justify-between gap-3"
                 >
                   <div className="min-w-0">
-                    <span className="text-[11px] text-slate-500 block">{item.label}</span>
-                    <strong className="font-mono text-xs text-[#0f172a] truncate block mt-0.5">
+                    <span className="type-support text-slate-500 block">{item.label}</span>
+                    <strong className="font-mono type-support text-[#0f172a] truncate block mt-0.5">
                       {item.value}
                     </strong>
                   </div>
@@ -369,16 +369,16 @@ export const PaymentsModule: React.FC<PaymentsModuleProps> = ({
                     title={`Copy ${item.label}`}
                   >
                     {copiedField === item.label ? (
-                      <Check className="w-3.5 h-3.5 text-emerald-600" />
+                      <Check className="w-4 h-4 text-emerald-600" />
                     ) : (
-                      <Copy className="w-3.5 h-3.5" />
+                      <Copy className="w-4 h-4" />
                     )}
                   </button>
                 </div>
               ))}
             </div>
 
-            <div className="text-xs text-slate-600 pt-3 border-t border-slate-100">
+            <div className="type-support text-slate-600 pt-3 border-t border-slate-100">
               Mailing Address: <strong className="text-[#0f172a]">{bank.corporateMailingAddress}</strong> · Accounting Desk:{' '}
               <strong className="text-[#0f172a]">easytravelagency@trustagent.space</strong>
             </div>
@@ -391,10 +391,10 @@ export const PaymentsModule: React.FC<PaymentsModuleProps> = ({
             className="max-w-2xl p-6 rounded-2xl border border-slate-200 bg-white space-y-4"
           >
             <div>
-              <h4 className="font-heading font-bold text-base text-[#0f172a]">
+              <h3 className="type-h3 text-[#0f172a]">
                 Submit Wire, ACH, or Zelle Remittance Proof
-              </h4>
-              <p className="text-xs text-slate-500 mt-0.5">
+              </h3>
+              <p className="type-body text-slate-500 mt-1">
                 Link your bank transfer confirmation to an active reservation or add funds to your balance.
               </p>
             </div>
@@ -505,10 +505,10 @@ export const PaymentsModule: React.FC<PaymentsModuleProps> = ({
                   type="file"
                   accept="image/*,.pdf"
                   onChange={handleFileChange}
-                  className="w-full h-10 px-2.5 py-1.5 bg-white border border-slate-300 rounded-lg text-xs text-slate-600"
+                  className="w-full min-h-[44px] px-3 py-2 bg-white border border-slate-300 rounded-lg type-support text-slate-600"
                 />
                 {receiptFileName && (
-                  <span className="text-[11px] text-[#14616d] font-semibold block mt-1">
+                  <span className="type-support text-[#14616d] font-semibold block mt-1">
                     Attached: {receiptFileName}
                   </span>
                 )}

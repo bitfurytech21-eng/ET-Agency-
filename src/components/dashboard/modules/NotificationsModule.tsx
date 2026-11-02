@@ -57,10 +57,10 @@ export const NotificationsModule: React.FC<NotificationsModuleProps> = ({
       <div className="space-y-6">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-200 pb-4">
           <div>
-            <h3 className="font-heading font-bold text-lg text-[#0f172a]">
+            <h3 className="type-h3 text-[#0f172a]">
               Notifications &amp; Account Updates
             </h3>
-            <p className="text-xs text-slate-500">
+            <p className="type-body text-slate-500 mt-1">
               Confirmation notices, payment reconciliation alerts, and account updates for your workspace
             </p>
           </div>

@@ -325,7 +325,7 @@ export const AdminProperties: React.FC<AdminPropertiesProps> = ({
   return (
     <div className="space-y-6">
       {/* Sub-Navigation Bar */}
-      <div className="flex flex-wrap items-center justify-between gap-3 border-b border-[#e6dfd5] pb-3">
+      <div className="flex flex-wrap items-center justify-between gap-4 border-b border-slate-200 pb-4">
         <div className="flex flex-wrap gap-2">
           {[
             { id: 'index', label: `All Residences (${properties.length})`, icon: Building2 },
@@ -343,13 +343,13 @@ export const AdminProperties: React.FC<AdminPropertiesProps> = ({
                 key={tab.id}
                 type="button"
                 onClick={() => setSubTab(tab.id as SubTab)}
-                className={`px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-colors cursor-pointer border whitespace-nowrap ${
+                className={`px-3.5 py-2 min-h-[40px] rounded-lg type-nav flex items-center gap-2 transition-colors cursor-pointer border whitespace-nowrap ${
                   active
-                    ? 'bg-[#82634f] text-white border-[#82634f]'
-                    : 'bg-white text-[#5c5046] border-[#e6dfd5] hover:border-[#82634f]/40 hover:text-[#282828]'
+                    ? 'bg-[#14616d] text-white border-[#14616d]'
+                    : 'bg-white text-slate-600 border-slate-200 hover:border-slate-300 hover:text-slate-900'
                 }`}
               >
-                <Icon className="w-3.5 h-3.5" />
+                <Icon className="w-4 h-4 shrink-0" />
                 <span>{tab.label}</span>
               </button>
             );
@@ -358,12 +358,15 @@ export const AdminProperties: React.FC<AdminPropertiesProps> = ({
 
         {/* Active Residence Context Selector */}
         {selectedProperty && ['edit', 'images', 'availability'].includes(subTab) && (
-          <div className="flex items-center gap-2 text-xs">
-            <span className="text-[#857568]">Editing:</span>
+          <div className="flex items-center gap-2.5">
+            <label htmlFor="admin-active-residence-select" className="form-label mb-0 whitespace-nowrap">
+              Editing:
+            </label>
             <select
+              id="admin-active-residence-select"
               value={selectedPropertyId}
               onChange={(e) => setSelectedPropertyId(e.target.value)}
-              className="bg-white border border-[#dfd6ca] rounded-lg px-2.5 py-1.5 font-semibold text-[#282828] text-xs outline-none focus:border-[#00b7a8]"
+              className="form-select py-1.5 min-h-[40px] w-auto font-semibold"
             >
               {properties.map((p) => (
                 <option key={p.id} value={p.id}>
@@ -377,55 +380,55 @@ export const AdminProperties: React.FC<AdminPropertiesProps> = ({
 
       {/* 1. ALL RESIDENCES DIRECTORY */}
       {subTab === 'index' && (
-        <div className="bg-white border border-[#e6dfd5] rounded-2xl p-6 space-y-4">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[#e6dfd5] pb-4">
+        <div className="admin-panel overflow-hidden">
+          <div className="px-6 py-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-200">
             <div>
-              <h3 className="type-h4 text-[#1b1d20]">Residence Portfolio Directory</h3>
-              <p className="text-xs text-[#5c5046]">
+              <h3 className="type-h3 text-slate-900">Residence Portfolio Directory</h3>
+              <p className="type-body text-slate-600 mt-1">
                 Manage property specifications, room layouts, video tours, availability holds, and verified status.
               </p>
             </div>
 
-            <div className="flex flex-wrap items-center gap-2.5">
-              <div className="relative">
-                <Search className="w-3.5 h-3.5 text-[#857568] absolute left-3 top-2.5" />
+            <div className="flex flex-wrap items-center gap-3">
+              <div className="relative w-full sm:w-64">
+                <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
                 <input
                   type="text"
                   placeholder="Search unit, title, type..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="pl-8 pr-3 py-1.5 bg-[#faf8f5] border border-[#dfd6ca] rounded-lg text-xs outline-none focus:border-[#00b7a8]"
+                  className="form-input pl-10 min-h-[40px] py-2"
                 />
               </div>
 
               <button
                 type="button"
                 onClick={() => setSubTab('add')}
-                className="px-3.5 py-1.5 bg-[#00b7a8] hover:bg-[#009e91] text-white rounded-lg text-xs font-semibold flex items-center gap-1.5 cursor-pointer whitespace-nowrap"
+                className="btn btn-primary btn-sm"
               >
-                <Plus className="w-3.5 h-3.5" />
+                <Plus className="w-4 h-4" />
                 <span>Add Residence</span>
               </button>
             </div>
           </div>
 
           <div className="overflow-x-auto">
-            <table className="w-full text-left text-xs tabular-nums">
-              <thead className="bg-[#faf8f5] text-[#697076] font-semibold border-b border-[#e6dfd5]">
+            <table className="data-table">
+              <thead>
                 <tr>
-                  <th className="py-3 px-3">Residence</th>
-                  <th className="py-3 px-3">Specs &amp; Capacity</th>
-                  <th className="py-3 px-3">Monthly Rate</th>
-                  <th className="py-3 px-3">Media</th>
-                  <th className="py-3 px-3">Verification &amp; Status</th>
-                  <th className="py-3 px-3 text-right">Actions</th>
+                  <th>Residence</th>
+                  <th>Specs &amp; Capacity</th>
+                  <th>Monthly Rate</th>
+                  <th>Media</th>
+                  <th>Verification &amp; Status</th>
+                  <th className="text-right">Actions</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-[#e6dfd5]">
+              <tbody>
                 {filteredProperties.map((prop, idx) => (
-                  <tr key={prop.id} className="hover:bg-[#fbf9f6] transition-colors">
-                    <td className="py-3.5 px-3">
-                      <div className="flex items-center gap-3">
+                  <tr key={prop.id}>
+                    <td>
+                      <div className="flex items-center gap-3.5">
                         <img
                           src={prop.images?.[0] || getFallbackPropertyImage(idx)}
                           alt={prop.title}
@@ -434,54 +437,54 @@ export const AdminProperties: React.FC<AdminPropertiesProps> = ({
                             e.currentTarget.onerror = null;
                             e.currentTarget.src = getFallbackPropertyImage(idx);
                           }}
-                          className="w-12 h-10 object-cover rounded-md border border-[#e6dfd5] shrink-0"
+                          className="w-14 h-11 object-cover rounded-lg border border-slate-200 shrink-0"
                         />
                         <div className="min-w-0">
-                          <span className="font-mono font-semibold text-[#82634f] block">
+                          <span className="font-mono type-support font-semibold text-[#14616d] block">
                             {prop.unitNumber}
                           </span>
-                          <span className="font-semibold text-[#1b1d20] line-clamp-1">
+                          <span className="font-semibold text-slate-900 line-clamp-1">
                             {prop.title}
                           </span>
-                          <span className="text-[11px] text-[#697076]">
+                          <span className="type-support text-slate-500 block">
                             {prop.propertyType || prop.category}
                           </span>
                         </div>
                       </div>
                     </td>
-                    <td className="py-3 px-3 text-[#434a4f]">
-                      <div>
+                    <td className="text-slate-700">
+                      <div className="font-medium">
                         {prop.bedrooms || 1} Bed · {prop.bathrooms || 1} Bath · Max{' '}
                         {prop.maxGuests || Math.max(2, (prop.bedrooms || 1) * 2)} Guests
                       </div>
-                      <div className="text-[11px] text-[#697076]">
+                      <div className="type-support text-slate-500">
                         {prop.sqft || 'Standard'} · Min {prop.minimumStayDays || 5} nights
                       </div>
                     </td>
-                    <td className="py-3 px-3 font-semibold text-[#00897d]">
+                    <td className="font-semibold text-[#14616d] tabular-nums whitespace-nowrap">
                       ${prop.monthlyRate?.toLocaleString()} / mo
                     </td>
-                    <td className="py-3 px-3 text-[#434a4f]">
-                      <div className="flex items-center gap-2">
+                    <td className="text-slate-700">
+                      <div className="flex items-center gap-2 whitespace-nowrap">
                         <button
                           type="button"
                           onClick={() => {
                             setSelectedPropertyId(prop.id);
                             setSubTab('images');
                           }}
-                          className="text-[#82634f] hover:underline font-semibold cursor-pointer"
+                          className="type-support font-semibold text-[#14616d] hover:underline cursor-pointer"
                         >
                           {prop.images?.length || 0} Photos
                         </button>
                         {prop.videoTourUrl && (
-                          <span className="inline-flex items-center gap-1 text-[#00897d]">
-                            · <Video className="w-3 h-3" /> Video
+                          <span className="inline-flex items-center gap-1 type-support text-slate-600">
+                            · <Video className="w-3.5 h-3.5 text-[#14616d]" /> Video
                           </span>
                         )}
                       </div>
                     </td>
-                    <td className="py-3 px-3">
-                      <div className="flex items-center gap-2">
+                    <td>
+                      <div className="flex items-center gap-2 whitespace-nowrap type-support">
                         <span
                           className={`font-semibold ${
                             prop.status === 'Available'
@@ -494,14 +497,14 @@ export const AdminProperties: React.FC<AdminPropertiesProps> = ({
                           {prop.status}
                         </span>
                         {prop.verified && (
-                          <span className="inline-flex items-center gap-0.5 text-[#1b1d20] font-medium">
-                            · <ShieldCheck className="w-3.5 h-3.5 text-[#00897d]" /> Verified
+                          <span className="inline-flex items-center gap-1 text-slate-700 font-medium">
+                            · <ShieldCheck className="w-4 h-4 text-[#14616d]" /> Verified
                           </span>
                         )}
                       </div>
                     </td>
-                    <td className="py-3 px-3 text-right">
-                      <div className="inline-flex items-center gap-1.5">
+                    <td className="text-right">
+                      <div className="inline-flex items-center gap-2">
                         <button
                           type="button"
                           onClick={() => {
@@ -509,17 +512,17 @@ export const AdminProperties: React.FC<AdminPropertiesProps> = ({
                             setSubTab('availability');
                           }}
                           title="Manage Calendar & Rates"
-                          className="p-1.5 rounded bg-white hover:bg-[#faf8f5] text-[#5c5046] border border-[#dfd6ca] cursor-pointer"
+                          className="btn btn-outline btn-sm px-2.5"
                         >
-                          <Calendar className="w-3.5 h-3.5" />
+                          <Calendar className="w-4 h-4" />
                         </button>
                         <button
                           type="button"
                           onClick={() => handleStartEdit(prop)}
                           title="Edit Residence, Rooms & Video"
-                          className="px-2.5 py-1.5 rounded bg-[#e8f8f6] hover:bg-[#d0f2ed] text-[#00897d] border border-[#bfe8e3] font-semibold inline-flex items-center gap-1 cursor-pointer"
+                          className="btn btn-primary btn-sm"
                         >
-                          <Edit3 className="w-3.5 h-3.5" />
+                          <Edit3 className="w-4 h-4" />
                           <span>Edit</span>
                         </button>
                       </div>
@@ -534,103 +537,103 @@ export const AdminProperties: React.FC<AdminPropertiesProps> = ({
 
       {/* 2. ADD NEW RESIDENCE */}
       {subTab === 'add' && (
-        <div className="bg-white border border-[#e6dfd5] rounded-2xl p-6 sm:p-8 max-w-4xl space-y-6">
-          <div className="border-b border-[#e6dfd5] pb-4">
-            <h3 className="type-h4 text-[#1b1d20]">Publish New Residence</h3>
-            <p className="text-xs text-[#5c5046]">
+        <div className="admin-panel p-6 sm:p-8 max-w-4xl space-y-6">
+          <div className="border-b border-slate-200 pb-4">
+            <h3 className="type-h3 text-slate-900">Publish New Residence</h3>
+            <p className="type-body text-slate-600 mt-1">
               Creates a database-backed residence with its own detail page, room explorer, and live booking calendar.
             </p>
           </div>
 
-          <form onSubmit={handleCreateProperty} className="space-y-4 text-xs">
+          <form onSubmit={handleCreateProperty} className="space-y-5">
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
               <div>
-                <label className="block text-[#5c5046] font-semibold mb-1">Unit Number *</label>
+                <label className="form-label">Unit Number *</label>
                 <input
                   type="text"
                   required
                   value={newProp.unitNumber || ''}
                   onChange={(e) => setNewProp({ ...newProp, unitNumber: e.target.value })}
-                  className="w-full px-3 py-2 bg-[#faf8f5] border border-[#dfd6ca] rounded-lg font-mono"
+                  className="form-input font-mono"
                 />
               </div>
               <div className="sm:col-span-2">
-                <label className="block text-[#5c5046] font-semibold mb-1">Residence Title *</label>
+                <label className="form-label">Residence Title *</label>
                 <input
                   type="text"
                   required
                   value={newProp.title || ''}
                   onChange={(e) => setNewProp({ ...newProp, title: e.target.value })}
-                  className="w-full px-3 py-2 bg-[#faf8f5] border border-[#dfd6ca] rounded-lg"
+                  className="form-input"
                 />
               </div>
             </div>
 
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 tabular-nums">
               <div>
-                <label className="block text-[#5c5046] font-semibold mb-1">Monthly Rate ($)</label>
+                <label className="form-label">Monthly Rate ($)</label>
                 <input
                   type="number"
                   required
                   value={newProp.monthlyRate || 2800}
                   onChange={(e) => setNewProp({ ...newProp, monthlyRate: Number(e.target.value) })}
-                  className="w-full px-3 py-2 bg-[#faf8f5] border border-[#dfd6ca] rounded-lg"
+                  className="form-input tabular-nums"
                 />
               </div>
               <div>
-                <label className="block text-[#5c5046] font-semibold mb-1">Bedrooms</label>
+                <label className="form-label">Bedrooms</label>
                 <input
                   type="number"
                   min={1}
                   value={newProp.bedrooms || 1}
                   onChange={(e) => setNewProp({ ...newProp, bedrooms: Number(e.target.value) })}
-                  className="w-full px-3 py-2 bg-[#faf8f5] border border-[#dfd6ca] rounded-lg"
+                  className="form-input tabular-nums"
                 />
               </div>
               <div>
-                <label className="block text-[#5c5046] font-semibold mb-1">Bathrooms</label>
+                <label className="form-label">Bathrooms</label>
                 <input
                   type="number"
                   min={1}
                   step="0.5"
                   value={newProp.bathrooms || 1}
                   onChange={(e) => setNewProp({ ...newProp, bathrooms: Number(e.target.value) })}
-                  className="w-full px-3 py-2 bg-[#faf8f5] border border-[#dfd6ca] rounded-lg"
+                  className="form-input tabular-nums"
                 />
               </div>
               <div>
-                <label className="block text-[#5c5046] font-semibold mb-1">Max Guests</label>
+                <label className="form-label">Max Guests</label>
                 <input
                   type="number"
                   min={1}
                   value={newProp.maxGuests || 2}
                   onChange={(e) => setNewProp({ ...newProp, maxGuests: Number(e.target.value) })}
-                  className="w-full px-3 py-2 bg-[#faf8f5] border border-[#dfd6ca] rounded-lg"
+                  className="form-input tabular-nums"
                 />
               </div>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
               <div>
-                <label className="block text-[#5c5046] font-semibold mb-1">Property Type</label>
+                <label className="form-label">Property Type</label>
                 <input
                   type="text"
                   value={newProp.propertyType || ''}
                   onChange={(e) => setNewProp({ ...newProp, propertyType: e.target.value })}
-                  className="w-full px-3 py-2 bg-[#faf8f5] border border-[#dfd6ca] rounded-lg"
+                  className="form-input"
                 />
               </div>
               <div>
-                <label className="block text-[#5c5046] font-semibold mb-1">Interior Area (sq ft)</label>
+                <label className="form-label">Interior Area (sq ft)</label>
                 <input
                   type="text"
                   value={newProp.sqft || ''}
                   onChange={(e) => setNewProp({ ...newProp, sqft: e.target.value })}
-                  className="w-full px-3 py-2 bg-[#faf8f5] border border-[#dfd6ca] rounded-lg"
+                  className="form-input"
                 />
               </div>
               <div>
-                <label className="block text-[#5c5046] font-semibold mb-1">Min Stay (Nights)</label>
+                <label className="form-label">Min Stay (Nights)</label>
                 <input
                   type="number"
                   min={1}
@@ -638,14 +641,14 @@ export const AdminProperties: React.FC<AdminPropertiesProps> = ({
                   onChange={(e) =>
                     setNewProp({ ...newProp, minimumStayDays: Number(e.target.value) })
                   }
-                  className="w-full px-3 py-2 bg-[#faf8f5] border border-[#dfd6ca] rounded-lg"
+                  className="form-input tabular-nums"
                 />
               </div>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <label className="block text-[#5c5046] font-semibold mb-1">
+                <label className="form-label">
                   Video Tour URL (Optional — hidden if blank)
                 </label>
                 <input
@@ -653,16 +656,16 @@ export const AdminProperties: React.FC<AdminPropertiesProps> = ({
                   value={newProp.videoTourUrl || ''}
                   onChange={(e) => setNewProp({ ...newProp, videoTourUrl: e.target.value })}
                   placeholder="https://... (.mp4 or YouTube URL)"
-                  className="w-full px-3 py-2 bg-[#faf8f5] border border-[#dfd6ca] rounded-lg"
+                  className="form-input"
                 />
               </div>
-              <div className="flex items-center pt-5">
-                <label className="inline-flex items-center gap-2 cursor-pointer font-semibold text-[#1b1d20]">
+              <div className="flex items-center sm:pt-6">
+                <label className="inline-flex items-center gap-2.5 cursor-pointer type-label text-slate-900">
                   <input
                     type="checkbox"
                     checked={Boolean(newProp.verified)}
                     onChange={(e) => setNewProp({ ...newProp, verified: e.target.checked })}
-                    className="w-4 h-4 accent-[#00897d]"
+                    className="w-4 h-4 accent-[#14616d]"
                   />
                   <span>Mark Residence Inspection Verified</span>
                 </label>
@@ -670,38 +673,38 @@ export const AdminProperties: React.FC<AdminPropertiesProps> = ({
             </div>
 
             <div>
-              <label className="block text-[#5c5046] font-semibold mb-1">Short Summary</label>
+              <label className="form-label">Short Summary</label>
               <textarea
                 rows={2}
                 value={newProp.shortDesc || ''}
                 onChange={(e) => setNewProp({ ...newProp, shortDesc: e.target.value })}
-                className="w-full px-3 py-2 bg-[#faf8f5] border border-[#dfd6ca] rounded-lg"
+                className="form-textarea"
               />
             </div>
 
             <div>
-              <label className="block text-[#5c5046] font-semibold mb-1">Full Description</label>
+              <label className="form-label">Full Description</label>
               <textarea
                 rows={4}
                 value={newProp.fullDesc || ''}
                 onChange={(e) => setNewProp({ ...newProp, fullDesc: e.target.value })}
-                className="w-full px-3 py-2 bg-[#faf8f5] border border-[#dfd6ca] rounded-lg"
+                className="form-textarea"
               />
             </div>
 
-            <div className="flex justify-end gap-2 pt-3">
+            <div className="flex justify-end gap-3 pt-3">
               <button
                 type="button"
                 onClick={() => setSubTab('index')}
-                className="px-4 py-2 border border-[#dfd6ca] rounded-lg text-[#5c5046] hover:bg-[#faf8f5] font-semibold cursor-pointer"
+                className="btn btn-outline"
               >
                 Cancel
               </button>
               <button
                 type="submit"
-                className="px-5 py-2 bg-[#00b7a8] hover:bg-[#009e91] text-white rounded-lg font-semibold flex items-center gap-1.5 cursor-pointer"
+                className="btn btn-primary"
               >
-                <Plus className="w-3.5 h-3.5" />
+                <Plus className="w-4 h-4" />
                 <span>Create Residence</span>
               </button>
             </div>
@@ -711,24 +714,24 @@ export const AdminProperties: React.FC<AdminPropertiesProps> = ({
 
       {/* 3. EDIT RESIDENCE SPECS, BEDROOM EXPLORER, VIDEO TOUR & LOCATION */}
       {subTab === 'edit' && editForm && (
-        <form onSubmit={handleSaveEdit} className="space-y-6 text-xs">
+        <form onSubmit={handleSaveEdit} className="space-y-6">
           {/* Core Specifications */}
-          <div className="bg-white border border-[#e6dfd5] rounded-2xl p-6 space-y-4">
-            <div className="flex flex-wrap items-center justify-between gap-3 border-b border-[#e6dfd5] pb-3">
+          <div className="admin-panel p-6 space-y-5">
+            <div className="flex flex-wrap items-center justify-between gap-4 border-b border-slate-200 pb-4">
               <div>
-                <h3 className="type-h4 text-[#1b1d20]">
+                <h3 className="type-h3 text-slate-900">
                   Core Specifications — {editForm.unitNumber}
                 </h3>
-                <p className="text-[#5c5046]">
+                <p className="type-body text-slate-600 mt-1">
                   All changes save directly to the property database and update the public detail page immediately.
                 </p>
               </div>
-              <label className="inline-flex items-center gap-2 font-semibold text-[#1b1d20] cursor-pointer">
+              <label className="inline-flex items-center gap-2.5 type-label text-slate-900 cursor-pointer">
                 <input
                   type="checkbox"
                   checked={Boolean(editForm.verified)}
                   onChange={(e) => setEditForm({ ...editForm, verified: e.target.checked })}
-                  className="w-4 h-4 accent-[#00897d]"
+                  className="w-4 h-4 accent-[#14616d]"
                 />
                 <span>Verified Property Status</span>
               </label>
@@ -736,70 +739,70 @@ export const AdminProperties: React.FC<AdminPropertiesProps> = ({
 
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
               <div className="sm:col-span-2">
-                <label className="block text-[#5c5046] font-semibold mb-1">Property Title</label>
+                <label className="form-label">Property Title</label>
                 <input
                   type="text"
                   value={editForm.title}
                   onChange={(e) => setEditForm({ ...editForm, title: e.target.value })}
-                  className="w-full px-3 py-2 bg-[#faf8f5] border border-[#dfd6ca] rounded-lg"
+                  className="form-input"
                 />
               </div>
               <div>
-                <label className="block text-[#5c5046] font-semibold mb-1">Unit Identifier</label>
+                <label className="form-label">Unit Identifier</label>
                 <input
                   type="text"
                   value={editForm.unitNumber}
                   onChange={(e) => setEditForm({ ...editForm, unitNumber: e.target.value })}
-                  className="w-full px-3 py-2 bg-[#faf8f5] border border-[#dfd6ca] rounded-lg font-mono"
+                  className="form-input font-mono"
                 />
               </div>
             </div>
 
             <div className="grid grid-cols-2 sm:grid-cols-5 gap-4 tabular-nums">
               <div>
-                <label className="block text-[#5c5046] font-semibold mb-1">Monthly Rate ($)</label>
+                <label className="form-label">Monthly Rate ($)</label>
                 <input
                   type="number"
                   value={editForm.monthlyRate}
                   onChange={(e) =>
                     setEditForm({ ...editForm, monthlyRate: Number(e.target.value) })
                   }
-                  className="w-full px-3 py-2 bg-[#faf8f5] border border-[#dfd6ca] rounded-lg"
+                  className="form-input tabular-nums"
                 />
               </div>
               <div>
-                <label className="block text-[#5c5046] font-semibold mb-1">Bedrooms</label>
+                <label className="form-label">Bedrooms</label>
                 <input
                   type="number"
                   min={1}
                   value={editForm.bedrooms || 1}
                   onChange={(e) => setEditForm({ ...editForm, bedrooms: Number(e.target.value) })}
-                  className="w-full px-3 py-2 bg-[#faf8f5] border border-[#dfd6ca] rounded-lg"
+                  className="form-input tabular-nums"
                 />
               </div>
               <div>
-                <label className="block text-[#5c5046] font-semibold mb-1">Bathrooms</label>
+                <label className="form-label">Bathrooms</label>
                 <input
                   type="number"
                   min={1}
                   step="0.5"
                   value={editForm.bathrooms || 1}
                   onChange={(e) => setEditForm({ ...editForm, bathrooms: Number(e.target.value) })}
-                  className="w-full px-3 py-2 bg-[#faf8f5] border border-[#dfd6ca] rounded-lg"
+                  className="form-input tabular-nums"
                 />
               </div>
               <div>
-                <label className="block text-[#5c5046] font-semibold mb-1">Max Guests</label>
+                <label className="form-label">Max Guests</label>
                 <input
                   type="number"
                   min={1}
                   value={editForm.maxGuests || 2}
                   onChange={(e) => setEditForm({ ...editForm, maxGuests: Number(e.target.value) })}
-                  className="w-full px-3 py-2 bg-[#faf8f5] border border-[#dfd6ca] rounded-lg"
+                  className="form-input tabular-nums"
                 />
               </div>
               <div>
-                <label className="block text-[#5c5046] font-semibold mb-1">Status</label>
+                <label className="form-label">Status</label>
                 <select
                   value={editForm.status}
                   onChange={(e) =>
@@ -808,7 +811,7 @@ export const AdminProperties: React.FC<AdminPropertiesProps> = ({
                       status: e.target.value as AdminProperty['status'],
                     })
                   }
-                  className="w-full px-3 py-2 bg-[#faf8f5] border border-[#dfd6ca] rounded-lg font-semibold"
+                  className="form-select font-semibold"
                 >
                   <option value="Available">Available</option>
                   <option value="Inquired">Inquired</option>
@@ -819,26 +822,26 @@ export const AdminProperties: React.FC<AdminPropertiesProps> = ({
 
             <div className="grid grid-cols-1 sm:grid-cols-4 gap-4">
               <div>
-                <label className="block text-[#5c5046] font-semibold mb-1">Property Type</label>
+                <label className="form-label">Property Type</label>
                 <input
                   type="text"
                   value={editForm.propertyType || ''}
                   onChange={(e) => setEditForm({ ...editForm, propertyType: e.target.value })}
-                  className="w-full px-3 py-2 bg-[#faf8f5] border border-[#dfd6ca] rounded-lg"
+                  className="form-input"
                 />
               </div>
               <div>
-                <label className="block text-[#5c5046] font-semibold mb-1">Interior Size</label>
+                <label className="form-label">Interior Size</label>
                 <input
                   type="text"
                   value={editForm.sqft || ''}
                   onChange={(e) => setEditForm({ ...editForm, sqft: e.target.value })}
                   placeholder="e.g. 920 sq ft"
-                  className="w-full px-3 py-2 bg-[#faf8f5] border border-[#dfd6ca] rounded-lg"
+                  className="form-input"
                 />
               </div>
               <div>
-                <label className="block text-[#5c5046] font-semibold mb-1">Min Stay (Nights)</label>
+                <label className="form-label">Min Stay (Nights)</label>
                 <input
                   type="number"
                   min={1}
@@ -846,11 +849,11 @@ export const AdminProperties: React.FC<AdminPropertiesProps> = ({
                   onChange={(e) =>
                     setEditForm({ ...editForm, minimumStayDays: Number(e.target.value) })
                   }
-                  className="w-full px-3 py-2 bg-[#faf8f5] border border-[#dfd6ca] rounded-lg"
+                  className="form-input tabular-nums"
                 />
               </div>
               <div>
-                <label className="block text-[#5c5046] font-semibold mb-1">Max Stay (Nights)</label>
+                <label className="form-label">Max Stay (Nights)</label>
                 <input
                   type="number"
                   min={5}
@@ -858,24 +861,24 @@ export const AdminProperties: React.FC<AdminPropertiesProps> = ({
                   onChange={(e) =>
                     setEditForm({ ...editForm, maximumStayDays: Number(e.target.value) })
                   }
-                  className="w-full px-3 py-2 bg-[#faf8f5] border border-[#dfd6ca] rounded-lg"
+                  className="form-input tabular-nums"
                 />
               </div>
             </div>
 
             <div>
-              <label className="block text-[#5c5046] font-semibold mb-1">Full Description</label>
+              <label className="form-label">Full Description</label>
               <textarea
                 rows={4}
                 value={editForm.fullDesc}
                 onChange={(e) => setEditForm({ ...editForm, fullDesc: e.target.value })}
-                className="w-full px-3 py-2 bg-[#faf8f5] border border-[#dfd6ca] rounded-lg"
+                className="form-textarea"
               />
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <label className="block text-[#5c5046] font-semibold mb-1">
+                <label className="form-label">
                   Amenities (comma-separated)
                 </label>
                 <input
@@ -890,11 +893,11 @@ export const AdminProperties: React.FC<AdminPropertiesProps> = ({
                         .filter(Boolean),
                     })
                   }
-                  className="w-full px-3 py-2 bg-[#faf8f5] border border-[#dfd6ca] rounded-lg"
+                  className="form-input"
                 />
               </div>
               <div>
-                <label className="block text-[#5c5046] font-semibold mb-1">
+                <label className="form-label">
                   Verified Facilities (comma-separated)
                 </label>
                 <input
@@ -909,114 +912,114 @@ export const AdminProperties: React.FC<AdminPropertiesProps> = ({
                         .filter(Boolean),
                     })
                   }
-                  className="w-full px-3 py-2 bg-[#faf8f5] border border-[#dfd6ca] rounded-lg"
+                  className="form-input"
                 />
               </div>
             </div>
           </div>
 
           {/* Video Tour Settings */}
-          <div className="bg-white border border-[#e6dfd5] rounded-2xl p-6 space-y-4">
-            <div className="border-b border-[#e6dfd5] pb-3">
-              <h4 className="type-nav font-semibold text-[#1b1d20]">
+          <div className="admin-panel p-6 space-y-5">
+            <div className="border-b border-slate-200 pb-4">
+              <h4 className="type-h4 text-slate-900">
                 Video Walkthrough Configuration
               </h4>
-              <p className="text-[#5c5046]">
+              <p className="type-support text-slate-600 mt-1">
                 Supports direct HTML5 video streams (.mp4/.webm) or YouTube walkthrough URLs. Leave blank to hide the Video Tour section for this property.
               </p>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <label className="block text-[#5c5046] font-semibold mb-1">Video Tour URL</label>
+                <label className="form-label">Video Tour URL</label>
                 <input
                   type="text"
                   value={editForm.videoTourUrl || ''}
                   onChange={(e) => setEditForm({ ...editForm, videoTourUrl: e.target.value })}
                   placeholder="https://... or leave empty to hide"
-                  className="w-full px-3 py-2 bg-[#faf8f5] border border-[#dfd6ca] rounded-lg"
+                  className="form-input"
                 />
               </div>
               <div>
-                <label className="block text-[#5c5046] font-semibold mb-1">Poster Image URL</label>
+                <label className="form-label">Poster Image URL</label>
                 <input
                   type="text"
                   value={editForm.videoPosterUrl || ''}
                   onChange={(e) => setEditForm({ ...editForm, videoPosterUrl: e.target.value })}
                   placeholder="Defaults to hero photograph"
-                  className="w-full px-3 py-2 bg-[#faf8f5] border border-[#dfd6ca] rounded-lg"
+                  className="form-input"
                 />
               </div>
             </div>
           </div>
 
           {/* Bedroom Explorer Rooms Manager */}
-          <div className="bg-white border border-[#e6dfd5] rounded-2xl p-6 space-y-4">
-            <div className="flex items-center justify-between border-b border-[#e6dfd5] pb-3">
+          <div className="admin-panel p-6 space-y-5">
+            <div className="flex flex-wrap items-center justify-between gap-3 border-b border-slate-200 pb-4">
               <div>
-                <h4 className="type-nav font-semibold text-[#1b1d20]">
+                <h4 className="type-h4 text-slate-900">
                   Interactive Bedroom Explorer Rooms ({(editForm.bedroomsDetail || []).length})
                 </h4>
-                <p className="text-[#5c5046]">
+                <p className="type-support text-slate-600 mt-1">
                   Configure each room’s label, bed setup, bathroom access, and room photograph.
                 </p>
               </div>
               <button
                 type="button"
                 onClick={handleAddBedroom}
-                className="px-3 py-1.5 rounded-lg bg-[#faf8f5] hover:bg-[#f2ece4] border border-[#dfd6ca] font-semibold text-[#1b1d20] inline-flex items-center gap-1 cursor-pointer"
+                className="btn btn-outline btn-sm"
               >
-                <Plus className="w-3.5 h-3.5 text-[#00897d]" />
+                <Plus className="w-4 h-4 text-[#14616d]" />
                 <span>Add Bedroom</span>
               </button>
             </div>
 
-            <div className="space-y-4">
+            <div className="divide-y divide-slate-200">
               {(editForm.bedroomsDetail || []).map((room, rIdx) => (
                 <div
                   key={room.id || rIdx}
-                  className="p-4 bg-[#faf8f5] border border-[#e6dfd5] rounded-xl space-y-3"
+                  className="py-5 first:pt-0 last:pb-0 space-y-4"
                 >
-                  <div className="flex items-center justify-between gap-2">
-                    <span className="font-semibold text-[#00897d]">{room.roomLabel}</span>
+                  <div className="flex items-center justify-between gap-3">
+                    <span className="type-h4 text-[#14616d]">{room.roomLabel}</span>
                     <button
                       type="button"
                       onClick={() => handleRemoveBedroom(rIdx)}
-                      className="text-rose-700 hover:underline font-medium cursor-pointer"
+                      className="type-support text-rose-700 hover:underline font-semibold cursor-pointer"
                     >
                       Remove Room
                     </button>
                   </div>
 
-                  <div className="grid grid-cols-1 sm:grid-cols-4 gap-3">
+                  <div className="grid grid-cols-1 sm:grid-cols-4 gap-4">
                     <div>
-                      <label className="block text-[#5c5046] font-semibold mb-1">Tab Label</label>
+                      <label className="form-label">Tab Label</label>
                       <input
                         type="text"
                         value={room.roomLabel}
                         onChange={(e) => handleUpdateBedroom(rIdx, { roomLabel: e.target.value })}
-                        className="w-full px-2.5 py-1.5 bg-white border border-[#dfd6ca] rounded-lg"
+                        className="form-input"
                       />
                     </div>
                     <div>
-                      <label className="block text-[#5c5046] font-semibold mb-1">Suite Title</label>
+                      <label className="form-label">Suite Title</label>
                       <input
                         type="text"
                         value={room.title}
                         onChange={(e) => handleUpdateBedroom(rIdx, { title: e.target.value })}
-                        className="w-full px-2.5 py-1.5 bg-white border border-[#dfd6ca] rounded-lg"
+                        className="form-input"
                       />
                     </div>
                     <div>
-                      <label className="block text-[#5c5046] font-semibold mb-1">Bed Setup</label>
+                      <label className="form-label">Bed Setup</label>
                       <input
                         type="text"
                         value={room.bedConfig}
                         onChange={(e) => handleUpdateBedroom(rIdx, { bedConfig: e.target.value })}
-                        className="w-full px-2.5 py-1.5 bg-white border border-[#dfd6ca] rounded-lg"
+                        className="form-input"
                       />
                     </div>
                     <div>
-                      <label className="block text-[#5c5046] font-semibold mb-1">
+                      <label className="form-label">
                         Bathroom Access
                       </label>
                       <input
@@ -1025,25 +1028,25 @@ export const AdminProperties: React.FC<AdminPropertiesProps> = ({
                         onChange={(e) =>
                           handleUpdateBedroom(rIdx, { bathroomAccess: e.target.value })
                         }
-                        className="w-full px-2.5 py-1.5 bg-white border border-[#dfd6ca] rounded-lg"
+                        className="form-input"
                       />
                     </div>
                   </div>
 
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
-                      <label className="block text-[#5c5046] font-semibold mb-1">
+                      <label className="form-label">
                         Room Photo URL (from property gallery)
                       </label>
                       <input
                         type="text"
                         value={room.image}
                         onChange={(e) => handleUpdateBedroom(rIdx, { image: e.target.value })}
-                        className="w-full px-2.5 py-1.5 bg-white border border-[#dfd6ca] rounded-lg"
+                        className="form-input"
                       />
                     </div>
                     <div>
-                      <label className="block text-[#5c5046] font-semibold mb-1">
+                      <label className="form-label">
                         Room Appointments (comma-separated)
                       </label>
                       <input
@@ -1057,20 +1060,20 @@ export const AdminProperties: React.FC<AdminPropertiesProps> = ({
                               .filter(Boolean),
                           })
                         }
-                        className="w-full px-2.5 py-1.5 bg-white border border-[#dfd6ca] rounded-lg"
+                        className="form-input"
                       />
                     </div>
                   </div>
 
                   <div>
-                    <label className="block text-[#5c5046] font-semibold mb-1">
+                    <label className="form-label">
                       Room Description
                     </label>
                     <textarea
                       rows={2}
                       value={room.description}
                       onChange={(e) => handleUpdateBedroom(rIdx, { description: e.target.value })}
-                      className="w-full px-2.5 py-1.5 bg-white border border-[#dfd6ca] rounded-lg"
+                      className="form-textarea"
                     />
                   </div>
                 </div>
@@ -1080,17 +1083,17 @@ export const AdminProperties: React.FC<AdminPropertiesProps> = ({
 
           {/* Location & Address Privacy */}
           {editForm.locationInfo && (
-            <div className="bg-white border border-[#e6dfd5] rounded-2xl p-6 space-y-4">
-              <div className="flex flex-wrap items-center justify-between gap-2 border-b border-[#e6dfd5] pb-3">
+            <div className="admin-panel p-6 space-y-5">
+              <div className="flex flex-wrap items-center justify-between gap-3 border-b border-slate-200 pb-4">
                 <div>
-                  <h4 className="type-nav font-semibold text-[#1b1d20]">
+                  <h4 className="type-h4 text-slate-900">
                     Location Corridor &amp; Address Privacy
                   </h4>
-                  <p className="text-[#5c5046]">
+                  <p className="type-support text-slate-600 mt-1">
                     Control whether exact street addresses are restricted until booking confirmation.
                   </p>
                 </div>
-                <label className="inline-flex items-center gap-2 font-semibold text-[#1b1d20] cursor-pointer">
+                <label className="inline-flex items-center gap-2.5 type-label text-slate-900 cursor-pointer">
                   <input
                     type="checkbox"
                     checked={Boolean(editForm.locationInfo.addressDisclosureRestricted)}
@@ -1103,7 +1106,7 @@ export const AdminProperties: React.FC<AdminPropertiesProps> = ({
                         },
                       })
                     }
-                    className="w-4 h-4 accent-[#00897d]"
+                    className="w-4 h-4 accent-[#14616d]"
                   />
                   <span>Restrict Exact Street Address Until Confirmed</span>
                 </label>
@@ -1111,7 +1114,7 @@ export const AdminProperties: React.FC<AdminPropertiesProps> = ({
 
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                 <div>
-                  <label className="block text-[#5c5046] font-semibold mb-1">
+                  <label className="form-label">
                     Neighborhood / Corridor
                   </label>
                   <input
@@ -1126,11 +1129,11 @@ export const AdminProperties: React.FC<AdminPropertiesProps> = ({
                         },
                       })
                     }
-                    className="w-full px-3 py-2 bg-[#faf8f5] border border-[#dfd6ca] rounded-lg"
+                    className="form-input"
                   />
                 </div>
                 <div>
-                  <label className="block text-[#5c5046] font-semibold mb-1">City</label>
+                  <label className="form-label">City</label>
                   <input
                     type="text"
                     value={editForm.locationInfo.city}
@@ -1143,11 +1146,11 @@ export const AdminProperties: React.FC<AdminPropertiesProps> = ({
                         },
                       })
                     }
-                    className="w-full px-3 py-2 bg-[#faf8f5] border border-[#dfd6ca] rounded-lg"
+                    className="form-input"
                   />
                 </div>
                 <div>
-                  <label className="block text-[#5c5046] font-semibold mb-1">
+                  <label className="form-label">
                     Approved Address Line
                   </label>
                   <input
@@ -1162,7 +1165,7 @@ export const AdminProperties: React.FC<AdminPropertiesProps> = ({
                         },
                       })
                     }
-                    className="w-full px-3 py-2 bg-[#faf8f5] border border-[#dfd6ca] rounded-lg"
+                    className="form-input"
                   />
                 </div>
               </div>
@@ -1173,13 +1176,13 @@ export const AdminProperties: React.FC<AdminPropertiesProps> = ({
             <button
               type="button"
               onClick={() => setSubTab('index')}
-              className="px-4 py-2.5 border border-[#dfd6ca] bg-white rounded-xl font-semibold text-[#5c5046] cursor-pointer"
+              className="btn btn-outline"
             >
               Back to Directory
             </button>
             <button
               type="submit"
-              className="px-6 py-2.5 bg-[#00b7a8] hover:bg-[#009e91] text-white rounded-xl font-semibold inline-flex items-center gap-2 cursor-pointer"
+              className="btn btn-primary"
             >
               <CheckCircle2 className="w-4 h-4" />
               <span>Save All Property Changes</span>
@@ -1190,42 +1193,42 @@ export const AdminProperties: React.FC<AdminPropertiesProps> = ({
 
       {/* 4. PHOTO GALLERY MANAGER */}
       {subTab === 'images' && selectedProperty && (
-        <div className="bg-white border border-[#e6dfd5] rounded-2xl p-6 space-y-6">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[#e6dfd5] pb-4">
+        <div className="admin-panel p-6 space-y-6">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-200 pb-4">
             <div>
-              <h3 className="type-h4 text-[#1b1d20]">
+              <h3 className="type-h3 text-slate-900">
                 Photography Gallery — {selectedProperty.unitNumber} (
                 {selectedProperty.images?.length || 0} Photos)
               </h3>
-              <p className="text-xs text-[#5c5046]">
+              <p className="type-body text-slate-600 mt-1">
                 Add verified property photographs, promote any image to Hero Cover, or remove outdated images.
               </p>
             </div>
 
-            <form onSubmit={handleAddPhoto} className="flex items-center gap-2 w-full sm:w-auto">
+            <form onSubmit={handleAddPhoto} className="flex items-center gap-2.5 w-full sm:w-auto">
               <input
                 type="url"
                 required
                 value={newPhotoUrl}
                 onChange={(e) => setNewPhotoUrl(e.target.value)}
                 placeholder="https://... photograph URL"
-                className="flex-1 sm:w-72 px-3 py-2 bg-[#faf8f5] border border-[#dfd6ca] rounded-lg text-xs"
+                className="form-input flex-1 sm:w-72 min-h-[42px]"
               />
               <button
                 type="submit"
-                className="px-3.5 py-2 bg-[#00b7a8] hover:bg-[#009e91] text-white rounded-lg text-xs font-semibold inline-flex items-center gap-1 cursor-pointer whitespace-nowrap"
+                className="btn btn-primary btn-sm"
               >
-                <Plus className="w-3.5 h-3.5" />
+                <Plus className="w-4 h-4" />
                 <span>Add Photo</span>
               </button>
             </form>
           </div>
 
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3">
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
             {(selectedProperty.images || []).map((imgUrl, idx) => (
               <div
                 key={`${selectedProperty.id}-img-${idx}`}
-                className="group relative rounded-xl overflow-hidden border border-[#e6dfd5] bg-[#faf8f5] aspect-4/3"
+                className="group relative rounded-xl overflow-hidden border border-slate-200 bg-slate-50 aspect-4/3"
               >
                 <img
                   src={imgUrl}
@@ -1237,15 +1240,15 @@ export const AdminProperties: React.FC<AdminPropertiesProps> = ({
                   }}
                   className="w-full h-full object-cover"
                 />
-                <div className="absolute inset-0 bg-black/55 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-1.5 p-2">
+                <div className="absolute inset-0 bg-slate-950/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2 p-2">
                   {idx > 0 && (
                     <button
                       type="button"
                       onClick={() => handleMakeHeroPhoto(idx)}
                       title="Promote to Hero Cover"
-                      className="p-1.5 bg-white text-[#1b1d20] rounded-md hover:bg-[#faf8f5] cursor-pointer"
+                      className="p-2 bg-white text-slate-900 rounded-lg hover:bg-slate-100 cursor-pointer"
                     >
-                      <ArrowUp className="w-3.5 h-3.5" />
+                      <ArrowUp className="w-4 h-4" />
                     </button>
                   )}
                   <a
@@ -1253,26 +1256,26 @@ export const AdminProperties: React.FC<AdminPropertiesProps> = ({
                     target="_blank"
                     rel="noreferrer"
                     title="Open Full Resolution"
-                    className="p-1.5 bg-white text-[#1b1d20] rounded-md hover:bg-[#faf8f5]"
+                    className="p-2 bg-white text-slate-900 rounded-lg hover:bg-slate-100"
                   >
-                    <ExternalLink className="w-3.5 h-3.5" />
+                    <ExternalLink className="w-4 h-4" />
                   </a>
                   {(selectedProperty.images?.length || 0) > 1 && (
                     <button
                       type="button"
                       onClick={() => handleRemovePhoto(idx)}
                       title="Remove Photograph"
-                      className="p-1.5 bg-rose-600 text-white rounded-md hover:bg-rose-700 cursor-pointer"
+                      className="p-2 bg-rose-600 text-white rounded-lg hover:bg-rose-700 cursor-pointer"
                     >
-                      <Trash2 className="w-3.5 h-3.5" />
+                      <Trash2 className="w-4 h-4" />
                     </button>
                   )}
                 </div>
-                <span className="absolute bottom-1.5 left-1.5 px-1.5 py-0.5 rounded bg-black/65 text-white text-[10px] font-mono tabular-nums">
+                <span className="absolute bottom-2 left-2 px-2 py-0.5 rounded bg-slate-950/75 text-white type-support font-mono tabular-nums">
                   #{idx + 1}
                 </span>
                 {idx === 0 && (
-                  <span className="absolute top-1.5 left-1.5 px-2 py-0.5 rounded bg-[#00897d] text-white text-[10px] font-semibold">
+                  <span className="absolute top-2 left-2 px-2.5 py-0.5 rounded bg-[#14616d] text-white type-support font-semibold">
                     Hero Cover
                   </span>
                 )}
@@ -1284,48 +1287,48 @@ export const AdminProperties: React.FC<AdminPropertiesProps> = ({
 
       {/* 5. AVAILABILITY HOLDS & SEASONAL PRICING */}
       {subTab === 'availability' && selectedProperty && (
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 text-xs">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {/* Blocked Dates */}
-          <div className="bg-white border border-[#e6dfd5] rounded-2xl p-6 space-y-4">
-            <div className="border-b border-[#e6dfd5] pb-3">
-              <h3 className="type-h4 text-[#1b1d20]">
+          <div className="admin-panel p-6 space-y-5">
+            <div className="border-b border-slate-200 pb-4">
+              <h3 className="type-h4 text-slate-900">
                 Calendar Holds &amp; Blocked Dates — {selectedProperty.unitNumber}
               </h3>
-              <p className="text-[#5c5046]">
+              <p className="type-support text-slate-600 mt-1">
                 Prevent double bookings during maintenance, inspections, or offline corporate holds.
               </p>
             </div>
 
-            <form onSubmit={handleAddBlockedRange} className="grid grid-cols-2 gap-3">
+            <form onSubmit={handleAddBlockedRange} className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <label className="block font-semibold text-[#5c5046] mb-1">Start Date *</label>
+                <label className="form-label">Start Date *</label>
                 <input
                   type="date"
                   required
                   value={newBlockStart}
                   onChange={(e) => setNewBlockStart(e.target.value)}
-                  className="w-full px-3 py-2 bg-[#faf8f5] border border-[#dfd6ca] rounded-lg tabular-nums"
+                  className="form-input tabular-nums"
                 />
               </div>
               <div>
-                <label className="block font-semibold text-[#5c5046] mb-1">End Date *</label>
+                <label className="form-label">End Date *</label>
                 <input
                   type="date"
                   required
                   min={newBlockStart || undefined}
                   value={newBlockEnd}
                   onChange={(e) => setNewBlockEnd(e.target.value)}
-                  className="w-full px-3 py-2 bg-[#faf8f5] border border-[#dfd6ca] rounded-lg tabular-nums"
+                  className="form-input tabular-nums"
                 />
               </div>
               <div>
-                <label className="block font-semibold text-[#5c5046] mb-1">Hold Type</label>
+                <label className="form-label">Hold Type</label>
                 <select
                   value={newBlockStatus}
                   onChange={(e) =>
                     setNewBlockStatus(e.target.value as BlockedDateRange['status'])
                   }
-                  className="w-full px-3 py-2 bg-[#faf8f5] border border-[#dfd6ca] rounded-lg"
+                  className="form-select"
                 >
                   <option value="blocked">Owner / Admin Hold</option>
                   <option value="turnover">Inspection &amp; Turnover</option>
@@ -1333,45 +1336,45 @@ export const AdminProperties: React.FC<AdminPropertiesProps> = ({
                 </select>
               </div>
               <div>
-                <label className="block font-semibold text-[#5c5046] mb-1">Label</label>
+                <label className="form-label">Label</label>
                 <input
                   type="text"
                   value={newBlockLabel}
                   onChange={(e) => setNewBlockLabel(e.target.value)}
-                  className="w-full px-3 py-2 bg-[#faf8f5] border border-[#dfd6ca] rounded-lg"
+                  className="form-input"
                 />
               </div>
-              <div className="col-span-2 flex justify-end">
+              <div className="sm:col-span-2 flex justify-end">
                 <button
                   type="submit"
-                  className="px-4 py-2 bg-[#00b7a8] hover:bg-[#009e91] text-white rounded-lg font-semibold cursor-pointer"
+                  className="btn btn-primary btn-sm"
                 >
                   Add Calendar Block
                 </button>
               </div>
             </form>
 
-            <div className="space-y-2 pt-2">
+            <div className="divide-y divide-slate-200 pt-2 border-t border-slate-200">
               {(selectedProperty.blockedDates || []).length === 0 ? (
-                <p className="text-[#697076] py-3">No administrative date blocks configured.</p>
+                <p className="type-support text-slate-500 py-4">No administrative date blocks configured.</p>
               ) : (
                 (selectedProperty.blockedDates || []).map((blk) => (
                   <div
                     key={blk.id}
-                    className="p-3 bg-[#faf8f5] border border-[#e6dfd5] rounded-xl flex items-center justify-between gap-2 tabular-nums"
+                    className="py-3 flex items-center justify-between gap-3 type-support tabular-nums"
                   >
                     <div>
-                      <span className="font-semibold text-[#1b1d20]">
+                      <span className="font-semibold text-slate-900">
                         {blk.start} → {blk.end}
                       </span>
-                      <span className="text-[#5c5046] ml-2">
+                      <span className="text-slate-600 ml-2">
                         · {blk.label || blk.status}
                       </span>
                     </div>
                     <button
                       type="button"
                       onClick={() => handleRemoveBlockedRange(blk.id)}
-                      className="text-rose-700 hover:underline font-medium cursor-pointer"
+                      className="text-rose-700 hover:underline font-semibold cursor-pointer shrink-0"
                     >
                       Remove
                     </button>
@@ -1382,51 +1385,51 @@ export const AdminProperties: React.FC<AdminPropertiesProps> = ({
           </div>
 
           {/* Seasonal Pricing Rules */}
-          <div className="bg-white border border-[#e6dfd5] rounded-2xl p-6 space-y-4">
-            <div className="border-b border-[#e6dfd5] pb-3">
-              <h3 className="type-h4 text-[#1b1d20]">
+          <div className="admin-panel p-6 space-y-5">
+            <div className="border-b border-slate-200 pb-4">
+              <h3 className="type-h4 text-slate-900">
                 Seasonal Pricing Rules — {selectedProperty.unitNumber}
               </h3>
-              <p className="text-[#5c5046]">
+              <p className="type-support text-slate-600 mt-1">
                 Configure seasonal rate multipliers applied automatically during live quote calculation.
               </p>
             </div>
 
-            <form onSubmit={handleAddSeasonalRule} className="grid grid-cols-2 gap-3">
-              <div className="col-span-2">
-                <label className="block font-semibold text-[#5c5046] mb-1">Season Name *</label>
+            <form onSubmit={handleAddSeasonalRule} className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div className="sm:col-span-2">
+                <label className="form-label">Season Name *</label>
                 <input
                   type="text"
                   required
                   value={newSeasonLabel}
                   onChange={(e) => setNewSeasonLabel(e.target.value)}
                   placeholder="e.g. Autumn Relocation Peak"
-                  className="w-full px-3 py-2 bg-[#faf8f5] border border-[#dfd6ca] rounded-lg"
+                  className="form-input"
                 />
               </div>
               <div>
-                <label className="block font-semibold text-[#5c5046] mb-1">Start (MM-DD)</label>
+                <label className="form-label">Start (MM-DD)</label>
                 <input
                   type="text"
                   value={newSeasonStart}
                   onChange={(e) => setNewSeasonStart(e.target.value)}
                   placeholder="06-01"
-                  className="w-full px-3 py-2 bg-[#faf8f5] border border-[#dfd6ca] rounded-lg font-mono"
+                  className="form-input font-mono tabular-nums"
                 />
               </div>
               <div>
-                <label className="block font-semibold text-[#5c5046] mb-1">End (MM-DD)</label>
+                <label className="form-label">End (MM-DD)</label>
                 <input
                   type="text"
                   value={newSeasonEnd}
                   onChange={(e) => setNewSeasonEnd(e.target.value)}
                   placeholder="08-31"
-                  className="w-full px-3 py-2 bg-[#faf8f5] border border-[#dfd6ca] rounded-lg font-mono"
+                  className="form-input font-mono tabular-nums"
                 />
               </div>
-              <div className="col-span-2 flex items-end justify-between gap-3">
+              <div className="sm:col-span-2 flex flex-col sm:flex-row sm:items-end justify-between gap-3">
                 <div className="flex-1">
-                  <label className="block font-semibold text-[#5c5046] mb-1">
+                  <label className="form-label">
                     Rate Multiplier (e.g. 1.12 = +12%)
                   </label>
                   <input
@@ -1436,34 +1439,34 @@ export const AdminProperties: React.FC<AdminPropertiesProps> = ({
                     max="3"
                     value={newSeasonMultiplier}
                     onChange={(e) => setNewSeasonMultiplier(e.target.value)}
-                    className="w-full px-3 py-2 bg-[#faf8f5] border border-[#dfd6ca] rounded-lg tabular-nums"
+                    className="form-input tabular-nums"
                   />
                 </div>
                 <button
                   type="submit"
-                  className="px-4 py-2 bg-[#00b7a8] hover:bg-[#009e91] text-white rounded-lg font-semibold cursor-pointer whitespace-nowrap"
+                  className="btn btn-primary"
                 >
                   Add Season Rule
                 </button>
               </div>
             </form>
 
-            <div className="space-y-2 pt-2">
+            <div className="divide-y divide-slate-200 pt-2 border-t border-slate-200">
               {(selectedProperty.seasonalPricing || []).map((rule) => (
                 <div
                   key={rule.id}
-                  className="p-3 bg-[#faf8f5] border border-[#e6dfd5] rounded-xl flex items-center justify-between gap-2 tabular-nums"
+                  className="py-3 flex items-center justify-between gap-3 type-support tabular-nums"
                 >
                   <div>
-                    <strong className="font-semibold text-[#1b1d20]">{rule.label}</strong>
-                    <span className="text-[#5c5046] ml-2">
+                    <strong className="font-semibold text-slate-900">{rule.label}</strong>
+                    <span className="text-slate-600 ml-2">
                       ({rule.startMonthDay} → {rule.endMonthDay}) · ×{rule.multiplier || 1}
                     </span>
                   </div>
                   <button
                     type="button"
                     onClick={() => handleRemoveSeasonalRule(rule.id)}
-                    className="text-rose-700 hover:underline font-medium cursor-pointer"
+                    className="text-rose-700 hover:underline font-semibold cursor-pointer shrink-0"
                   >
                     Remove
                   </button>
@@ -1476,22 +1479,22 @@ export const AdminProperties: React.FC<AdminPropertiesProps> = ({
 
       {/* 6. CONCIERGE SERVICES & PRICING MANAGER */}
       {subTab === 'concierge' && (
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 text-xs">
-          <div className="lg:col-span-5 bg-white border border-[#e6dfd5] rounded-2xl p-6 space-y-4 h-fit">
-            <div className="border-b border-[#e6dfd5] pb-3">
-              <h3 className="type-h4 text-[#1b1d20]">Add Concierge Add-On Service</h3>
-              <p className="text-[#5c5046]">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+          <div className="lg:col-span-5 admin-panel p-6 space-y-5 h-fit">
+            <div className="border-b border-slate-200 pb-4">
+              <h3 className="type-h4 text-slate-900">Add Concierge Add-On Service</h3>
+              <p className="type-support text-slate-600 mt-1">
                 Published services appear on the Property Detail Concierge section and Interactive Booking Panel.
               </p>
             </div>
 
-            <form onSubmit={handleCreateConciergeSubmit} className="space-y-3">
+            <form onSubmit={handleCreateConciergeSubmit} className="space-y-4">
               <div>
-                <label className="block font-semibold text-[#5c5046] mb-1">Service Category</label>
+                <label className="form-label">Service Category</label>
                 <select
                   value={svcCategory}
                   onChange={(e) => setSvcCategory(e.target.value)}
-                  className="w-full px-3 py-2 bg-[#faf8f5] border border-[#dfd6ca] rounded-lg"
+                  className="form-select"
                 >
                   {CONCIERGE_CATEGORIES.map((cat) => (
                     <option key={cat} value={cat}>
@@ -1502,71 +1505,72 @@ export const AdminProperties: React.FC<AdminPropertiesProps> = ({
               </div>
 
               <div>
-                <label className="block font-semibold text-[#5c5046] mb-1">Service Title *</label>
+                <label className="form-label">Service Title *</label>
                 <input
                   type="text"
                   required
                   value={svcTitle}
                   onChange={(e) => setSvcTitle(e.target.value)}
                   placeholder="e.g. Private Vineyard Sommelier Tasting"
-                  className="w-full px-3 py-2 bg-[#faf8f5] border border-[#dfd6ca] rounded-lg"
+                  className="form-input"
                 />
               </div>
 
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block font-semibold text-[#5c5046] mb-1">Price ($ USD) *</label>
+                  <label className="form-label">Price ($ USD) *</label>
                   <input
                     type="number"
                     min={1}
                     required
                     value={svcPrice}
                     onChange={(e) => setSvcPrice(e.target.value)}
-                    className="w-full px-3 py-2 bg-[#faf8f5] border border-[#dfd6ca] rounded-lg tabular-nums"
+                    className="form-input tabular-nums"
                   />
                 </div>
                 <div>
-                  <label className="block font-semibold text-[#5c5046] mb-1">Billing Unit</label>
+                  <label className="form-label">Billing Unit</label>
                   <input
                     type="text"
                     value={svcBilling}
                     onChange={(e) => setSvcBilling(e.target.value)}
                     placeholder="per session / per stay"
-                    className="w-full px-3 py-2 bg-[#faf8f5] border border-[#dfd6ca] rounded-lg"
+                    className="form-input"
                   />
                 </div>
               </div>
 
               <div>
-                <label className="block font-semibold text-[#5c5046] mb-1">Short Description *</label>
+                <label className="form-label">Short Description *</label>
                 <textarea
                   rows={2}
                   required
                   value={svcDesc}
                   onChange={(e) => setSvcDesc(e.target.value)}
                   placeholder="Concise description shown on property concierge cards..."
-                  className="w-full p-2.5 bg-[#faf8f5] border border-[#dfd6ca] rounded-lg"
+                  className="form-textarea"
                 />
               </div>
 
               <button
                 type="submit"
-                className="w-full py-2.5 bg-[#00b7a8] hover:bg-[#009e91] text-white font-semibold rounded-xl cursor-pointer"
+                className="btn btn-primary w-full"
               >
                 Publish Concierge Service
               </button>
             </form>
           </div>
 
-          <div className="lg:col-span-7 bg-white border border-[#e6dfd5] rounded-2xl p-6 space-y-4">
-            <div className="flex flex-wrap items-center justify-between gap-3 border-b border-[#e6dfd5] pb-3">
-              <h3 className="type-h4 text-[#1b1d20]">
+          <div className="lg:col-span-7 admin-panel p-6 space-y-4">
+            <div className="flex flex-wrap items-center justify-between gap-3 border-b border-slate-200 pb-4">
+              <h3 className="type-h4 text-slate-900">
                 Concierge Services ({conciergeItems.length})
               </h3>
               <select
+                aria-label="Filter concierge services by category"
                 value={svcFilterCat}
                 onChange={(e) => setSvcFilterCat(e.target.value)}
-                className="px-3 py-1.5 bg-[#faf8f5] border border-[#dfd6ca] rounded-lg font-semibold"
+                className="form-select w-auto min-h-[40px] py-1.5 font-semibold"
               >
                 <option value="all">All Categories</option>
                 {CONCIERGE_CATEGORIES.map((cat) => (
@@ -1577,16 +1581,16 @@ export const AdminProperties: React.FC<AdminPropertiesProps> = ({
               </select>
             </div>
 
-            <div className="space-y-2.5 max-h-[540px] overflow-y-auto pr-1">
+            <div className="divide-y divide-slate-200 max-h-[540px] overflow-y-auto pr-1">
               {conciergeItems.map((svc) => (
                 <div
                   key={svc.id}
-                  className="p-3.5 bg-[#faf8f5] border border-[#e6dfd5] rounded-xl flex items-center justify-between gap-3"
+                  className="py-3.5 first:pt-0 last:pb-0 flex items-center justify-between gap-4"
                 >
-                  <div className="min-w-0">
-                    <div className="text-[11px] text-[#00897d] font-semibold">{svc.category}</div>
-                    <div className="font-semibold text-[#1b1d20] truncate">{svc.title}</div>
-                    <div className="text-[#5c5046] tabular-nums">
+                  <div className="min-w-0 space-y-0.5">
+                    <div className="type-support text-[#14616d] font-semibold">{svc.category}</div>
+                    <div className="font-semibold text-slate-900 truncate">{svc.title}</div>
+                    <div className="type-support text-slate-600 tabular-nums">
                       ${svc.priceUsd.toLocaleString()} {svc.billingUnitLabel}
                     </div>
                   </div>
@@ -1595,10 +1599,10 @@ export const AdminProperties: React.FC<AdminPropertiesProps> = ({
                       <button
                         type="button"
                         onClick={() => onToggleConciergeService(svc)}
-                        className={`px-3 py-1.5 rounded-lg border font-semibold cursor-pointer ${
+                        className={`btn btn-sm ${
                           svc.available
-                            ? 'bg-[#e8f8f6] text-[#00897d] border-[#bfe8e3]'
-                            : 'bg-white text-[#857568] border-[#dfd6ca]'
+                            ? 'bg-[#edf6f8] text-[#0f4952] border-[#14616d]/30'
+                            : 'btn-outline text-slate-500'
                         }`}
                       >
                         {svc.available ? 'Active' : 'Paused'}
@@ -1608,10 +1612,10 @@ export const AdminProperties: React.FC<AdminPropertiesProps> = ({
                       <button
                         type="button"
                         onClick={() => onDeleteConciergeService(svc)}
-                        className="p-1.5 rounded-lg bg-rose-50 hover:bg-rose-100 border border-rose-200 text-rose-700 cursor-pointer"
+                        className="btn btn-outline btn-sm px-2.5 text-rose-700 hover:bg-rose-50 border-rose-200"
                         title="Remove service"
                       >
-                        <Trash2 className="w-3.5 h-3.5" />
+                        <Trash2 className="w-4 h-4" />
                       </button>
                     )}
                   </div>
@@ -1624,18 +1628,19 @@ export const AdminProperties: React.FC<AdminPropertiesProps> = ({
 
       {/* 7. GUEST REVIEWS MODERATION */}
       {subTab === 'reviews' && (
-        <div className="bg-white border border-[#e6dfd5] rounded-2xl p-6 space-y-4 text-xs">
-          <div className="flex flex-wrap items-center justify-between gap-3 border-b border-[#e6dfd5] pb-3">
+        <div className="admin-panel p-6 space-y-5">
+          <div className="flex flex-wrap items-center justify-between gap-4 border-b border-slate-200 pb-4">
             <div>
-              <h3 className="type-h4 text-[#1b1d20]">Customer Reviews Moderation</h3>
-              <p className="text-[#5c5046]">
+              <h3 className="type-h3 text-slate-900">Customer Reviews Moderation</h3>
+              <p className="type-body text-slate-600 mt-1">
                 Review genuine customer submissions across all residences.
               </p>
             </div>
             <select
+              aria-label="Filter reviews by residence"
               value={reviewPropFilter}
               onChange={(e) => setReviewPropFilter(e.target.value)}
-              className="px-3 py-1.5 bg-[#faf8f5] border border-[#dfd6ca] rounded-lg font-semibold"
+              className="form-select w-auto min-h-[40px] py-1.5 font-semibold"
             >
               <option value="all">All Residences ({reviews.length})</option>
               {properties.map((p) => (
@@ -1647,52 +1652,52 @@ export const AdminProperties: React.FC<AdminPropertiesProps> = ({
           </div>
 
           {filteredReviews.length === 0 ? (
-            <p className="text-[#697076] py-8 text-center">
+            <p className="type-body text-slate-500 py-8 text-center">
               No customer reviews recorded for this filter.
             </p>
           ) : (
-            <div className="space-y-3">
+            <div className="divide-y divide-slate-200">
               {filteredReviews.map((rev) => {
                 const prop = properties.find((p) => p.id === rev.propertyId);
                 return (
                   <div
                     key={rev.id}
-                    className="p-4 bg-[#faf8f5] border border-[#e6dfd5] rounded-xl flex flex-col sm:flex-row sm:items-start justify-between gap-4"
+                    className="py-5 first:pt-0 last:pb-0 flex flex-col sm:flex-row sm:items-start justify-between gap-4"
                   >
-                    <div className="space-y-1.5">
-                      <div className="flex flex-wrap items-center gap-2 text-[#5c5046] tabular-nums">
-                        <strong className="text-[#1b1d20]">{rev.authorName}</strong>
-                        <span>·</span>
-                        <span className="font-semibold text-[#00897d]">
+                    <div className="space-y-2">
+                      <div className="flex flex-wrap items-center gap-2 type-support text-slate-600 tabular-nums">
+                        <strong className="text-slate-900 font-semibold">{rev.authorName}</strong>
+                        <span aria-hidden="true">·</span>
+                        <span className="font-semibold text-[#14616d]">
                           {prop?.unitNumber || rev.propertyId}
                         </span>
-                        <span>·</span>
-                        <span className="inline-flex items-center gap-0.5 text-amber-600 font-semibold">
-                          <Star className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
+                        <span aria-hidden="true">·</span>
+                        <span className="inline-flex items-center gap-1 text-amber-700 font-semibold">
+                          <Star className="w-4 h-4 fill-amber-400 text-amber-400" />
                           {rev.rating}.0
                         </span>
                         {rev.verifiedBooking && (
                           <>
-                            <span>·</span>
+                            <span aria-hidden="true">·</span>
                             <span className="text-emerald-700 font-semibold">Verified Stay</span>
                           </>
                         )}
-                        <span>·</span>
+                        <span aria-hidden="true">·</span>
                         <span>{rev.createdAt.split('T')[0]}</span>
                       </div>
                       {rev.title && (
-                        <div className="font-semibold text-[#1b1d20]">{rev.title}</div>
+                        <div className="type-h4 text-slate-900">{rev.title}</div>
                       )}
-                      <p className="text-[#434a4f]">{rev.content}</p>
+                      <p className="type-body text-slate-700">{rev.content}</p>
                     </div>
 
                     {onDeleteReview && (
                       <button
                         type="button"
                         onClick={() => onDeleteReview(rev.id)}
-                        className="px-3 py-1.5 rounded-lg bg-rose-50 hover:bg-rose-100 border border-rose-200 text-rose-700 font-semibold inline-flex items-center gap-1 cursor-pointer shrink-0"
+                        className="btn btn-outline btn-sm text-rose-700 hover:bg-rose-50 border-rose-200 shrink-0"
                       >
-                        <Trash2 className="w-3.5 h-3.5" />
+                        <Trash2 className="w-4 h-4" />
                         <span>Remove</span>
                       </button>
                     )}

@@ -95,11 +95,11 @@ export const HomeShowcaseSection: React.FC<HomeShowcaseSectionProps> = ({
                       onClick={() => onViewProperty(property)}
                       className="type-h3 text-[#0f172a] group-hover:text-[#14616d] transition-colors cursor-pointer line-clamp-1"
                     >
-                      {property.shortTitle || property.title}
+                      {property.title}
                     </h3>
 
                     <p className="type-body text-[#475569] line-clamp-2">
-                      {property.description}
+                      {property.shortDesc}
                     </p>
                   </div>
 
@@ -112,7 +112,7 @@ export const HomeShowcaseSection: React.FC<HomeShowcaseSectionProps> = ({
                         <span className="type-support text-[#64748b] ml-1">/ month</span>
                       </div>
                       <span className="type-support text-[#64748b] font-mono tabular-nums">
-                        ${property.nightlyRate}/night
+                        ${Math.round(property.monthlyRate / 30)}/night
                       </span>
                     </div>
 

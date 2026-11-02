@@ -44,15 +44,15 @@ export const VehicleCard: React.FC<VehicleCardProps> = ({
           )}
 
           <div className="space-y-1">
-            <div className="flex flex-wrap items-center gap-2 text-xs">
+            <div className="flex flex-wrap items-center gap-2 type-support">
               <span className="font-mono font-semibold text-slate-600 tabular-nums">{rental.id}</span>
               <span className="text-slate-300" aria-hidden="true">·</span>
               <StatusBadge status={rental.status} size="sm" />
             </div>
-            <h4 className="font-heading font-bold text-base text-[#0f172a] leading-snug">
+            <h4 className="type-h4 text-[#0f172a]">
               {rental.year} {rental.vehicleName}
             </h4>
-            <div className="flex flex-wrap items-center gap-1.5 text-xs text-slate-600">
+            <div className="flex flex-wrap items-center gap-1.5 type-support text-slate-600">
               <span className="text-[#14616d] font-semibold">{rental.category}</span>
               <span className="text-slate-300" aria-hidden="true">·</span>
               <span>Finish: {rental.colorName}</span>
@@ -61,37 +61,37 @@ export const VehicleCard: React.FC<VehicleCardProps> = ({
         </div>
 
         <div className="sm:text-right shrink-0">
-          <span className="text-[11px] text-slate-500 font-medium block">Total Rental</span>
-          <span className="text-base font-bold text-[#0f172a] tabular-nums">
+          <span className="type-support text-slate-500 font-medium block">Total Rental</span>
+          <span className="type-h4 text-[#0f172a] tabular-nums">
             ${rental.totalUsd.toLocaleString()} USD
           </span>
         </div>
       </div>
 
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 text-xs pt-1 tabular-nums">
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 type-support pt-1 tabular-nums">
         <div>
-          <span className="text-[11px] font-medium text-slate-500 block">Pickup Date</span>
+          <span className="type-support font-medium text-slate-500 block">Pickup Date</span>
           <div className="flex items-center gap-1.5 font-semibold text-[#0f172a] mt-0.5">
             <Calendar className="w-3.5 h-3.5 text-[#14616d] shrink-0" />
             <span>{rental.pickupDate}</span>
           </div>
         </div>
         <div>
-          <span className="text-[11px] font-medium text-slate-500 block">Return Date</span>
+          <span className="type-support font-medium text-slate-500 block">Return Date</span>
           <div className="flex items-center gap-1.5 font-semibold text-[#0f172a] mt-0.5">
             <Calendar className="w-3.5 h-3.5 text-slate-500 shrink-0" />
             <span>{rental.returnDate}</span>
           </div>
         </div>
         <div>
-          <span className="text-[11px] font-medium text-slate-500 block">Handover Location</span>
+          <span className="type-support font-medium text-slate-500 block">Handover Location</span>
           <div className="flex items-center gap-1.5 font-semibold text-[#0f172a] mt-0.5 truncate">
             <MapPin className="w-3.5 h-3.5 text-[#14616d] shrink-0" />
             <span className="truncate">{rental.pickupLocation}</span>
           </div>
         </div>
         <div>
-          <span className="text-[11px] font-medium text-slate-500 block">Protection Plan</span>
+          <span className="type-support font-medium text-slate-500 block">Protection Plan</span>
           <div className="flex items-center gap-1.5 font-semibold text-[#0f172a] mt-0.5">
             <ShieldCheck className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
             <span className="truncate">
@@ -101,8 +101,8 @@ export const VehicleCard: React.FC<VehicleCardProps> = ({
         </div>
       </div>
 
-      <div className="flex flex-wrap items-center justify-between gap-2 pt-3 border-t border-slate-100">
-        <div className="text-xs text-slate-600">
+      <div className="flex flex-wrap items-center justify-between gap-3 pt-3 border-t border-slate-100">
+        <div className="type-support text-slate-600">
           <span>
             Primary Driver: <strong className="text-[#0f172a]">{rental.primaryDriver}</strong>
           </span>
@@ -115,7 +115,7 @@ export const VehicleCard: React.FC<VehicleCardProps> = ({
             <button
               type="button"
               onClick={() => onRequestModification(rental)}
-              className="px-3 py-1.5 rounded-lg border border-slate-200 text-slate-700 hover:bg-slate-50 text-xs font-semibold cursor-pointer whitespace-nowrap"
+              className="btn btn-outline btn-sm"
             >
               Modify
             </button>
@@ -124,7 +124,7 @@ export const VehicleCard: React.FC<VehicleCardProps> = ({
             <button
               type="button"
               onClick={() => onRequestCancellation(rental)}
-              className="px-3 py-1.5 rounded-lg border border-rose-200 text-rose-700 hover:bg-rose-50 text-xs font-semibold cursor-pointer whitespace-nowrap"
+              className="px-3.5 py-2 rounded-lg border border-rose-200 text-rose-700 hover:bg-rose-50 type-btn cursor-pointer whitespace-nowrap"
             >
               Cancel
             </button>
@@ -135,7 +135,7 @@ export const VehicleCard: React.FC<VehicleCardProps> = ({
             className="btn btn-primary btn-sm"
           >
             <span>Rental Details</span>
-            <ArrowRight className="w-3.5 h-3.5" />
+            <ArrowRight className="w-4 h-4" />
           </button>
         </div>
       </div>

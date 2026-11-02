@@ -93,7 +93,7 @@ try:
         with open(db_path, 'w') as f:
             json.dump(db, f, indent=2)
             
-        print(f'Database data/db.json updated: {len(sac_props)} Sacramento + {len(la_items)} Los Angeles = {len(all_props)} Total Properties!')
+        print(f'Database data/db.json updated: {len(sac_props)} El Dorado Hills, CA + {len(la_items)} Los Angeles = {len(all_props)} Total Properties!')
 
 except Exception as e:
     print('Error:', e)

@@ -255,7 +255,7 @@ export const HostDesignView: React.FC = () => {
                   Al Williamson
                 </div>
                 <div className="type-support text-[#4de0d2] font-semibold mt-0.5">
-                  Leading Landlord, Business Owner · Sacramento, CA
+                  Leading Landlord, Business Owner · El Dorado Hills, CA
                 </div>
               </div>
             </div>

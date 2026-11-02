@@ -76,14 +76,14 @@ export const SavedItemsModule: React.FC<SavedItemsModuleProps> = ({
       <div className="space-y-8">
         <div className="border-b border-slate-200 pb-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           <div>
-            <h3 className="font-heading font-bold text-lg text-[#0f172a] flex items-center gap-2">
+            <h3 className="type-h3 text-[#0f172a] flex items-center gap-2">
               <Bookmark className="w-5 h-5 text-[#14616d]" /> Saved Residences &amp; Fleet Vehicles
             </h3>
-            <p className="text-xs text-slate-500 mt-0.5">
-              Review and reserve your bookmarked California corporate housing and 3D fleet rentals.
+            <p className="type-body text-slate-500 mt-1">
+              Review and reserve your bookmarked California corporate housing and fleet rentals.
             </p>
           </div>
-          <div className="text-xs font-medium text-slate-500 tabular-nums">
+          <div className="type-support font-medium text-slate-500 tabular-nums">
             {totalCount} item{totalCount === 1 ? '' : 's'} bookmarked
           </div>
         </div>
@@ -100,22 +100,22 @@ export const SavedItemsModule: React.FC<SavedItemsModuleProps> = ({
           <div className="space-y-8">
             {(activeSubTab === 'all' || activeSubTab === 'properties') && (
               <div className="space-y-4">
-                <div className="flex items-center justify-between">
-                  <h4 className="text-sm font-bold text-[#0f172a] flex items-center gap-2">
+                <div className="flex items-center justify-between gap-4">
+                  <h4 className="type-h4 text-[#0f172a] flex items-center gap-2 tabular-nums">
                     <Building2 className="w-4 h-4 text-[#14616d]" /> Executive Residences ({savedProperties.length})
                   </h4>
                   <button
                     type="button"
                     onClick={onReserveProperty}
-                    className="text-xs text-[#14616d] hover:underline font-semibold flex items-center gap-1 cursor-pointer whitespace-nowrap"
+                    className="type-btn text-[#14616d] hover:underline flex items-center gap-1 cursor-pointer whitespace-nowrap"
                   >
                     <span>Reserve New Stay</span>
-                    <ArrowRight className="w-3.5 h-3.5" />
+                    <ArrowRight className="w-4 h-4" />
                   </button>
                 </div>
 
                 {savedProperties.length === 0 ? (
-                  <div className="p-6 bg-white border border-slate-200 rounded-2xl text-center text-xs text-slate-500">
+                  <div className="p-6 bg-white border border-slate-200 rounded-2xl text-center type-body text-slate-500">
                     No residences currently bookmarked.
                   </div>
                 ) : (
@@ -136,22 +136,22 @@ export const SavedItemsModule: React.FC<SavedItemsModuleProps> = ({
 
             {(activeSubTab === 'all' || activeSubTab === 'vehicles') && (
               <div className="space-y-4">
-                <div className="flex items-center justify-between">
-                  <h4 className="text-sm font-bold text-[#0f172a] flex items-center gap-2">
+                <div className="flex items-center justify-between gap-4">
+                  <h4 className="type-h4 text-[#0f172a] flex items-center gap-2 tabular-nums">
                     <Car className="w-4 h-4 text-[#14616d]" /> Fleet Rentals ({savedVehicles.length})
                   </h4>
                   <button
                     type="button"
                     onClick={onExploreVehicles}
-                    className="text-xs text-[#14616d] hover:underline font-semibold flex items-center gap-1 cursor-pointer whitespace-nowrap"
+                    className="type-btn text-[#14616d] hover:underline flex items-center gap-1 cursor-pointer whitespace-nowrap"
                   >
                     <span>Browse Car Rentals</span>
-                    <ArrowRight className="w-3.5 h-3.5" />
+                    <ArrowRight className="w-4 h-4" />
                   </button>
                 </div>
 
                 {savedVehicles.length === 0 ? (
-                  <div className="p-6 bg-white border border-slate-200 rounded-2xl text-center text-xs text-slate-500">
+                  <div className="p-6 bg-white border border-slate-200 rounded-2xl text-center type-body text-slate-500">
                     No vehicles currently bookmarked.
                   </div>
                 ) : (
@@ -170,28 +170,28 @@ export const SavedItemsModule: React.FC<SavedItemsModuleProps> = ({
                               referrerPolicy="no-referrer"
                               className="w-full h-full object-cover hover:scale-103 transition-transform duration-200"
                             />
-                            <div className="absolute top-3 left-3 bg-[#0f172a]/85 backdrop-blur-xs text-white text-[11px] font-semibold px-2.5 py-1 rounded-lg">
+                            <div className="absolute top-3 left-3 bg-[#0f172a]/85 backdrop-blur-xs text-white type-support font-semibold px-2.5 py-1 rounded-lg">
                               {veh.category}
                             </div>
                             <button
                               type="button"
                               onClick={() => handleRemoveVehicle(veh.id)}
                               title="Remove from saved"
-                              className="absolute top-3 right-3 w-8 h-8 rounded-full bg-white/95 flex items-center justify-center text-rose-600 hover:scale-105 transition-transform cursor-pointer shadow-xs"
+                              className="absolute top-3 right-3 w-9 h-9 rounded-full bg-white/95 flex items-center justify-center text-rose-600 hover:scale-105 transition-transform cursor-pointer shadow-xs"
                             >
                               <Trash2 className="w-4 h-4" />
                             </button>
                           </div>
 
                           <div className="p-4 space-y-3 flex-1 flex flex-col justify-between">
-                            <div className="space-y-1">
-                              <h5 className="font-heading font-bold text-base text-[#0f172a]">
+                            <div className="space-y-1.5">
+                              <h5 className="type-h4 text-[#0f172a]">
                                 {veh.year} {veh.name}
                               </h5>
-                              <p className="text-xs text-slate-600 line-clamp-2">
+                              <p className="type-support text-slate-600 line-clamp-2">
                                 {veh.tagline || veh.description}
                               </p>
-                              <div className="flex items-center gap-2 pt-2 text-xs text-slate-500 tabular-nums">
+                              <div className="flex items-center gap-2 pt-1 type-support text-slate-500 tabular-nums">
                                 <span>Seats {veh.seating}</span>
                                 <span aria-hidden="true">·</span>
                                 <span>Luggage {veh.luggage}</span>
@@ -207,7 +207,7 @@ export const SavedItemsModule: React.FC<SavedItemsModuleProps> = ({
                                 className="btn btn-primary btn-sm w-full"
                               >
                                 <span>Reserve Vehicle</span>
-                                <ArrowRight className="w-3.5 h-3.5" />
+                                <ArrowRight className="w-4 h-4" />
                               </button>
                             </div>
                           </div>
